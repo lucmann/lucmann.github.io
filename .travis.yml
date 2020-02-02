@@ -9,7 +9,7 @@ install:
   - npm install
 branches:
   only:
-    - master
+    - dev
 script:
   - hexo generate
 deploy:
