@@ -8,7 +8,24 @@ It's good choice for exploring any project's source code to start with its build
 
 ### Questions
 
-1. What role do DRM, DRI and Gallium play in Mesa? 
+#### What dependencies are there when you build mesa on the WSL?
+
+* Run-time dependency
+    - libdrm_intel
+    - libdrm_amdgpu
+    - libdrm_radeon
+    - libdrm_nouveau
+    - libdrm
+    - LLVM
+    - libelf
+    - valgrind
+    - bison
+    - flex
+
+* Build-time dependency
+    - wayland-scanner
+
+#### What role do DRM, DRI and Gallium play in Mesa? 
 
 ``` meson
 _libdrm_checks = [
