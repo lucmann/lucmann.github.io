@@ -1,5 +1,7 @@
 ---
 title: Notes for Mesa
+date: 2020-2-5
+tags: [OpenGL]
 ---
 [Mesa](https://mesa3d.org/) is an open source implementation for OpenGL. Check [repository](https://gitlab.freedesktop.org/mesa/mesa) for its source code. There are something worth to learn about this project for a graphic driver developer.
 
@@ -63,7 +65,7 @@ Found ninja-1.9.0 at /usr/bin/ninja
 NOTE: if you remodify the **meson_options.txt** and are about to reconfigure, you need to run:
 
 ``` bash
-meson --reconfigure --prefix="${PWD}/build/install" build
+meson setup --wipe build
 ```
 
 Once dependencies check passed you can compile and install:
