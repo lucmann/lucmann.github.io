@@ -1,8 +1,7 @@
 ---
-title: about
+title:
 date: 2020-02-05 19:14:44
 ---
 
-"Everything that can be counted does not necessarily count;
-
-Everything that counts cannot necessarily be counted."
+<center>Everything that can be counted does not necessarily count; Everything that counts cannot necessarily be counted.</center>
+<right>Albert Einstein</right>
