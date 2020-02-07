@@ -8,10 +8,7 @@ tags: [OpenGL]
 ## Build
 It's good choice for exploring any project's source code to start with its build script. So here is the start.
 
-### Questions
-
-#### What dependencies are there when you build mesa on the WSL?
-
+### Requisite
 * Run-time dependency
     - libdrm_intel
     - libdrm_amdgpu
@@ -30,57 +27,18 @@ It's good choice for exploring any project's source code to start with its build
     - libxcb-fixes0-dev
     - libxext-dev
 
-These dependencies include from build-time headers to run-time tools. Nevertheless most of them are optional but not necessary. You can customize them in **meson_options.txt** by modifying the **value** field of each option. Then you can create a build directory and start to configure.
+These dependencies include from build-time headers to run-time tools. Nevertheless most of them are optional but not necessary. You can customize them in **meson_options.txt** by modifying the **value** field of each option. With the listed above run and build time dependencies installed you can create a build directory and start to configure.
 
 ``` bash
-meson --prefix="${PWD}/build/install" build
+meson build
 ```
+
 You can configure a minimal dependencies mesa given that WSL is not a desktop platform as the following my configuration result:
 
 ```
 Message: Configuration summary:
         
-        prefix:          /home/luc/github/mesa/build/install
-        libdir:          lib/x86_64-linux-gnu
-        includedir:      include
-        
-        OpenGL:          yes (ES1: no ES2: no)
-        OSMesa:          no
-        
-        EGL:             no
-        GBM:             no
-        EGL/Vulkan/VL platforms:   drm
-        
-        Vulkan drivers:  no
-        
-        llvm:            no
-        
-        Gallium drivers: swrast
-        Gallium st:      mesa
-        HUD lmsensors:   no
-        
-        Shared-glapi:    no
-
-Build targets in project: 83
-Found ninja-1.9.0 at /usr/bin/ninja
-```
-
-Once dependencies check passed you can compile and install:
-
-``` bash
-ninja -C build && ninja -C build install
-```
-
-So far you should have at least a single static library, say libsoftpipe.a, generated although only with this can you not get your OpenGL application worked on the WSL.
-
-#### libGL.so is not built until glx option is enabled in **meson_options.txt**.
-
-As mentioned above, with the minimal dependencies, you will get nothing but libsoftpipe.a. Only with essential build-time dependencies for X11 installed and glx option configured is libGL.so built. The configuration is as follow:
-
-```
-Message: Configuration summary:
-        
-        prefix:          /home/luc/github/mesa/build/install
+        prefix:          /usr/local
         libdir:          lib/x86_64-linux-gnu
         includedir:      include
         
@@ -99,31 +57,92 @@ Message: Configuration summary:
         llvm:            yes
         llvm-version:    9.0.0
         
-        Gallium drivers: nouveau swrast
+        Gallium drivers: swrast
         Gallium st:      mesa
         HUD lmsensors:   no
         
-        Shared-glapi:    no
+        Shared-glapi:    yes
 
-Build targets in project: 91
+Build targets in project: 90
+WARNING: Project specifies a minimum meson_version '>= 0.46' but uses features which were added in newer versions:
+ * 0.51.0: {'dep.get_variable'}
+Found ninja-1.9.0 at /usr/bin/ninja
+```
+As you see this configuration supports quite a few components which are essential for off-screen rendering. Once dependencies check passed fully you can begin to compile and install:
+
+``` bash
+ninja -C build && sudo ninja -C build install
 ```
 
-NOTE: if you have remodified the **meson_options.txt** and are about to reconfigure, you need to run:
+After compilation and installed as follow:
+
+``` bash
+ls -l /usr/local/lib/x86_64-linux-gnu
+total 159360
+lrwxrwxrwx 1 root root        10 Feb  7 17:13 libGL.so -> libGL.so.1
+lrwxrwxrwx 1 root root        14 Feb  7 17:13 libGL.so.1 -> libGL.so.1.5.0
+-rwxr-xr-x 1 root root 111044912 Feb  7 17:13 libGL.so.1.5.0
+lrwxrwxrwx 1 root root        14 Feb  7 17:13 libOSMesa.so -> libOSMesa.so.8
+lrwxrwxrwx 1 root root        18 Feb  7 17:13 libOSMesa.so.8 -> libOSMesa.so.8.0.0
+-rwxr-xr-x 1 root root  51541176 Feb  7 17:13 libOSMesa.so.8.0.0
+lrwxrwxrwx 1 root root        13 Feb  7 17:13 libglapi.so -> libglapi.so.0
+lrwxrwxrwx 1 root root        17 Feb  7 17:13 libglapi.so.0 -> libglapi.so.0.0.0
+-rwxr-xr-x 1 root root    337264 Feb  7 17:07 libglapi.so.0.0.0
+drwxr-xr-x 1 root root       512 Feb  7 17:13 pkgconfig
+```
+
+NOTE:
+- Mesa is installed in `/usr/local/lib/$(uname -p)-linux-gnu` by default. So you have to `ldconfig` so that your linker can find them.
+- libsoftpipe.a will be built but not installed.
+- meson build system will enable compiler's `-g` flag by default unless you are building on the release branch.
+- if you have remodified the **meson_options.txt** and are about to reconfigure, you need to run:
 
 ``` bash
 meson setup --wipe build
 ```
 
-After compilation and installed as follow:
+## Offscreen Demos
+Now that mesa have been built and installed we can give a try to run an OGL application. Similarly without window system supportd on the WSL, [off-screen rendering](https://mesa3d.org/osmesa.html) is my choice. We can clone the mesa [demos](https://gitlab.freedesktop.org/mesa/demos) which includes a lot of demos besides off-screen demos. 
 
+### Requisite
+We need some more libraries besides libOSMesa and libGL before you can get these off-screen demos worked. They are:
+- [GLU](https://gitlab.freedesktop.org/mesa/glu)
+- libm
+
+To build these demos:
+``` bash
+gcc osdemo.c -o osdemo -g -I/home/luc/github/demos/src/util -lGL -lGLU -lOSMesa -lm
 ```
-lrwxrwxrwx 1 luc luc        10 Feb  5 16:18 libGL.so -> libGL.so.1*
-lrwxrwxrwx 1 luc luc        14 Feb  5 16:18 libGL.so.1 -> libGL.so.1.5.0*
--rwxrwxrwx 1 luc luc 112504456 Feb  5 16:18 libGL.so.1.5.0*
-lrwxrwxrwx 1 luc luc        14 Feb  5 16:18 libOSMesa.so -> libOSMesa.so.8*
-lrwxrwxrwx 1 luc luc        18 Feb  5 16:18 libOSMesa.so.8 -> libOSMesa.so.8.0.0*
--rwxrwxrwx 1 luc luc  53012360 Feb  5 16:18 libOSMesa.so.8.0.0*
-```
+
+The executable osdemo saves the rendered pixels as the portable pixmap format. You need to covert it to image format e.g. jpg. You may do this with `pnmtojpeg output.ppm > output.jpg`.
+
+{% asset_img "osdemo.jpg" "osdemo" %}
+
+## OSMesa Call Graphs
+### Context Initialization
+
+--> `OSMesaCreateContextExt`
+--> `OSMesaCreateContextAttribs`
+--> `_mesa_initialize_context`
+--> `one_time_init`
+--> `_mesa_init_remap_table`
+--> `map_function_spec`
+--> `_glapi_add_dispatch`
+
+### Draw
+
+--> `_mesa_PopMatrix`
+--> `vbo_exec_FlushVertices`
+--> `vbo_exec_FlushVertices_internal`
+--> `vbo_exec_vtx_flush`
+--> `_tnl_draw`
+--> `_tnl_draw_prims`
+--> `_tnl_run_pipeline`
+
+## Q&A
+#### libGL.so is not built until glx option is enabled in **meson_options.txt**.
+
+Only with essential build-time dependencies for X11 installed and glx option configured is libGL.so built.
 
 #### What role do DRM, DRI and Gallium play in Mesa? 
 
@@ -152,3 +171,6 @@ endif
 
 - dri based GLX requires shared-glapi
 - Gallium-xlib based GLX requires softpipe or llvmpipe
+- Cannot build GLX support without X11 platform support and at least one OpenGL API
+
+That means non-X11 platform and GLX are not enabled at once.
