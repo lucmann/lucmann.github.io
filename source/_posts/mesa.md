@@ -101,7 +101,7 @@ NOTE:
 meson setup --wipe build
 ```
 
-## Offscreen Demos
+## Off-screen Demos
 Now that mesa have been built and installed we can give a try to run an OGL application. Similarly without window system supportd on the WSL, [off-screen rendering](https://mesa3d.org/osmesa.html) is my choice. We can clone the mesa [demos](https://gitlab.freedesktop.org/mesa/demos) which includes a lot of demos besides off-screen demos. 
 
 ### Requisite
