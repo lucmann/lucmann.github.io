@@ -156,7 +156,7 @@ _libdrm_checks = [
 ]
 ```
 
-DRI and Gallium seem to be respectively different underlying implementation in Mesa. Moreover in term of swrast and i915, you have to choose either of both as you can read the following code snippet in meson.build.
+DRI and Gallium seem to be respectively different underlying implementation in Mesa. Moreover in term of swrast and i915, you have to choose either of both as you can read the following code snippet in meson.build. In fact DRI is more complicated and staler but [Gallium](https://www.freedesktop.org/wiki/Software/gallium/) is more smaller and simpler.
 
 ``` meson
 if with_dri_swrast and (with_gallium_softpipe or with_gallium_swr)
