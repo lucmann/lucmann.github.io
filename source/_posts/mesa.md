@@ -123,7 +123,11 @@ The executable osdemo saves the rendered pixels as the portable pixmap format. Y
 
 --> `OSMesaCreateContextExt`
 --> `OSMesaCreateContextAttribs`
---> `_mesa_initialize_context`
+--> `st_api_create_context`
+--> `llvmpipe_create_context`
+    --> `draw_create_with_llvm_context`
+        --> `draw_create_context`
+            --> `draw_llvm_create`
 --> `one_time_init`
 --> `_mesa_init_remap_table`
 --> `map_function_spec`
@@ -131,13 +135,19 @@ The executable osdemo saves the rendered pixels as the portable pixmap format. Y
 
 ### Draw
 
---> `_mesa_PopMatrix`
---> `vbo_exec_FlushVertices`
---> `vbo_exec_FlushVertices_internal`
---> `vbo_exec_vtx_flush`
---> `_tnl_draw`
---> `_tnl_draw_prims`
---> `_tnl_run_pipeline`
+Mesa supports many features from software pipelines to hardware drivers. For example Gallium, it features with several software or hardware implementations which include the two software pipelines, softpipe and [llvmpipe](https://www.mesa3d.org/llvmpipe.html). With the different pipes enabled, will the calls walk in the different paths. 
+
+#### Three Different Build Configuration (reference to **meson_options.txt**)
+| *Option* | *platform* | *dri-drivers* | *gallium-drivers* | *llvm* | *osmesa* |
+|-|-|-|-|-|-|
+| *softpipe* | x11 | | swrast | :heavy_check_mark: | gallium |
+| *llvmpipe* | x11 | | swrast |                    | gallium |
+| *tnl*      | x11 | | swrast | :heavy_check_mark: | classic |
+
+#### Three Different Call Paths
+<div align=center>
+{% asset_img PopMatrix.png "Three different call paths" %}
+</div>
 
 ## Q&A
 #### libGL.so is not built until glx option is enabled in **meson_options.txt**.
