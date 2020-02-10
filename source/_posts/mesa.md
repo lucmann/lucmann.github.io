@@ -116,7 +116,7 @@ gcc osdemo.c -o osdemo -g -I/home/luc/github/demos/src/util -lGL -lGLU -lOSMesa 
 
 The executable osdemo saves the rendered pixels as the portable pixmap format. You need to covert it to image format e.g. jpg. You may do this with `pnmtojpeg output.ppm > output.jpg`.
 
-{% asset_img "osdemo.jpg" "osdemo" %}
+<div align=center>{% asset_img "osdemo.jpg" "osdemo" %}</div>
 
 ## OSMesa Call Graphs
 ### Context Initialization
@@ -140,9 +140,9 @@ Mesa supports many features from software pipelines to hardware drivers. For exa
 #### Three Different Build Configuration (reference to **meson_options.txt**)
 | *Option* | *platform* | *dri-drivers* | *gallium-drivers* | *llvm* | *osmesa* |
 |-|-|-|-|-|-|
-| *softpipe* | x11 | | swrast | :heavy_check_mark: | gallium |
-| *llvmpipe* | x11 | | swrast |                    | gallium |
-| *tnl*      | x11 | | swrast | :heavy_check_mark: | classic |
+| *softpipe* | x11 | | swrast | false | gallium |
+| *llvmpipe* | x11 | | swrast | true  | gallium |
+| *tnl*      | x11 | | swrast | true  | classic |
 
 #### Three Different Call Paths
 <div align=center>
