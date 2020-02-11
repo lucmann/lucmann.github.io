@@ -169,6 +169,15 @@ endif
 
 - dri based GLX requires shared-glapi
 - Gallium-xlib based GLX requires softpipe or llvmpipe
+    * This means `gallium-xlib` is supposed to be a software implementation of GLX.
+```
+option(
+  'glx',
+  type : 'combo',
+  value : 'xlib',
+  choices : ['auto', 'disabled', 'dri', 'xlib', 'gallium-xlib'],
+  description : 'Build support for GLX platform'
+)
+```
 - Cannot build GLX support without X11 platform support and at least one OpenGL API
-
-That means non-X11 platform and GLX are not enabled at once.
+    * GLX, As the name suggests, is dedicated to X11 winsys.
