@@ -95,7 +95,7 @@ NOTE:
 - Mesa is installed in `/usr/local/lib/$(uname -p)-linux-gnu` by default. So you have to `ldconfig` so that your linker can find them.
 - libsoftpipe.a will be built but not installed.
 - meson build system will enable compiler's `-g` flag by default unless you are building on the release branch.
-- if you have remodified the **meson_options.txt** and are about to reconfigure, you need to run:
+- if you have remodified the **meson_options.txt** and built once and now are about to reconfigure and rebuild, you need to run:
 
 ``` bash
 meson setup --wipe build
