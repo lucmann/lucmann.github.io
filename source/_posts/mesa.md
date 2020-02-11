@@ -119,35 +119,23 @@ The executable osdemo saves the rendered pixels as the portable pixmap format. Y
 <div align=center>{% asset_img "osdemo.jpg" "osdemo" %}</div>
 
 ## OSMesa Call Graphs
-### Context Initialization
+Mesa supports many features from software pipelines to hardware drivers. For example [Gallium](https://www.freedesktop.org/wiki/Software/gallium/), it features with several software or hardware implementations which include the two software pipelines, softpipe and [llvmpipe](https://www.mesa3d.org/llvmpipe.html). With the different pipes enabled will the calls walk in the different paths. 
 
---> `OSMesaCreateContextExt`
---> `OSMesaCreateContextAttribs`
---> `st_api_create_context`
---> `llvmpipe_create_context`
-    --> `draw_create_with_llvm_context`
-        --> `draw_create_context`
-            --> `draw_llvm_create`
---> `one_time_init`
---> `_mesa_init_remap_table`
---> `map_function_spec`
---> `_glapi_add_dispatch`
-
-### Draw
-
-Mesa supports many features from software pipelines to hardware drivers. For example Gallium, it features with several software or hardware implementations which include the two software pipelines, softpipe and [llvmpipe](https://www.mesa3d.org/llvmpipe.html). With the different pipes enabled will the calls walk in the different paths. 
-
-#### Three Different Build Configuration (reference to **meson_options.txt**)
+### Three Different Build Configuration (reference to **meson_options.txt**)
 | Option | *platform* | *glx* | *dri-drivers* | *gallium-drivers* | *llvm* | *osmesa* |
 |-|-|-|-|-|-|-|
 | **llvmpipe** | x11 | gallium-xlib | | swrast | true  | gallium |
 | **softpipe** | x11 | gallium-xlib | | swrast | false | gallium |
 | **tnl**      | x11 | gallium-xlib | | swrast | true  | classic |
 
-#### Three Different Call Paths
-<div align=center>
-{% asset_img PopMatrix.png "Three different call paths" %}
-</div>
+### Three Different Call Paths
+#### Context
+<div align=center>{% asset_img OSMesaCreateContextExt.png "context initialization" %}</div>
+
+NOTE: As for softpipe and llvmpipe `gl_api` and `gl_context` are created respectively while both of them are created in one path for the classic osmesa.
+
+#### Draw
+<div align=center>{% asset_img PopMatrix.png "draw command" %}</div>
 
 ## Q&A
 #### libGL.so is not built until glx option is enabled in **meson_options.txt**.
@@ -166,7 +154,7 @@ _libdrm_checks = [
 ]
 ```
 
-DRI and Gallium seem to be respectively different underlying implementation in Mesa. Moreover in term of swrast and i915, you have to choose either of both as you can read the following code snippet in meson.build. In fact DRI is more complicated and staler but [Gallium](https://www.freedesktop.org/wiki/Software/gallium/) is more smaller and simpler.
+DRI and Gallium seem to be respectively different underlying implementation in Mesa. Moreover in term of swrast and i915, you have to choose either of both as you can read the following code snippet in meson.build. In fact DRI is more complicated and staler but Gallium is more smaller and simpler.
 
 ``` meson
 if with_dri_swrast and (with_gallium_softpipe or with_gallium_swr)
