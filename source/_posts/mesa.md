@@ -139,7 +139,7 @@ Mesa supports many features from software pipelines to hardware drivers. For exa
 
 #### Three Different Build Configuration (reference to **meson_options.txt**)
 | Option | *platform* | *glx* | *dri-drivers* | *gallium-drivers* | *llvm* | *osmesa* |
-|-|-|-|-|-|-|
+|-|-|-|-|-|-|-|
 | **llvmpipe** | x11 | gallium-xlib | | swrast | true  | gallium |
 | **softpipe** | x11 | gallium-xlib | | swrast | false | gallium |
 | **tnl**      | x11 | gallium-xlib | | swrast | true  | classic |
