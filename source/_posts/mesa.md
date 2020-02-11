@@ -179,5 +179,16 @@ option(
   description : 'Build support for GLX platform'
 )
 ```
+- OSMesa gallium requires gallium softpipe or llvmpipe
+    * This means if `osmesa` is configured as `gallium`, `gallium-drivers` must include `swrast` but the `classic` osmesa uses the fixed-functioned TNL by default.
+```
+option(
+  'osmesa',
+  type : 'combo',
+  value : 'gallium',
+  choices : ['none', 'classic', 'gallium'],
+  description : 'Build OSmesa.'
+)
+```
 - Cannot build GLX support without X11 platform support and at least one OpenGL API
     * GLX, As the name suggests, is dedicated to X11 winsys.
