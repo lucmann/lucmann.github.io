@@ -135,7 +135,7 @@ The executable osdemo saves the rendered pixels as the portable pixmap format. Y
 
 ### Draw
 
-Mesa supports many features from software pipelines to hardware drivers. For example Gallium, it features with several software or hardware implementations which include the two software pipelines, softpipe and [llvmpipe](https://www.mesa3d.org/llvmpipe.html). With the different pipes enabled, will the calls walk in the different paths. 
+Mesa supports many features from software pipelines to hardware drivers. For example Gallium, it features with several software or hardware implementations which include the two software pipelines, softpipe and [llvmpipe](https://www.mesa3d.org/llvmpipe.html). With the different pipes enabled will the calls walk in the different paths. 
 
 #### Three Different Build Configuration (reference to **meson_options.txt**)
 | Option | *platform* | *glx* | *dri-drivers* | *gallium-drivers* | *llvm* | *osmesa* |
