@@ -138,11 +138,11 @@ The executable osdemo saves the rendered pixels as the portable pixmap format. Y
 Mesa supports many features from software pipelines to hardware drivers. For example Gallium, it features with several software or hardware implementations which include the two software pipelines, softpipe and [llvmpipe](https://www.mesa3d.org/llvmpipe.html). With the different pipes enabled, will the calls walk in the different paths. 
 
 #### Three Different Build Configuration (reference to **meson_options.txt**)
-| Option | *platform* | *dri-drivers* | *gallium-drivers* | *llvm* | *osmesa* |
+| Option | *platform* | *glx* | *dri-drivers* | *gallium-drivers* | *llvm* | *osmesa* |
 |-|-|-|-|-|-|
-| **softpipe** | x11 | | swrast | false | gallium |
-| **llvmpipe** | x11 | | swrast | true  | gallium |
-| **tnl**      | x11 | | swrast | true  | classic |
+| **llvmpipe** | x11 | gallium-xlib | | swrast | true  | gallium |
+| **softpipe** | x11 | gallium-xlib | | swrast | false | gallium |
+| **tnl**      | x11 | gallium-xlib | | swrast | true  | classic |
 
 #### Three Different Call Paths
 <div align=center>
