@@ -144,7 +144,7 @@ If you want to know the full runtime stack of an OpenGL demo, you can not get ri
 
 As we know, Mesa is quite modularized and flexible. How does it take the path that `softpipe_create_context` rather than other pipe contexts? The `st_manager` is a key structure.
 
-{% codeblock lang:c https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/include/state_tracker/st_api.h "state tracker manager" %}
+{% codeblock lang:c "" https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/include/state_tracker/st_api.h "state tracker manager" %}
 struct st_manager
 {
    struct pipe_screen *screen;
