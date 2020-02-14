@@ -139,9 +139,12 @@ NOTE: As for softpipe and llvmpipe `gl_api` and `gl_context` are created respect
 
 ## GLX Demos
 If you want to know the full runtime stack of an OpenGL demo, you can not get rid of the window system. That is why I will try some GLX demos. Evidently GLX demos must depend on X11. This time I still choose the gallium-xlib with softpipe. The following call graph shows the path that GLX context is created.
+
 <div align=center>{% asset_img glXCreateContext.png "glx context creation" %}</div>
+
 As we know, Mesa is quite modularized and flexible. How does it take the path that `softpipe_create_context` rather than other pipe contexts? The `st_manager` is a key structure.
-{% codeblock lang:c "state tracker manager" https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/include/state_tracker/st_api.h %}
+
+{% codeblock lang:c https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/include/state_tracker/st_api.h "state tracker manager" %}
 struct st_manager
 {
    struct pipe_screen *screen;
@@ -191,6 +194,7 @@ struct st_manager
 {% endcodeblock %}
 
 `struct pipe_screen` has a callback function that will be set to `softpipe_create_context`. The following calls will create `struct pipe_screen` that will be set to `st_manager`.
+
 <div align=center>{% asset_img glXChooseVisual.png "pipe_screen creation" %}</div>
 
 ## Q&A
