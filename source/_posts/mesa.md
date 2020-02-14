@@ -142,56 +142,7 @@ If you want to know the full runtime stack of an OpenGL demo, you can not get ri
 
 <div align=center>{% asset_img glXCreateContext.png "glx context creation" %}</div>
 
-As we know, Mesa is quite modularized and flexible. How does it take the path that `softpipe_create_context` rather than other pipe contexts? The `st_manager` is a key structure.
-
-{% codeblock lang:c "" https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/include/state_tracker/st_api.h "state tracker manager" %}
-struct st_manager
-{
-   struct pipe_screen *screen;
-
-   /**
-    * Look up and return the info of an EGLImage.
-    *
-    * This is used to implement for example EGLImageTargetTexture2DOES.
-    * The GLeglImageOES agrument of that call is passed directly to this
-    * function call and the information needed to access this is returned
-    * in the given struct out.
-    *
-    * @smapi: manager owning the caller context
-    * @stctx: caller context
-    * @egl_image: EGLImage that caller recived
-    * @out: return struct filled out with access information.
-    *
-    * This function is optional.
-    */
-   bool (*get_egl_image)(struct st_manager *smapi,
-                         void *egl_image,
-                         struct st_egl_image *out);
-
-   /**
-    * Query an manager param.
-    */
-   int (*get_param)(struct st_manager *smapi,
-                    enum st_manager_param param);
-
-   /**
-    * Call the loader function setBackgroundContext. Called from the worker
-    * thread.
-    */
-   void (*set_background_context)(struct st_context_iface *stctxi,
-                                  struct util_queue_monitoring *queue_info);
-
-   /**
-    * Destroy any private data used by the state tracker manager.
-    */
-   void (*destroy)(struct st_manager *smapi);
-
-   /**
-    * Available for the state tracker manager to use.
-    */
-   void *st_manager_private;
-};
-{% endcodeblock %}
+As we know, Mesa is quite modularized and flexible. How does it take the path that `softpipe_create_context` rather than other pipe contexts? The [st_manager](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/include/state_tracker/st_api.h) is a key structure.
 
 `struct pipe_screen` has a callback function that will be set to `softpipe_create_context`. The following calls will create `struct pipe_screen` that will be set to `st_manager`.
 
