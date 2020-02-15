@@ -150,6 +150,20 @@ As we know, Mesa is quite modularized and flexible. How does it take the path th
 
 To bind the intended gallium driver backend to Mesa there must be something done before `glXChooseVisual` is called. It's started by the library `init()` and prepare the global variables.
 
+[xm_public.h](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/state_trackers/glx/xlib/xm_public.h)
+
+``` c
+/* This is the driver interface required by the glx/xlib state tracker. 
+ */
+struct xm_driver {
+   struct pipe_screen *(*create_pipe_screen)( Display *display );
+   struct st_api *(*create_st_api)( void );
+};
+
+extern void
+xmesa_set_driver( const struct xm_driver *driver );
+```
+
 [xlib.c](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/targets/libgl-xlib/xlib.c)
 
 ``` c
@@ -195,6 +209,26 @@ static struct xm_driver xlib_driver =
 
 
 /* Build the rendering stack.
+ *
+ * NOTE: The obsolete symbols _init and _fini
+ *
+ * signature:
+ * void _init(void);
+ * void _fini(void);
+ *
+ * The linker recoginizes special symbols _init and _fini. If a dynamic library
+ * exports a routine named _init, then that code is executed after the loading,
+ * before dlopen() returns. If the dynamic library exports a routine named _fini,
+ * then that routine is called just before the library is unloaded. In case you
+ * need to avoid linking against the system startup files,this can be done by
+ * giving gcc the "-nostartfiles" parameter on the command line.
+ * Using these routines, or the gcc -nostartfiles of -nostdlib options, is not
+ * recommended. Their use may result in undesired behavior, since the constructor/
+ * destructor routines will not be executed(unless special measures are taken).
+ * Instead, libraries should export routines using the __attribute__((constructor))
+ * and __attribute__((destructor)) function attributes. Constructor routines are
+ * executed before dlopen() returns, and destructor routines ared executed before
+ * dlclose() returns.
  */
 static void _init( void ) __attribute__((constructor));
 static void _init( void )
@@ -204,6 +238,8 @@ static void _init( void )
    xmesa_set_driver( &xlib_driver );
 }
 ```
+
+where define the `xlib_driver` and set by `_init()`.
 
 [sw_helper.h](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/auxiliary/target-helpers/sw_helper.h)
 
@@ -286,22 +322,80 @@ void xmesa_set_driver( const struct xm_driver *templ )
    xmesa_strict_invalidate =
       debug_get_bool_option("XMESA_STRICT_INVALIDATE", FALSE);
 }
+
+static XMesaDisplay
+xmesa_init_display( Display *display )
+{
+   static mtx_t init_mutex = _MTX_INITIALIZER_NP;
+   XMesaDisplay xmdpy;
+   XMesaExtDisplayInfo *info;
+
+   if (display == NULL) {
+      return NULL;
+   }
+
+   mtx_lock(&init_mutex);
+
+   /* Look for XMesaDisplay which corresponds to this display */
+   info = MesaExtInfo.head;
+   while(info) {
+      if (info->display == display) {
+         /* Found it */
+         mtx_unlock(&init_mutex);
+         return  &info->mesaDisplay;
+      }
+      info = info->next;
+   }
+
+   /* Not found.  Create new XMesaDisplay */
+   /* first allocate X-related resources and hook destroy callback */
+
+   /* allocate mesa display info */
+   info = (XMesaExtDisplayInfo *) Xmalloc(sizeof(XMesaExtDisplayInfo));
+   if (info == NULL) {
+      mtx_unlock(&init_mutex);
+      return NULL;
+   }
+   info->display = display;
+
+   xmdpy = &info->mesaDisplay; /* to be filled out below */
+   xmdpy->display = display;
+   xmdpy->pipe = NULL;
+
+   xmdpy->smapi = CALLOC_STRUCT(st_manager);
+   if (!xmdpy->smapi) {
+      Xfree(info);
+      mtx_unlock(&init_mutex);
+      return NULL;
+   }
+
+   xmdpy->screen = driver.create_pipe_screen(display);
+   if (!xmdpy->screen) {
+      free(xmdpy->smapi);
+      Xfree(info);
+      mtx_unlock(&init_mutex);
+      return NULL;
+   }
+
+   /* At this point, both smapi and screen are known to be valid */
+   xmdpy->smapi->screen = xmdpy->screen;
+   xmdpy->smapi->get_param = xmesa_get_param;
+   (void) mtx_init(&xmdpy->mutex, mtx_plain);
+
+   /* chain to the list of displays */
+   _XLockMutex(_Xglobal_lock);
+   info->next = MesaExtInfo.head;
+   MesaExtInfo.head = info;
+   MesaExtInfo.ndisplays++;
+   _XUnlockMutex(_Xglobal_lock);
+
+   mtx_unlock(&init_mutex);
+
+   return xmdpy;
+}
 ```
 
-[xm_public.h](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/state_trackers/glx/xlib/xm_public.h)
-
-``` c
-/* This is the driver interface required by the glx/xlib state tracker. 
- */
-struct xm_driver {
-   struct pipe_screen *(*create_pipe_screen)( Display *display );
-   struct st_api *(*create_st_api)( void );
-};
-
-extern void
-xmesa_set_driver( const struct xm_driver *driver );
-```
-As we see, glx library's `init()` will set `xlib_driver.create_pipe_screen` to `swrast_xlib_create_screen` that return a `pipe_screen` to be set to the `st_manager->screen`. Eventually those two helper functions decide which gallium driver backend will be used by compilation macros.
+where `driver.create_pipe_screen(display)` is instantiated as `xlib_driver.swrast_xlib_create_screen`. As we see, glx library's `init()` will set `xlib_driver.create_pipe_screen` to `swrast_xlib_create_screen` that return a `pipe_screen` to be set to the `st_manager->screen`. Eventually those two helper functions decide which gallium driver backend will be used by compilation macros.
 
 ## Q&A
 #### libGL.so is not built until glx option is enabled in **meson_options.txt**.
