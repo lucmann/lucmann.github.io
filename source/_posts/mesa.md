@@ -205,7 +205,7 @@ static void _init( void )
 }
 ```
 
-[sw_helper.h](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/auxiliary/targets-helpers/sw_helper.h)
+[sw_helper.h](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/auxiliary/target-helpers/sw_helper.h)
 
 ``` c
 static inline struct pipe_screen *
@@ -268,7 +268,7 @@ sw_screen_create(struct sw_winsys *winsys)
 }
 ```
 
-[xm_api.c](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/state_tracker/glx/xlib/xm_api.c)
+[xm_api.c](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/state_trackers/glx/xlib/xm_api.c)
 
 ``` c
 /* Driver interface routines, set up by xlib backend on library
@@ -288,7 +288,7 @@ void xmesa_set_driver( const struct xm_driver *templ )
 }
 ```
 
-[xm_public.h](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/state_tracker/glx/xlib/xm_public.h)
+[xm_public.h](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/state_trackers/glx/xlib/xm_public.h)
 
 ``` c
 /* This is the driver interface required by the glx/xlib state tracker. 
