@@ -144,9 +144,164 @@ If you want to know the full runtime stack of an OpenGL demo, you can not get ri
 
 As we know, Mesa is quite modularized and flexible. How does it take the path that `softpipe_create_context` rather than other pipe contexts? The [st_manager](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/include/state_tracker/st_api.h) is a key structure.
 
-`struct pipe_screen` has a callback function that will be set to `softpipe_create_context`. The following calls will create `struct pipe_screen` that will be set to `st_manager`.
+`struct pipe_screen` has a callback function that will be set to `softpipe_create_context`. The following calls will create `struct pipe_screen` that will be set to the `st_manager`.
 
 <div align=center>{% asset_img glXChooseVisual.png "pipe_screen creation" %}</div>
+
+To bind the intended gallium driver backend to Mesa there must be something done before `glXChooseVisual` is called. It's started by the library `init()` and prepare the global variables.
+
+[xlib.c](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/targets/libgl-xlib/xlib.c)
+
+``` c
+/* Helper function to build a subset of a driver stack consisting of
+ * one of the software rasterizers (llvmpipe, softpipe) and the
+ * xlib winsys.
+ */
+static struct pipe_screen *
+swrast_xlib_create_screen( Display *display )
+{
+   struct sw_winsys *winsys;
+   struct pipe_screen *screen = NULL;
+
+   /* Create the underlying winsys, which performs presents to Xlib
+    * drawables:
+    */
+   winsys = xlib_create_sw_winsys( display );
+   if (winsys == NULL)
+      return NULL;
+
+   /* Create a software rasterizer on top of that winsys:
+    */
+   screen = sw_screen_create( winsys );
+   if (screen == NULL)
+      goto fail;
+
+   /* Inject any wrapping layers we want to here:
+    */
+   return debug_screen_wrap( screen );
+
+fail:
+   if (winsys)
+      winsys->destroy( winsys );
+
+   return NULL;
+}
+
+static struct xm_driver xlib_driver = 
+{
+   .create_pipe_screen = swrast_xlib_create_screen,
+   .create_st_api = st_gl_api_create,
+};
+
+
+/* Build the rendering stack.
+ */
+static void _init( void ) __attribute__((constructor));
+static void _init( void )
+{
+   /* Initialize the xlib libgl code, pass in the winsys:
+    */
+   xmesa_set_driver( &xlib_driver );
+}
+```
+
+[sw_helper.h](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/auxiliary/targets-helpers/sw_helper.h)
+
+``` c
+static inline struct pipe_screen *
+sw_screen_create_named(struct sw_winsys *winsys, const char *driver)
+{
+   struct pipe_screen *screen = NULL;
+
+#if defined(GALLIUM_LLVMPIPE)
+   if (screen == NULL && strcmp(driver, "llvmpipe") == 0)
+      screen = llvmpipe_create_screen(winsys);
+#endif
+
+#if defined(GALLIUM_VIRGL)
+   if (screen == NULL && strcmp(driver, "virpipe") == 0) {
+      struct virgl_winsys *vws;
+      vws = virgl_vtest_winsys_wrap(winsys);
+      screen = virgl_create_screen(vws, NULL);
+   }
+#endif
+
+#if defined(GALLIUM_SOFTPIPE)
+   if (screen == NULL && strcmp(driver, "softpipe") == 0)
+      screen = softpipe_create_screen(winsys);
+#endif
+
+#if defined(GALLIUM_SWR)
+   if (screen == NULL && strcmp(driver, "swr") == 0)
+      screen = swr_create_screen(winsys);
+#endif
+
+#if defined(GALLIUM_ZINK)
+   if (screen == NULL && strcmp(driver, "zink") == 0)
+      screen = zink_create_screen(winsys);
+#endif
+
+   return screen;
+}
+
+
+struct pipe_screen *
+sw_screen_create(struct sw_winsys *winsys)
+{
+   const char *default_driver;
+   const char *driver;
+
+#if defined(GALLIUM_LLVMPIPE)
+   default_driver = "llvmpipe";
+#elif defined(GALLIUM_SOFTPIPE)
+   default_driver = "softpipe";
+#elif defined(GALLIUM_SWR)
+   default_driver = "swr";
+#elif defined(GALLIUM_SWR)
+   default_driver = "zink";
+#else
+   default_driver = "";
+#endif
+
+   driver = debug_get_option("GALLIUM_DRIVER", default_driver);
+   return sw_screen_create_named(winsys, driver);
+}
+```
+
+[xm_api.c](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/state_tracker/glx/xlib/xm_api.c)
+
+``` c
+/* Driver interface routines, set up by xlib backend on library
+ * _init().  These are global in the same way that function names are
+ * global.
+ */
+static struct xm_driver driver;
+static struct st_api *stapi;
+
+void xmesa_set_driver( const struct xm_driver *templ )
+{
+   driver = *templ;
+   stapi = driver.create_st_api();
+
+   xmesa_strict_invalidate =
+      debug_get_bool_option("XMESA_STRICT_INVALIDATE", FALSE);
+}
+```
+
+[xm_public.h](https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/state_tracker/glx/xlib/xm_public.h)
+
+``` c
+/* This is the driver interface required by the glx/xlib state tracker. 
+ */
+struct xm_driver {
+   struct pipe_screen *(*create_pipe_screen)( Display *display );
+   struct st_api *(*create_st_api)( void );
+};
+
+extern void
+xmesa_set_driver( const struct xm_driver *driver );
+```
+As we see, glx library's `init()` will set `xlib_driver.create_pipe_screen` to `swrast_xlib_create_screen` that return a `pipe_screen` to be set to the `st_manager->screen`. Eventually those two helper functions decide which gallium driver backend will be used by compilation macros.
 
 ## Q&A
 #### libGL.so is not built until glx option is enabled in **meson_options.txt**.
