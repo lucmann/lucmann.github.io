@@ -138,11 +138,7 @@ NOTE: As for softpipe and llvmpipe `gl_api` and `gl_context` are created respect
 <div align=center>{% asset_img PopMatrix.png "draw command" %}</div>
 
 ## GLX Demos
-If you want to know the full runtime stack of an OpenGL demo, you can not get rid of the window system. That is why I will try some GLX demos. Evidently GLX demos must depend on X11. This time I still choose the gallium-xlib with softpipe.
-
-<div align=center>{% asset_img glxgears.gif glxgears %}</div>
-
-The following call graph shows the path that GLX context is created.
+If you want to know the full runtime stack of an OpenGL demo, you can not get rid of the window system. That is why I will try some GLX demos. Evidently GLX demos must depend on X11. This time I still choose the gallium-xlib with softpipe. The following call graph shows the path that GLX context is created.
 
 <div align=center>{% asset_img glXCreateContext.png "glx context creation" %}</div>
 
