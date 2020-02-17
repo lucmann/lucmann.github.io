@@ -138,7 +138,11 @@ NOTE: As for softpipe and llvmpipe `gl_api` and `gl_context` are created respect
 <div align=center>{% asset_img PopMatrix.png "draw command" %}</div>
 
 ## GLX Demos
-If you want to know the full graphic stack of an OpenGL demo, you can not get rid of the window system. That is why I will try some GLX demos. Evidently GLX demos must depend on X11. You can cope with this problem by installing [vcXsrv](https://sourceforge.net/projects/vcxsrv/) on the Windows 10 which hosts your WSL. This time I still choose the gallium-xlib with softpipe. The following call graph shows the path that GLX context is created.
+If you want to know the full graphic stack of an OpenGL demo, you can not get rid of the window system. That is why I will try some GLX demos. Evidently GLX demos must depend on X11. You can cope with this problem by installing [vcXsrv](https://sourceforge.net/projects/vcxsrv/) on the Windows 10 which hosts your WSL. 
+
+<div align=center>{% asset_img glxgears.png "glx demo" %}</div>
+
+This time I still choose the gallium-xlib with softpipe. The following call graph shows the path that GLX context is created.
 
 <div align=center>{% asset_img glXCreateContext.png "glx context creation" %}</div>
 
@@ -404,8 +408,8 @@ To verify the analysis above we will try to add a customized gallium driver name
 - helper functions for loading software rasterizers for GLX
 - build scripts
 
-### Added or Modified Sources and Build Scripts
-``` text
+### [Added or Modified Sources and Build Scripts](https://gitlab.freedesktop.org/lucmaa/mesa/tree/gallium-gb-1.0)
+```
 meson.build
 meson_options.txt
 src/gallium/auxiliary/target-helpers/inline_sw_helper.h
@@ -419,7 +423,8 @@ src/gallium/targets/libgl-xlib/meson.build
 src/gallium/meson.build
 ```
 
-``` vim
+Result after building:
+```
 build/src/gallium/
 ├── auxiliary
 │   ├── eb820e8@@gallium@sta
