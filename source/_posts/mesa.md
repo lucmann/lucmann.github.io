@@ -419,7 +419,7 @@ src/gallium/targets/libgl-xlib/meson.build
 src/gallium/meson.build
 ```
 
-``` markdown
+``` vim
 build/src/gallium/
 ├── auxiliary
 │   ├── eb820e8@@gallium@sta
