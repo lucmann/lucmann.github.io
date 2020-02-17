@@ -138,7 +138,7 @@ NOTE: As for softpipe and llvmpipe `gl_api` and `gl_context` are created respect
 <div align=center>{% asset_img PopMatrix.png "draw command" %}</div>
 
 ## GLX Demos
-If you want to know the full runtime stack of an OpenGL demo, you can not get rid of the window system. That is why I will try some GLX demos. Evidently GLX demos must depend on X11. This time I still choose the gallium-xlib with softpipe. The following call graph shows the path that GLX context is created.
+If you want to know the full graphic stack of an OpenGL demo, you can not get rid of the window system. That is why I will try some GLX demos. Evidently GLX demos must depend on X11. You can cope with this problem by installing [vcXsrv](https://sourceforge.net/projects/vcxsrv/) on the Windows 10 which hosts your WSL. This time I still choose the gallium-xlib with softpipe. The following call graph shows the path that GLX context is created.
 
 <div align=center>{% asset_img glXCreateContext.png "glx context creation" %}</div>
 
@@ -395,7 +395,7 @@ xmesa_init_display( Display *display )
 }
 ```
 
-where `driver.create_pipe_screen(display)` is instantiated as `xlib_driver.swrast_xlib_create_screen`. As we see, glx library's `init()` will set `xlib_driver.create_pipe_screen` to `swrast_xlib_create_screen` that return a `pipe_screen` to be set to the `st_manager->screen`. Eventually those two helper functions decide which gallium driver backend will be used by compilation macros.
+where `driver.create_pipe_screen(display)` is instantiated as `xlib_driver.swrast_xlib_create_screen`. As we see, the dynamic library routine `_init()` will set `xlib_driver.create_pipe_screen` to `swrast_xlib_create_screen` that return a `pipe_screen` to be set to the `st_manager->screen`. Eventually those two helper functions decide which gallium driver backend will be used by compilation macros.
 
 ## Q&A
 #### libGL.so is not built until glx option is enabled in **meson_options.txt**.
