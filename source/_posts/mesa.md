@@ -412,11 +412,15 @@ To verify the analysis above we will try to add a customized gallium driver name
 
 ### Trace
 
-| *belong* | *hook* | *callback* | *caller* |
-|-|-|-|-|
-| pipe_screen | resource_create | softpipe_resource_create | bufferobj_data |
-| pipe_context | transfer_map | softpipe_transfer_map | |
-| pipe_context | create_surface | softpipe_create_surface | st_framebuffer_validate |
+| *belong* | *hook* | *callback* | *caller* | *X/GL API* |
+|-|-|-|-|-|
+| pipe_screen | resource_create | softpipe_resource_create | bufferobj_data | |
+| pipe_context | transfer_map | softpipe_transfer_map | | |
+| pipe_context | create_surface | softpipe_create_surface | st_framebuffer_validate | |
+| pipe_context | flush | softpipe_flush_wrapped | st_context_flush | glXSwapBuffers |
+| pipe_context | clear | softpipe_clear | st_Clear | glClear |
+| pipe_context | draw_vbo | softpipe_draw_vbo | st_draw_vbo | glCallList |
+| pipe_context | draw_vbo | softpipe_draw_vbo | st_draw_vbo | glCallList |
 
 ## Q&A
 #### When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
