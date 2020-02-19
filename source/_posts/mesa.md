@@ -297,7 +297,7 @@ sw_screen_create(struct sw_winsys *winsys)
    default_driver = "softpipe";
 #elif defined(GALLIUM_SWR)
    default_driver = "swr";
-#elif defined(GALLIUM_SWR)
+#elif defined(GALLIUM_ZINK)
    default_driver = "zink";
 #else
    default_driver = "";
@@ -401,233 +401,69 @@ xmesa_init_display( Display *display )
 
 where `driver.create_pipe_screen(display)` is instantiated as `xlib_driver.swrast_xlib_create_screen`. As we see, the dynamic library routine `_init()` will set `xlib_driver.create_pipe_screen` to `swrast_xlib_create_screen` that return a `pipe_screen` to be set to the `st_manager->screen`. Eventually those two helper functions decide which gallium driver backend will be used by compilation macros.
 
-## Gallium Genbu(customized)
+## Gallium Genbu
 To verify the analysis above we will try to add a customized gallium driver named **genbu** as a clone from the existing softpipe based GLX. All that we will do is three parts work below.
 
-- key data structures: genbu_screen, genbu_context, the related interfaces and definitions 
+- key data structures: genbu_screen, genbu_context, the related callbacks and definitions 
 - helper functions for loading software rasterizers for GLX
 - build scripts
 
 ### [Added or Modified Sources and Build Scripts](https://gitlab.freedesktop.org/lucmaa/mesa/tree/gallium-gb-1.0)
-```
-meson.build
-meson_options.txt
-src/gallium/auxiliary/target-helpers/inline_sw_helper.h
-src/gallium/drivers/genbu/genbu_limits.h
-src/gallium/drivers/genbu/genbu_public.h
-src/gallium/drivers/genbu/genbu_screen.c
-src/gallium/drivers/genbu/genbu_screen.h
-src/gallium/drivers/genbu/genbu_texture.h
-src/gallium/drivers/genbu/meson.build
-src/gallium/targets/libgl-xlib/meson.build
-src/gallium/meson.build
-```
 
-Result after building:
-```
-build/src/gallium/
-├── auxiliary
-│   ├── eb820e8@@gallium@sta
-│   │   ├── cso_cache_cso_cache.c.o
-│   │   ├── cso_cache_cso_context.c.o
-│   │   ├── cso_cache_cso_hash.c.o
-│   │   ├── draw_draw_context.c.o
-│   │   ├── draw_draw_fs.c.o
-│   │   ├── draw_draw_gs.c.o
-│   │   ├── draw_draw_pipe.c.o
-│   │   ├── draw_draw_pipe_aaline.c.o
-│   │   ├── draw_draw_pipe_aapoint.c.o
-│   │   ├── draw_draw_pipe_clip.c.o
-│   │   ├── draw_draw_pipe_cull.c.o
-│   │   ├── draw_draw_pipe_flatshade.c.o
-│   │   ├── draw_draw_pipe_offset.c.o
-│   │   ├── draw_draw_pipe_pstipple.c.o
-│   │   ├── draw_draw_pipe_stipple.c.o
-│   │   ├── draw_draw_pipe_twoside.c.o
-│   │   ├── draw_draw_pipe_unfilled.c.o
-│   │   ├── draw_draw_pipe_util.c.o
-│   │   ├── draw_draw_pipe_validate.c.o
-│   │   ├── draw_draw_pipe_vbuf.c.o
-│   │   ├── draw_draw_pipe_wide_line.c.o
-│   │   ├── draw_draw_pipe_wide_point.c.o
-│   │   ├── draw_draw_prim_assembler.c.o
-│   │   ├── draw_draw_pt.c.o
-│   │   ├── draw_draw_pt_emit.c.o
-│   │   ├── draw_draw_pt_fetch.c.o
-│   │   ├── draw_draw_pt_fetch_emit.c.o
-│   │   ├── draw_draw_pt_fetch_shade_emit.c.o
-│   │   ├── draw_draw_pt_fetch_shade_pipeline.c.o
-│   │   ├── draw_draw_pt_post_vs.c.o
-│   │   ├── draw_draw_pt_so_emit.c.o
-│   │   ├── draw_draw_pt_util.c.o
-│   │   ├── draw_draw_pt_vsplit.c.o
-│   │   ├── draw_draw_vertex.c.o
-│   │   ├── draw_draw_vs.c.o
-│   │   ├── draw_draw_vs_exec.c.o
-│   │   ├── draw_draw_vs_variant.c.o
-│   │   ├── driver_ddebug_dd_context.c.o
-│   │   ├── driver_ddebug_dd_draw.c.o
-│   │   ├── driver_ddebug_dd_screen.c.o
-│   │   ├── driver_noop_noop_pipe.c.o
-│   │   ├── driver_noop_noop_state.c.o
-│   │   ├── driver_rbug_rbug_context.c.o
-│   │   ├── driver_rbug_rbug_core.c.o
-│   │   ├── driver_rbug_rbug_objects.c.o
-│   │   ├── driver_rbug_rbug_screen.c.o
-│   │   ├── driver_trace_tr_context.c.o
-│   │   ├── driver_trace_tr_dump.c.o
-│   │   ├── driver_trace_tr_dump_state.c.o
-│   │   ├── driver_trace_tr_screen.c.o
-│   │   ├── driver_trace_tr_texture.c.o
-│   │   ├── hud_font.c.o
-│   │   ├── hud_hud_context.c.o
-│   │   ├── hud_hud_cpu.c.o
-│   │   ├── hud_hud_cpufreq.c.o
-│   │   ├── hud_hud_diskstat.c.o
-│   │   ├── hud_hud_driver_query.c.o
-│   │   ├── hud_hud_fps.c.o
-│   │   ├── hud_hud_nic.c.o
-│   │   ├── hud_hud_sensors_temp.c.o
-│   │   ├── indices_u_primconvert.c.o
-│   │   ├── meson-generated_.._u_indices_gen.c.o
-│   │   ├── meson-generated_.._u_unfilled_gen.c.o
-│   │   ├── nir_nir_draw_helpers.c.o
-│   │   ├── nir_tgsi_to_nir.c.o
-│   │   ├── os_os_process.c.o
-│   │   ├── pipebuffer_pb_buffer_fenced.c.o
-│   │   ├── pipebuffer_pb_bufmgr_cache.c.o
-│   │   ├── pipebuffer_pb_bufmgr_debug.c.o
-│   │   ├── pipebuffer_pb_bufmgr_mm.c.o
-│   │   ├── pipebuffer_pb_bufmgr_slab.c.o
-│   │   ├── pipebuffer_pb_cache.c.o
-│   │   ├── pipebuffer_pb_slab.c.o
-│   │   ├── pipebuffer_pb_validate.c.o
-│   │   ├── postprocess_pp_celshade.c.o
-│   │   ├── postprocess_pp_colors.c.o
-│   │   ├── postprocess_pp_init.c.o
-│   │   ├── postprocess_pp_mlaa.c.o
-│   │   ├── postprocess_pp_program.c.o
-│   │   ├── postprocess_pp_run.c.o
-│   │   ├── rbug_rbug_connection.c.o
-│   │   ├── rbug_rbug_context.c.o
-│   │   ├── rbug_rbug_core.c.o
-│   │   ├── rbug_rbug_demarshal.c.o
-│   │   ├── rbug_rbug_shader.c.o
-│   │   ├── rbug_rbug_texture.c.o
-│   │   ├── renderonly_renderonly.c.o
-│   │   ├── rtasm_rtasm_cpu.c.o
-│   │   ├── rtasm_rtasm_execmem.c.o
-│   │   ├── rtasm_rtasm_x86sse.c.o
-│   │   ├── tgsi_tgsi_aa_point.c.o
-│   │   ├── tgsi_tgsi_build.c.o
-│   │   ├── tgsi_tgsi_dump.c.o
-│   │   ├── tgsi_tgsi_emulate.c.o
-│   │   ├── tgsi_tgsi_exec.c.o
-│   │   ├── tgsi_tgsi_from_mesa.c.o
-│   │   ├── tgsi_tgsi_info.c.o
-│   │   ├── tgsi_tgsi_iterate.c.o
-│   │   ├── tgsi_tgsi_lowering.c.o
-│   │   ├── tgsi_tgsi_parse.c.o
-│   │   ├── tgsi_tgsi_point_sprite.c.o
-│   │   ├── tgsi_tgsi_sanity.c.o
-│   │   ├── tgsi_tgsi_scan.c.o
-│   │   ├── tgsi_tgsi_strings.c.o
-│   │   ├── tgsi_tgsi_text.c.o
-│   │   ├── tgsi_tgsi_transform.c.o
-│   │   ├── tgsi_tgsi_two_side.c.o
-│   │   ├── tgsi_tgsi_ureg.c.o
-│   │   ├── tgsi_tgsi_util.c.o
-│   │   ├── translate_translate.c.o
-│   │   ├── translate_translate_cache.c.o
-│   │   ├── translate_translate_generic.c.o
-│   │   ├── translate_translate_sse.c.o
-│   │   ├── util_u_async_debug.c.o
-│   │   ├── util_u_bitmask.c.o
-│   │   ├── util_u_blit.c.o
-│   │   ├── util_u_blitter.c.o
-│   │   ├── util_u_cache.c.o
-│   │   ├── util_u_compute.c.o
-│   │   ├── util_u_debug_describe.c.o
-│   │   ├── util_u_debug_flush.c.o
-│   │   ├── util_u_debug_gallium.c.o
-│   │   ├── util_u_debug_image.c.o
-│   │   ├── util_u_debug_memory.c.o
-│   │   ├── util_u_debug_refcnt.c.o
-│   │   ├── util_u_debug_stack.c.o
-│   │   ├── util_u_debug_symbol.c.o
-│   │   ├── util_u_dl.c.o
-│   │   ├── util_u_draw.c.o
-│   │   ├── util_u_draw_quad.c.o
-│   │   ├── util_u_dump_defines.c.o
-│   │   ├── util_u_dump_state.c.o
-│   │   ├── util_u_framebuffer.c.o
-│   │   ├── util_u_gen_mipmap.c.o
-│   │   ├── util_u_handle_table.c.o
-│   │   ├── util_u_hash_table.c.o
-│   │   ├── util_u_helpers.c.o
-│   │   ├── util_u_idalloc.c.o
-│   │   ├── util_u_index_modify.c.o
-│   │   ├── util_u_linear.c.o
-│   │   ├── util_u_live_shader_cache.c.o
-│   │   ├── util_u_log.c.o
-│   │   ├── util_u_network.c.o
-│   │   ├── util_u_prim.c.o
-│   │   ├── util_u_prim_restart.c.o
-│   │   ├── util_u_pstipple.c.o
-│   │   ├── util_u_resource.c.o
-│   │   ├── util_u_sampler.c.o
-│   │   ├── util_u_screen.c.o
-│   │   ├── util_u_simple_shaders.c.o
-│   │   ├── util_u_split_draw.c.o
-│   │   ├── util_u_suballoc.c.o
-│   │   ├── util_u_surface.c.o
-│   │   ├── util_u_surfaces.c.o
-│   │   ├── util_u_tests.c.o
-│   │   ├── util_u_texture.c.o
-│   │   ├── util_u_threaded_context.c.o
-│   │   ├── util_u_tile.c.o
-│   │   ├── util_u_transfer.c.o
-│   │   ├── util_u_transfer_helper.c.o
-│   │   ├── util_u_upload_mgr.c.o
-│   │   └── util_u_vbuf.c.o
-│   ├── libgallium.a
-│   ├── pipe-loader
-│   ├── u_indices_gen.c
-│   └── u_unfilled_gen.c
-├── drivers
-│   └── genbu
-│       ├── 1e0fe92@@genbu@sta
-│       │   ├── genbu_context.c.o
-│       │   └── genbu_screen.c.o
-│       └── libgenbu.a
-├── state_trackers
-│   └── glx
-│       └── xlib
-│           ├── 5534cc1@@xlib@sta
-│           │   ├── glx_api.c.o
-│           │   ├── glx_getproc.c.o
-│           │   ├── glx_usefont.c.o
-│           │   ├── xm_api.c.o
-│           │   └── xm_st.c.o
-│           └── libxlib.a
-├── targets
-│   └── libgl-xlib
-│       ├── a6bea21@@GL@sha
-│       │   └── xlib.c.o
-│       ├── libGL.so -> libGL.so.1
-│       ├── libGL.so.1 -> libGL.so.1.5.0
-│       └── libGL.so.1.5.0
-└── winsys
-    └── sw
-        ├── null
-        ├── wrapper
-        └── xlib
-            ├── 5513208@@ws_xlib@sta
-            │   └── xlib_sw_winsys.c.o
-            └── libws_xlib.a
-```
+### Trace
+
+| *belong* | *hook* | *callback* | *caller* |
+|-|-|-|-|
+| pipe_screen | resource_create | softpipe_resource_create | bufferobj_data |
+| pipe_context | transfer_map | softpipe_transfer_map | |
+| pipe_context | create_surface | softpipe_create_surface | st_framebuffer_validate |
 
 ## Q&A
+#### When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
+
+The answer is *`sw_winsys`*. All of target helpers's parameter is a `sw_winsys`. Check mesa source directory: [mesa/src/gallium/winsys](https://gitlab.freedesktop.org/mesa/mesa/tree/master/src/gallium/winsys)
+
+```
+amdgpu
+etnaviv
+freedreno
+i915
+iris
+kmsro
+lima
+nouveau
+panfrost
+radeon
+svga
+sw
+tegra
+v3d
+vc4
+virgl
+```
+
+To put it simply, specific driver corresponds to specific winsys. The `sw` is for software rasterizers. If you expect to create pipe screen for some driver else, you need to add another target helper with its winsys as parameter like: 
+
+```
+static inline struct pipe_screen *
+i915_screen_create_named(struct i915_drm_winsys *winsys, const char *driver)
+```
+
+That means you have to declare a bunch of new interfaces from the top. So you'd better wrap the function to create specific driver's winsys so that it can take a sw_winsys as its parameter like:
+
+
+```
+#if defined(GALLIUM_VIRGL)
+   if (screen == NULL && strcmp(driver, "virpipe") == 0) {
+      struct virgl_winsys *vws;
+      vws = virgl_vtest_winsys_wrap(winsys);
+      screen = virgl_create_screen(vws, NULL);
+   }
+#endif
+
+```
+
+
 #### libGL.so is not built until glx option is enabled in **meson_options.txt**.
 
 Only with essential build-time dependencies for X11 installed and glx option configured is libGL.so built.
