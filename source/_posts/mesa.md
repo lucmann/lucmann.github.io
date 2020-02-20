@@ -26,6 +26,11 @@ It's good choice for exploring any project's source code to start with its build
     - libx11-xcb-dev
     - libxcb-fixes0-dev
     - libxext-dev
+    - libxdamage-dev (if glx option is dri)
+    - libxfixes-dev (if glx option is dri)
+    - libxcb-glx-dev (if glx option is dri)
+    - libxcb-dri2-dev (if glx option is dri)
+    - libxxf86vm-dev (if glx option is dri)
 
 These dependencies include from build-time headers to run-time tools. Nevertheless most of them are optional but not necessary. You can customize them in **meson_options.txt** by modifying the **value** field of each option. With the listed above run and build time dependencies installed you can create a build directory and start to configure.
 
@@ -137,7 +142,7 @@ NOTE: As for softpipe and llvmpipe `gl_api` and `gl_context` are created respect
 #### Draw
 <div align=center>{% asset_img PopMatrix.png "draw command" %}</div>
 
-## GLX Demos
+## Gallium-Based GLX Demos
 If you want to know the full graphic stack of an OpenGL demo, you can not get rid of the window system. That is why I will try some GLX demos. Evidently GLX demos must depend on X11. You can cope with this problem by installing [vcXsrv](https://sourceforge.net/projects/vcxsrv/) on the Windows 10 which hosts your WSL. 
 
 <div align=center>{% asset_img glxgears.png "glx demo" %}</div>
@@ -422,6 +427,13 @@ To verify the analysis above we will try to add a customized gallium driver name
 | pipe_context | draw_vbo | softpipe_draw_vbo | st_draw_vbo | glCallList |
 | pipe_context | draw_vbo | softpipe_draw_vbo | st_draw_vbo | glCallList |
 
+
+## DRI-Based GLX Demos
+
+- `driOpenDriver`
+
+This function adds the "_dri.so" suffix to the driver name and searches the directories specified by the **LIBGL_DRIVERS_PATH** environment variable in order to find the driver.
+
 ## Q&A
 #### When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
 
@@ -499,7 +511,7 @@ endif
 
 - dri based GLX requires shared-glapi
 - Gallium-xlib based GLX requires softpipe or llvmpipe
-    * This means `gallium-xlib` is supposed to be a software implementation of GLX.
+    * means that `gallium-xlib` is supposed to only support software rasterizers(llvmpipe, softpipe) and virtual GPU(virgl, swr).
 ```
 option(
   'glx',
@@ -509,8 +521,17 @@ option(
   description : 'Build support for GLX platform'
 )
 ```
+In Mesa, glx is implemented in three ways:
+
+| *-based | backend | window system |
+|-|-|-|
+| dri-based | non-sw-pipes | *_drm_winsys |
+| xlib | tnl | sw_winsys |
+| gallium-based | softpipe/llvmpipe | sw_winsys |
+
+
 - OSMesa gallium requires gallium softpipe or llvmpipe
-    * This means if `osmesa` is configured as `gallium`, `gallium-drivers` must include `swrast` but the `classic` osmesa uses the fixed-functioned TNL by default.
+    * means if `osmesa` is configured as `gallium`, `gallium-drivers` must include `swrast` but the `classic` osmesa uses the fixed-functioned TNL by default.
 ```
 option(
   'osmesa',
