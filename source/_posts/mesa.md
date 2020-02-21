@@ -636,3 +636,93 @@ option(
 ```
 - Cannot build GLX support without X11 platform support and at least one OpenGL API
     * GLX, As the name suggests, is dedicated to X11 winsys.
+
+#### When `__glXInitialize` creates the `Display`, **only** `driswCreateDisplay` returns successfully. Both of `dri2CreateDisplay` and `driCreateDisplay` failed.
+
+- env: WSL on Windows 10 and with vcXsrv installed on the host as X server
+
+The cause of failure is that vcXsrv has no extensions with DRI or DRI2. This lack of X server extension fails `DRI2QueryExtension` and `XF86DRIQueryExtension` so that the loading of gallium driver is not invoked.
+
+``` c
+/*
+ * XextAddDisplay - add a display to this extension
+ */
+XExtDisplayInfo *XextAddDisplay (
+    XExtensionInfo *extinfo,
+    Display *dpy,
+    _Xconst char *ext_name,
+    XExtensionHooks *hooks,
+    int nevents,
+    XPointer data)
+{
+    XExtDisplayInfo *dpyinfo;
+
+    dpyinfo = (XExtDisplayInfo *) Xmalloc (sizeof (XExtDisplayInfo));
+    if (!dpyinfo) return NULL;
+    dpyinfo->display = dpy;
+    dpyinfo->data = data;
+    dpyinfo->codes = XInitExtension (dpy, ext_name);
+
+    /*
+     * if the server has the extension, then we can initialize the
+     * appropriate function vectors
+     */
+    if (dpyinfo->codes) {
+	int i, j;
+
+	for (i = 0, j = dpyinfo->codes->first_event; i < nevents; i++, j++) {
+	    XESetWireToEvent (dpy, j, hooks->wire_to_event);
+	    XESetEventToWire (dpy, j, hooks->event_to_wire);
+	}
+
+        /* register extension for XGE */
+        if (strcmp(ext_name, GE_NAME))
+            xgeExtRegister(dpy, dpyinfo->codes->major_opcode, hooks);
+
+	if (hooks->create_gc)
+	  XESetCreateGC (dpy, dpyinfo->codes->extension, hooks->create_gc);
+	if (hooks->copy_gc)
+	  XESetCopyGC (dpy, dpyinfo->codes->extension, hooks->copy_gc);
+	if (hooks->flush_gc)
+	  XESetFlushGC (dpy, dpyinfo->codes->extension, hooks->flush_gc);
+	if (hooks->free_gc)
+	  XESetFreeGC (dpy, dpyinfo->codes->extension, hooks->free_gc);
+	if (hooks->create_font)
+	  XESetCreateFont (dpy, dpyinfo->codes->extension, hooks->create_font);
+	if (hooks->free_font)
+	  XESetFreeFont (dpy, dpyinfo->codes->extension, hooks->free_font);
+	if (hooks->close_display)
+	  XESetCloseDisplay (dpy, dpyinfo->codes->extension,
+			     hooks->close_display);
+	if (hooks->error)
+	  XESetError (dpy, dpyinfo->codes->extension, hooks->error);
+	if (hooks->error_string)
+	  XESetErrorString (dpy, dpyinfo->codes->extension,
+			    hooks->error_string);
+    } else if (hooks->close_display) {
+	/* The server doesn't have this extension.
+	 * Use a private Xlib-internal extension to hang the close_display
+	 * hook on so that the "cache" (extinfo->cur) is properly cleaned.
+	 * (XBUG 7955)
+	 */
+	XExtCodes *codes = XAddExtension(dpy);
+	if (!codes) {
+	    XFree(dpyinfo);
+	    return NULL;
+	}
+	XESetCloseDisplay (dpy, codes->extension, hooks->close_display);
+    }
+
+    /*
+     * now, chain it onto the list
+     */
+    _XLockMutex(_Xglobal_lock);
+    dpyinfo->next = extinfo->head;
+    extinfo->head = dpyinfo;
+    extinfo->cur = dpyinfo;
+    extinfo->ndisplays++;
+    _XUnlockMutex(_Xglobal_lock);
+    return dpyinfo;
+}
+```
+
