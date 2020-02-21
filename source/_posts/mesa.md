@@ -430,14 +430,107 @@ To verify the analysis above we will try to add a customized gallium driver name
 
 ## DRI-Based GLX Demos
 
+### Loading
+
+- `__glXInitialize`
 - `driOpenDriver`
 
-This function adds the "_dri.so" suffix to the driver name and searches the directories specified by the **LIBGL_DRIVERS_PATH** environment variable in order to find the driver.
+``` c
+#if defined(GLX_DIRECT_RENDERING) && !defined(GLX_USE_APPLEGL)
+   glx_direct = !env_var_as_boolean("LIBGL_ALWAYS_INDIRECT", false);
+   glx_accel = !env_var_as_boolean("LIBGL_ALWAYS_SOFTWARE", false);
+
+   dpyPriv->drawHash = __glxHashCreate();
+
+   /*
+    ** Initialize the direct rendering per display data and functions.
+    ** Note: This _must_ be done before calling any other DRI routines
+    ** (e.g., those called in AllocAndFetchScreenConfigs).
+    */
+#if defined(GLX_USE_DRM)
+   if (glx_direct && glx_accel) {
+#if defined(HAVE_DRI3)
+      if (!env_var_as_boolean("LIBGL_DRI3_DISABLE", false))
+         dpyPriv->dri3Display = dri3_create_display(dpy);
+#endif /* HAVE_DRI3 */
+      dpyPriv->dri2Display = dri2CreateDisplay(dpy);
+      dpyPriv->driDisplay = driCreateDisplay(dpy);
+   }
+#endif /* GLX_USE_DRM */
+   if (glx_direct)
+      dpyPriv->driswDisplay = driswCreateDisplay(dpy);
+#endif /* GLX_DIRECT_RENDERING && !GLX_USE_APPLEGL */
+
+#ifdef GLX_USE_APPLEGL
+   if (!applegl_create_display(dpyPriv)) {
+      free(dpyPriv);
+      return NULL;
+   }
+#endif
+
+#ifdef GLX_USE_WINDOWSGL
+   if (glx_direct && glx_accel)
+      dpyPriv->windowsdriDisplay = driwindowsCreateDisplay(dpy);
+#endif
+
+   if (!AllocAndFetchScreenConfigs(dpy, dpyPriv)) {
+      free(dpyPriv);
+      return NULL;
+   }
+```
+
+This process of loading drivers works similarly with that of gallium-based glx. Compilation macros and environment variables make a difference. There are several approaches to load the specific drivers:
+
+- `dri3_create_display`
+- `dri2CreateDisplay`
+- `driCreateDisplay`
+- `driswCreateDisplay`
+- `applegl_create_display`
+- `driwindowsCreateDisplay`
+
+Let's look into `driCreateDisplay`. Once it manages to attach to `driCreateScreen` which searches and matches the appropriate gallium driver the function `driOpenDriver` will open the **found** driver by its name like "i965", "radeon", "nouveau", etc. These drivers are supposed to be installed at **`LIBGL_DRIVERS_PATH`** or `LIBGL_DRIVERS_DIR`(deprecated) and named as `*_dri.so` by default.
+
+``` c
+/*
+ * Allocate, initialize and return a __DRIdisplayPrivate object.
+ * This is called from __glXInitialize() when we are given a new
+ * display pointer.
+ */
+_X_HIDDEN __GLXDRIdisplay *
+driCreateDisplay(Display * dpy)
+{
+   struct dri_display *pdpyp;
+   int eventBase, errorBase;
+   int major, minor, patch;
+
+   if (!XF86DRIQueryExtension(dpy, &eventBase, &errorBase)) {
+      return NULL;
+   }
+
+   if (!XF86DRIQueryVersion(dpy, &major, &minor, &patch)) {
+      return NULL;
+   }
+
+   pdpyp = malloc(sizeof *pdpyp);
+   if (!pdpyp) {
+      return NULL;
+   }
+
+   pdpyp->driMajor = major;
+   pdpyp->driMinor = minor;
+   pdpyp->driPatch = patch;
+
+   pdpyp->base.destroyDisplay = driDestroyDisplay;
+   pdpyp->base.createScreen = driCreateScreen;
+
+   return &pdpyp->base;
+}
+```
 
 ## Q&A
 #### When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
 
-The answer is *`sw_winsys`*. All of target helpers's parameter is a `sw_winsys`. Check mesa source directory: [mesa/src/gallium/winsys](https://gitlab.freedesktop.org/mesa/mesa/tree/master/src/gallium/winsys)
+The answer is **`sw_winsys`**. All of target helpers's parameter is a `sw_winsys`. Check mesa source directory: [mesa/src/gallium/winsys](https://gitlab.freedesktop.org/mesa/mesa/tree/master/src/gallium/winsys)
 
 ```
 amdgpu
