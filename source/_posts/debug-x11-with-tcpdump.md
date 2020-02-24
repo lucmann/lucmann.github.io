@@ -187,4 +187,4 @@ $3 = {
 }
 ```
 
-`$2` is **Request** packet content to VcXsrv, `$3` is **Reply** packet content from VcXsrv. Even we can notice the three-shaked of TCP from the zero-lengthed packet in x110224.pcap. 
+`$2` is **Request** packet content to VcXsrv, `$3` is **Reply** packet content from VcXsrv. Even that we can notice the three-way handshake of TCP from the zero-lengthed packet in x110224.pcap. 
