@@ -490,6 +490,26 @@ This process of loading drivers works similarly with that of gallium-based glx. 
 
 Let's look into `driCreateDisplay`. Once it manages to attach to `driCreateScreen` which searches and matches the appropriate gallium driver the function `driOpenDriver` will open the **found** driver by its name like "i965", "radeon", "nouveau", etc. These drivers are supposed to be installed at **`LIBGL_DRIVERS_PATH`** or `LIBGL_DRIVERS_DIR`(deprecated) and named as `*_dri.so` by default.
 
+Like Gallium-based GLX's `_init` routine with GCC `constructor` attribute, DRI-based GLX also defines a routine `megadriver_stub_init` with `constructor` attribute which allows to load the specific driver in a way of `__DRIextension`.
+
+<div align=center>{% asset_img "__glXInitialize.png" "loading a driver" %}</div>
+
+``` c
+/**
+ * This is a constructor function for the megadriver dynamic library.
+ *
+ * When the driver is dlopen'ed, this function will run. It will
+ * search for the name of the foo_dri.so file that was opened using
+ * the dladdr function.
+ *
+ * After finding foo's name, it will call __driDriverGetExtensions_foo
+ * and use the return to update __driDriverExtensions to enable
+ * compatibility with older DRI driver loaders.
+ */
+__attribute__((constructor)) static void
+megadriver_stub_init(void);
+```
+
 ``` c
 /*
  * Allocate, initialize and return a __DRIdisplayPrivate object.
