@@ -1,5 +1,5 @@
 ---
-title: debugging x11 with tcpdump
+title: Debugging X11 with tcpdump
 date: 2020-02-24 09:18:03
 tags: [X11]
 ---
@@ -120,45 +120,6 @@ reading from file /home/luc/github/x110224.pcap, link-type EN10MB (Ethernet)
 
 what codes sends and receives these packets? The first two twenty-byted segments are IP header (20 bytes without option) and TCP header (20 bytes without option) separately in these packets.
 
-``` shell
-Num     Type           Disp Enb Address            What
-1       breakpoint     keep y   [34m0x00007ffff7a14520[m in [33mXextAddDisplay[m at [32mextutil.c[m:103
-	breakpoint already hit 1 time
-Starting program: /mnt/c/Users/lulu/Documents/github/demos/src/xdemos/glxgears 
-[Thread debugging using libthread_db enabled]
-Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-[Inferior 1 (process 7648) exited with code 0377]
-Starting program: /mnt/c/Users/lulu/Documents/github/demos/src/xdemos/glxgears 
-[Thread debugging using libthread_db enabled]
-Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-[Inferior 1 (process 7649) exited with code 0377]
-Starting program: /mnt/c/Users/lulu/Documents/github/demos/src/xdemos/glxgears 
-[Thread debugging using libthread_db enabled]
-Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-[Inferior 1 (process 7650) exited with code 0377]
-Starting program: /mnt/c/Users/lulu/Documents/github/demos/src/xdemos/glxgears 
-[Thread debugging using libthread_db enabled]
-Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-
-Breakpoint 1, [33mXextAddDisplay[m ([36mextinfo[m=0x7ffff7e77380 <_dri2Info_data>, [36mdpy[m=0x55555555d2a0, [m
-    [m[36mext_name[m=0x7ffff7e76780 <dri2ExtensionName> "DRI2", [36mhooks[m=0x7ffff7e767a0 <dri2ExtensionHooks>, [36mnevents[m=0, [36mdata[m=0x0)[m
-   [m at [32mextutil.c[m:103
-[33mXInitExtension[m ([36mdpy=dpy@entry[m=0x55555555d2a0, [36mname=name@entry[m=0x7ffff7e76780 <dri2ExtensionName> "DRI2")[m
-   [m at [32mInitExt.c[m:44
-[33mXQueryExtension[m ([36mdpy=dpy@entry[m=0x55555555d2a0, [36mname=name@entry[m=0x7ffff7e76780 <dri2ExtensionName> "DRI2", [m
-    [m[36mmajor_opcode=major_opcode@entry[m=0x7fffffffd954, [36mfirst_event=first_event@entry[m=0x7fffffffd958, [m
-    [m[36mfirst_error=first_error@entry[m=0x7fffffffd95c) at [32mQuExt.c[m:39
-[33m_XSend[m ([36mdpy=dpy@entry[m=0x55555555d2a0, [36mdata=data@entry[m=0x7ffff7e76780 <dri2ExtensionName> "DRI2", [36msize[m=4)[m
-   [m at [32mxcb_io.c[m:453
-[33mXQueryExtension[m ([36mdpy=dpy@entry[m=0x55555555d2a0, [36mname=name@entry[m=0x7ffff7e76780 <dri2ExtensionName> "DRI2", [m
-    [m[36mmajor_opcode=major_opcode@entry[m=0x7fffffffd954, [36mfirst_event=first_event@entry[m=0x7fffffffd958, [m
-    [m[36mfirst_error=first_error@entry[m=0x7fffffffd95c) at [32mQuExt.c[m:48
-$10 = {reqType = 98 'b', pad = 0 '\000', length = 3, nbytes = 4, pad1 = 0 '\000', pad2 = 0 '\000'}
-$11 = {reqType = 0x62, pad = 0x0, length = 0x3, nbytes = 0x4, pad1 = 0x0, pad2 = 0x0}
-$12 = {type = 0x1, pad1 = 0x0, sequenceNumber = 0xa, length = 0x0, present = 0x0, major_opcode = 0x0, [m
-  [mfirst_event = 0x0, first_error = 0x0, pad3 = 0x0, pad4 = 0x0, pad5 = 0x0, pad6 = 0x0, pad7 = 0x0}
-```
-
 The source code snippet:
 ``` c
 Bool
@@ -186,3 +147,44 @@ XQueryExtension(
     return (rep.present);
 }
 ```
+
+The gdb log:
+```
+Starting program: /mnt/c/Users/lulu/Documents/github/demos/src/xdemos/glxgears 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, XextAddDisplay (extinfo=0x7ffff7e77380 <_dri2Info_data>, dpy=0x55555555d2a0, 
+    ext_name=0x7ffff7e76780 <dri2ExtensionName> "DRI2", hooks=0x7ffff7e767a0 <dri2ExtensionHooks>, nevents=0, data=0x0)
+    at extutil.c:103
+XInitExtension (dpy=dpy@entry=0x55555555d2a0, name=name@entry=0x7ffff7e76780 <dri2ExtensionName> "DRI2")
+    at InitExt.c:44
+XQueryExtension (dpy=dpy@entry=0x55555555d2a0, name=name@entry=0x7ffff7e76780 <dri2ExtensionName> "DRI2", 
+    major_opcode=major_opcode@entry=0x7fffffffd984, first_event=first_event@entry=0x7fffffffd988, 
+    first_error=first_error@entry=0x7fffffffd98c) at QuExt.c:39
+$2 = {
+  reqType = 0x62, 
+  pad = 0x0, 
+  length = 0x3, 
+  nbytes = 0x4, 
+  pad1 = 0x0, 
+  pad2 = 0x0
+}
+$3 = {
+  type = 0x1, 
+  pad1 = 0x0, 
+  sequenceNumber = 0xa, 
+  length = 0x0, 
+  present = 0x0, 
+  major_opcode = 0x0, 
+  first_event = 0x0, 
+  first_error = 0x0, 
+  pad3 = 0x0, 
+  pad4 = 0x0, 
+  pad5 = 0x0, 
+  pad6 = 0x0, 
+  pad7 = 0x0
+}
+```
+
+`$2` is **Request** packet content to VcXsrv, `$3` is **Reply** packet content from VcXsrv. Even we can notice the three-shaked of TCP from the zero-lengthed packet in x110224.pcap. 
