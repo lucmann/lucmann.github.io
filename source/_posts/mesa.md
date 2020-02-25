@@ -492,7 +492,8 @@ Let's look into `driCreateDisplay`. Once it manages to attach to `driCreateScree
 
 Like Gallium-based GLX's `_init` routine with GCC **`constructor`** attribute, DRI-based GLX also defines a routine `megadriver_stub_init` with `constructor` attribute which allows to load the specific driver in a way of **`__DRIextension`**.
 
-{% img gdb.svg '"dri-based glx driver loader" "Alt text"' %}
+<img src="gdb.svg" />
+
 
 ``` c
 /**
