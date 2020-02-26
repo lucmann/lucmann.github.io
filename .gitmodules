@@ -3,4 +3,4 @@
 	url = https://github.com/iissnan/hexo-theme-next
 [submodule "themes/polarbear"]
 	path = themes/polarbear
-	url = git@github.com:lucmaa/hexo-theme-polarbear.git
+	url = https://github.com/lucmaa/hexo-theme-polarbear
