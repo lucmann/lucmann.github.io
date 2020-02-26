@@ -17,8 +17,7 @@ where an attribute-list is a possibly empty comma-separated sequence of attribut
 static void _init( void ) __attribute__((constructor));
 ```
 
-## Category
-
+## Categories
 - [Function Attributes](https://gcc.gnu.org/onlinedocs/gcc/Function-Attributes.html#Function-Attributes)
 - [Variable Attribute](https://gcc.gnu.org/onlinedocs/gcc/Variable-Attributes.html#Variable-Attributes)
 - [Type Attributes](https://gcc.gnu.org/onlinedocs/gcc/Type-Attributes.html#Type-Attributes)
@@ -33,4 +32,5 @@ extern __thread struct _glapi_table * _glapi_tls_Dispatch
     __attribute__((tls_model("initial-exec")));
 ```
 
-where the `tls_model` attribute sets thread-local storage model of a particular __thread variable, overriding `-ftls-model=` command-line switch on a per-variable basis. The `tls_model` argument should be one of `global-dynamic`, `local-dynamic`, `initial-exec`, or `local-exec`.
+where the `tls_model` attribute sets thread-local storage model of a particular thread variable, overriding `-ftls-model=` command-line switch on a per-variable basis. The [`tls_model`](https://docs.oracle.com/cd/E53394_01/html/E54813/man-tlsam.html#scrolltoc) argument should be one of `global-dynamic`, `local-dynamic`, `initial-exec`, or `local-exec`.
+
