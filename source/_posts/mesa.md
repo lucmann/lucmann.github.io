@@ -564,6 +564,11 @@ Apart from OpenGL state it contains several other contexts
 ### vbo_context
 VBO is short for vertex buffer object. This context derives two kinds of vbo contexts, `vbo_exec_context` and `vbo_save_context` which `vbo_exec_context` is generic for core and compatible ogl and the other is specific for compatible ogl.
 
+#### vbo_exec_vtx_init
+
+- Allocate a `gl_buffer_object` which just is referenced.
+- Initialize vbo attributes including size, type and active size.
+
 
 ## Q&A
 #### When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
