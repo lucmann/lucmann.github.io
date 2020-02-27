@@ -548,6 +548,23 @@ driCreateDisplay(Display * dpy)
 }
 ```
 
+## Contexts
+There are a variety of **contexts** in Mesa. The biggest one, **`gl_context`**, is commented as
+{% blockquote %}
+This is the central context data structure for Mesa. Almost all OpenGL state is contained in this structure. Think of this as a base class from which device drivers will derive sub classes.
+{% endblockquote %}
+Apart from OpenGL state it contains several other contexts
+
+- `swrast_context`
+- `swsetup_context`
+- `swtnl_context`
+- `vbo_context`
+- `st_context`
+
+### vbo_context
+VBO is short for vertex buffer object. This context derives two kinds of vbo contexts, `vbo_exec_context` and `vbo_save_context` which `vbo_exec_context` is generic for core and compatible ogl and the other is specific for compatible ogl.
+
+
 ## Q&A
 #### When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
 
