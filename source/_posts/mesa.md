@@ -569,6 +569,78 @@ VBO is short for vertex buffer object. This context derives two kinds of vbo con
 - Allocate a `gl_buffer_object` which just is referenced.
 - Initialize vbo attributes including size, type and active size.
 
+#### vbo vs. vao
+
+``` c
+struct gl_buffer_object
+{
+   GLint RefCount;
+   GLuint Name;
+   GLchar *Label;       
+   GLenum16 Usage;      
+   GLbitfield StorageFlags; 
+   GLsizeiptrARB Size;  
+   GLubyte *Data;       
+   GLboolean DeletePending;   
+   GLboolean Written;   
+   GLboolean Purgeable; 
+   GLboolean Immutable; 
+   gl_buffer_usage UsageHistory; 
+   GLuint NumSubDataCalls;
+   GLuint NumMapBufferWriteCalls;
+   struct gl_buffer_mapping Mappings[MAP_COUNT];
+   simple_mtx_t MinMaxCacheMutex;
+   struct hash_table *MinMaxCache;
+   unsigned MinMaxCacheHitIndices;
+   unsigned MinMaxCacheMissIndices;
+   bool MinMaxCacheDirty;
+   bool HandleAllocated; 
+};
+
+
+struct gl_vertex_array_object
+{
+   GLuint Name;
+   GLint RefCount;
+   GLchar *Label;       
+   /**
+    * Has this array object been bound?
+    */
+   GLboolean EverBound;
+   /**
+    * Marked to true if the object is shared between contexts and immutable.
+    * Then reference counting is done using atomics and thread safe.
+    * Is used for dlist VAOs.
+    */
+   bool SharedAndImmutable;
+   struct gl_array_attributes VertexAttrib[VERT_ATTRIB_MAX];
+   struct gl_vertex_buffer_binding BufferBinding[VERT_ATTRIB_MAX];
+   GLbitfield VertexAttribBufferMask;
+   GLbitfield Enabled;
+   /**
+    * Mask of VERT_BIT_* enabled arrays past position/generic0 mapping
+    *
+    * The value is valid past calling _mesa_update_vao_derived_arrays.
+    * Note that _mesa_update_vao_derived_arrays is called when binding
+    * the VAO to Array._DrawVAO.
+    */
+   GLbitfield _EffEnabledVBO;
+   gl_attribute_map_mode _AttributeMapMode;
+   GLbitfield NewArrays;
+   struct gl_buffer_object *IndexBufferObj;
+};
+```
+
+## Dispatchers
+
+- *`Exec`*: The current dispatch table for non-displaylist-saving execution, either BeginEnd or OutsideBeginEnd
+- *`OutsideBeginEnd`*: The normal dispatch table for non-displaylist-saving, non-begin/end
+- *`Save`*: The dispatch table used between glNewList() and glEndList()
+- *`BeginEnd`*: The dispatch table used between glBegin() and glEnd() (outside of a display list). Only valid functions between those two are set, which is mostly just the set in a GLvertexformat struct.
+- *`ContextLost`*: Dispatch table for when a graphics reset has happened.
+- *`MarshalExec`*: Dispatch table used to marshal API calls from the client program to a separate server thread. NULL if API calls are not being marshalled to another thread.
+- *`CurrentClientDispatch`*: Dispatch table currently in use for fielding API calls from the client program. If API calls are being marshalled to another thread, this refers to *`MarshalExec`*. Otherwise it refers to *`CurrentServerDispatch`*.
+- *`CurrentServerDispatch`*: Dispatch table currently in use for performing API calls. It refers to *`Save`* or *`Exec`*.
 
 ## Q&A
 #### When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
