@@ -34,3 +34,10 @@ extern __thread struct _glapi_table * _glapi_tls_Dispatch
 
 where the `tls_model` attribute sets thread-local storage model of a particular thread variable, overriding `-ftls-model=` command-line switch on a per-variable basis. The [`tls_model`](https://docs.oracle.com/cd/E53394_01/html/E54813/man-tlsam.html#scrolltoc) argument should be one of `global-dynamic`, `local-dynamic`, `initial-exec`, or `local-exec`.
 
+### [Visibility](http://anadoxin.org/blog/control-over-symbol-exports-in-gcc.html)
+
+```
+__attribute__((visibility("default")));
+```
+
+this attribute involves with the visibility of exported symbols in a shared object, overriding `-fvisibility=hidden` command-line option during the compilation. The visibility argument should be one of `default`, `hidden`, `internal`, or `protected`.
