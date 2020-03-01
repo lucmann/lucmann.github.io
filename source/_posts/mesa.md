@@ -603,27 +603,12 @@ struct gl_vertex_array_object
    GLuint Name;
    GLint RefCount;
    GLchar *Label;       
-   /**
-    * Has this array object been bound?
-    */
    GLboolean EverBound;
-   /**
-    * Marked to true if the object is shared between contexts and immutable.
-    * Then reference counting is done using atomics and thread safe.
-    * Is used for dlist VAOs.
-    */
    bool SharedAndImmutable;
    struct gl_array_attributes VertexAttrib[VERT_ATTRIB_MAX];
    struct gl_vertex_buffer_binding BufferBinding[VERT_ATTRIB_MAX];
    GLbitfield VertexAttribBufferMask;
    GLbitfield Enabled;
-   /**
-    * Mask of VERT_BIT_* enabled arrays past position/generic0 mapping
-    *
-    * The value is valid past calling _mesa_update_vao_derived_arrays.
-    * Note that _mesa_update_vao_derived_arrays is called when binding
-    * the VAO to Array._DrawVAO.
-    */
    GLbitfield _EffEnabledVBO;
    gl_attribute_map_mode _AttributeMapMode;
    GLbitfield NewArrays;
