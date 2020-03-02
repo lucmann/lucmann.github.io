@@ -651,6 +651,29 @@ struct gl_vertex_array_object
 - *`CurrentClientDispatch`*: Dispatch table currently in use for fielding API calls from the client program. If API calls are being marshalled to another thread, this refers to *`MarshalExec`*. Otherwise it refers to *`CurrentServerDispatch`*.
 - *`CurrentServerDispatch`*: Dispatch table currently in use for performing API calls. It refers to *`Save`* or *`Exec`*.
 
+
+## Modules
+
+- draw module
+- CSO module
+- translate module
+- VBO module
+- TNL module(Transform & Light)
+
+## draw_xxx_stage
+
+- **`extern struct draw_stage *draw_unfilled_stage( struct draw_context *context );`**
+- **`extern struct draw_stage *draw_twoside_stage( struct draw_context *context );`**
+- **`extern struct draw_stage *draw_offset_stage( struct draw_context *context );`**
+- **`extern struct draw_stage *draw_clip_stage( struct draw_context *context );`**
+- **`extern struct draw_stage *draw_flatshade_stage( struct draw_context *context );`**
+- **`extern struct draw_stage *draw_cull_stage( struct draw_context *context );`**
+- **`extern struct draw_stage *draw_stipple_stage( struct draw_context *context );`**
+- **`extern struct draw_stage *draw_wide_line_stage( struct draw_context *context );`**
+- **`extern struct draw_stage *draw_wide_point_stage( struct draw_context *context );`**
+- **`extern struct draw_stage *draw_validate_stage( struct draw_context *context );`**
+
+
 ## Q&A
 #### When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
 
