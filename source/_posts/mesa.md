@@ -551,6 +551,7 @@ driCreateDisplay(Display * dpy)
 ## Contexts
 There are a variety of **contexts** in Mesa. They are designed as a framework of layers.
 
+```
 __________________
 |                |
 |   gl_contex    | --------------> standard & general
@@ -566,6 +567,7 @@ __________________
 |  draw_contex   | --------------> driver-specific
 |________________|
 
+```
 
 ### gl_context
 {% blockquote %}
