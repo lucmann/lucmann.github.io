@@ -673,6 +673,42 @@ struct gl_vertex_array_object
 - **`extern struct draw_stage *draw_wide_point_stage( struct draw_context *context );`**
 - **`extern struct draw_stage *draw_validate_stage( struct draw_context *context );`**
 
+## Auxiliary
+
+- cso_cache
+    The CSO cache is used to accelerate preparation of state by saving driver-specific state structure for later use.
+
+- draw
+    Draw is a software TCL pipeline for hardware that lacks vertex shaders or other essential parts of pre-rasterization vertex preparation.
+
+- driver_ddebug
+- driver_noop
+- driver_rbug
+- driver_trace
+- gallivm
+- hud
+- indices
+    Indices provides tools for translating or generating element indices for use with element-based rendering.
+
+- nir
+- os
+    * memory allocation
+    * simple message logging
+    * obtaining run-time configuration option
+    * threading primitives
+    The OS module contains the abstraction for basic operating system services above. This is the bare minimum required to port Gallium to a new platform. It already provides the implementations of these abstractions for the most common platforms. When targeting an embedded platform no implementation will be provided - these must be provided separately.
+
+- pipe-loader
+- pipebuffer
+- postprocess
+- rbug
+- renderonly
+- rtasm
+- target-helpers
+- tgsi
+- translate
+- util
+- vl
 
 ## Q&A
 #### When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
