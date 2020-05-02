@@ -13,7 +13,7 @@ timezone: ''
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://lucmaa.github.io
+url: https://lucmann.github.io
 root: /
 permalink: :title/
 permalink_defaults:
@@ -105,5 +105,5 @@ theme: polarbear
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: git@github.com:lucmaa/lucmaa.github.io.git
+  repository: git@github.com:lucmann/lucmann.github.io.git
   branch: master
