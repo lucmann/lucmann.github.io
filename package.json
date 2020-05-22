@@ -24,5 +24,18 @@
     "hexo-renderer-scss": "^1.2.0",
     "hexo-renderer-stylus": "^1.1.0",
     "hexo-server": "^1.0.0"
-  }
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucmann/lucmann.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucmann/lucmann.github.io/issues"
+  },
+  "homepage": "https://github.com/lucmann/lucmann.github.io#readme",
+  "description": ""
 }
