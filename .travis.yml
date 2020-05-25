@@ -7,7 +7,7 @@ cache:
     - node_modules
 before_install:
   - wget http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc6_2.30-0ubuntu2_amd64.deb
-  - sudo dpkg -i libc6_2.30-0ubuntu2_amd64.deb
+  - sudo dpkg -i --auto-deconfigure libc6_2.30-0ubuntu2_amd64.deb
 install:
   - npm install
 branches:
