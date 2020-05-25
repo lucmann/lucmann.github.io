@@ -10,13 +10,22 @@ It's good choice for exploring any project's source code to start with its build
 
 ### Requisite
 * Run-time dependency
+    - libdrm_intel
+    - libdrm_amdgpu
+    - libdrm_radeon
+    - libdrm_nouveau
+    - libdrm
+    - LLVM
+    - libelf
+    - valgrind
     - bison
     - flex
     - gettext
 
 * Build-time dependency
-    - libx11-xcb-dev (if glx option is gallium-xlib)
-    - libxext-dev (if glx option is gallium-xlib)
+    - libx11-xcb-dev
+    - libxcb-fixes0-dev
+    - libxext-dev
     - libxdamage-dev (if glx option is dri)
     - libxfixes-dev (if glx option is dri)
     - libxcb-glx-dev (if glx option is dri)
