@@ -12,6 +12,7 @@
     "version": "4.0.0"
   },
   "dependencies": {
+    "acorn": "^7.2.0",
     "hexo": "^4.0.0",
     "hexo-deployer-git": "^2.1.0",
     "hexo-generator-archive": "^1.0.0",
@@ -23,7 +24,9 @@
     "hexo-renderer-sass": "^0.4.0",
     "hexo-renderer-scss": "^1.2.0",
     "hexo-renderer-stylus": "^1.1.0",
-    "hexo-server": "^1.0.0"
+    "hexo-server": "^1.0.0",
+    "kind-of": "^6.0.3",
+    "minimist": "^1.2.5"
   },
   "main": "index.js",
   "devDependencies": {},
