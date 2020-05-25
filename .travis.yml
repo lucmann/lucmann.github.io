@@ -6,10 +6,12 @@ cache:
   directories:
     - node_modules
 install:
-  - npm install -g --unsafe-perm=true --allow-root
+  - npm install
 branches:
   only:
     - dev
+before_script:
+  - chmod 0777 ./node_modules/.bin/hexo
 script:
   - hexo generate
 deploy:
