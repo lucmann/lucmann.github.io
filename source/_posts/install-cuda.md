@@ -1,7 +1,7 @@
 ---
 title: Installing CUDA Toolkit for GPGPU-sim on WSL
 date: 2020-03-28 11:32:23
-tags: CUDA, WSL
+tags: [CUDA, WSL]
 ---
 
 [GPGPU-sim](http://www.gpgpu-sim.org/) is a cycle-level simulator modeling contemporary graphics processing units (GPUs) and running GPU computing workloads written in CUDA or OpenCL. To look insight of its source code, I try to build it on the WSL (just for fun). For now WSL has not provided the support for GPU device yet. Fortunately compiling of GPGPU-sim has no dependency on NVIDIA driver. All that it needs is CUDA toolkit.
