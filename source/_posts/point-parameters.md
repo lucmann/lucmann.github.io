@@ -12,12 +12,40 @@ tags: [OpenGL]
 ARB_point_parameters扩展主要实现两个目的:
 
 1. 点的大小(Size)要受距离衰减的影响，就是点的大小要随着点离观察点的距离的增大而减小。
-2. 点的大小(Size)到点的面积和透明度的映射要受一个门限的控制，就是点的面积小于一个门限后，点的Alpha分量(一般是Color的第4个分量，它决定透明度，Alpha等于0，表示完全透明)要随面积的减小而减小。
 
 这个扩展定义的点的明亮度的距离衰减公式是:
 
 {% katex [displayMode] %} 
 
-dist_atten(d) = \frac{1}{a + b \times d + c \times d^2}
+Attenuation(d) = \frac{1}{a + b \times d + c \times d^2}
+
+Brightness(Pe) = Brightness \times Attenuation(\lvert Pe \rvert)
 
 {% endkatex %}
+
+这里，
+- **Pe**指在眼睛坐标系里的一个点(Point in eye coordinates)
+- **Brightness**是与点的大小成正比的一个初始值
+- **a**, **b**, **c**是由`glPointParameterfv()`通过参数`GL_POINT_DISTANCE_ATTENUATION`传入的衰减因子
+
+2. 点的大小(Size)到点的面积和透明度的映射要受一个门限的控制，就是点的面积小于一个门限后，点的Alpha分量(一般是Color的第4个分量，它决定透明度，Alpha等于0，表示完全透明)要随面积的减小而减小。
+
+这个扩展定义的点的最终的Alpha分量的计算公式是:
+
+{% katex [displayMode] %}
+
+Area(Pe) = \begin{cases}
+    Brightness(Pe) &\text{if } Brightness(Pe) \geq ThresholdArea \\
+    ThresholdArea  &\text{if } Brightness(Pe) \lt ThresholdArea
+\end{cases}
+
+Factor(Pe) = Brightness(Pe) / ThresholdArea
+
+\Alpha(Pe) = \alpha * Factor(Pe)
+
+{% endkatex %}
+
+这里，
+- 小**alpha**是点的Color(RGBA)的第4个分量
+- **ThresholdArea**是与`glPointParameterf()`通过参数`GL_POINT_FADE_THRESHOLD_SIZE`传入的值的平方成正比的一个门限值
+
