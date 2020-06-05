@@ -35,8 +35,8 @@ Brightness(Pe) = Brightness \times Attenuation(\lvert Pe \rvert)
 {% katex [displayMode] %}
 
 Area(Pe) = \begin{cases}
-    Brightness(Pe), & \text{if } Brightness(Pe) \geq ThresholdArea \\
-    ThresholdArea,  & \text{if } Brightness(Pe) \lt ThresholdArea
+  Brightness(Pe), & \text{if } a \\
+  ThresholdArea,  & \text{if } b
 \end{cases}
 
 Factor(Pe) = Brightness(Pe) / ThresholdArea
