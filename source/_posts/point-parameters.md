@@ -30,7 +30,7 @@ Brightness(Pe) = Brightness \times Attenuation(\lvert Pe \rvert)
 
 2. 点的大小(Size)到点的面积和透明度的映射要受一个门限的控制，就是点的面积小于一个门限后，点的Alpha分量(一般是Color的第4个分量，它决定透明度，Alpha等于0，表示完全透明)要随面积的减小而减小。
 
-这个扩展定义的点的最终的Alpha分量的计算公式是:
+这个扩展定义的点的最终的Alpha(Pe)分量的计算公式是:
 
 {% katex [displayMode] %}
 
@@ -41,7 +41,7 @@ Area(Pe) = \begin{cases}
 
 Factor(Pe) = Brightness(Pe) / ThresholdArea
 
-\Alpha(Pe) = \alpha * Factor(Pe)
+Alpha(Pe) = \alpha * Factor(Pe)
 
 {% endkatex %}
 
