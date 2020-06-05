@@ -23,6 +23,7 @@
     "hexo-renderer-sass": "^0.4.0",
     "hexo-renderer-scss": "^1.2.0",
     "hexo-renderer-stylus": "^1.1.0",
-    "hexo-server": "^1.0.0"
+    "hexo-server": "^1.0.0",
+    "hexo-tag-katex": "^1.1.1"
   }
 }
