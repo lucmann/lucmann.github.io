@@ -33,8 +33,8 @@ $$Brightness(Pe) = Brightness \times Attenuation(\lvert Pe \rvert)$$
 
 $$
 Area(Pe) = \begin{cases}
-  Brightness(Pe), & \text{if } a \\
-  ThresholdArea,  & \text{if } b
+  Brightness(Pe), & \text{if } Brightness(Pe) \geq ThresholdArea \\
+  ThresholdArea,  & \text{if } Otherwise
 \end{cases}
 
 Factor(Pe) = Brightness(Pe) / ThresholdArea

@@ -98,9 +98,12 @@ ignore:
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
-plugins: hexo-renderer-mathjax
 ## Themes: https://hexo.io/themes/
 theme: landscape
+
+mathjax:
+  on: true
+  per_page: false
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
