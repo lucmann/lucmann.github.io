@@ -100,7 +100,7 @@ ignore:
 ## Plugins: https://hexo.io/plugins/
 plugins: hexo-renderer-mathjax
 ## Themes: https://hexo.io/themes/
-theme: polarbear
+theme: landscape
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
