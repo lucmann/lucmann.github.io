@@ -34,13 +34,13 @@ $$Brightness(Pe) = Brightness \times Attenuation(\lvert Pe \rvert)$$
 $$
 Area(Pe) = \begin{cases}
   Brightness(Pe), & \text{if } Brightness(Pe) \geq ThresholdArea \\
-  ThresholdArea,  & \text{if } Otherwise
+  ThresholdArea,  & \text{otherwise }
 \end{cases}
-
-Factor(Pe) = Brightness(Pe) / ThresholdArea
-
-Alpha(Pe) = \alpha * Factor(Pe)
 $$
+
+$$Factor(Pe) = Brightness(Pe) / ThresholdArea$$
+
+$$Alpha(Pe) = \alpha * Factor(Pe)$$
 
 这里，
 - $\alpha$ 是点的Color(RGBA)的第4个分量
