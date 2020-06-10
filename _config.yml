@@ -103,7 +103,7 @@ theme: next
 
 mathjax:
   on: true
-  per_page: false
+  per_page: true
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
