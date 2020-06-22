@@ -9,11 +9,9 @@ tags: [OpenGL]
 It's good choice for exploring any project's source code to start with its build script. So here is the start.
 
 ### Dependencies
-Mesa is a highly configurable project that means it allows to customize your own particular components by command-line
-options or a pure text file(meson_options.txt).
+Mesa is a highly configurable project that means it allows to customize your own particular components by command-line options or a pure text file(meson_options.txt).
 
-Generally speaking, which dependencies are required is determined by your configuration. For example, the
-following configuration
+Generally speaking, which dependencies are required is determined by your configuration. For example, the following configuration
 
 ```
 option(
