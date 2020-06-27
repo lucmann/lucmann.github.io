@@ -1,5 +1,5 @@
 ---
-title:
+title: about
 date: 2020-02-05 19:14:44
 type: "about"
 ---
