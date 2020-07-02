@@ -23,10 +23,13 @@ ARB Extension #124
 - 数据存储(Data Store)
 - 状态信息，用来描述Data Store的哪一部分被使用，如何解释所用的数据元素
 - 嵌入的采样器对象(Sampler)
-- 各种其它纹理参数，像Filter, Swizzle等
+- 各种其它纹理参数，像Filter, Mipmap等
 
 # 原则
 ARB_texture_view规定的关于创建Texture View的几个原则(限制)主要有以下3个:
 - 只能给Immutable纹理创建View,也就是那些由TexStorage创建的纹理
 - 原纹理和新纹理的格式要兼容
 - 原纹理和新纹理的类型要兼容
+
+## 为什么只给Immutable纹理类型创建Texture View
+
