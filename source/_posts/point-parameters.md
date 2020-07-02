@@ -5,8 +5,13 @@ tags: [OpenGL]
 mathjax: true
 ---
 
+# 编号
+
+ARB Extension #14
+
 # 概述
-作为ARB Extension #14(编号)，这个OpenGL Extension支持允许用户设置点的扩展几何特征。这些点的几何特征主要用来渲染粒子或微小光源，通常被称为光点(Light Points).
+
+ARB_point_parameters允许用户设置点的扩展几何特征。这些点的几何特征主要用来渲染粒子或微小光源，通常被称为光点(Light Points).
 
 光栅化后的点的明亮度由多个因素决定: 点的面积(Area), 点的颜色(Color), 点的透明度(Transparency), 以及电子枪和磷光粉之间的反应。而点的面积和点的透明度由点的大小(Size)推导而来，在ARB_point_parameters之前，点的大小`size`这个参数由 `glPointSize`指定。
 

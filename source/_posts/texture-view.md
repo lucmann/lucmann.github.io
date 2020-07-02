@@ -4,8 +4,13 @@ date: 2020-06-09 12:17:07
 tags:
 ---
 
+# 编号
+
+ARB Extension #124
+
 # 概述
-ARB_texture_view是ARB Extension #124. 它主要实现两种纹理对象的操作：
+
+它主要实现两种纹理对象的操作：
 - 它可以以不同的像素格式或数据类型(format/type)解释同一个纹理对象存储在内存中的数据(data store)
 - 它可以抽取已有纹理对象某个范围的Mipmap Levels或Array Slices作为一个新纹理对象
 
