@@ -101,9 +101,7 @@ ignore:
 ## Themes: https://hexo.io/themes/
 theme: even
 
-mathjax:
-  on: true
-  per_page: true
+plugins: hexo-math
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
