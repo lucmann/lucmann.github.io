@@ -10,6 +10,8 @@ smart pointer是C++11引入的，被包含在C++标准库中。smart pointer是�
 - `std::unique_ptr`
 - `std::weak_ptr`
 
+<!--more-->
+
 # `shared_ptr`
 
 shared_ptr主要用在多个对象共享同一个资源的场景(sharing ownership)。它允许当指针指向的对象在任何地方都不再被使用的时候自动销毁所指对象。C++引入它的目的是消除内存泄漏(memory leak)和野指针(dangling pointer). 从实现的角度看，shared_ptr是通过消耗更多的内存来换取程序的健壮性。每个shared_ptr对象的内部都指向两块内存区域:
