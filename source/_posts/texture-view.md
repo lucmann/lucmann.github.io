@@ -4,13 +4,12 @@ date: 2020-06-09 12:17:07
 tags: [OpenGL]
 ---
 
-# 编号
-
-ARB Extension #124
-
-# 概述
+# 概述(#124)
 
 ARB_texture_view的主要目的是通过创建已有纹理对象的视图(view), 来产生新的纹理对象，以达到共享同一纹理存储(data store)的目的。它可以从以下3个方面创建纹理视图：
+
+<!--more-->
+
 - texture type 它可以指定一个新的纹理类型(在约束范围内)来创建新的纹理对象
 - internal format 它可以定义一个新的纹理格式(在约束范围内)来解释已有的data store
 - sub mipmap/array range 它可以从已有纹理的mipmap levels或array slices中截取一个子集作为新的纹理对象

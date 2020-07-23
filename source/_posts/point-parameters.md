@@ -2,14 +2,9 @@
 title: ARB_point_parameters
 date: 2020-06-05 13:06:50
 tags: [OpenGL]
-mathjax: true
 ---
 
-# 编号
-
-ARB Extension #14
-
-# 概述
+# 概述(#14)
 
 ARB_point_parameters允许用户设置点的扩展几何特征。这些点的几何特征主要用来渲染粒子或微小光源，通常被称为光点(Light Points).
 

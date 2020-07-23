@@ -4,13 +4,11 @@ date: 2020-07-02 15:47:02
 tags: [OpenGL]
 ---
 
-# 编号
-
-ARB Extension #117
-
-# 概述
+# 概述(#117)
 
 ARB_texture_storage的主要目的是简化纹理一致性(consistency)和完整性(completeness)检查，以减小实现的开销。
+
+<!--more-->
 
 在ARB_texture_storage之前，OpenGL允许给每个Mipmap级别分别指定不同的大小，像素格式(format), 数据类型(type)等等，把纹理一致性检查放在draw time阶段，这给实现增加了开销。
 
