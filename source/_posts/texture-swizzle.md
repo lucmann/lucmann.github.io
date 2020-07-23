@@ -1,7 +1,7 @@
 ---
 title: ARB_texture_swizzle
 date: 2020-06-30 15:52:24
-tags: [OpenGL]
+tags: [OGL Extension]
 ---
 
 # 概述(#84)
