@@ -12,5 +12,5 @@ tags: [OpenGL]
 
 ARB_sparse_texture允许你使用一个比GPU物理内存大得多的纹理，它使用一种虚拟页的方法将大的纹理分成多个页， 这些页有的驻留在物理内存，有的没有，只有当需要的时候才加载它们。比方我们根据相机的视角变化，只加载那些在视野范围内可见的pages. 因此sparse texture也叫做tiled texture或mega texture.
 
-<% asset_img "SparseTextureExample.jpg" "sparse texture" %>
+{% asset_img "SparseTextureExample.jpg" "sparse texture" %}
 
