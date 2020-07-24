@@ -2,6 +2,7 @@
 title: ARB_point_parameters
 date: 2020-06-05 13:06:50
 tags: [OGL Extension]
+categories: [CG]
 ---
 
 # 概述(#14)
