@@ -1,7 +1,7 @@
 ---
 title: X11 Data Structure Hierarchy
 date: 2020-09-03 16:49:16
-tags: [X11]
+tags: [X]
 ---
 
 # X Window System
