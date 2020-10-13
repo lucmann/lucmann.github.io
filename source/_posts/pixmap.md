@@ -1,10 +1,10 @@
 ---
 title: Pixmap in X
 date: 2020-09-27 22:13:07
-tags: [X]
 output:
   html_document:
-    css: pixmap/style.css
+    css: style.css
+tags: [X]
 ---
 
 # XYPixmap
