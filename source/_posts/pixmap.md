@@ -1,14 +1,11 @@
 ---
 title: Pixmap in X
 date: 2020-09-27 22:13:07
-output:
-  html_document:
-    css: style.css
 tags: [X]
 style: |
     .post-content {
-        p {
-            line-height: 1.0;
+        pre {
+            line-height: 0.8;
         }
     }
 ---
