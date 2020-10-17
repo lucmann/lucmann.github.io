@@ -5,6 +5,12 @@ output:
   html_document:
     css: style.css
 tags: [X]
+style: |
+    .post-content {
+        p {
+            line-height: 1.0;
+        }
+    }
 ---
 
 # XYPixmap
