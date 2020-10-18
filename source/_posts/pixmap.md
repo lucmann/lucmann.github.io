@@ -2,12 +2,6 @@
 title: Pixmap in X
 date: 2020-09-27 22:13:07
 tags: [X]
-style: |
-    .post-content {
-        pre {
-            line-height: 1.0;
-        }
-    }
 ---
 
 # XYPixmap
