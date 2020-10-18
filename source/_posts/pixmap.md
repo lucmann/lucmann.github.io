@@ -5,7 +5,7 @@ tags: [X]
 style: |
     .post-content {
         pre {
-            line-height: 0.8;
+            line-height: 1.0;
         }
     }
 ---
