@@ -15,14 +15,14 @@ update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 11
 
 `update-alternatives`的基本用法是：
 
-update-alternatives --install <u>link</u> <u>name</u> <u>path</u> <u>priority</u>
+update-alternatives --install __link__ __name__ __path__ __priority__
 
 其中，priority是越大优先级越高。
 
 如果需要查看某个alternative当前的链接有哪些：
 
-update-alternatives --display <u>name</u>
+update-alternatives --display __name__
 
 如果需要删除某个alternative的某个目标路径：
 
-update-alternatives --remove <u>name</u> <u>path</u>
+update-alternatives --remove __name__ __path__
