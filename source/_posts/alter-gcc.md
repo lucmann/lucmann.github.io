@@ -1,7 +1,7 @@
 ---
 title: 更换系统GCC版本
 date: 2020-10-29 19:41:12
-tags: gcc
+tags: [gcc]
 ---
 
 # GCC版本
