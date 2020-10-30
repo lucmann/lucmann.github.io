@@ -7,7 +7,7 @@ cache:
   directories:
     - node_modules
 install:
-  - LIBSASS_EXT="no" npm install
+  - npm install
   - npm rebuild node-sass
 branches:
   only:
