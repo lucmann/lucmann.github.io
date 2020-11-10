@@ -9,6 +9,7 @@ cache:
 install:
   - LIBSASS_EXT="no" npm install
   - npm install node-sass
+  - npm audit fix
 branches:
   only:
     - dev
