@@ -7,9 +7,9 @@ cache:
   directories:
     - node_modules
 install:
-  - npm install
+  - npm install fsevents -D
   - npm install dart-sass
-  - npm audit fix
+  - npm install
 branches:
   only:
     - dev
