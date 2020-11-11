@@ -19,7 +19,7 @@ script:
   - hexo generate
 deploy:
   provider: pages
-  skip-cleanup: false
+  skip-cleanup: true
   github-token: $GH_TOKEN
   keep-history: true
   target_branch: $P_BRANCH
