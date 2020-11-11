@@ -7,6 +7,8 @@ tags: [X]
 # Motivation
 Given that a difficulty to add a custom X11 device driver or module or extension for Xserver, I try to find out how an Xserver is built and its dependent drivers and modules and extensions are orgnized together by building it from [source](https://gitlab.freedesktop.org/xorg/xserver.git).
 
+<!--more-->
+
 # Build
 Fortunately the xserver has already an alternative build system support for [Meson](https://mesonbuild.com/) more than autotools before. Build configuration options are listed in the file `meson_options.txt` which makes easy configure the build. On the other hand, Meson does not permit in-source builds, a separate build directory makes it clearer for checking the output.
 
