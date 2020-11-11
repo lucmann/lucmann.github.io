@@ -1,6 +1,7 @@
 sudo: true
 dist: bionic
 language: node_js
+cache: false
 node_js:
   - lts/*
 install:
