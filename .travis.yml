@@ -11,7 +11,7 @@ branches:
   only:
     - dev
 before_script:
-  - chmod 777 ./node_modules/.bin/hexo
+  - echo "Starting to generate html ..."
 script:
   - hexo generate
 deploy:
