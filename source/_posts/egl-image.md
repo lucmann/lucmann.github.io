@@ -42,6 +42,7 @@ typedef void * EGLClientBuffer;
 ```
 
 eglCreateImageKHR可以接受的target的值有:
+
 | target                             | Notes                                             |
 |:-----------------------------------|:--------------------------------------------------|
 | EGL_GL_TEXTURE_2D                  | Used for GL 2D texture images                     |
