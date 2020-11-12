@@ -1,7 +1,7 @@
 ---
 title: ARB_sparse_texture
 date: 2020-07-23 11:33:59
-tags: [OGL Extension]
+tags: GL
 categories: [CG]
 ---
 

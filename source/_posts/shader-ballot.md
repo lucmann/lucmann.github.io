@@ -1,7 +1,7 @@
 ---
 title: ARB_shader_ballot
 date: 2020-06-09 12:17:07
-tags: [OGL Extension]
+tags: GL
 categories: [CG]
 ---
 
