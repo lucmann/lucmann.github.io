@@ -16,6 +16,9 @@ Xorg的glamor实现依赖3个组件:
 - GL/GLES   负责绘制2D图形
 - GBM       负责管理Buffer Object（VRAM)
 
+# What role do they play in Xorg drivers?
+{% asset_img "glamor_sequence.png" "glamor_sequence" %}
+
 # GBM - Generic Buffer Management
 {% asset_img "gbm.png" "gbm internal & backend" %}
 
