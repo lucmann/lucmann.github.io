@@ -22,3 +22,5 @@ Xorg的glamor实现依赖3个组件:
 # GBM - Generic Buffer Management
 {% asset_img "gbm.png" "gbm internal & backend" %}
 
+# How to get EGLDisplay from gbm_device?
+{% asset_img "glamor_egl_init.png" "glamor_egl_init" %}
