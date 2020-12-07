@@ -1,5 +1,5 @@
 ---
-title: update-alternatives - Set GCC/Python Proper Version On Your System
+title: Altering Your GCC/Python Version Easily
 date: 2020-12-04 17:21:05
 tags: [Linux]
 ---
@@ -9,7 +9,8 @@ tags: [Linux]
 
 <!--more-->
 
-# update-alternatives
+# How to solve it
+`update-alternatives`通过在`/etc/alternatives/`目录下创建一个符号链接文件，通过修改这个文件的指向达到轻松更换像gcc或Python这类系统软件的版本的目的。
 
 ## Synopsis
 
@@ -19,4 +20,11 @@ update-alternatives [option...] command
 
 --install <u>link</u> <u>name</u> <u>path</u> <u>priority</u>
 
+--set <u>name</u> <u>path</u>
+
 --remove <u>name</u> <u>path</u>
+
+--remove-all <u>name</u>
+
+--query <u>name</u>
+
