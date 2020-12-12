@@ -1,7 +1,7 @@
 ---
 title: Smart Pointer
 date: 2020-07-04 10:56:25
-tags: [cpp]
+tags: [C++]
 categories: [Programming]
 ---
 
