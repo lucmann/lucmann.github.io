@@ -1,7 +1,7 @@
 ---
 title: Draw Commands
 date: 2020-09-15 16:44:37
-tags: GL
+tags: [GL]
 ---
 
 # Category

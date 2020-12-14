@@ -1,7 +1,7 @@
 ---
 title: EGLImage
 date: 2020-11-12 15:00:56
-tags: EGL
+tags: [EGL]
 ---
 
 # Overview
