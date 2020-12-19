@@ -2,7 +2,7 @@
 title: ARB_shader_ballot
 date: 2020-06-09 12:17:07
 tags: [GL]
-categories: [CG]
+categories: [/usr]
 ---
 
 # 概述(#183)
