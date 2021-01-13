@@ -40,3 +40,8 @@ Modern CMake更像一个面向对象编程语言， Targets是Objects, 它们有
 Targets的Properties包括编译这个Target的源文件，编译选项，以及最后链接的库这些都是一个Target的Properties. 只要是Properties，就有这个Property的作用域(Scope). Properties也有作用域的概念(scope), 对应`INTERFACE`和`PRIVATE`. 
 INTERFACE properties是外部用的，也就是给导入或使用本Targets的其它Targets用的。PRIVATE properties是Targets内部用的。
 
+# Generator Expressions
+Generator Expressions（生成表达式）是指在生成构建系统的过程中（如果是Make构建系统，就是在生成Makefile的过程中）针对每个构建配置生成特定的值. 生成表达式有3类:
+- Logical Expressions
+- Informational Expressions
+- Output Expressions
