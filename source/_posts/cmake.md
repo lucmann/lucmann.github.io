@@ -10,6 +10,10 @@ categories: /bin
 <!--more-->
 
 # Guideline
+- Declare your module with `ADD_LIBRARY` or `ADD_EXECUTABLE`.
+- Declare your build flags with `TARGET_xxx()`.
+- Declare your dependencies with `TARGET_LINK_LIBRARIES`
+- Specify what is `PUBLIC` and what is `PRIVATE`
 - Don't make any assumption about the platform and compiler.
 - Make sure that all your projects can be built both standalone and as a subproject of another project.
 - Always add namespaced aliases for libraries.
@@ -34,6 +38,7 @@ categories: /bin
 - Non-INTERFACE_ properties define the build specification of a targt
 - INTERFACE_ properties define the usage requirements of a target
 - Use target_link_libraries() to express direct dependencies
+- Don't use `TARGET_LINK_LIBRARIES()` without specifying `PUBLIC`, `PRIVATE` or `INTERFACE`.
 
 # Targets and Properties
 Modern CMake更像一个面向对象编程语言， Targets是Objects, 它们有Properties(Member Variables)和Commands(Methods), 
@@ -45,3 +50,19 @@ Generator Expressions（生成表达式）是指在生成构建系统的过程�
 - Logical Expressions
 - Informational Expressions
 - Output Expressions
+
+```
+target_compile_definitions(foo PRIVATE
+    "VERBOSITY=$<IF:$<CONFIG:Debug>,30,10>"
+)    
+```
+
+上例中使用了嵌套的generator expressions, `$<CONFIG:cfg>`嵌套在`$<IF:?,true-value...,false-value...>`, 两者都是logical expressions, 注意后者是CMake 3.8才有的。`$<CONFIG:Debug>`的意思是如果`CONFIG`是`Debug`,那么这个表达式的值是`1`,否则是`0`, 注意这个比较是不区分大小写的字符串比较。`$<IF:?,true-value...,false-value...>`就像三元表达式`a ? b : c`一样。
+
+注意`0`和`1`是两个basic logical expressions,所有其它logical expressions的最终值都是`0`或`1`,所以下面的表达式是有效的
+
+```
+$<$<CONFIG:Debug>:DEBUG_MODE>
+```
+
+它展开后是`$<0:DEBUG_MODE>`或`$<1:DEBUG_MODE>`,所以整个表达式最终值是`DEBUG_MODE`或空。
