@@ -19,7 +19,14 @@ X Window System是一个基于网络的窗口系统协议，它的一个实现�
 - Visual
     Visual structure; contains information about colormapping possible.
 
-以上4个结构体都被定义在[Xlib.h](https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/include/X11/Xlib.h),前两个相对大一些，尤其是`Display`,可以说是统领万象者。它们四者之间的关系是前者包含多个后者，依次类推。
+以上4个结构体都被定义在[Xlib.h](https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/include/X11/Xlib.h),它们四者之间的关系是前者包含多个后者，依次类推。这里注意区分两组概念:
+
+<table>
+<caption><em>Comparison between Display and DISPLAY</em></caption>
+<tr><th>Display<th>DISPLAY
+<tr><th>Category<td>struct<td>env var
+<tr><th>Usage<td>Display *<br>as most Xlib API's first argument<td>export DISPLAY=:0<br>for example
+</table>
 
 # How are they organized?
 ```mermaid
