@@ -23,9 +23,9 @@ X Window System是一个基于网络的窗口系统协议，它的一个实现�
 
 <table>
 <caption><em>Comparison between Display and DISPLAY</em></caption>
-<tr><th>Display<th>DISPLAY
+<tr><th><th>Display<th>DISPLAY
 <tr><th>Category<td>struct<td>env var
-<tr><th>Usage<td>Display *<br>as most Xlib API's first argument<td>export DISPLAY=:0<br>for example
+<tr><th>Usage<td>Display *dpy<br>as most Xlib API's first argument<td>e.g. export DISPLAY=:0
 </table>
 
 # How are they organized?
