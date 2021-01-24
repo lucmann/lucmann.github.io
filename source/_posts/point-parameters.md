@@ -2,7 +2,7 @@
 title: ARB_point_parameters
 date: 2020-06-05 13:06:50
 tags: [GL]
-categories: [/usr]
+categories: [usr]
 ---
 
 # 概述(#14)

@@ -2,7 +2,7 @@
 title: Modern CMake
 date: 2021-01-10 07:42:04
 tags:
-categories: /bin
+categories: bin
 ---
 
 最近看了一些关于Modern CMake(since 3.0.0)的教程，这里记录一下.
