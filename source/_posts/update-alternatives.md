@@ -24,7 +24,12 @@ update-alternatives [option...] command
 
 --remove <u>name</u> <u>path</u>
 
---remove-all <u>name</u>
-
---query <u>name</u>
+--display <u>name</u>
+```update-alternatives --display python
+python - auto mode
+  link best version is /usr/bin/python3
+  link currently points to /usr/bin/python3
+  link python is /usr/bin/python
+/usr/bin/python3 - priority 5
+```
 
