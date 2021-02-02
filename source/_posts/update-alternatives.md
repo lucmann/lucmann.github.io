@@ -25,7 +25,7 @@ update-alternatives [option...] command
 --remove <u>name</u> <u>path</u>
 
 --display <u>name</u>
-```update-alternatives --display python
+```ascii update-alternatives --display python
 python - auto mode
   link best version is /usr/bin/python3
   link currently points to /usr/bin/python3
