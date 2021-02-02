@@ -2,7 +2,7 @@
 title: Smart Pointer
 date: 2020-07-04 10:56:25
 tags: [C++]
-categories: [usr]
+categories: usr
 ---
 
 smart pointer是C++11引入的，被包含在C++标准库中。smart pointer是为了管理对象的所属(object ownership)而设计的，smart pointer对象负责自动地销毁所关联对象。常见的smart pointer有:

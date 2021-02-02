@@ -2,7 +2,7 @@
 title: ARB_texture_swizzle
 date: 2020-06-30 15:52:24
 tags: [GL]
-categories: [usr]
+categories: usr
 ---
 
 # 概述(#84)
