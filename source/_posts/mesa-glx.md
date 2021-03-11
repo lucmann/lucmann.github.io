@@ -18,7 +18,7 @@ Mesa的GLX实现有3种
 
 ```mermaid
 erDiagram
-    xlib&gallium-xlib ||--|| x11 : dep
-    xlib&gallium-xlib ||--|| xext: dep
-    xlib&gallium-xlib ||--|| xcb : dep
+    A ||--|| B : dep
+    A ||--|| C : dep
+    A ||--|| D : dep
 ```
