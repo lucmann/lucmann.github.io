@@ -18,7 +18,14 @@ Mesa的GLX实现有3种
 
 ```mermaid
 erDiagram
-    A ||--|| B : dep
-    A ||--|| C : dep
-    A ||--|| D : dep
+    A
 ```
+
+如果是xlib, 它的源码位于
+- mesa/drivers/x11 
+
+如果是gallium-xlib, 它的源码位于
+- gallium/winsys/sw/xlib
+- gallium/frontends/glx/xlib
+- gallium/targets/libgl-xlib
+
