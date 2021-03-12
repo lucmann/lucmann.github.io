@@ -22,7 +22,6 @@ graph TD
     A --> x11
     A --> xext
     A --> xcb
-graph TD
     B[dri]
     B --> x11
     B --> xext
