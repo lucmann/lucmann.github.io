@@ -30,13 +30,13 @@ Since **OpenGL 4.3 Core Profile Specification**
 也即多个独立的shader可以读写同一块内存。所以这里同样有内存互斥访问的问题存在。OpenGL Specification和Shading Language都提供了一些机制来控制内存访问。
 
 - OpenGL API
-    ```
-    glMemoryBarrier()
-    ```
+```
+glMemoryBarrier()
+```
 
 - GLSL
-    ```
-    memoryBarrier()
-    ```
+```
+memoryBarrier()
+```
 
 
