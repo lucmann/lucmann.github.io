@@ -2,15 +2,16 @@
 title: ARB_indirect_parameters
 date: 2021-03-18 11:29:57
 tags: [GL]
+categories: media
 ---
 
 # [Overview](https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_indirect_parameters.txt)
 
-Numbering **ARB Extension #154**
+Numbers **ARB Extension #154**
 
-Require **OpenGL 4.2**
+Requires **OpenGL 4.2**
 
-Since **OpenGL 4.3 Core Profile**
+Since **OpenGL 4.6 Core Profile Specification**
 
 <!--more-->
 
