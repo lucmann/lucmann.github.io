@@ -22,6 +22,7 @@ Since **OpenGL 4.2 Core Profile Specification**
 - 增加layout qualifier identifier `binding`用来绑定一个uniform block的location. uniform block本身需要GLSL 1.4的支持。
 - 增加layout qualifier identifier `binding`用来绑定units到sampler和image variable声明。
 - 增加C语言风格的初始化列表，即 `a[10] = { 0 };`
-- 允许标量的swizzle操作
+- 增加vectors和matrices的`.length()`方法，返回vector的分量个数或matrix的列数。
+- 允许标量的swizzle操作。
 - 增加内置常量`gl_MinProgramTexelOffset`和`gl_MaxProgramTexelOffset`
 
