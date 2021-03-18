@@ -6,9 +6,11 @@ tags: [GL]
 
 # [Overview](https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_indirect_parameters.txt)
 
-** ARB Extension #133
+Numbering **ARB Extension #154**
 
-**written against OpenGL 4.3 Core Profile**
+Require **OpenGL 4.2**
+
+Since **OpenGL 4.3 Core Profile**
 
 <!--more-->
 
