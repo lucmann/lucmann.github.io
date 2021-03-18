@@ -30,19 +30,19 @@ Since **OpenGL 4.3 Core Profile Specification**
 
 这个扩展定义了两个概念：**interfaces**和**active resources**
 
-- Interfaces
+## Interfaces
 
 Provides a way for the program to communicate with application code, fixed-function OpenGL pipeline stages, and other programs.
 
 例如：
-    - inputs
-    - outputs
-    - uniforms
-    - uniform blocks
-    - subroutines and subroutine uniforms
-    - atomic counter buffers
+- inputs
+- outputs
+- uniforms
+- uniform blocks
+- subroutines and subroutine uniforms
+- atomic counter buffers
 
-- Inactive Resources
+## Active Resources
 
 Each interface of a program has a set of active resources used by the program.
 
