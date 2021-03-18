@@ -35,12 +35,12 @@ Since **OpenGL 4.3 Core Profile Specification**
 Provides a way for the program to communicate with application code, fixed-function OpenGL pipeline stages, and other programs.
 
 例如：
-- inputs
-- outputs
-- uniforms
-- uniform blocks
-- subroutines and subroutine uniforms
-- atomic counter buffers
+    - inputs
+    - outputs
+    - uniforms
+    - uniform blocks
+    - subroutines and subroutine uniforms
+    - atomic counter buffers
 
 - Inactive Resources
 
@@ -56,5 +56,10 @@ graph TD
     F[Fragment Shader]
     G[Output]
 
-    A --> B --> C --> D --> E --> F --> G
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
 ```
