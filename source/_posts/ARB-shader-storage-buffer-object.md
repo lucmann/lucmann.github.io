@@ -8,6 +8,8 @@ categories: media
 # [Overview](https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_shader_storage_buffer_object.txt)
 Numbers **ARB Extension #137**
 
+<!--more-->
+
 Requires **ARB_program_interface_query**
 
 Interacts

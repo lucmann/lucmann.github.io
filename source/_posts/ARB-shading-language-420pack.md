@@ -8,6 +8,8 @@ categories: media
 # [Overview](https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_shading_language_420pack.txt)
 Numbers **ARB Extension #108**
 
+<!--more-->
+
 Interacts
 - [ARB_shader_image_load_store](https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_shader_image_load_store.txt)
 
