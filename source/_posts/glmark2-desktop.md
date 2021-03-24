@@ -28,7 +28,7 @@ categories: bin
 
 # desktop
 
-{% asset_img "desktop.png" "SceneDesktop" %}
+{% asset_img "desktop.png" "glmark2 -b desktop" %}
 
 **desktop**这个场景在fragment shader中使用了**convolution**计算高斯模糊效果, 因为某种原因，我认为这个用例是一个比较特别的用例，所以在这里记录一下在**Mesa llvmpipe**下以及`glmark2 -b desktop`不同的选项下的测试结果。
 
