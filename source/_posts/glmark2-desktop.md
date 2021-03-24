@@ -92,7 +92,7 @@ categories: bin
 
 `glmark2 -b desktop`的默认选项值是`:effect=blur:blur-radius=5:separable=true`. 此时，**Fragment Shader**中应用高斯模糊的GLSL代码. 可以看到它有两段fragment shader，分别从水平和垂直方向对纹素进行了卷积计算。
 
-{% codeblock "fragment shader" %}
+{% codeblock "fragment shader h" %}
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -128,7 +128,9 @@ texture2D(Texture0, TextureCoord + vec2(5.0 * TextureStepX, 0.0)) * Kernel5 +
 
     gl_FragColor = vec4(result.xyz, 1.0);
 }
+{% endcodeblock %}
 
+{% codeblock "fragment shader v" %}
 #ifdef GL_ES
 precision mediump float;
 #endif
