@@ -848,6 +848,145 @@ void main(void)
 
 ### ideas
 {% codeblock %}
+#ifdef GL_ES
+precision mediump float;
+#endif
+varying vec4 color;
+
+void main()
+{
+    gl_FragColor = color;
+}
+{% endcodeblock %}
+
+{% codeblock %}
+#ifdef GL_ES
+precision mediump float;
+#endif
+uniform vec4 light0Position;
+varying vec3 vertex_normal;
+varying vec4 vertex_position;
+varying vec3 eye_direction;
+
+vec3 unitvec(vec4 v1, vec4 v2)
+{
+    if (v1.w == 0.0 && v2.w == 0.0)
+        return vec3(v2 - v1);
+    if (v1.w == 0.0)
+        return vec3(-v1);
+    if (v2.w == 0.0)
+        return vec3(v2);
+    return v2.xyz/v2.w - v1.xyz/v1.w;
+}
+
+void main()
+{
+    vec4 lightAmbient = vec4(0.0, 0.0, 0.0, 1.0);
+    vec4 lightDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
+    vec4 lightSpecular = vec4(1.0, 1.0, 1.0, 1.0);
+    vec4 matAmbient = vec4(0.1, 0.1, 0.1, 1.0);
+    vec4 matDiffuse = vec4(0.5, 0.4, 0.7, 1.0);
+    vec4 matSpecular = vec4(1.0, 1.0, 1.0, 1.0);
+    float matShininess = 30.0;
+    vec3 light_direction = normalize(unitvec(vertex_position, light0Position));
+    vec3 normalized_normal = normalize(vertex_normal);
+    vec3 reflection = reflect(-light_direction, normalized_normal);
+    float specularTerm = pow(max(0.0, dot(reflection, eye_direction)), matShininess);
+    float diffuseTerm = max(0.0, dot(normalized_normal, light_direction));
+    vec4 specular = (lightSpecular * matSpecular);
+    vec4 ambient = (lightAmbient * matAmbient);
+    vec4 diffuse = (lightDiffuse * matDiffuse);
+    gl_FragColor = (specular * specularTerm) + ambient + (diffuse * diffuseTerm);
+}
+{% endcodeblock %}
+
+{% codeblock %}
+#ifdef GL_ES
+precision mediump float;
+#endif
+uniform sampler2D tex;
+
+void main()
+{
+    vec2 curPos = gl_FragCoord.xy / 32.0;
+    vec4 color = texture2D(tex, curPos);
+    if (color.w < 0.5)
+        discard;
+    gl_FragColor = color;
+}
+{% endcodeblock %}
+
+{% codeblock %}
+#ifdef GL_ES
+precision mediump float;
+#endif
+struct LightSourceParameters
+{
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
+    vec4 position;
+};
+LightSourceParameters lightSource[3];
+uniform vec4 light0Position;
+uniform vec4 light1Position;
+uniform vec4 light2Position;
+varying vec3 vertex_normal;
+varying vec4 vertex_position;
+varying vec3 eye_direction;
+
+vec3 unitvec(vec4 v1, vec4 v2)
+{
+    if (v1.w == 0.0 && v2.w == 0.0)
+        return vec3(v2 - v1);
+    if (v1.w == 0.0)
+        return vec3(-v1);
+    if (v2.w == 0.0)
+        return vec3(v2);
+    return v2.xyz/v2.w - v1.xyz/v1.w;
+}
+
+void main()
+{
+    lightSource[0] = LightSourceParameters(
+        vec4(0.0, 0.0, 0.0, 1.0),
+        vec4(1.0, 1.0, 1.0, 1.0),
+        vec4(1.0, 1.0, 1.0, 1.0),
+        vec4(0.0, 1.0, 0.0, 0.0)
+    );
+    lightSource[1] = LightSourceParameters(
+        vec4(0.0, 0.0, 0.0, 1.0),
+        vec4(0.3, 0.3, 0.5, 1.0),
+        vec4(0.3, 0.3, 0.5, 1.0),
+        vec4(-1.0, 0.0, 0.0, 0.0)
+    );
+    lightSource[2] = LightSourceParameters(
+        vec4(0.2, 0.2, 0.2, 1.0),
+        vec4(0.2, 0.2, 0.2, 1.0),
+        vec4(0.2, 0.2, 0.2, 1.0),
+        vec4(0.0, -1.0, 0.0, 0.0)
+    );
+    vec4 matAmbient = vec4(0.0, 0.0, 0.0, 1.0);
+    vec4 matDiffuse = vec4(1.0, 0.2, 0.2, 1.0);
+    vec4 matSpecular = vec4(0.5, 0.5, 0.5, 1.0);
+    float matShininess = 20.0;
+    vec4 diffuseSum = vec4(0.0, 0.0, 0.0, 0.0);
+    vec4 specularSum = vec4(0.0, 0.0, 0.0, 0.0);
+    vec4 ambientSum = vec4(0.0, 0.0, 0.0, 0.0);
+    vec3 normalized_normal = normalize(vertex_normal);
+    lightSource[0].position = light0Position;
+    lightSource[1].position = light1Position;
+    lightSource[2].position = light2Position;
+    for (int light = 0; light < 3; light++) {
+        vec4 light_position = lightSource[light].position;
+        vec3 light_direction = normalize(unitvec(vertex_position, light_position));
+        vec3 reflection = reflect(-light_direction, normalized_normal);
+        specularSum += pow(max(0.0, dot(reflection, eye_direction)), matShininess) * lightSource[light].specular;
+        diffuseSum += max(0.0, dot(normalized_normal, light_direction)) * lightSource[light].diffuse;
+        ambientSum += lightSource[light].ambient;
+    }
+    gl_FragColor = (matSpecular * specularSum) + (matAmbient * ambientSum) + (matDiffuse * diffuseSum);
+}
 {% endcodeblock %}
 
 ### terrain
@@ -1299,25 +1438,211 @@ texture2D(Texture0, TextureCoord + vec2(0.0, 4.0 * stepY)) * Kernel4 +
 }
 {% endcodeblock %}
 
-###
+### jellyfish
 {% codeblock %}
+#ifdef GL_ES
+precision mediump float;
+#endif
+#ifdef GL_ES
+precision highp float;
+#endif
+ 
+uniform sampler2D uSampler;
+uniform sampler2D uSampler1;
+uniform float uCurrentTime;
+ 
+varying vec2 vTextureCoord;
+varying vec4 vWorld;
+varying vec3 vDiffuse;
+varying vec3 vAmbient;
+varying vec3 vFresnel;
+
+void main(void)
+{
+    vec4 caustics = texture2D(uSampler1, vec2(vWorld.x / 24.0 + uCurrentTime / 20.0, (vWorld.z - vWorld.y)/48.0 + uCurrentTime / 40.0));
+    vec4 colorMap = texture2D(uSampler, vTextureCoord);
+    float transparency = colorMap.a + pow(vFresnel.r, 2.0) - 0.3;
+    gl_FragColor = vec4(((vAmbient + vDiffuse + caustics.rgb) * colorMap.rgb), transparency);
+}
 {% endcodeblock %}
 
-###
+### loop
 {% codeblock %}
+#ifdef GL_ES
+precision mediump float;
+#endif
+varying vec4 dummy;
+uniform int FragmentLoops;
+
+void main(void)
+{
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+    // should be declared highp since the multiplication can overflow in
+    // mediump, particularly if mediump is implemented as fp16
+    highp vec2 FragCoord = gl_FragCoord.xy;
+#else
+    vec2 FragCoord = gl_FragCoord.xy;
+#endif
+    float d = fract(FragCoord.x * FragCoord.y * 0.0001);
+
+    for (int i = 0; i < FragmentLoops; i++)
+        d = fract(3.0 * d);
+
+
+    gl_FragColor = vec4(d, d, d, 1.0);
+}
 {% endcodeblock %}
 
-###
+### refract
 {% codeblock %}
+#ifdef GL_ES
+precision mediump float;
+#endif
+const float RefractiveIndex = 1.200000;
+const vec4 LightSourcePosition = vec4(1.000000, 1.000000, 2.000000, 1.000000);
+const vec4 LightColor = vec4(0.400000, 0.400000, 0.400000, 1.000000);
+uniform sampler2D DistanceMap;
+uniform sampler2D NormalMap;
+uniform sampler2D ImageMap;
+
+varying vec3 vertex_normal;
+varying vec4 vertex_position;
+varying vec4 MapCoord;
+
+void main()
+{
+    const vec4 lightSpecular = vec4(0.8, 0.8, 0.8, 1.0);
+    const vec4 matSpecular = vec4(1.0, 1.0, 1.0, 1.0);
+    const float matShininess = 100.0;
+    const vec2 point_five = vec2(0.5);
+    // Need the normalized eye direction and surface normal vectors to
+    // compute the transmitted vector through the "front" surface of the object.
+    vec3 eye_direction = normalize(-vertex_position.xyz);
+    vec3 normalized_normal = normalize(vertex_normal);
+    vec3 front_refraction = refract(eye_direction, normalized_normal, RefractiveIndex);
+    // Find our best distance approximation through the object so we can
+    // project the transmitted vector to the back of the object to find
+    // the exit point.
+    vec3 mc_perspective = (MapCoord.xyz / MapCoord.w) + front_refraction;
+    vec2 dcoord = mc_perspective.st * point_five + point_five;
+    vec4 distance_value = texture2D(DistanceMap, dcoord);
+    vec3 back_position = vertex_position.xyz + front_refraction * distance_value.x;
+    // Use the exit point to index the map of back-side normals, and use the
+    // back-side position and normal to find the transmitted vector out of the
+    // object.
+    vec2 normcoord = back_position.st * point_five + point_five;
+    vec3 back_normal = texture2D(NormalMap, normcoord).xyz;
+    vec3 back_refraction = refract(back_position, back_normal, 1.0/RefractiveIndex);
+    // Use the transmitted vector from the exit point to determine where
+    // the vector would intersect the environment (in this case a background
+    // image.
+    vec2 imagecoord = back_refraction.st * point_five + point_five;
+    vec4 texel = texture2D(ImageMap, imagecoord);
+    // Add in specular reflection, and we have our fragment value.
+    vec3 light_direction = normalize(vertex_position.xyz/vertex_position.w -
+                                     LightSourcePosition.xyz/LightSourcePosition.w);
+    vec3 reflection = reflect(light_direction, normalized_normal);
+    float specularTerm = pow(max(0.0, dot(reflection, eye_direction)), matShininess);
+    vec4 specular = (lightSpecular * matSpecular);
+    gl_FragColor = (specular * specularTerm) + texel;
+}
 {% endcodeblock %}
 
-###
+### shadow
 {% codeblock %}
+#ifdef GL_ES
+precision mediump float;
+#endif
+uniform sampler2D ShadowMap;
+
+varying vec4 Color;
+varying vec4 ShadowCoord;
+
+void main()
+{
+    vec4 sc_perspective = ShadowCoord / ShadowCoord.w;
+    sc_perspective.z += 0.1505;
+    vec4 shadow_value = texture2D(ShadowMap, sc_perspective.st);
+    float light_distance = shadow_value.x;
+    float shadow = 1.0;
+    if (ShadowCoord.w > 0.0 && light_distance < sc_perspective.z) {
+        shadow = 0.5;
+    }
+    gl_FragColor = vec4(shadow * Color.rgb, 1.0);
+}
 {% endcodeblock %}
+
+### function
+{% codeblock %}
+#ifdef GL_ES
+precision mediump float;
+#endif
+varying vec4 dummy;
+
+float process(float d)
+{
+    d = fract(3.0 * d);
+
+    return d;
+}
+
+void main(void)
+{
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+    // should be declared highp since the multiplication can overflow in
+    // mediump, particularly if mediump is implemented as fp16
+    highp vec2 FragCoord = gl_FragCoord.xy;
+#else
+    vec2 FragCoord = gl_FragCoord.xy;
+#endif
+    float d = fract(FragCoord.x * FragCoord.y * 0.0001);
+
+    d = process(d);
+
+
+    gl_FragColor = vec4(d, d, d, 1.0);
+}
+{% endcodeblock %}
+
+### conditionals
+{% codeblock %}
+#ifdef GL_ES
+precision mediump float;
+#endif
+varying vec4 dummy;
+
+void main(void)
+{
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+    // should be declared highp since the multiplication can overflow in
+    // mediump, particularly if mediump is implemented as fp16
+    highp vec2 FragCoord = gl_FragCoord.xy;
+#else
+    vec2 FragCoord = gl_FragCoord.xy;
+#endif
+    float d = fract(FragCoord.x * FragCoord.y * 0.0001);
+
+    if (d >= 0.5)
+        d = fract(2.0 * d);
+    else
+        d = fract(3.0 * d);
+
+
+    gl_FragColor = vec4(d, d, d, 1.0);
+}
+{% endcodeblock %}
+
+从上面这些场景的Fragment Shader来看，**desktop**和**clear**这两个场景比较特殊，clear没有shader, 而**desktop**有8个fragment shaders，而且每个fragment shader里都调用了多次`texture2D`这个纹理查询GLSL内置函数。
+
+- 为什么有8个fragment shader?
+
+    SceneDesktop这个场景除了主窗口外，默认还有4个小窗口，而这4个小窗口有两种特效: **blur**, **shadow**. blur效果是通过卷积实现的模糊效果，而且可以水平和垂直方向分开模糊，由选项`separable`控制，默认是`true`(水平和垂直各一个fragment shader).
+
+- 为什么每个fragment shader里有那么多`texture2D`?
 
 ## SceneDesktop Test
 
-{% codeblock "glmark2 --list | awk '/\\[Scene\\] desktop/, /\\[Scene\\] effect2d/ { print }'" %}
+{% codeblock "glmark2 --list | awk '/\[Scene\] desktop/, /\[Scene\] effect2d/ { print }'" %}
 [Scene] desktop
   [Option] blur-radius
     Description  : the blur effect radius (in pixels)
