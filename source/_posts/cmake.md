@@ -50,6 +50,12 @@ cmake --build build --target lib1 # 注意，如果lib1依赖其它目标，被�
 cmake -B build --graphviz=file.dot # 生成的file.dot可以用Graphviz提供的dot命令生成图片 dot -Tpng -o file.png file.dot
 ```
 
+查询CMAKE变量配置值，包括内置变量和自定义变量
+
+```
+cmake -L build
+```
+
 # Guideline
 - Declare your module with `ADD_LIBRARY` or `ADD_EXECUTABLE`.
 - Declare your build flags with `TARGET_xxx()`.
