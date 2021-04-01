@@ -6,7 +6,9 @@ categories: media
 ---
 
 # Wayland Architecture
-为了理解wayland的架构和它与X的区别，最好是看看从一个输入事件到这个输入事件的结果呈现上屏幕这个过程都发生了什么。
+为了理解wayland的架构和它与X的区别，最好是看看从一个输入事件到这个输入事件的结果呈现到屏幕上这个过程都发生了什么。
+
+<!--more-->
 
 {% asset_img x-architecture.png "X Architecture" %}
 
