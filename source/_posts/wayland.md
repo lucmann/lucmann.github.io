@@ -39,3 +39,5 @@ categories: media
 
 4. compositor收集来自它的客户端的`damage event`, 然后重新合成整个屏幕。compositor能直接发送`ioctl`请求给KMS执行一次pageflip.
 
+
+[阅读原文](https://wayland.freedesktop.org/architecture.html)
