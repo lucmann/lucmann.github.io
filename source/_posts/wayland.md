@@ -24,7 +24,7 @@ categories: media
 
 6. X Server收到compositor的渲染请求后，或者拷贝compositor back buffer到front buffer,或者做一次pageflip. 通常情况下，X Server必须做这一步，因为它需要计算窗口重叠，这可能需要裁剪操作，并且决定它是否可以pageflip. 但是，对于总是执行全屏操作的compositor来说，这又是一次不必要的上下文切换。
 
-上面的X Server的工作流程有一些问题。首先, X Server没有相关的信息去决定到底哪个窗口应该接收这个输入事件，它也不能将屏幕坐标转换成窗口内部坐标，甚至X Server把最后的屏幕渲染工作的职责都交给了合成管理器，X Server仍然控制着front buffer和modesetting. X Server过去大多数复杂的工作现在要么是在kernel中可以完成(`KMS`, `evdev`), 要么可以在一些自包含的库里完成(`mesa`, `fontconfig`, `freetype`, `cairo`, `Qt`, 等待). 总的来说，X Server现在已经成了在应用程序和compositor之间，compositor和硬件之间引入额外步骤的中间人了。
+上面的X Server的工作流程有一些问题。首先, X Server没有相关的信息去决定到底哪个窗口应该接收这个输入事件，它也不能将屏幕坐标转换成窗口内部坐标，甚至X Server把最后的屏幕渲染工作的职责都交给了合成管理器，X Server仍然控制着front buffer和modesetting. X Server过去大多数复杂的工作现在要么是在kernel中可以完成(`KMS`, `evdev`), 要么可以在一些自包含的库里完成(`mesa`, `fontconfig`, `freetype`, `cairo`, `Qt`, 等等). 总的来说，X Server现在已经成了在应用程序和compositor之间，compositor和硬件之间引入额外步骤的中间人了。
 
 
 在wayland里，compositor就是**Display Server**. 我们把`KMS`和`evdev`的控制权移交给compositor. Wayland协议让compositor直接发送输入事件给客户端，让客户端直接发送`damage event`给compositor.
@@ -40,4 +40,5 @@ categories: media
 4. compositor收集来自它的客户端的`damage event`, 然后重新合成整个屏幕。compositor能直接发送`ioctl`请求给KMS执行一次pageflip.
 
 
-[阅读原文](https://wayland.freedesktop.org/architecture.html)
+[[阅读原文]](https://wayland.freedesktop.org/architecture.html)
+
