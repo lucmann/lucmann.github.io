@@ -9,11 +9,12 @@ categories: media
 [KhronosGroup/Vulkan-Docs](https://github.com/KhronosGroup/Vulkan-Docs)包含了**Vulkan API**技术文档和相关工具。
 
 | Vulkan Version | Last Updated Tag   |
-|:--------------:|:------------------:|
+|:--------------:|:-------------------|
 | 1.0            | v1.0.69-core       |
 | 1.1            | v1.1.130           |
 | 1.2            | v1.2.174 (Current) | 
 
+<!--more-->
 
 # Build
 ## Testing Environment
@@ -41,4 +42,6 @@ gem install asciidoctor-mathematical
 gem install coderay
 {% endcodeblock %}
 
+## Scripts
+所有的**HTML**，**PDF**都是通过脚本基于`xml/vk.xml`生成的。比方要生成所有**extensions**相关的环境变量需要的脚本是`scripts/make_ext_dependency.py`.
 
