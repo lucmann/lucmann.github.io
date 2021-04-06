@@ -5,7 +5,22 @@ tags: [vulkan]
 categories: media
 ---
 
+# Introduction
+[KhronosGroup/Vulkan-Docs](https://github.com/KhronosGroup/Vulkan-Docs)包含了**Vulkan API**技术文档和相关工具。
+
+| Vulkan Version | Last Updated Tag   |
+|:--------------:|:------------------:|
+| 1.0            | v1.0.69-core       |
+| 1.1            | v1.1.130           |
+| 1.2            | v1.2.174 (Current) | 
+
+
 # Build
+## Testing Environment
+- Windows Subsystem for Linux 2.0
+- Ubuntu 20.04.2 LTS
+
+## Requirement
 Vulkan-Docs的构建需要`ruby`环境。主要是因为它用到一个`asciidoctor-mathematical`的工具包, 而它又依赖`mathematical`, 所以正确的安装顺序是
 
 {% codeblock "ruby development environment" %}
@@ -25,6 +40,5 @@ gem install asciidoctor-mathematical
 {% codeblock %}
 gem install coderay
 {% endcodeblock %}
-
 
 
