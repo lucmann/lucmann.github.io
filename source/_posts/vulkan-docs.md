@@ -45,3 +45,38 @@ gem install coderay
 ## Scripts
 所有的**HTML**，**PDF**都是通过脚本基于`xml/vk.xml`生成的。比方要生成所有**extensions**相关的环境变量需要的脚本是`scripts/make_ext_dependency.py`.
 
+## Targets
+Vulkan-Docs的构建系统基本上是`make` + `shell` + `python`. 它的顶层目录包含一个`Makefile`, 几乎包含了所有构建对象，其它的构建脚本基本上是`make VAR="$VALUE" TARGET $*`的调用形式。 这个Makefile里定义的目标大概有以下这些:
+
+- all
+- **allchecks**
+- alldocs
+- allman
+- allspecs
+- apiinc
+- buildmanpages
+- chunked
+- clean
+- clean_checks
+- clean_generated
+- clean_html
+- clean_man
+- clean_pdf
+- clean_validusage
+- config/extDependency.sh
+- diff_html
+- extinc
+- generated
+- hostsyncinc
+- **html**
+- katexinst
+- manhtml
+- **manhtmlpages**
+- manpdf
+- **pdf**
+- reflow
+- registry
+- **styleguide**
+- validinc
+- validusage
+
