@@ -1,0 +1,43 @@
+digraph D {
+	ranksep = 2.75;
+
+	{
+		rank = same;
+		node [style="invis"];
+		o1, o2, o3, o4, o5, o6;
+	}
+
+	{
+		{
+			node [style="invis"];
+			i2, i3, i4, i5, i6;
+		}
+		rank = same; i2; i3; i4; i5; i6; vert; tc; te; geom; frag; comp;
+
+		i2 -> tc;
+		i3 -> te;
+		i4 -> geom;
+		i5 -> frag;
+		i6 -> comp;
+	}
+
+	o1 -> vert [label="glCreateShader"];
+	vert -> vert [label="glCompileShader"];
+	o2 -> tc -> tc;
+	o3 -> te -> te;
+	o4 -> geom -> geom;
+	o5 -> frag -> frag;
+	o6 -> comp -> comp;
+
+	
+	p [shape=box, label="Program"];
+
+	{
+		rank = same;
+		node [style="invis"];
+		o -> p [label="glCreateProgram"];
+	}
+
+	vert -> p [label="glAttachShader"];
+	{tc, te, geom, frag, comp} -> p;
+}

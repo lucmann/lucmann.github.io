@@ -11,13 +11,6 @@ categories: media
 - `void glShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length);`
 - `void glCompileShader(GLunit shader);`
 
+# Program Object
+{% asset_img "program-object.png" %}
 
-```mermaid
-graph TD;
-	-->S1:glCreateShader;
-	-->S2:glCreateShader;
-	-->S3:glCreateShader;
-	-->S4:glCreateShader;
-	-->S5:glCreateShader;
-	-->S6:glCreateShader;
-```
