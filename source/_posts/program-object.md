@@ -12,5 +12,11 @@ categories: media
 - `void glCompileShader(GLunit shader);`
 
 # Program Object
+创建和使用**Program Object**的API:
+- `GLuint glCreateProgram();`
+- `void glAttachShader(GLuint program, GLuint shader);`
+
 {% asset_img "program-object.png" %}
+
+# Program Pipeline Object
 
