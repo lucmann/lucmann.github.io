@@ -11,6 +11,8 @@ categories: media
 - `void glShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length);`
 - `void glCompileShader(GLunit shader);`
 
+<!--more-->
+
 # Shader Stage
 OpenGL里没有专门的Shader Stage Object去封装Stage相关的状态。但是事实上，一个或多个特定类型的Shader Object(s)组成一个特定的Shader Stage, 多个**Shader Stages**链接成一个Program Object. 只不过大多情况下，一个Shader Stage只来自于一个Shader Object，但是多个同一类型的Shader Objects组成一个Program Object的一个Shader Stage是完全符合OpenGL规范的。
 
