@@ -33,7 +33,7 @@ DRM设备的主设备号在不同的系统上不同。
 | Linux         | 226          |
 
 ## Minor Number
-每种类型的DRM设备都有一个**Base Minor**, 允许的最大Minor是`16`.
+每种类型的DRM设备都有一个**Base Minor**, 每种类型允许的子设备号个数是`16`. 所以，Linux下最大的DRM设备号是`/dev/dri/renderD144`.
 
 {% asset_img "drm-minor.png" %}
 
