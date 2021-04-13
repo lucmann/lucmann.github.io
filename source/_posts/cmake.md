@@ -113,3 +113,12 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
 ```
 
 它展开后是`$<0:DEBUG_MODE>`或`$<1:DEBUG_MODE>`,所以整个表达式最终值是`DEBUG_MODE`或空。
+
+# Appendix: **CMake Built-in Variables**
+- CMAKE_CURRENT_SOURCE_DIR
+
+指`CMakeLists.txt`所在当前目录的绝对路径，一般随着`CMakeLists.txt`所在目录的变化而变化。
+
+- CMAKE_SOURCE_DIR
+
+指所在工程顶层目录绝对路径，一般源码`clone`下来后就确定了。
