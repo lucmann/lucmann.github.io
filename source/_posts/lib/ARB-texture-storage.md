@@ -2,7 +2,7 @@
 title: ARB_texture_storage
 date: 2020-07-02 15:47:02
 tags: [GL]
-categories: media
+categories: lib
 ---
 
 # Overview(#117)

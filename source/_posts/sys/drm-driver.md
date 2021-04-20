@@ -1,8 +1,8 @@
 ---
 title: DRM Driver
 date: 2021-04-12 17:07:27
-tags: [drm]
-categories: media
+tags: [dri]
+categories: sys
 ---
 
 # DRM driver features

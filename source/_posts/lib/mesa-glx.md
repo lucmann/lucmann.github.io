@@ -1,7 +1,7 @@
 ---
 title: GLX in Mesa
 date: 2021-03-11 14:44:56
-tags: [X]
+tags: [GL]
 categories: lib
 ---
 

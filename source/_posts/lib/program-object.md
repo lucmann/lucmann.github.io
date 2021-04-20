@@ -1,8 +1,8 @@
 ---
 title: OpenGL Program Object
 date: 2021-04-06 14:24:55
-tags: [shader]
-categories: media
+tags: [GL]
+categories: lib
 ---
 
 # Shader Object

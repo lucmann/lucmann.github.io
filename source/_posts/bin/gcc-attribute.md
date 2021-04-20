@@ -2,9 +2,12 @@
 title: GCC __attribute__
 date: 2020-02-26 10:49:57
 tags: [gcc]
+categories: bin
 ---
 
 `__attribute__` is a keyword introduced by GCC. It is regarded as an extension of a language. It helps the compiler optimize calls, check code more carefully for correctness, control memory placement and code generation options.
+
+<!--more-->
 
 ## Syntax
 ```

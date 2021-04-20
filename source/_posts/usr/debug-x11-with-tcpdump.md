@@ -1,7 +1,8 @@
 ---
 title: Debugging X11 with tcpdump
 date: 2020-02-24 09:18:03
-tags: [X]
+tags: [wsi]
+categories: usr
 ---
 
 X11 is designed as client-server mode. The communication between the X client and server complies with TCP protocol. Recently I have a Windows X server VcXsrv installed on my Windows 10 and I debug an OpenGL demo glxgears on the WSL2 with tcpdump.

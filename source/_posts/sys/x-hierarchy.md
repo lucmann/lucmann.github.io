@@ -1,7 +1,8 @@
 ---
 title: X11 Data Structure Hierarchy
 date: 2020-09-03 16:49:16
-tags: [X]
+tags: [wsi]
+categories: sys
 ---
 
 # X Window System

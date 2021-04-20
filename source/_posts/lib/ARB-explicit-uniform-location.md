@@ -2,7 +2,7 @@
 title: ARB_explicit_uniform_location
 date: 2021-03-18 14:14:04
 tags: [GL]
-categories: media
+categories: lib
 ---
 
 # [Overview](https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_explicit_uniform_location.txt)

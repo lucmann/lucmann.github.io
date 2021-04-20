@@ -1,7 +1,8 @@
 ---
 title: regex in vi
 date: 2020-02-29 21:58:03
-tags: [re, vi]
+tags: [vim]
+categories: bin
 ---
 ## Multiline
 Remove the multilined comment in the separated paragraphs

@@ -1,7 +1,8 @@
 ---
 title: Altering Your GCC/Python Version Easily
 date: 2020-12-04 17:21:05
-tags: [Linux]
+tags: [gcc, python]
+categories: bin
 ---
 
 # What's the problem

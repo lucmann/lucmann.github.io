@@ -1,8 +1,8 @@
 ---
 title: How is A Gallium Driver Loaded in Mesa
 date: 2021-04-08 08:07:49
-tags: [drm]
-categories: media
+tags: [GL]
+categories: lib
 ---
 
 # swrast

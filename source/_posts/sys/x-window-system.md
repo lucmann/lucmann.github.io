@@ -1,8 +1,8 @@
 ---
 title: X Window System
 date: 2020-12-20 11:58:43
-tags: [X]
-categories: usr
+tags: [wsi]
+categories: sys
 ---
 
 最近在看[X11 Server的代码](https://gitlab.freedesktop.org/xorg/xserver),顺手记录一些基本概念和想法。X11 Server的代码很古老了，有的是1993年写的，目前的X Server实现[X.org](https://zh.wikipedia.org/wiki/X.Org_Server)是从最早的一个X Server实现[XFree86](https://zh.wikipedia.org/wiki/XFree86) 4.4 RC2版本(2004年)派生出来的。
