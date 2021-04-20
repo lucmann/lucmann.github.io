@@ -1,8 +1,8 @@
 ---
 title: Wayland
 date: 2021-04-01 16:31:25
-tags: [compositor]
-categories: lib
+tags: [wsi]
+categories: sys
 ---
 
 # Wayland Architecture

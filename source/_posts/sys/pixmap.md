@@ -1,7 +1,8 @@
 ---
 title: Pixmap in X
 date: 2020-09-27 22:13:07
-tags: [X]
+tags: [wsi]
+categories: sys
 ---
 
 # XYPixmap
