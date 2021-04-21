@@ -1,7 +1,7 @@
 ---
 title: Modern CMake
 date: 2021-01-10 07:42:04
-tags:
+tags: [cmake]
 categories: bin
 ---
 

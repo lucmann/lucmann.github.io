@@ -1,7 +1,7 @@
 ---
 title: Macros Predefined by Compiler
 date: 2021-04-15 15:58:26
-tags: [compiler]
+tags: [gcc]
 categories: bin
 ---
 
