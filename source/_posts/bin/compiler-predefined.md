@@ -12,6 +12,8 @@ categories: bin
 - __ARM_ARCH_7A
 - __ARM_ARCH_8A
 
+<!--more-->
+
 如果使用**armv7**的工具链，那么只有`__ARM_ARCH_7A`会被定义，而如果使用**armv8**的工具链，那么只有`__ARM_ARCH_8A`会被定义。但以上两个编译器都会定义`__aarch64__`.
 
 # How to Check Macros Predefined by Compiler
