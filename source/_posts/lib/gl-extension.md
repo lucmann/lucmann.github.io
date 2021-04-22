@@ -56,8 +56,11 @@ OpenGL extensions that have been approved by the Khronos OpenGL Architectural Re
 
 
 ### K.3.2 Promoting Extensions to Core Features
-Khronos-approved, multivendor, 以及vendor-specific extensions都可以被_晋级_(promoted)加入到OpenGL核心特性集(required core features).一旦被加入，相应的extension specification将被合入到core specification. 在这个extension里定义的函数和枚举也将删除它们的**ARB**, **KHR**, **EXT**, 或者vendor后缀。而且支持这些被_晋升_的extension的OpenGL实现应该继续支持带后缀的函数名和枚举名。
+Khronos-approved, multivendor, 以及vendor-specific extensions都可以被_晋升_(_promoted_)加入到OpenGL核心特性集(required core features). 一旦被加入，相应的extension specification将被合入到core specification. 在这个extension里定义的函数和枚举也将_删除_它们的**ARB**, **KHR**, **EXT**, 或者**vendor后缀**。而且支持这些被_晋升_的extension的OpenGL实现应该继续支持带后缀的函数名和枚举名。
 
-# What is the relationship between OpenGL extensions and OpenGL versions?
+# What Is The Relationship Between OpenGL Extensions And OpenGL Versions?
+下面这张图展示各种OpenGL extensions集合的关系。只有那些**Required Core Features(Extensions)**才会被纳入到各个**OpenGL Core Profile Specification**， 也即OpenGL versions是通过不断加入新的Required Core Features来升级的。
 
-{% asset_img extensions.png "venn diagram of extensions" %}
+<div align=center>{% asset_img extensions.png "venn diagram of extensions" %}</div>
+
+# What Is Conformant OpenGL Implementation?
