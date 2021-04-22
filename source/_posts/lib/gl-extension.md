@@ -39,7 +39,8 @@ categories: lib
 - OpenGL Extensions和OpenGL Versions有什么关系？
 - OpenGL Extensions和conformant OpenGL implementation有什么关系？
 
-先翻译一段[OpenGL 4.6 Core Profile Specification](https://www.khronos.org/registry/OpenGL/specs/gl/glspec46.core.pdf) **K.3 ARB and Khronos Extensions** 章节
+先看一下[OpenGL 4.6 Core Profile Specification](https://www.khronos.org/registry/OpenGL/specs/gl/glspec46.core.pdf)
+### K.3 ARB and Khronos Extensions
 
 {% blockquote %}
 OpenGL extensions that have been approved by the Khronos OpenGL Architectural Review Board Working Group(ARB), or jointly approved by the ARB and the Khronos OpenGL ES Working Group(KHR), are summarized in this section. ARB and KHR extensions are NOT required to be supported by a CONFORMANT OpenGL implementation, but are expected to be widely available; they define functionality that is likely to move into the REQUIRED feature set in a future revision of the specification.
@@ -47,3 +48,16 @@ OpenGL extensions that have been approved by the Khronos OpenGL Architectural Re
 
 所有被ARB批准的，或者被ARB和KHR联合批准的OpenGL Extensions被罗列在本章节。这些Extensions不是一个**Conformant** OpenGL实现所必须支持的，但它们应该被大多数OpenGL实现都支持；它们所定义的功能很有可能在未来的OpenGL Specification里加到**必须支持的特性集**中。
 
+### K.3.1 Naming Conventions
+为了区分**ARB**和**KHR** extensions和core OpenGL extensions(required core features), 以及vendor-specific extensions, 有以下extension命名规范：
+- 每个Khronos-approved extension都有一个唯一的名字字符串"GL_ARB_name"或"GL_KHR_name", 如果某个OpenGL实现支持某个extension,那么这个extension的名字字符串就要出现在调用`glGetStringi(EXTENSIONS);`的返回值里。
+- 所有在这个extension里定义的函数，函数名都以`FunctionARB`或`FunctionKHR`命名。
+- 所有在这个extension里定义的枚举，枚举名都以`NAME_ARB`或`NAME_KHR`命名。
+
+
+### K.3.2 Promoting Extensions to Core Features
+Khronos-approved, multivendor, 以及vendor-specific extensions都可以被_晋级_(promoted)加入到OpenGL核心特性集(required core features).一旦被加入，相应的extension specification将被合入到core specification. 在这个extension里定义的函数和枚举也将删除它们的**ARB**, **KHR**, **EXT**, 或者vendor后缀。而且支持这些被_晋升_的extension的OpenGL实现应该继续支持带后缀的函数名和枚举名。
+
+# What is the relationship between OpenGL extensions and OpenGL versions?
+
+{% asset_img extensions.png "venn diagram of extensions" %}
