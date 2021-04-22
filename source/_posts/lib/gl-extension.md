@@ -22,8 +22,7 @@ categories: lib
 - multivendor (EXT)
 - Khronos-approved ("ARB", "OES", "OML")
 
-具体说， Khronos的Extension命名规则是`api_category_name`, 对于**OpenGL** API来说`api`就是`GL`, `category`就是上面的三
-类，对于第三类**Khronos-approved** Extensions, `category`还会细分
+具体说， Khronos的Extension命名规则是`api_category_name`, 对于**OpenGL** API来说`api`就是`GL`, `category`就是上面的三类，对于第三类**Khronos-approved** Extensions, `category`还会细分
 
 - "ARB"或"KHR"专门指**OpenGL** Extensions
 - "OES"专门指**OpenGL ES** Extensions
@@ -35,7 +34,7 @@ categories: lib
 - [OpenGL Vendor and EXT Extension Specifications](https://www.khronos.org/registry/OpenGL/index_gl.php#arbextspecs)
 
 ## Khronos-approved Extensions
-这里重点理一下**Khronos-approved** Extensions(或者**"GL_ARB_*"**和**"GL_KHR_*"**), 因为Khronos-approved Extensions与下面两个问题密切相关：
+这里重点理一下**Khronos-approved** Extensions(或者**"GL\_ARB\_*"**和**"GL\_KHR\_*"**), 因为Khronos-approved Extensions与下面两个问题密切相关：
 
 - OpenGL Extensions和OpenGL Versions有什么关系？
 - OpenGL Extensions和conformant OpenGL implementation有什么关系？
