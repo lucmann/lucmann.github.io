@@ -24,4 +24,6 @@ apt install nautilus -y
 {% asset_img wslg-nautilus.png "WSLg nautilus" %}
 
 # glmark2
-_To be continued ..._
+
+{% asset_img wslg-glmark2.png "WSLg glmark2" %}
+
