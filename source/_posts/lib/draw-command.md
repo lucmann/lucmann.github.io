@@ -2,6 +2,7 @@
 title: Draw Commands
 date: 2020-09-15 16:44:37
 tags: [GL]
+categories: lib
 ---
 
 # Category
@@ -164,4 +165,79 @@ void glDrawElementsInstancedBaseVertex(GLenum mode,
                                        GLsizei instancecount,
                                        GLint basevertex);
 ```
+
 ## Indirect Draw
+**Indirect Draw**有基本和Instanced Draw一样，除了那些**Draw Parameters**会被上传到由`indirect`指向的专门的`GL_DRAW_INDIRECT_BUFFER`缓冲区。
+### DrawArraysIndirect
+```
+void glDrawArraysIndirect(GLenum mode, const void *indirect);
+```
+
+在OpenGL ES 3.1及以上，DrawArraysIndirect的Draw Parameters被定义成下面的结构体:
+```
+typedef struct {
+    uint count;
+    uint instanceCount;
+    uint first;
+    uint reservedMustBeZero;
+} DrawArraysIndirectCommand;
+```
+
+在OpenGL 4.0及以上，DrawArraysIndirect的Draw Parameters被定义成下面的结构体:
+```
+typedef struct {
+    uint count;
+    uint instanceCount;
+    uint first;
+    uint baseInstance;
+} DrawArraysIndirectCommand;
+```
+
+这所以在OpenGL ES和OpenGL里有`baseInstance`的区别，是因为在OpenGL ES中没有下面的draw command:
+```
+void glDrawArraysIntancedBaseInstance(GLenum mode,
+				      GLint first,
+				      GLsizei count,
+				      GLsizei instancecount,
+				      GLuint baseinstance);
+```
+
+因此在OpenGL ES中，`glDrawArraysIndirect`相当于
+```
+DrawArraysIndirectCommand *cmd = (DrawArraysIndirectCommand *)indirect;
+DrawArraysInstanced(mode, cmd->first, cmd->count, cmd->instanceCount);
+```
+
+而在OpenGL中，`glDrawArraysIndirect`相当于
+```
+DrawArraysIndirectCommand *cmd = (DrawArraysIndirectCommand *)indirect;
+DrawArraysInstancedBaseInstance(mode, cmd->first, cmd->count,
+                cmd->instanceCount, cmd->baseInstance);
+```
+
+### DrawElementsIndirect
+```
+void glDrawElementsIndirect(GLenum mode, GLenum type, const void *indirect);
+```
+
+在ES 3.1中, DrawElementsIndirect的Draw Parameters被定义成下面这个结构体:
+```
+typedef struct {
+    uint count;
+    uint instanceCount;
+    uint firstIndex;
+    int  baseVertex;
+    uint reservedMustBeZero;
+} DrawElementsIndirectCommand;
+```
+
+而在OpenGL 4.0及以上, DrawElementsIndirect的`indirect`指向的Draw Parameters被定义成下面的结构体:
+```
+typedef struct {
+    uint count;
+    uint primCount;
+    uint firstIndex;
+    uint baseVertex;
+    uint baseInstance;
+} DrawElementsIndirectCommand;
+```
