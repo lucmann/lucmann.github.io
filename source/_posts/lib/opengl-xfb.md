@@ -113,3 +113,44 @@ Transform Feedback模式被激活后，在没有调用`glPauseTransformFeedback`
 void glEndTransformFeedback();
 ```
 
+# Feedback Objects
+跟其它OpenGL的功能一样，Transform Feedback也有一大堆state需要track, 所以这些state被封装进**Transform Feedback Objects**, 这些Feedback Objects和其它OpenGL Object一样需要`Gen`, `Delete`和`Bind`:
+
+```
+void glGenTransformFeedbacks(GLsizei n, GLuint *ids);
+void glDeleteTransformFeedbacks(GLsizei n, const GLuint *ids);
+void glBindTransformFeedback(GLenum target, GLuint id);
+```
+
+NOTE:
+- `glBindTransformFeedback`的`target`永远是`GL_TRANSFORM_FEEDBACK`
+- 不能绑定一个Feedback Object，如果当前的Feedback Object还是active或没有被paused.
+
+那么Feedback Object里封装了哪些Transform Feedback state呢？
+- generic buffer bindings, 即调用`glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, ...)`绑定的那些buffers
+- indexed buffer bindings, 即调用`glBindBufferRange(GL_TRANSFORM_FEEDBACK, ...)`绑定的那些buffers
+- transform feedback是否是active还是paused
+- 被当前的feedback操作记录的count of primitives等等
+
+# Feedback Rendering
+OK, 我们现在获得了Vertex Processing的结果，并记录了这次Transform Feedback操作的状态到Transform Feedback Objects(例如captured count of primitives, the number of vertices). 但是我们如何利用这些captured数据呢？
+
+```
+void glDrawTransformFeedback(GLenum mode,
+			     GLuint id);
+
+void glDrawTransformFeedbackInstanced(GLenum mode,
+				      GLuint id,
+				      GLsizei instancecount);
+void glDrawTransformFeedbackStream(GLenum mode,
+				   GLuint id,
+				   GLuint stream);
+void glDrawTransformFeedbackStreamInstanced(GLenum mode,
+					    GLuint id,
+					    GLuint stream,
+					    GLsizei instancecount);
+```
+
+NOTE:
+- 在调用这些`Draw`命令前，一定要先调用`glEndTransformFeedback`, 因为只有当调用了`glEndTransformFeedback`后，OpenGL状态机才知道一次完整的Transform Feedback操作完成了。
+
