@@ -6,6 +6,9 @@ categories: lib
 ---
 
 # Objects
+
+<!--more-->
+
 | Object             | Shareability | Containability              |
 |:-------------------|:-------------|:----------------------------|
 | Buffer             | shared       | No                          |
@@ -20,3 +23,7 @@ categories: lib
 | Transform Feedback | non-shared   | Buffer Objects              |
 | Query              | non-shared   | No                          |
 | Sync               | shared       | No                          |
+
+NOTE:
+- 对于一类Objects是否可以共享是指是否可以在多个**OpenGL contexts**之间共享
+
