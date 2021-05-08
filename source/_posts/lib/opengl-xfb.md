@@ -35,8 +35,9 @@ void glTransformFeedbackVaryings(GLuint program,
 这个API设置:
 - 哪些program的输出变量被**captured**
 - capturing模式， capturing模式有两种
-	- `GL_INTERLEAVED_ATTRIBS`
-	- `GL_SEPARATE_ATTRIBS`
+
+    - `GL_INTERLEAVED_ATTRIBS`
+    - `GL_SEPARATE_ATTRIBS`
 
 ### interleaved mode
 这种模式下，所有captured的输出被保存在同一个buffer object.
@@ -69,8 +70,7 @@ void glTransformFeedbackVaryings(GLuint program,
 |:-------------------------------------------------|:-------------:|
 | GL_MAX_TRANSFORM_FEEDBACK_BUFFERS                | 64            |
 
-注意到在interleaved capture mode下，没有变量个数的限制，原因是这里真正需要限制的不是要captured的变量的个数，而是保存这些变量的buffer的个数，在interleaved mode下，所有captured的变量都是保存在同一个buffer中的，所以不需要限制。而在separate
-mode下，每个列出的变量是保存在各自不同的buffer中，所以需要对此有一个上限。所以这里`GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS`的一个更好的名字应该是`GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_BUFFERS`.
+注意到在interleaved capture mode下，没有变量个数的限制，原因是这里真正需要限制的不是要captured的变量的个数，而是保存这些变量的buffer的个数，在interleaved mode下，所有captured的变量都是保存在同一个buffer中的，所以不需要限制。而在separate mode下，每个列出的变量是保存在各自不同的buffer中，所以需要对此有一个上限。所以这里`GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS`的一个更好的名字应该是`GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_BUFFERS`.
 
 ### No Limitations for the Type 
 任何类型的输出变量都可以被captured, 包括
@@ -80,3 +80,36 @@ mode下，每个列出的变量是保存在各自不同的buffer中，所以需�
 
 # Buffer Binding
 当设置好要capturing program中的哪些输出变量，以何种模式captured后，接下来就要设置(申请)保存captured的数据的buffer objects.
+
+```
+void glBindBufferRange(GLenum target,
+		       GLuint index,
+		       GLuint buffer,
+		       GLintptr offset,
+		       GLsizeiptr size);
+```
+
+这里`target`就是`GL_TRANSFORM_FEEDBACK_BUFFER`. `offset`必须是4字节对齐，如果存进buffer的值包含**double-precision**, 则需要8字节对齐。
+
+# Feedback Process
+Capture设置好，Buffer绑定好之后，就可以开始**Recording** Vertex Processing产出的数据了。通过调用下面的API开始Feedback:
+```
+void glBeginTransformFeedback(GLenum primitiveMode);
+```
+
+这里`primitiveMode`只能是以下3种之一:
+- GL_POINTS
+- GL_LINES
+- GL_TRIANGLES
+
+Transform Feedback模式被激活后，在没有调用`glPauseTransformFeedback`或`glEndTransformFeedback`之前，以下行为不被允许:
+- 修改`GL_TRANSFORM_FEEDBACK_BUFFER`的bindings
+- 任何对这些绑定的`GL_TRANSFORM_FEEDBACK_BUFFER`的读写操作
+- 重新申请这些绑定的`GL_TRANSFORM_FEEDBACK_BUFFER`的存储
+- 修改当前使用的program, 也就是不能调用`glUseProgram`或`glBindProgramPipeline`, 还有`glUseProgramStages`
+
+即出Transform Feedback模式调用:
+```
+void glEndTransformFeedback();
+```
+
