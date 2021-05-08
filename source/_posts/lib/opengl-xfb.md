@@ -35,8 +35,8 @@ void glTransformFeedbackVaryings(GLuint program,
 这个API设置:
 - 哪些program的输出变量被**captured**
 - capturing模式， capturing模式有两种
-    * `GL_INTERLEAVED_ATTRIBS`
-    * `GL_SEPARATE_ATTRIBS`
+	- `GL_INTERLEAVED_ATTRIBS`
+	- `GL_SEPARATE_ATTRIBS`
 
 ### interleaved mode
 这种模式下，所有captured的输出被保存在同一个buffer object.
@@ -51,17 +51,20 @@ void glTransformFeedbackVaryings(GLuint program,
 
 ### Limitations for the Number
 - separate capture
+
 | Limitation                                       | Minimal Value |
 |:-------------------------------------------------|:-------------:|
 | GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS       | 4             |
 | GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS    | 4             |
 
 - interleaved capture
+
 | Limitation                                       | Minimal Value |
 |:-------------------------------------------------|:-------------:|
 | GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS | 64            |
 
 - advanced interleaved capture (不同的变量放在不同的buffers)
+
 | Limitation                                       | Minimal Value |
 |:-------------------------------------------------|:-------------:|
 | GL_MAX_TRANSFORM_FEEDBACK_BUFFERS                | 64            |
