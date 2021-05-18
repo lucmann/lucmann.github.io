@@ -6,9 +6,11 @@ categories: sys
 ---
 
 # Global Platform Devices Array
-```
-struct xf86_platform_device *xf86_platform_devices;
 
+<!--more-->
+
+## A xf86 platform device
+```
 struct xf86_platform_device {
 		struct OdevAttributes *attribs;
 		struct pci_device *pdev;
@@ -28,6 +30,14 @@ struct OdevAttributes {
 
 `OdevAttributes`可以理解为**Output Device Attributes**, 这个结构体的每个成员都值得说一下。
 
+## Array of xf86 platform devices 
+```
+struct xf86_platform_device *xf86_platform_devices;
+
+```
+
+这个数组是全局的。
+
 - path
 
 字符串，kernel device node, `/dev/dri/card0`
@@ -40,10 +50,26 @@ struct OdevAttributes {
 
 字符串，DRI格式的Bus ID， `pci:0000:04:00.0`, 这种格式包含4个数字，分别表示：
 
-* PCI domain
-* PCI bus
-* PCI device
-* PCI function
+1. PCI domain
+2. PCI bus
+3. PCI device
+4. PCI function
+
+要注意这种格式与`Xorg.0.log`中的那种打印格式的区别
+
+```
+[     8.456] (--) PCI: (0:5:0:0) 1002:677b:174b:3000 rev 0, Mem @ 0x1040000000/268435456, 0x58600000/131072, I/O @ 0x00002000/256, BIOS @ 0x????????/131072
+```
+
+这种格式`PCI: (0:5:0:0) 1002:677b:174b:3000`, 一共包含了8个数字，分别表示：
+1. PCI domain
+2. PCI bus
+3. PCI device
+4. PCI function
+5. PCI vendor ID
+6. PCI device ID
+7. PCI subvendor ID
+8. PCI subdevice ID
 
 - fd
 
@@ -81,13 +107,14 @@ void xf86PciProbe(void);
 
 默认是使用`xf86PlatformDeviceProbe`， 当这个函数完成`xf86_add_platform_device`后，除了`attribs`, `xf86_platform_device`的其它成员还没有被填写，剩下的任务交由`libpciaccess`和`libdrm`的接口完成。
 
-- libpciaccess
-    	* pci_device_probe
-    	* pci_device_is_boot_vga
-- libdrm
-	* drmSetInterfaceVersion
-	* drmGetBusid
-	* drmGetVersion
+## libpciaccess
+- pci_device_probe
+- pci_device_is_boot_vga
+
+## libdrm
+- drmSetInterfaceVersion
+- drmGetBusid
+- drmGetVersion
 
 # Primary Bus
 在多卡的情况下，Xserver启动后默认使用哪个显卡显示？
@@ -104,11 +131,54 @@ typedef struct _bus {
 
 ```
 
-Xserver定义了一个全局的`BusRec`变量`primaryBus`
+Xserver定义了一个全局的`BusRec`类型变量`primaryBus`
 
 ```
 BusRec primaryBus = { BUS_NONE, {0} };
 ```
 
 这个`primaryBus`将是Xserver启动后默认使用的显卡设备的唯一候选者。
+
+# Who Is The Lucky Boy?
+Xserver有两个规则去确定[primaryBus](#primary-bus):
+
+- [xf86_platform_devices](#array-of-xf86-platform-devices)这个数组中存入的[xf86_platform_device](#a-xf86-platform-device)的顺序
+- [pci_device_is_boot_vga](#libpciaccess)
+
+Xserver顺序扫描`xf86_platform_devices`， 第一个`pci_device_is_boot_vga`返回`True`的那个显示设备即为`primaryBus`, 但这是在没有配置`PrimaryGPU`选项时的行为。
+
+## How `pci_device_is_boot_vga` Works?
+`pci_device_is_boot_vga`是一个虚接口，在Linux下的实现是`pci_device_linux_sysfs_boot_vga`, 下面的代码来自`libpciaccess`
+
+```
+static int pci_device_linux_sysfs_boot_vga(struct pci_device *dev)
+{
+    char name[256];
+    char reply[3];
+    int fd, bytes_read;
+    int ret = 0;
+
+    snprintf( name, 255, "%s/%04x:%02x:%02x.%1u/boot_vga",
+	      SYS_BUS_PCI,
+	      dev->domain,
+	      dev->bus,
+	      dev->dev,
+	      dev->func );
+
+    fd = open( name, O_RDONLY | O_CLOEXEC);
+    if (fd == -1)
+       return 0;
+
+    bytes_read = read(fd, reply, 1);
+    if (bytes_read != 1)
+	goto out;
+    if (reply[0] == '1')
+	ret = 1;
+out:
+    close(fd);
+    return ret;
+}
+```
+
+这里`SYS_BUS_PCI`被定义为`/sys/bus/pci/devices`, `pci_device_is_boot_vga`的返回值取决于显示设备的**kernel driver**如何实现`sysfs`文件系统中的`/sys/bus/pci/devices/0000:05:00.0/boot_vga`节点。
 
