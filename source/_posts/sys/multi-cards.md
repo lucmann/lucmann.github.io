@@ -10,6 +10,7 @@ categories: sys
 <!--more-->
 
 ## A xf86 platform device
+
 ```
 struct xf86_platform_device {
 		struct OdevAttributes *attribs;
@@ -30,7 +31,8 @@ struct OdevAttributes {
 
 `OdevAttributes`可以理解为**Output Device Attributes**, 这个结构体的每个成员都值得说一下。
 
-## Array of xf86 platform devices 
+## <a name="xf86_platform_devices"></a>Array of xf86 platform devices 
+
 ```
 struct xf86_platform_device *xf86_platform_devices;
 
@@ -142,7 +144,7 @@ BusRec primaryBus = { BUS_NONE, {0} };
 # Who Is The Lucky Boy?
 Xserver有两个规则去确定[primaryBus](#primary-bus):
 
-- [xf86_platform_devices](#array-of-xf86-platform-devices)这个数组中存入的[xf86_platform_device](#a-xf86-platform-device)的顺序
+- [xf86_platform_devices](#xf86_platform_devices)这个数组中存入的[xf86_platform_device](#a-xf86-platform-device)的顺序
 - [pci_device_is_boot_vga](#libpciaccess)
 
 Xserver顺序扫描`xf86_platform_devices`， 第一个`pci_device_is_boot_vga`返回`True`的那个显示设备即为`primaryBus`, 但这是在没有配置`PrimaryGPU`选项时的行为。
