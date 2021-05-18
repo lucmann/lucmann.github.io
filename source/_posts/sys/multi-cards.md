@@ -9,7 +9,7 @@ categories: sys
 
 <!--more-->
 
-## A xf86 platform device
+## <a name="xf86_platform_device"></a>A xf86 platform device
 
 ```
 struct xf86_platform_device {
@@ -90,10 +90,11 @@ struct xf86_platform_device *xf86_platform_devices;
 字符串， kernel driver name, `drm_driver.name`
 
 
-Xserver依赖两个接口来填写该结构，这个过程也体现了Xserver加载输出设备(显卡)及驱动的过程
+Xserver依赖下面的用户空间库来填写该结构，这个过程也体现了Xserver加载输出设备(显卡)及驱动的过程
 
 - [libpciaccess](https://gitlab.freedesktop.org/xorg/lib/libpciaccess)
-- libdrm
+- [libudev](https://github.com/systemd/systemd/tree/main/src/libudev)
+- [libdrm](https://gitlab.freedesktop.org/mesa/drm)
 
 1. 通过`libpciaccess`的接口发现系统PCI设备，获取`syspath`, `path`
 2. 通过`open`系统调用打开侦测到的`drm_device`，`fd`有了
@@ -107,7 +108,11 @@ void xf86PlatformDeviceProbe(struct OdevAttributes *attribs);
 void xf86PciProbe(void);
 ```
 
-默认是使用`xf86PlatformDeviceProbe`， 当这个函数完成`xf86_add_platform_device`后，除了`attribs`, `xf86_platform_device`的其它成员还没有被填写，剩下的任务交由`libpciaccess`和`libdrm`的接口完成。
+默认是使用`xf86PlatformDeviceProbe`， 当这个函数完成`xf86_add_platform_device`后，除了`attribs`, `xf86_platform_device`的其它成员还没有被填写，剩下的任务交由`libudev`, `libpciaccess`和`libdrm`的接口完成。
+
+## libudev
+- udev_enumerate_add_match_subsys
+- udev_enumerate_add_match_sysname
 
 ## libpciaccess
 - pci_device_probe
@@ -144,10 +149,31 @@ BusRec primaryBus = { BUS_NONE, {0} };
 # Who Is The Lucky Boy?
 Xserver有两个规则去确定[primaryBus](#primary-bus):
 
-- [xf86_platform_devices](#xf86_platform_devices)这个数组中存入的[xf86_platform_device](#a-xf86-platform-device)的顺序
+- [config_udev_odev_probe](#libudev)
 - [pci_device_is_boot_vga](#libpciaccess)
 
-Xserver顺序扫描`xf86_platform_devices`， 第一个`pci_device_is_boot_vga`返回`True`的那个显示设备即为`primaryBus`, 但这是在没有配置`PrimaryGPU`选项时的行为。
+## How `config_udev_odev_probe` Works?
+`config_udev_odev_probe`唯一的参数是一个callback函数`xf86PlatformDeviceProbe`, `config_udev_odev_probe`要做的就是调用[libudev](#libudev)的接口枚举出`/dev`文件系统里注册的`drm`设备，将它的`path`填到[xf86_platform_device.attribs->path](#xf86_platform_device)。所以这一步决定了[xf86_platform_devices](#xf86_platform_devices)数组中platform device的顺序，按照此顺序最后那个`pci_device_is_boot_vga`返回`True`的显示设备将为`primaryBus`, 但这是在没有配置`PrimaryGPU`选项时的行为。下面的代码来自`libudev`
+
+
+```
+_public_ int sd_device_enumerator_add_match_sysname(sd_device_enumerator *enumerator, const char *sysname) {
+        int r;
+
+        assert_return(enumerator, -EINVAL);
+        assert_return(sysname, -EINVAL);
+
+        r = set_put_strdup(&enumerator->match_sysname, sysname);
+        if (r <= 0)
+                return r;
+
+        enumerator->scan_uptodate = false;
+
+        return 1;
+}
+```
+
+这里参数`sysname`是一个正则表达式`card[0-9]*`
 
 ## How `pci_device_is_boot_vga` Works?
 `pci_device_is_boot_vga`是一个虚接口，在Linux下的实现是`pci_device_linux_sysfs_boot_vga`, 下面的代码来自`libpciaccess`
@@ -183,4 +209,7 @@ out:
 ```
 
 这里`SYS_BUS_PCI`被定义为`/sys/bus/pci/devices`, `pci_device_is_boot_vga`的返回值取决于显示设备的**kernel driver**如何实现`sysfs`文件系统中的`/sys/bus/pci/devices/0000:05:00.0/boot_vga`节点。
+
+
+以上两点规则说明，在多卡系统中，不使用`PrimaryGPU`的情况下，当且仅当目标卡的`drm`设备节点号最大，而且`/sys/bus/pci/devices/XXXX:XX:XX.X/boot_vga`被实现为read它返回`1`. 这样目标卡才能做为`primaryBus`设备默认显示输出。
 
