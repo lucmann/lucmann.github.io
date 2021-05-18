@@ -59,7 +59,7 @@ struct xf86_platform_device *xf86_platform_devices;
 
 要注意这种格式与`Xorg.0.log`中的那种打印格式的区别
 
-```
+``` xorg-server-1.18.4
 [     8.456] (--) PCI: (0:5:0:0) 1002:677b:174b:3000 rev 0, Mem @ 0x1040000000/268435456, 0x58600000/131072, I/O @ 0x00002000/256, BIOS @ 0x????????/131072
 ```
 
@@ -72,6 +72,12 @@ struct xf86_platform_device *xf86_platform_devices;
 6. PCI device ID
 7. PCI subvendor ID
 8. PCI subdevice ID
+
+``` xorg-server-1.20.0
+[    40.891] (--) PCI: (10@0:0:0) 1a03:2000:1a03:2000 rev 65, Mem @ 0x60000000/16777216, 0x61000000/131072, I/O @ 0x00002000/128, BIOS @ 0x????????/65536
+```
+
+这种格式`PCI: (10@0:0:0) 1a03:2000:1a03:2000`, 也是共8个数字，与前面的区别是PCI domain与PCI bus换了位置。
 
 - fd
 
