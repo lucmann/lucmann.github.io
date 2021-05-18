@@ -27,41 +27,88 @@ struct OdevAttributes {
 ```
 
 `OdevAttributes`可以理解为**Output Device Attributes**, 这个结构体的每个成员都值得说一下。
+
 - path
 
-	字符串，kernel device node, `/dev/dri/card0`
+字符串，kernel device node, `/dev/dri/card0`
 
 - syspath
 
-	字符串，system device path, `/sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/drm/card1`
+字符串，system device path, `/sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/drm/card1`
 
 - busid
 
-	字符串，DRI格式的Bus ID， `PCI:1:0:0` (我猜的)
+字符串，DRI格式的Bus ID， `pci:0000:04:00.0`, 这种格式包含4个数字，分别表示：
+
+* PCI domain
+* PCI bus
+* PCI device
+* PCI function
 
 - fd
 
-	文件描述符，`open(/dev/dri/card0)`返回值
+文件描述符，`open(/dev/dri/card0)`返回值
 
 - major
 
-	主设备号
+主设备号
 
 - minor
 
-	次设备号
+次设备号
 
 - driver
 
-	字符串， kernel driver name, `drm_driver.name`
+字符串， kernel driver name, `drm_driver.name`
 
 
 Xserver依赖两个接口来填写该结构，这个过程也体现了Xserver加载输出设备(显卡)及驱动的过程
 
-- libpciaccess
+- [libpciaccess](https://gitlab.freedesktop.org/xorg/lib/libpciaccess)
 - libdrm
 
 1. 通过`libpciaccess`的接口发现系统PCI设备，获取`syspath`, `path`
 2. 通过`open`系统调用打开侦测到的`drm_device`，`fd`有了
 3. 通过`libdrm`接口获取`major`, `minor`和`driver`
+
+
+# Device Detect Routines
+Xserver提供了两种设备检测方法：
+```
+void xf86PlatformDeviceProbe(struct OdevAttributes *attribs);
+void xf86PciProbe(void);
+```
+
+默认是使用`xf86PlatformDeviceProbe`， 当这个函数完成`xf86_add_platform_device`后，除了`attribs`, `xf86_platform_device`的其它成员还没有被填写，剩下的任务交由`libpciaccess`和`libdrm`的接口完成。
+
+- libpciaccess
+    	* pci_device_probe
+    	* pci_device_is_boot_vga
+- libdrm
+	* drmSetInterfaceVersion
+	* drmGetBusid
+	* drmGetVersion
+
+# Primary Bus
+在多卡的情况下，Xserver启动后默认使用哪个显卡显示？
+
+```
+typedef struct _bus {
+	BusType type;
+	union {
+		struct pci_device *pci;
+		SbusBusId sbus;
+		struct xf86_platform_device *plat;
+	} id;
+} BusRec, *BusPtr;
+
+```
+
+Xserver定义了一个全局的`BusRec`变量`primaryBus`
+
+```
+BusRec primaryBus = { BUS_NONE, {0} };
+```
+
+这个`primaryBus`将是Xserver启动后默认使用的显卡设备的唯一候选者。
 
