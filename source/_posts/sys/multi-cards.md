@@ -211,5 +211,5 @@ out:
 这里`SYS_BUS_PCI`被定义为`/sys/bus/pci/devices`, `pci_device_is_boot_vga`的返回值取决于显示设备的**kernel driver**如何实现`sysfs`文件系统中的`/sys/bus/pci/devices/0000:05:00.0/boot_vga`节点。
 
 
-以上两点规则说明，在多卡系统中，不使用`PrimaryGPU`的情况下，当且仅当目标卡的`drm`设备节点号最大，而且`/sys/bus/pci/devices/XXXX:XX:XX.X/boot_vga`被实现为read它返回`1`. 这样目标卡才能做为`primaryBus`设备默认显示输出。
+以上两点规则说明，在多卡系统中，不使用`PrimaryGPU`的情况下，当且仅当目标卡的`drm`设备节点号最大，而且`/sys/bus/pci/devices/XXXX:XX:XX.X/boot_vga`被实现为read它返回ASCII字符`'1'`. 这样目标卡才能做为`primaryBus`设备默认显示输出。
 
