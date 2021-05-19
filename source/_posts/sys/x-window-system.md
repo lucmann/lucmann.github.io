@@ -1,7 +1,7 @@
 ---
 title: X Window System
 date: 2020-12-20 11:58:43
-tags: [wsi]
+tags: [xorg]
 categories: sys
 ---
 

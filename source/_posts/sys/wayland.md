@@ -1,7 +1,7 @@
 ---
 title: Wayland
 date: 2021-04-01 16:31:25
-tags: [wsi]
+tags: [xorg]
 categories: sys
 ---
 

@@ -2,7 +2,7 @@
 title: Build Xserver from Source
 date: 2020-10-19 17:47:39
 tags: [xorg]
-categories: bin
+categories: sys
 ---
 
 # Motivation
