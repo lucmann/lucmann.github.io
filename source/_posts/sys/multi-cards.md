@@ -79,6 +79,10 @@ struct xf86_platform_device *xf86_platform_devices;
 
 这种格式`PCI: (10@0:0:0) 1a03:2000:1a03:2000`, 也是共8个数字，与前面的区别是PCI domain与PCI bus换了位置。
 
+上面两种格式都可以作为`Device`段里`BusID`的格式，X11规定的`BusID`的格式是
+
+"bus<font color="green">[@domain]</font>:device<font color="green">[:func]</font>"
+
 - fd
 
 文件描述符，`open(/dev/dri/card0)`返回值
