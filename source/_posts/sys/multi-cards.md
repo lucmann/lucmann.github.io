@@ -1,17 +1,32 @@
 ---
-title: Multi-VideoCards in Xorg
+title: 多PCI显卡共存场景下的Linux VGA仲裁(vgaarbiter)
 date: 2021-05-14 11:20:00
-tags: xorg
+tags: [xorg, linux]
 categories: sys
 ---
 
-# Global Platform Devices Array
+# 引子
+本文想尝试回答的问题是，当主板上同时存在多张PCI显卡，但只有一个显示器(假设显示器至少有两个HDMI接口)时，Linux系统是如何选择优先使用哪一张显卡输出的。
 
 <!--more-->
 
-## <a name="xf86_platform_device"></a>A xf86 platform device
+上述场景又可细分为下面3种情况(OS: Kylin V10, Kernel: 4.4, Window System: Xorg 1.20.4)：
+
+| 场景           | 显示                                              |
+|:---------------|:--------------------------------------------------|
+| A卡 + A卡      | 显示器可任意选择输入源, 默认PCI slotX 显示        |
+| A卡 + N卡      | 显示器可任意选择输入源, 默认PCI slotX             |
+| N卡 + N卡      | 显示器可任意选择输入源, 默认PCI slotX             |
+
+# [Linux VGAArbiter](https://www.kernel.org/doc/html/v4.10/gpu/vgaarbiter.html)
+
+# X server 资源访问控制(RAC)
+## <a name="xf86_platform_device"></a>Xorg抽象的输出设备
+Xorg定义了一个全局数组`xf86_platform_devices`, 这个数组的元素类型是`xf86_platform_device`, 存储是动态申请的，Xorg探测到一个PCI显卡时，就申请一个存储。 
 
 ```
+struct xf86_platform_device *xf86_platform_devices;
+
 struct xf86_platform_device {
 		struct OdevAttributes *attribs;
 		struct pci_device *pdev;
@@ -29,16 +44,7 @@ struct OdevAttributes {
 }
 ```
 
-`OdevAttributes`可以理解为**Output Device Attributes**, 这个结构体的每个成员都值得说一下。
-
-## <a name="xf86_platform_devices"></a>Array of xf86 platform devices 
-
-```
-struct xf86_platform_device *xf86_platform_devices;
-
-```
-
-这个数组是全局的。
+`OdevAttributes`定义了一个PCI输出设备的属性。
 
 - path
 
@@ -100,7 +106,7 @@ struct xf86_platform_device *xf86_platform_devices;
 字符串， kernel driver name, `drm_driver.name`
 
 
-Xserver依赖下面的用户空间库来填写该结构，这个过程也体现了Xserver加载输出设备(显卡)及驱动的过程
+Xserver依赖下面的用户空间库来填写该结构，这个过程也体现了Xserver检测显卡及加载驱动的过程
 
 - [libpciaccess](https://gitlab.freedesktop.org/xorg/lib/libpciaccess)
 - [libudev](https://github.com/systemd/systemd/tree/main/src/libudev)
