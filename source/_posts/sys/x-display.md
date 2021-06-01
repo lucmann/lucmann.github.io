@@ -1,23 +1,26 @@
 ---
-title: X11 Data Structure Hierarchy
+title: X11中的Display, Screen, Depth和Visual
 date: 2020-09-03 16:49:16
 tags: [xorg]
 categories: sys
 ---
 
-# X Window System
-X Window System是一个基于网络的窗口系统协议，它的一个实现是[Xorg](https://www.x.org/wiki/)。
+# X窗口系统
+[X窗口系统](https://en.wikipedia.org/wiki/X_Window_System)诞生于1984年MIT的研究，后来成为Unix, 类UNIX等操作系统所一致适用的标准化软件工具包及显示架构的运作协议。目前使用最普遍最受欢迎的一个实现是[X.Org](https://www.x.org/wiki/)，它所用的协议版本是**X11**, 所以Xorg也经常被叫做X11。
 
 <!--more-->
 
-# What are data structures in Xorg?
-- Display
-    Display datatype maintaining display specific data. The contents of this structure are implementation dependent. A Display should be treated as oqaque by application code.
-- Screen
+# 它们是什么
+## Display
+Display datatype maintaining display specific data. The contents of this structure are implementation dependent. A Display should be treated as oqaque by application code.
+
+## Screen
     Information about the screen. The contents of this structure are implementation dependent. A Screen should be treated as opaque by application code.
-- Depth
+
+## Depth
     Depth structure; contains information for each possible depth.
-- Visual
+
+## Visual
     Visual structure; contains information about colormapping possible.
 
 以上4个结构体都被定义在[Xlib.h](https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/include/X11/Xlib.h),它们四者之间的关系是前者包含多个后者，依次类推。这里注意区分两组概念:
@@ -29,7 +32,7 @@ X Window System是一个基于网络的窗口系统协议，它的一个实现�
 <tr><th>Usage<td>Display *dpy<br>as most Xlib API's first argument<td>e.g. export DISPLAY=:0
 </table>
 
-# How are they organized?
+# 它们之间的层级关系
 ```mermaid
 graph TD
     D[Display]
@@ -54,10 +57,10 @@ graph TD
     end
 ```
 
-# How do we get their information?
-一般的Linux系统中有一个命令`xdpyinfo`,利用它可以查看到所有的4者的信息，当然和其它的X的工具一样，使用前要确保环境变量`DISPLAY`已经为有效值。下面是在Xorg作为X Server时查看到的系统X11 Window的相关信息。(只截取前面部分)
-```
+# `xdpyinfo`
+`xdpyinfo`来自X11的工具包`x11-utils`, 它可以打印当前`DISPLAY`的Display, Screen, Depth, Visual信息，当然和其它的X的工具一样，使用前要确保环境变量`DISPLAY`已经为有效值。下面是在Xorg作为X Server时查看到的系统X11 Window的相关信息。(只截取前面部分)
 
+```
 name of display:    :18.0
 version number:    11.0
 vendor string:    The X.Org Foundation
