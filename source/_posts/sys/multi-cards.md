@@ -20,8 +20,9 @@ categories: sys
 
 # [Linux VGAArbiter](https://www.kernel.org/doc/html/v4.10/gpu/vgaarbiter.html)
 
-# X server 资源访问控制(RAC)
+# X Server的输出设备检测和驱动加载
 ## <a name="xf86_platform_device"></a>Xorg抽象的输出设备
+Linux下的显示输出设备一般要么是一个`pci_device`，要么是一个`xf86_platform_device`
 Xorg定义了一个全局数组`xf86_platform_devices`, 这个数组的元素类型是`xf86_platform_device`, 存储是动态申请的，Xorg探测到一个PCI显卡时，就申请一个存储。 
 
 ```
