@@ -9,8 +9,23 @@ categories: lib
 ```plantuml
 @startuml
 class pipe_loader_device
-class pipe_loader_sw_device
-class pipe_loader_drm_device
+
+class pipe_loader_sw_device {
+    sw_driver_descriptor * dd
+    .. !GALLIUM_STATIC_TARGETS ..
+    util_dl_library * lib
+    ..
+    sw_winsys * ws
+    int fd
+}
+
+class pipe_loader_drm_device {
+    drm_driver_descriptor * dd
+    .. !GALLIUM_STATIC_TARGETS ..
+    util_dl_library * lib
+    ..
+    int fd
+}
 
 pipe_loader_device <|-- pipe_loader_drm_device
 pipe_loader_device <|-- pipe_loader_sw_device
