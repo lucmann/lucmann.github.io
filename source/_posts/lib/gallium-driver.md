@@ -1,9 +1,21 @@
 ---
-title: How is A Gallium Driver Loaded in Mesa
+title: Mesa Gallium驱动框架
 date: 2021-04-08 08:07:49
-tags: [GL]
+tags: [mesa]
 categories: lib
 ---
+
+# Gallium Pipe
+```plantuml
+@startuml
+class pipe_loader_device
+class pipe_loader_sw_device
+class pipe_loader_drm_device
+
+pipe_loader_device <|-- pipe_loader_drm_device
+pipe_loader_device <|-- pipe_loader_sw_device
+@enduml
+```
 
 # swrast
 

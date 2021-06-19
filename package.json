@@ -15,6 +15,7 @@
     "dart-sass": "^1.25.0",
     "hexo": "^4.2.1",
     "hexo-deployer-git": "^2.1.0",
+    "hexo-filter-kroki": "^2.1.6",
     "hexo-filter-mermaid-diagrams": "^1.0.5",
     "hexo-generator-archive": "^1.0.0",
     "hexo-generator-category": "^1.0.0",
