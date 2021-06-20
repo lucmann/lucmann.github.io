@@ -20,16 +20,22 @@ categories: bin
 ## Build
 Build的工作主要包括解决依赖关系，构建目标(库,应用,测试用例)。`cmake`命令有很多选项可以帮助我们灵活有效地构建目标， 例如：
 
-Out-of-source构建，意思是不污染源代码目录，在指定的单独的目录下生成构建系统
+Out-of-source构建，意思是不污染源代码目录，在指定的单独的目录下生成构建系统, 如果build不存在，cmake会创建它
 
 ```
-cmake -B build # 指定在build目录下生成构建系统，如果build不存在，cmake会创建它
+cmake -B build
 ```
 
-开始构建
+将构建目标间的依赖关系输出Graphivz dot, 生成的`file.dot`可以用dot命令生成图片`dot -Tpng -o file.png file.dot`
 
 ```
-cmake --build build # 通过-B, --build选项可以省去 mkdir build && cd build && cmake .. && make 繁琐的操作
+cmake -B build --graphviz=file.dot
+```
+
+开始构建, 通过`-B`, `--build`选项可以省去`mkdir build && cd build && cmake .. && make`繁琐的操作
+
+```
+cmake --build build
 ```
 
 全量构建
@@ -38,16 +44,16 @@ cmake --build build # 通过-B, --build选项可以省去 mkdir build && cd buil
 cmake --build build --clean-first
 ```
 
-只构建指定的目标
+只构建指定的目标`lib1`, 如果`lib1`依赖其它目标，被依赖的目标也会被构建
 
 ```
-cmake --build build --target lib1 # 注意，如果lib1依赖其它目标，被依赖的目标也会被构建
+cmake --build build --target lib1
 ```
 
-将目标间的依赖关系生成dot文件可供Graphviz生成图
+安装, 一般需要root权限
 
 ```
-cmake -B build --graphviz=file.dot # 生成的file.dot可以用Graphviz提供的dot命令生成图片 dot -Tpng -o file.png file.dot
+cmake --install build
 ```
 
 查询CMAKE变量配置值，包括内置变量和自定义变量
