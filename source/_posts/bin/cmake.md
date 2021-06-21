@@ -62,6 +62,12 @@ cmake --install build
 cmake -L build
 ```
 
+列出生成的Makefile里有效的`target`
+
+```
+cmake --build build --target help
+```
+
 # Guideline
 - Declare your module with `ADD_LIBRARY` or `ADD_EXECUTABLE`.
 - Declare your build flags with `TARGET_xxx()`.
