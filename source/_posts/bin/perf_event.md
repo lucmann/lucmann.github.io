@@ -23,3 +23,12 @@ NOTE: 如果没有特别说明，以下`perf`命令都在`root`权限下执行
 perf list 'sched:*'
 ```
 
+## `perf stat`
+
+```
+perf stat -a sleep
+```
+
+{% asset_img perf_stat.PNG %}
+
+
