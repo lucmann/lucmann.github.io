@@ -102,8 +102,8 @@ void glDispatchCompute(GLuint num_groups_x,
 | type      | CUDA                | type         | Compute Shader                 |
 |:----------|:--------------------|:-------------|:-------------------------------|
 | dim3      | gridDim             | uvec3        | gl_NumWorkGroups               |
-| dim3      | blockDim            | const uvec3  | gl_WorkGroupSize               |
 | uint3     | blockIdx            | uvec3        | gl_WorkGroupID                 |
+| dim3      | blockDim            | const uvec3  | gl_WorkGroupSize               |
 | uint3     | threadIdx           | uvec3        | gl_LocalInvocationID           |
 | -         | -                   | uvec3        | gl_GlobalInvocationID          |
 | -         | -                   | uint         | gl_LocalInvocationIndex        |
