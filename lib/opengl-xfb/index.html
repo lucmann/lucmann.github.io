@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="OpenGL Transform Feedback"/><meta name="keywords" content="GL, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="https://lucmann.github.io/lib/opengl-xfb/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>OpenGL Transform Feedback - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">OpenGL Transform Feedback
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-05-08
+        </span><span class="post-category">
+            <a href="/categories/lib/">lib</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Transform-Feedback"><span class="toc-text">Transform Feedback</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Vertex-Processing"><span class="toc-text">Vertex Processing</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Capturing"><span class="toc-text">Capturing</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Capturing-Setting"><span class="toc-text">Capturing Setting</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#interleaved-mode"><span class="toc-text">interleaved mode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#separate-mode"><span class="toc-text">separate mode</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Captured-Output-Variables"><span class="toc-text">Captured Output Variables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Limitations-for-the-Number"><span class="toc-text">Limitations for the Number</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#No-Limitations-for-the-Type"><span class="toc-text">No Limitations for the Type</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Buffer-Binding"><span class="toc-text">Buffer Binding</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Feedback-Process"><span class="toc-text">Feedback Process</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Feedback-Objects"><span class="toc-text">Feedback Objects</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Feedback-Rendering"><span class="toc-text">Feedback Rendering</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="Transform-Feedback"><a href="#Transform-Feedback" class="headerlink" title="Transform Feedback"></a><a href="https://www.khronos.org/opengl/wiki/Transform_Feedback" target="_blank" rel="noopener">Transform Feedback</a></h1><p><strong>Transform Feedback</strong>(xfb)是将Vertex_Processing阶段产生的图元数据保存在<strong>Buffer Objects</strong>, 以便后面多次提交。</p>
+<a id="more"></a>
+<h1 id="Vertex-Processing"><a href="#Vertex-Processing" class="headerlink" title="Vertex Processing"></a><a href="https://www.khronos.org/opengl/wiki/Vertex_Processing" target="_blank" rel="noopener">Vertex Processing</a></h1><p><strong>xfb</strong>的输入来自Vertex Processing, 所以首先要确定Vertex Processing阶段都是什么，输出什么。Vertex Processing的输出是图元(Primitives), 它至少包含一个vertex shader.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Stage</th>
+<th style="text-align:left">Presence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">vertex</td>
+<td style="text-align:left">mandatory</td>
+</tr>
+<tr>
+<td style="text-align:left">tessellation</td>
+<td style="text-align:left">optional</td>
+</tr>
+<tr>
+<td style="text-align:left">geometry</td>
+<td style="text-align:left">optional</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="Capturing"><a href="#Capturing" class="headerlink" title="Capturing"></a>Capturing</h1><blockquote><p>Transform Feedback is the process of capturing Primitives generated by the Vertex Processing step(s).</p>
+</blockquote>
+<h2 id="Capturing-Setting"><a href="#Capturing-Setting" class="headerlink" title="Capturing Setting"></a>Capturing Setting</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void glTransformFeedbackVaryings(GLuint program,</span><br><span class="line">				 GLsizei count,</span><br><span class="line">				 const char **varyings,</span><br><span class="line">				 GLenum bufferMode);</span><br></pre></td></tr></table></figure>
+<p>这个API设置:</p>
+<ul>
+<li>哪些program的输出变量被<strong>captured</strong></li>
+<li><p>capturing模式， capturing模式有两种</p>
+<ul>
+<li><code>GL_INTERLEAVED_ATTRIBS</code></li>
+<li><code>GL_SEPARATE_ATTRIBS</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="interleaved-mode"><a href="#interleaved-mode" class="headerlink" title="interleaved mode"></a>interleaved mode</h3><p>这种模式下，所有captured的输出被保存在同一个buffer object.</p>
+<h3 id="separate-mode"><a href="#separate-mode" class="headerlink" title="separate mode"></a>separate mode</h3><p>这种模式下，输出未必被captured到不同的buffer object, 它仅仅是指输出被captured到不同的<strong>buffer binding points</strong>. 因为同一个buffer object的不同区域也可以被绑定到不同的<strong>buffer binding points</strong>.</p>
+<h2 id="Captured-Output-Variables"><a href="#Captured-Output-Variables" class="headerlink" title="Captured Output Variables"></a>Captured Output Variables</h2><p>既然要capture Vertex Processing step(s)的输出变量，那么有两个问题:</p>
+<ul>
+<li>How many output variables and total components can be captured?</li>
+<li>Which types of output variables can be captured?</li>
+</ul>
+<h3 id="Limitations-for-the-Number"><a href="#Limitations-for-the-Number" class="headerlink" title="Limitations for the Number"></a>Limitations for the Number</h3><ul>
+<li>separate capture</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Limitation</th>
+<th style="text-align:center">Minimal Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS</td>
+<td style="text-align:center">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>interleaved capture</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Limitation</th>
+<th style="text-align:center">Minimal Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td>
+<td style="text-align:center">64</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>advanced interleaved capture (不同的变量放在不同的buffers)</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Limitation</th>
+<th style="text-align:center">Minimal Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GL_MAX_TRANSFORM_FEEDBACK_BUFFERS</td>
+<td style="text-align:center">64</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>注意到在interleaved capture mode下，没有变量个数的限制，原因是这里真正需要限制的不是要captured的变量的个数，而是保存这些变量的buffer的个数，在interleaved mode下，所有captured的变量都是保存在同一个buffer中的，所以不需要限制。而在separate mode下，每个列出的变量是保存在各自不同的buffer中，所以需要对此有一个上限。所以这里<code>GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS</code>的一个更好的名字应该是<code>GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_BUFFERS</code>.</p>
+<h3 id="No-Limitations-for-the-Type"><a href="#No-Limitations-for-the-Type" class="headerlink" title="No Limitations for the Type"></a>No Limitations for the Type</h3><p>任何类型的输出变量都可以被captured, 包括</p>
+<ul>
+<li>structs</li>
+<li>arrays</li>
+<li>members of interface blocks</li>
+</ul>
+<h1 id="Buffer-Binding"><a href="#Buffer-Binding" class="headerlink" title="Buffer Binding"></a>Buffer Binding</h1><p>当设置好要capturing program中的哪些输出变量，以何种模式captured后，接下来就要设置(申请)保存captured的数据的buffer objects.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void glBindBufferRange(GLenum target,</span><br><span class="line">		       GLuint index,</span><br><span class="line">		       GLuint buffer,</span><br><span class="line">		       GLintptr offset,</span><br><span class="line">		       GLsizeiptr size);</span><br></pre></td></tr></table></figure>
+<p>这里<code>target</code>就是<code>GL_TRANSFORM_FEEDBACK_BUFFER</code>. <code>offset</code>必须是4字节对齐，如果存进buffer的值包含<strong>double-precision</strong>, 则需要8字节对齐。</p>
+<h1 id="Feedback-Process"><a href="#Feedback-Process" class="headerlink" title="Feedback Process"></a>Feedback Process</h1><p>Capture设置好，Buffer绑定好之后，就可以开始<strong>Recording</strong> Vertex Processing产出的数据了。通过调用下面的API开始Feedback:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void glBeginTransformFeedback(GLenum primitiveMode);</span><br></pre></td></tr></table></figure></p>
+<p>这里<code>primitiveMode</code>只能是以下3种之一:</p>
+<ul>
+<li>GL_POINTS</li>
+<li>GL_LINES</li>
+<li>GL_TRIANGLES</li>
+</ul>
+<p>Transform Feedback模式被激活后，在没有调用<code>glPauseTransformFeedback</code>或<code>glEndTransformFeedback</code>之前，以下行为不被允许:</p>
+<ul>
+<li>修改<code>GL_TRANSFORM_FEEDBACK_BUFFER</code>的bindings</li>
+<li>任何对这些绑定的<code>GL_TRANSFORM_FEEDBACK_BUFFER</code>的读写操作</li>
+<li>重新申请这些绑定的<code>GL_TRANSFORM_FEEDBACK_BUFFER</code>的存储</li>
+<li>修改当前使用的program, 也就是不能调用<code>glUseProgram</code>或<code>glBindProgramPipeline</code>, 还有<code>glUseProgramStages</code></li>
+</ul>
+<p>即出Transform Feedback模式调用:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void glEndTransformFeedback();</span><br></pre></td></tr></table></figure></p>
+<h1 id="Feedback-Objects"><a href="#Feedback-Objects" class="headerlink" title="Feedback Objects"></a>Feedback Objects</h1><p>跟其它OpenGL的功能一样，Transform Feedback也有一大堆state需要track, 所以这些state被封装进<strong>Transform Feedback Objects</strong>, 这些Feedback Objects和其它OpenGL Object一样需要<code>Gen</code>, <code>Delete</code>和<code>Bind</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void glGenTransformFeedbacks(GLsizei n, GLuint *ids);</span><br><span class="line">void glDeleteTransformFeedbacks(GLsizei n, const GLuint *ids);</span><br><span class="line">void glBindTransformFeedback(GLenum target, GLuint id);</span><br></pre></td></tr></table></figure>
+<p>NOTE:</p>
+<ul>
+<li><code>glBindTransformFeedback</code>的<code>target</code>永远是<code>GL_TRANSFORM_FEEDBACK</code></li>
+<li>不能绑定一个Feedback Object，如果当前的Feedback Object还是active或没有被paused.</li>
+</ul>
+<p>那么Feedback Object里封装了哪些Transform Feedback state呢？</p>
+<ul>
+<li>generic buffer bindings, 即调用<code>glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, ...)</code>绑定的那些buffers</li>
+<li>indexed buffer bindings, 即调用<code>glBindBufferRange(GL_TRANSFORM_FEEDBACK, ...)</code>绑定的那些buffers</li>
+<li>transform feedback是否是active还是paused</li>
+<li>被当前的feedback操作记录的count of primitives等等</li>
+</ul>
+<h1 id="Feedback-Rendering"><a href="#Feedback-Rendering" class="headerlink" title="Feedback Rendering"></a>Feedback Rendering</h1><p>OK, 我们现在获得了Vertex Processing的结果，并记录了这次Transform Feedback操作的状态到Transform Feedback Objects(例如captured count of primitives, the number of vertices). 但是我们如何利用这些captured数据呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void glDrawTransformFeedback(GLenum mode,</span><br><span class="line">			     GLuint id);</span><br><span class="line"></span><br><span class="line">void glDrawTransformFeedbackInstanced(GLenum mode,</span><br><span class="line">				      GLuint id,</span><br><span class="line">				      GLsizei instancecount);</span><br><span class="line">void glDrawTransformFeedbackStream(GLenum mode,</span><br><span class="line">				   GLuint id,</span><br><span class="line">				   GLuint stream);</span><br><span class="line">void glDrawTransformFeedbackStreamInstanced(GLenum mode,</span><br><span class="line">					    GLuint id,</span><br><span class="line">					    GLuint stream,</span><br><span class="line">					    GLsizei instancecount);</span><br></pre></td></tr></table></figure>
+<p>NOTE:</p>
+<ul>
+<li>在调用这些<code>Draw</code>命令前，一定要先调用<code>glEndTransformFeedback</code>, 因为只有当调用了<code>glEndTransformFeedback</code>后，OpenGL状态机才知道一次完整的Transform Feedback操作完成了。</li>
+</ul>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/GL/">GL</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/sys/multi-cards/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">多PCI显卡共存场景下的Linux VGA仲裁(vgaarbiter)</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/lib/opengl-objects/">
+        <span class="next-text nav-default">OpenGL Objects</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

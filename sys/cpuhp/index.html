@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="CPU Hotplug in Linux"/><meta name="keywords" content="linux, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="https://lucmann.github.io/sys/cpuhp/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>CPU Hotplug in Linux - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">CPU Hotplug in Linux
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-05-21
+        </span><span class="post-category">
+            <a href="/categories/sys/">sys</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#A-Puzzle"><span class="toc-text">A Puzzle</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CPU-hotplug"><span class="toc-text">CPU hotplug</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#What-if-the-cpu-is-shutdown"><span class="toc-text">What if the cpu is shutdown</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What-happened-if-the-cpu-is-shutdown"><span class="toc-text">What happened if the cpu is shutdown</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cpuset"><span class="toc-text">cpuset</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="A-Puzzle"><a href="#A-Puzzle" class="headerlink" title="A Puzzle"></a>A Puzzle</h1><p>如果先调用<code>sched_setaffinity</code>将线程绑定到CPU1上，再将CPU1逻辑关闭(offline)，会发生什么？在Linux系统中，要回答这个问题，先要搞清楚Linux下的3个机制:</p>
+<ul>
+<li>CPU hotplug</li>
+<li>cpuset</li>
+<li>scheduling affinity</li>
+</ul>
+<h1 id="CPU-hotplug"><a href="#CPU-hotplug" class="headerlink" title="CPU hotplug"></a><a href="https://www.kernel.org/doc/html/latest/core-api/cpu_hotplug.html" target="_blank" rel="noopener">CPU hotplug</a></h1><p>CPU hotplug的意思是, Linux允许<strong>Logically</strong> <code>Shutdown</code>和<code>Bring Up</code> CPU, 用户可以通过<code>sysfs</code>接口操作</p>
+<figure class="highlight plain"><figcaption><span>shutdown</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 0 &gt; &#x2F;sys&#x2F;devices&#x2F;system&#x2F;cpu&#x2F;cpu1&#x2F;online</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span>bring up</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 1 &gt; &#x2F;sys&#x2F;devices&#x2F;system&#x2F;cpu&#x2F;cpu1&#x2F;online</span><br></pre></td></tr></table></figure>
+<h2 id="What-if-the-cpu-is-shutdown"><a href="#What-if-the-cpu-is-shutdown" class="headerlink" title="What if the cpu is shutdown"></a>What if the cpu is shutdown</h2><p><code>/proc/interrupts</code>, <code>/proc/cpuinfo</code>, <code>top</code>都将看不到它</p>
+<h2 id="What-happened-if-the-cpu-is-shutdown"><a href="#What-happened-if-the-cpu-is-shutdown" class="headerlink" title="What happened if the cpu is shutdown"></a>What happened if the cpu is shutdown</h2><p>我只列出跟上面的疑问有关系的:</p>
+<ul>
+<li>All processes are migrated away from this outgoing CPU to new CPUs. The new CPU is chosen from each process’ <strong>current cpuset</strong>, which may be a subset of all online CPUs.</li>
+</ul>
+<p>当关闭CPU1后，原来运行在CPU1上的进程将被移到新的CPU们上调度，具体哪个CPU是从这个进程当前的<strong>cpuset</strong>中选择，所以疑问转换成了“<code>sched_setaffinity</code>对进程当前的<strong>cpuset</strong>做了什么？”</p>
+<h1 id="cpuset"><a href="#cpuset" class="headerlink" title="cpuset"></a><a href="https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/cpusets.html" target="_blank" rel="noopener">cpuset</a></h1>
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/linux/">linux</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/bin/perf_event/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Linux perf初探</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/sys/udev/">
+        <span class="next-text nav-default">udev, sysfs & libudev</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

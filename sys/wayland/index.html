@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Wayland"/><meta name="keywords" content="xorg, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="https://lucmann.github.io/sys/wayland/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Wayland - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Wayland
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-04-01
+        </span><span class="post-category">
+            <a href="/categories/sys/">sys</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Wayland-Architecture"><span class="toc-text">Wayland Architecture</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="Wayland-Architecture"><a href="#Wayland-Architecture" class="headerlink" title="Wayland Architecture"></a>Wayland Architecture</h1><p>为了理解wayland的架构和它与X的区别，最好是看看从一个输入事件到这个输入事件的结果呈现到屏幕上这个过程都发生了什么。</p>
+<a id="more"></a>
+<img src="/sys/wayland/x-architecture.png" class="" title="X Architecture">
+<ol>
+<li><p>kernel获取到一个输入事件，通过<code>evdev</code>输入设备驱动发送给X Server.这里kernel做了很多工作，包括驱动输入设备，转换各种不同的设备事件协议为标准的Linux <code>evdev</code>输入事件。</p>
+</li>
+<li><p>X Server决定这个事件影响哪个窗口，并发送这个事件给该窗口所属的那些客户端，但问题是，X Server并不能真正确定是哪个窗口，因为在屏幕坐标里的窗口位置是由compositor控制的，窗口位置可以被很多操作改变，缩小，旋转，晃动等等，而X Server并不知晓这些操作。</p>
+</li>
+<li><p>客户端收到这个事件，然后决定做什么。通常对事件的响应是UI的改变，也许是一个多选框被打勾，也许是鼠标落到一个按钮上，按钮高亮。因此客户端又向X Server发回一个渲染请求。</p>
+</li>
+<li><p>当X Server收到渲染请求后，又转发给驱动，由驱动控制图形硬件完成渲染，这里的驱动可能是像AMD显卡的驱动，也可能是一个像Mesa这样的OpenGL软件实现。X Server负责计算渲染区域的边界，以一个<code>damage event</code>发送结果给compositor.</p>
+</li>
+<li><p><code>damage event</code>告诉compositor, 窗口的内容已经改变，如果这个窗口是可见的，那么需要重新合成屏幕的这一部分。compositor基于它的场景图和X Window的内容负责渲染整个屏幕，但是它还得通过X Server去完成渲染，因为只有X Server才能和驱动打交道。</p>
+</li>
+<li><p>X Server收到compositor的渲染请求后，或者拷贝compositor back buffer到front buffer,或者做一次pageflip. 通常情况下，X Server必须做这一步，因为它需要计算窗口重叠，这可能需要裁剪操作，并且决定它是否可以pageflip. 但是，对于总是执行全屏操作的compositor来说，这又是一次不必要的上下文切换。</p>
+</li>
+</ol>
+<p>上面的X Server的工作流程有一些问题。首先, X Server没有相关的信息去决定到底哪个窗口应该接收这个输入事件，它也不能将屏幕坐标转换成窗口内部坐标，甚至X Server把最后的屏幕渲染工作的职责都交给了合成管理器，X Server仍然控制着front buffer和modesetting. X Server过去大多数复杂的工作现在要么是在kernel中可以完成(<code>KMS</code>, <code>evdev</code>), 要么可以在一些自包含的库里完成(<code>mesa</code>, <code>fontconfig</code>, <code>freetype</code>, <code>cairo</code>, <code>Qt</code>, 等等). 总的来说，X Server现在已经成了在应用程序和compositor之间，compositor和硬件之间引入额外步骤的中间人了。</p>
+<p>在wayland里，compositor就是<strong>Display Server</strong>. 我们把<code>KMS</code>和<code>evdev</code>的控制权移交给compositor. Wayland协议让compositor直接发送输入事件给客户端，让客户端直接发送<code>damage event</code>给compositor.</p>
+<img src="/sys/wayland/wayland-architecture.png" class="" title="Wayland Architecture">
+<ol>
+<li><p>kernel发送输入事件给compositor, 这一步与X Server类似，这没有问题，因为这样可以复用内核中所有的输入设备驱动。</p>
+</li>
+<li><p>compositor浏览它的场景图来决定输入事件应该发给哪个窗口。场景图对应屏幕上的显示，compositor知晓它已经应用到场景图中各个元素的坐标变换，因此compositor可以正确选择哪个窗口接收输入事件，也可以将屏幕坐标转换为窗口内部坐标通过逆变换。所能应用到某个窗口的变换类型完全取决于compositor的实现，只要它可以计算出对应输入事件的逆变换。</p>
+</li>
+<li><p>和X Server的场景类似，当客户端收到输入事件后，它相应地更新UI. 但在wayland下，客户端不再发送渲染请求给谁，渲染任务由客户端自己完成，客户端只需要发送消息告诉compositor哪块区域已经更新了。</p>
+</li>
+<li><p>compositor收集来自它的客户端的<code>damage event</code>, 然后重新合成整个屏幕。compositor能直接发送<code>ioctl</code>请求给KMS执行一次pageflip.</p>
+</li>
+</ol>
+<p><a href="https://wayland.freedesktop.org/architecture.html" target="_blank" rel="noopener">[阅读原文]</a></p>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/xorg/">xorg</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/usr/vulkan-docs/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Vulkan-Docs Build</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/lib/gl-version/">
+        <span class="next-text nav-default">OpenGL (ES) and GLSL (ES) Version</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

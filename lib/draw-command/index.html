@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Draw Commands"/><meta name="keywords" content="GL, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="https://lucmann.github.io/lib/draw-command/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Draw Commands - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Draw Commands
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-09-15
+        </span><span class="post-category">
+            <a href="/categories/lib/">lib</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Category"><span class="toc-text">Category</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic-Draw"><span class="toc-text">Basic Draw</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Indexed-Draw"><span class="toc-text">Indexed Draw</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Instanced-Draw"><span class="toc-text">Instanced Draw</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Indirect-Draw"><span class="toc-text">Indirect Draw</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DrawArraysIndirect"><span class="toc-text">DrawArraysIndirect</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DrawElementsIndirect"><span class="toc-text">DrawElementsIndirect</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="Category"><a href="#Category" class="headerlink" title="Category"></a>Category</h1><p>OpenGL中的Draw Commands是一组生成GPU渲染Command Stream的API，我们可以将它们简单分为4类:</p>
+<ul>
+<li>Basic Draw</li>
+<li>Indexed Draw</li>
+<li>Instanced Draw</li>
+<li>Indirect Draw</li>
+</ul>
+<a id="more"></a>
+<p>Basic Draw是最基本的Draw命令，其它3类都是从它衍生来的，为了某种绘制便利或顶点复用对Basic Draw API进行扩展，从而得到相应的索引绘制、实例绘制、间接绘制。</p>
+<h2 id="Basic-Draw"><a href="#Basic-Draw" class="headerlink" title="Basic Draw"></a>Basic Draw</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glDrawArrays</span><span class="params">(GLenum mode,</span></span></span><br><span class="line"><span class="function"><span class="params">                  GLint first,</span></span></span><br><span class="line"><span class="function"><span class="params">                  GLsizei count)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>glDrawArrays</code>是OpenGL中最基本的绘制命令，它的第一个参数可接受的图元类型有:</p>
+<ul>
+<li>GL_POINTS</li>
+<li>GL_LINE_STRIP</li>
+<li>GL_LINE_LOOP</li>
+<li>GL_LINES</li>
+<li>GL_LINE_STRIP_ADJACENCY</li>
+<li>GL_LINES_ADJACENCY</li>
+<li>GL_TRIANGLE_STRIP</li>
+<li>GL_TRIANGLE_FAN</li>
+<li>GL_TRIANGLES</li>
+<li>GL_TRIANGLE_STRIP_ADJACENCY</li>
+<li>GL_TRIANGLES_ADJACENCY</li>
+<li>GL_PATCHES</li>
+</ul>
+<p>例如顶点数组如下<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    vertices</span><br><span class="line">   ----------</span><br><span class="line"><span class="number">0</span> | (<span class="number">-1</span>,  <span class="number">1</span>) |</span><br><span class="line"><span class="number">1</span> | (<span class="number">-1</span>, <span class="number">-1</span>) |</span><br><span class="line"><span class="number">2</span> | ( <span class="number">1</span>, <span class="number">-1</span>) |</span><br><span class="line"><span class="number">3</span> | ( <span class="number">1</span>,  <span class="number">1</span>) |</span><br><span class="line">   ----------</span><br></pre></td></tr></table></figure><br>用3个顶点绘制一个三角形，调用命令如下<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glDrawArrays(GL_TRIANGLES, <span class="number">0</span>, <span class="number">3</span>);</span><br></pre></td></tr></table></figure></p>
+<h2 id="Indexed-Draw"><a href="#Indexed-Draw" class="headerlink" title="Indexed Draw"></a>Indexed Draw</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glDrawElements</span><span class="params">(GLenum mode,</span></span></span><br><span class="line"><span class="function"><span class="params">                    GLsizei count,</span></span></span><br><span class="line"><span class="function"><span class="params">                    GLenum type,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">const</span> <span class="keyword">void</span>* indices)</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glDrawElementsBaseVertex</span><span class="params">(GLenum mode,</span></span></span><br><span class="line"><span class="function"><span class="params">                              GLsizei count,</span></span></span><br><span class="line"><span class="function"><span class="params">                              GLenum type,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">void</span>* indices</span></span></span><br><span class="line"><span class="function"><span class="params">                              GLint basevertex)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>glDrawElements</code>不是直接用顶点数组去绘制，而是用顶点数组的索引去绘制，例如还是用3个顶点绘制一个三角形<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    vertices</span><br><span class="line">   ----------</span><br><span class="line"><span class="number">0</span> | (<span class="number">-1</span>,  <span class="number">1</span>) |</span><br><span class="line"><span class="number">1</span> | (<span class="number">-1</span>, <span class="number">-1</span>) |</span><br><span class="line"><span class="number">2</span> | ( <span class="number">1</span>, <span class="number">-1</span>) |</span><br><span class="line"><span class="number">3</span> | ( <span class="number">1</span>,  <span class="number">1</span>) |</span><br><span class="line">   ----------</span><br></pre></td></tr></table></figure></p>
+<p>这次除了顶点数组外，我们还要上传一个顶点索引数组<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  indices</span><br><span class="line">   -----</span><br><span class="line"><span class="number">0</span> |  <span class="number">0</span>  |</span><br><span class="line"><span class="number">1</span> |  <span class="number">1</span>  |</span><br><span class="line"><span class="number">2</span> |  <span class="number">2</span>  |</span><br><span class="line">   -----</span><br></pre></td></tr></table></figure><br>调用命令如下<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glDrawElements(GL_TRIANGLES, <span class="number">3</span>, GL_UNSIGNED_BYTE, &amp;indices);</span><br></pre></td></tr></table></figure><br>当然上面这个只有3个顶点的例子体现不出来<code>glDrawElements</code>的复用顶点的好处，但是在三角形很多且这些三角形的顶点有很多重复的情形下就不同了，它的优势就体现出来了:</p>
+<ul>
+<li>虽然我们额外增加了一个索引数组indices去存储所绘制顶点的索引，但相比一个顶点最多4个float类型的数据量来说，用一个unsigned byte来表示一个顶点还是划算的。</li>
+<li>在顶点坐标一样，只需改变顶点顺序的图元绘制中，将大大减少数据量。</li>
+</ul>
+<p><code>glDrawElementsBaseVertex</code>的行为和<code>glDrawElements</code>一样，除了在所取到的索引数组相应元素值上加basevertex. 考虑如下情况:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    vertices                indices</span><br><span class="line">   ----------                -----</span><br><span class="line"><span class="number">0</span> | (<span class="number">-1</span>,  <span class="number">1</span>) |            <span class="number">0</span> |  <span class="number">0</span>  |</span><br><span class="line"><span class="number">1</span> | (<span class="number">-1</span>, <span class="number">-1</span>) |            <span class="number">1</span> |  <span class="number">1</span>  |</span><br><span class="line"><span class="number">2</span> | ( <span class="number">1</span>, <span class="number">-1</span>) |            <span class="number">2</span> |  <span class="number">2</span>  |</span><br><span class="line"><span class="number">3</span> | ( <span class="number">1</span>,  <span class="number">1</span>) |            <span class="number">3</span> |  <span class="number">3</span>  |</span><br><span class="line">   ----------             <span class="number">4</span> |  <span class="number">0</span>  |</span><br><span class="line">                          <span class="number">5</span> |  <span class="number">2</span>  |</span><br><span class="line">                             -----</span><br></pre></td></tr></table></figure>
+<p>这种情况下，我们一般会调用<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glDrawElements(GL_TRIANGLES, <span class="number">6</span>, GL_UNSIGNED_BYTE, &amp;indices);</span><br></pre></td></tr></table></figure></p>
+<p>但是如果所索引的顶点不在顶点数组的开始，而是从第100个顶点开始<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">      vertices                indices2</span><br><span class="line">     ----------                -----</span><br><span class="line">        ....                <span class="number">0</span> | <span class="number">100</span> |</span><br><span class="line"><span class="number">100</span> | (<span class="number">-1</span>,  <span class="number">1</span>) |            <span class="number">1</span> | <span class="number">101</span> |</span><br><span class="line"><span class="number">101</span> | (<span class="number">-1</span>, <span class="number">-1</span>) |            <span class="number">2</span> | <span class="number">102</span> |</span><br><span class="line"><span class="number">102</span> | ( <span class="number">1</span>, <span class="number">-1</span>) |            <span class="number">3</span> | <span class="number">103</span> |</span><br><span class="line"><span class="number">103</span> | ( <span class="number">1</span>,  <span class="number">1</span>) |            <span class="number">4</span> | <span class="number">100</span> |</span><br><span class="line">        ....                <span class="number">5</span> | <span class="number">102</span> |</span><br><span class="line">     ----------                -----</span><br></pre></td></tr></table></figure></p>
+<p>这种情况下原来的indices不能用了，只能再创建并绑定一个新的VBO <code>indices2</code>, 而创建绑定VBO是内存操作开销很大，<code>glDrawElementsBaseVertex</code>就是解决这个问题的。我们只需要在原来的索引值上加一个offset<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glDrawElementsBaseVertex(GL_TRIANGLES, <span class="number">6</span>, GL_UNSIGNED_BYTE, &amp;indices, <span class="number">100</span>);</span><br></pre></td></tr></table></figure></p>
+<h2 id="Instanced-Draw"><a href="#Instanced-Draw" class="headerlink" title="Instanced Draw"></a>Instanced Draw</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glDrawArraysInstanced</span><span class="params">(GLenum mode,</span></span></span><br><span class="line"><span class="function"><span class="params">                           GLint first,</span></span></span><br><span class="line"><span class="function"><span class="params">                           GLsizei count,</span></span></span><br><span class="line"><span class="function"><span class="params">                           GLsizei instancecount)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glDrawArraysInstancedBaseInstance</span><span class="params">(GLenum mode,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       GLint first,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       GLsizei count,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       GLsizei instancecount,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       GLuint baseinstance)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glDrawElementsInstanced</span><span class="params">(GLenum mode,</span></span></span><br><span class="line"><span class="function"><span class="params">                             GLsizei count,</span></span></span><br><span class="line"><span class="function"><span class="params">                             GLenum type,</span></span></span><br><span class="line"><span class="function"><span class="params">                             <span class="keyword">const</span> <span class="keyword">void</span>* indices,</span></span></span><br><span class="line"><span class="function"><span class="params">                             GLsizei instancecount)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glDrawElementsInstancedBaseInstance</span><span class="params">(GLenum mode,</span></span></span><br><span class="line"><span class="function"><span class="params">                                         GLsizei count,</span></span></span><br><span class="line"><span class="function"><span class="params">                                         GLenum type,</span></span></span><br><span class="line"><span class="function"><span class="params">                                         <span class="keyword">const</span> <span class="keyword">void</span>* indices,</span></span></span><br><span class="line"><span class="function"><span class="params">                                         GLsizei instancecount,</span></span></span><br><span class="line"><span class="function"><span class="params">                                         GLuint baseinstance)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glDrawElementsInstancedBaseVertex</span><span class="params">(GLenum mode,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       GLsizei count,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       GLenum type,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       <span class="keyword">void</span>* indices,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       GLsizei instancecount,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       GLint basevertex)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="Indirect-Draw"><a href="#Indirect-Draw" class="headerlink" title="Indirect Draw"></a>Indirect Draw</h2><p><strong>Indirect Draw</strong>有基本和Instanced Draw一样，除了那些<strong>Draw Parameters</strong>会被上传到由<code>indirect</code>指向的专门的<code>GL_DRAW_INDIRECT_BUFFER</code>缓冲区。</p>
+<h3 id="DrawArraysIndirect"><a href="#DrawArraysIndirect" class="headerlink" title="DrawArraysIndirect"></a>DrawArraysIndirect</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void glDrawArraysIndirect(GLenum mode, const void *indirect);</span><br></pre></td></tr></table></figure>
+<p>在OpenGL ES 3.1及以上，DrawArraysIndirect的Draw Parameters被定义成下面的结构体:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">    uint count;</span><br><span class="line">    uint instanceCount;</span><br><span class="line">    uint first;</span><br><span class="line">    uint reservedMustBeZero;</span><br><span class="line">&#125; DrawArraysIndirectCommand;</span><br></pre></td></tr></table></figure></p>
+<p>在OpenGL 4.0及以上，DrawArraysIndirect的Draw Parameters被定义成下面的结构体:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">    uint count;</span><br><span class="line">    uint instanceCount;</span><br><span class="line">    uint first;</span><br><span class="line">    uint baseInstance;</span><br><span class="line">&#125; DrawArraysIndirectCommand;</span><br></pre></td></tr></table></figure></p>
+<p>这所以在OpenGL ES和OpenGL里有<code>baseInstance</code>的区别，是因为在OpenGL ES中没有下面的draw command:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void glDrawArraysIntancedBaseInstance(GLenum mode,</span><br><span class="line">				      GLint first,</span><br><span class="line">				      GLsizei count,</span><br><span class="line">				      GLsizei instancecount,</span><br><span class="line">				      GLuint baseinstance);</span><br></pre></td></tr></table></figure></p>
+<p>因此在OpenGL ES中，<code>glDrawArraysIndirect</code>相当于<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DrawArraysIndirectCommand *cmd &#x3D; (DrawArraysIndirectCommand *)indirect;</span><br><span class="line">DrawArraysInstanced(mode, cmd-&gt;first, cmd-&gt;count, cmd-&gt;instanceCount);</span><br></pre></td></tr></table></figure></p>
+<p>而在OpenGL中，<code>glDrawArraysIndirect</code>相当于<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DrawArraysIndirectCommand *cmd &#x3D; (DrawArraysIndirectCommand *)indirect;</span><br><span class="line">DrawArraysInstancedBaseInstance(mode, cmd-&gt;first, cmd-&gt;count,</span><br><span class="line">                cmd-&gt;instanceCount, cmd-&gt;baseInstance);</span><br></pre></td></tr></table></figure></p>
+<h3 id="DrawElementsIndirect"><a href="#DrawElementsIndirect" class="headerlink" title="DrawElementsIndirect"></a>DrawElementsIndirect</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void glDrawElementsIndirect(GLenum mode, GLenum type, const void *indirect);</span><br></pre></td></tr></table></figure>
+<p>在ES 3.1中, DrawElementsIndirect的Draw Parameters被定义成下面这个结构体:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">    uint count;</span><br><span class="line">    uint instanceCount;</span><br><span class="line">    uint firstIndex;</span><br><span class="line">    int  baseVertex;</span><br><span class="line">    uint reservedMustBeZero;</span><br><span class="line">&#125; DrawElementsIndirectCommand;</span><br></pre></td></tr></table></figure></p>
+<p>而在OpenGL 4.0及以上, DrawElementsIndirect的<code>indirect</code>指向的Draw Parameters被定义成下面的结构体:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">    uint count;</span><br><span class="line">    uint primCount;</span><br><span class="line">    uint firstIndex;</span><br><span class="line">    uint baseVertex;</span><br><span class="line">    uint baseInstance;</span><br><span class="line">&#125; DrawElementsIndirectCommand;</span><br></pre></td></tr></table></figure></p>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/GL/">GL</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/sys/pixmap/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Pixmap in X</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/sys/x-display/">
+        <span class="next-text nav-default">X11中的Display, Screen, Depth和Visual</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

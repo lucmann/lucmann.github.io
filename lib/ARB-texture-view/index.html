@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="ARB_texture_view"/><meta name="keywords" content="GL, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="https://lucmann.github.io/lib/ARB-texture-view/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>ARB_texture_view - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">ARB_texture_view
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-06-09
+        </span><span class="post-category">
+            <a href="/categories/lib/">lib</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述-124"><span class="toc-text">概述(#124)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#原则"><span class="toc-text">原则</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么只给Immutable纹理类型创建Texture-View"><span class="toc-text">为什么只给Immutable纹理类型创建Texture View</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="概述-124"><a href="#概述-124" class="headerlink" title="概述(#124)"></a>概述(#124)</h1><p>ARB_texture_view的主要目的是通过创建已有纹理对象的视图(view), 来产生新的纹理对象，以达到共享同一纹理存储(data store)的目的。它可以从以下3个方面创建纹理视图：</p>
+<a id="more"></a>
+<ul>
+<li>texture type 它可以指定一个新的纹理类型(在约束范围内)来创建新的纹理对象</li>
+<li>internal format 它可以定义一个新的纹理格式(在约束范围内)来解释已有的data store</li>
+<li>sub mipmap/array range 它可以从已有纹理的mipmap levels或array slices中截取一个子集作为新的纹理对象</li>
+</ul>
+<p>NOTE: 上述最后一种方式只指定新的范围(level/index)，而不进行data store拷贝。</p>
+<p>没有增加新的纹理类型，原来的纹理对象被划分为以下几个部分:</p>
+<ul>
+<li>数据存储(Data Store)</li>
+<li>状态信息，用来描述Data Store的哪一部分被使用，如何解释所用的数据元素</li>
+<li>嵌入的采样器对象(Sampler)</li>
+<li>各种其它纹理参数，像Filter, Mipmap等</li>
+</ul>
+<h1 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h1><p>ARB_texture_view规定的关于创建Texture View的几个原则(限制)主要有以下3个:</p>
+<ul>
+<li>只能给Immutable纹理创建View,也就是那些由TexStorage创建的纹理</li>
+<li>原纹理和新纹理的格式要兼容</li>
+<li>原纹理和新纹理的类型要兼容</li>
+</ul>
+<h2 id="为什么只给Immutable纹理类型创建Texture-View"><a href="#为什么只给Immutable纹理类型创建Texture-View" class="headerlink" title="为什么只给Immutable纹理类型创建Texture View"></a>为什么只给Immutable纹理类型创建Texture View</h2><p>Texture View本质上并没有上传纹理data store, 而是像指针一样，增加了对已有纹理对象的引用。如果是Mutable纹理，那么它的格式，大小等都是可以修改的，这样就无法保证纹理的consistency和completeness. 而Immutable纹理不会存在这样的问题。</p>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/GL/">GL</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/lib/ARB-shader-ballot/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">ARB_shader_ballot</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/lib/ARB-point-parameters/">
+        <span class="next-text nav-default">ARB_point_parameters</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

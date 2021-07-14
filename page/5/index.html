@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="https://lucmann.github.io/page/5/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><section id="posts" class="posts"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lib/ARB-sparse-texture/">ARB_sparse_texture</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-07-23
+        </span><span class="post-category">
+            <a href="/categories/lib/">lib</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Overview-158"><a href="#Overview-158" class="headerlink" title="Overview(#158)"></a>Overview(#158)</h1><p>复杂的OpenGL应用和对高分辨率的追求使纹理的大小巨增，但是可供一个GPU使用的物理内存是有限的，一旦内存使用殆尽，内存换页就可能发生，性能严重下降，或者更糟，应用直接挂了。但另一方面GPU可访问的地址空间目前已经可以达到GB，甚至TB.</p>
+          <div class="read-more">
+            <a href="/lib/ARB-sparse-texture/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/var/smart-pointer/">Smart Pointer</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-07-04
+        </span><span class="post-category">
+            <a href="/categories/var/">var</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p>smart pointer是C++11引入的，被包含在C++标准库中。smart pointer是为了管理对象的所属(object ownership)而设计的，smart pointer对象负责自动地销毁所关联对象。常见的smart pointer有:</p>
+          <div class="read-more">
+            <a href="/var/smart-pointer/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lib/ARB-texture-storage/">ARB_texture_storage</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-07-02
+        </span><span class="post-category">
+            <a href="/categories/lib/">lib</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Overview-117"><a href="#Overview-117" class="headerlink" title="Overview(#117)"></a>Overview(#117)</h1><p>ARB_texture_storage的主要目的是简化纹理一致性(consistency)和完整性(completeness)检查，以减小实现的开销。</p>
+          <div class="read-more">
+            <a href="/lib/ARB-texture-storage/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lib/ARB-texture-swizzle/">ARB_texture_swizzle</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-06-30
+        </span><span class="post-category">
+            <a href="/categories/lib/">lib</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="概述-84"><a href="#概述-84" class="headerlink" title="概述(#84)"></a>概述(#84)</h1><p>传统的OpenGL纹理格式(texture format)的纹理数据存储和解释是统一的，纹理就是被解释成颜色。而在现代OpenGL应用中，大多数纹理并不是代表颜色，而是代表像shadow maps, normal maps, page tables, occlusion data等等这样的数据。对于后者，我们将纹理数据称作”RGBA”，只是对数据在现有模型上的一种方便的映射，但并不是数据实际上的准确解释。</p>
+          <div class="read-more">
+            <a href="/lib/ARB-texture-swizzle/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lib/ARB-shader-ballot/">ARB_shader_ballot</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-06-09
+        </span><span class="post-category">
+            <a href="/categories/lib/">lib</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="概述-183"><a href="#概述-183" class="headerlink" title="概述(#183)"></a>概述(#183)</h1><p>ARB_shader_ballot给一组线程(a group of invocations)提供某些形式的线程间(cross-invocation)通信的能力。它要么是通过广播某个线程作用域里的值，要么是通过一个位数组(bitarray)表示一组线程中每个线程作用域里的可能的值。</p>
+          <div class="read-more">
+            <a href="/lib/ARB-shader-ballot/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lib/ARB-texture-view/">ARB_texture_view</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-06-09
+        </span><span class="post-category">
+            <a href="/categories/lib/">lib</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="概述-124"><a href="#概述-124" class="headerlink" title="概述(#124)"></a>概述(#124)</h1><p>ARB_texture_view的主要目的是通过创建已有纹理对象的视图(view), 来产生新的纹理对象，以达到共享同一纹理存储(data store)的目的。它可以从以下3个方面创建纹理视图：</p>
+          <div class="read-more">
+            <a href="/lib/ARB-texture-view/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lib/ARB-point-parameters/">ARB_point_parameters</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-06-05
+        </span><span class="post-category">
+            <a href="/categories/lib/">lib</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="概述-14"><a href="#概述-14" class="headerlink" title="概述(#14)"></a>概述(#14)</h1><p>ARB_point_parameters允许用户设置点的扩展几何特征。这些点的几何特征主要用来渲染粒子或微小光源，通常被称为光点(Light Points).</p>
+          <div class="read-more">
+            <a href="/lib/ARB-point-parameters/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lib/multithread-synchronization/">POSIX Threads Synchronization - Spinlock vs. Mutex</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-06-03
+        </span><span class="post-category">
+            <a href="/categories/lib/">lib</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h2 id="Spinlock"><a href="#Spinlock" class="headerlink" title="Spinlock"></a>Spinlock</h2><p>自旋锁是解决多处理器共享内存使用的一种底层同步机制。当一个线程试图获取一个已经被另一个线程占有的自旋锁时，这个线程将以循环检查自旋锁是否被释放的方式(自旋)阻塞。一个线程不应该长时间占有一个自旋锁，因为被阻塞的线程仍然消耗CPU资源 (CPU cycles)</p>
+<h3 id="POSIX-interfaces"><a href="#POSIX-interfaces" class="headerlink" title="POSIX interfaces"></a>POSIX interfaces</h3><h4 id="Initializing-a-Spinlock"><a href="#Initializing-a-Spinlock" class="headerlink" title="Initializing a Spinlock"></a>Initializing a Spinlock</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_init</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock, <span class="keyword">int</span> pshared)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>pshared</code>属性可以取以下值的其中之一:</p>
+<p>PTHREAD_PROCESS_SHARED - 这个自旋锁可以被任何线程操作，即使这些线程属于不同的进程，只要申请这个自旋锁的内存是被这些进程共享的。</p>
+<p>PTHREAD_PROCESS_PRIVATE - 这个自旋锁只能被那些与初始化它的线程同属一个进程的线程操作。</p>
+<h4 id="Acquiring-a-Spinlock"><a href="#Acquiring-a-Spinlock" class="headerlink" title="Acquiring a Spinlock"></a>Acquiring a Spinlock</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_lock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>如果被请求的自旋锁没有被其它线程占有，则请求它的线程成功获取这个锁，否则这个线程不从<code>pthread_spin_lock</code>中返回(阻塞)，直到这个锁被释放。一个线程尝试获取被它自己占有的自旋锁是未定义的行为。</p>
+<h4 id="Acquiring-a-Non-Blocking-Spinlock"><a href="#Acquiring-a-Non-Blocking-Spinlock" class="headerlink" title="Acquiring a Non-Blocking Spinlock"></a>Acquiring a Non-Blocking Spinlock</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_trylock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>尝试获取一个自旋锁，与<code>pthread_spin_lock</code>不同的是，如果所请求的锁被另一个线程占有，不阻塞，而是立即返回失败(Non-Blocking).</p>
+<h4 id="Unlocking-a-Spinlock"><a href="#Unlocking-a-Spinlock" class="headerlink" title="Unlocking a Spinlock"></a>Unlocking a Spinlock</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_unlock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>释放被锁的自旋锁。成功返回0，否则返回以下错误码之一:</p>
+<p>EPERM - 调用线程不持有这个锁</p>
+<p>EINVAL - lock指向的不是一个已初始化的自旋锁对象</p>
+<h4 id="Destroying-a-Spinlock"><a href="#Destroying-a-Spinlock" class="headerlink" title="Destroying a Spinlock"></a>Destroying a Spinlock</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_destroy</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br></pre></td></tr></table></figure>
+
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/bin/regex-in-vi/">regex in vi</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-02-29
+        </span><span class="post-category">
+            <a href="/categories/bin/">bin</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h2 id="Multiline"><a href="#Multiline" class="headerlink" title="Multiline"></a>Multiline</h2><p>Remove the multilined comment in the separated paragraphs</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">gl_vertex_array_object</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">   GLuint Name;</span><br><span class="line">   GLint RefCount;</span><br><span class="line">   GLchar *Label;       </span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Has this array object been bound?</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   GLboolean EverBound;</span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Marked to true if the object is shared between contexts and immutable.</span></span><br><span class="line"><span class="comment">    * Then reference counting is done using atomics and thread safe.</span></span><br><span class="line"><span class="comment">    * Is used for dlist VAOs.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">bool</span> SharedAndImmutable;</span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">gl_array_attributes</span> <span class="title">VertexAttrib</span>[<span class="title">VERT_ATTRIB_MAX</span>];</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">gl_vertex_buffer_binding</span> <span class="title">BufferBinding</span>[<span class="title">VERT_ATTRIB_MAX</span>];</span></span><br><span class="line">   GLbitfield VertexAttribBufferMask;</span><br><span class="line">   GLbitfield Enabled;</span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Mask of VERT_BIT_* enabled arrays past position/generic0 mapping</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * The value is valid past calling _mesa_update_vao_derived_arrays.</span></span><br><span class="line"><span class="comment">    * Note that _mesa_update_vao_derived_arrays is called when binding</span></span><br><span class="line"><span class="comment">    * the VAO to Array._DrawVAO.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   GLbitfield _EffEnabledVBO;</span><br><span class="line">   gl_attribute_map_mode _AttributeMapMode;</span><br><span class="line">   GLbitfield NewArrays;</span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">gl_buffer_object</span> *<span class="title">IndexBufferObj</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Ex mode:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:%s;&#x2F;\*\*\_.\&#123;-&#125;\*&#x2F;;;</span><br></pre></td></tr></table></figure>
+<p>where <code>\{-}</code> means non-greedy match. See <code>:help non-greedy</code>.</p>
+<p>A regular expression in vim often includes the following patterns to search text in a single line:</p>
+<ul>
+<li><code>.</code> any character, except a newline</li>
+<li><code>^</code> the beginning of the line</li>
+<li><code>$</code> the end of the line</li>
+<li><code>\s</code> a space or tab</li>
+</ul>
+<p>The above patterns can be replaced with other patterns that also match the newline character, as follows:</p>
+<ul>
+<li><code>\_.</code> any character, including a newline</li>
+<li><code>\_^</code> the beginning of a line</li>
+<li><code>\_$</code> the end of a line</li>
+<li><code>\_s</code> a space, tab or newline character</li>
+<li><code>\n</code> a newline character</li>
+</ul>
+<h2 id="Empty-Lines"><a href="#Empty-Lines" class="headerlink" title="Empty Lines"></a>Empty Lines</h2><p>Remove empty lines or lines which only contain whitespaces.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:g&#x2F;^\s*$&#x2F;d</span><br></pre></td></tr></table></figure>
+<h2 id="Case-Transform"><a href="#Case-Transform" class="headerlink" title="Case Transform"></a>Case Transform</h2><p>To lowercase</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:s&#x2F;^##\s\(.\)&#x2F;## \L\1&#x2F;</span><br></pre></td></tr></table></figure>
+<p>To uppercase</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:s&#x2F;^##\s\(.\)&#x2F;## \U\1&#x2F;</span><br></pre></td></tr></table></figure>
+
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/bin/gcc-attribute/">GCC __attribute__</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-02-26
+        </span><span class="post-category">
+            <a href="/categories/bin/">bin</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p><code>__attribute__</code> is a keyword introduced by GCC. It is regarded as an extension of a language. It helps the compiler optimize calls, check code more carefully for correctness, control memory placement and code generation options.</p>
+          <div class="read-more">
+            <a href="/bin/gcc-attribute/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <nav class="pagination"><a class="prev" href="/page/4/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text">Prev</span>
+      </a>
+    <a class="next" href="/page/6/">
+        <span class="next-text">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></section></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

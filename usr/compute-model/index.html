@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="CUDA Thread Hierarchy vs OpenGL Compute Shader Thread Hierarchy"/><meta name="keywords" content="cuda, compute, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="https://lucmann.github.io/usr/compute-model/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>CUDA Thread Hierarchy vs OpenGL Compute Shader Thread Hierarchy - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">CUDA Thread Hierarchy vs OpenGL Compute Shader Thread Hierarchy
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-06-28
+        </span><span class="post-category">
+            <a href="/categories/usr/">usr</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CUDA-Thread-Hierarchy"><span class="toc-text">CUDA Thread Hierarchy</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Thread"><span class="toc-text">Thread</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thread-Block"><span class="toc-text">Thread Block</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Grid-of-Thread-Blocks"><span class="toc-text">Grid of Thread Blocks</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CUDA-Thread-Map"><span class="toc-text">CUDA Thread Map</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CUDA-Memory"><span class="toc-text">CUDA Memory</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#OpenGL-Compute-Shader-Thread-Hierarchy"><span class="toc-text">OpenGL Compute Shader Thread Hierarchy</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CUDA和Compute-Shader变量对比"><span class="toc-text">CUDA和Compute Shader变量对比</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="CUDA-Thread-Hierarchy"><a href="#CUDA-Thread-Hierarchy" class="headerlink" title="CUDA Thread Hierarchy"></a>CUDA Thread Hierarchy</h1><a id="more"></a>
+<img src="/usr/compute-model/cuda-thread-hier.png" class="">
+<p>CUDA中的<code>kernel</code>是一段可在GPU独立运行的小程序，而且这段程序会被实例化(类似的说法还有<strong>launched</strong>, <strong>issued</strong>, <strong>executed</strong>, <strong>invoked</strong>)成非常多的<code>thread</code>, 这些线程可<strong>并发地</strong>在GPU上运行。程序员或者说编译器将这些线程组织成</p>
+<ul>
+<li>Thread</li>
+<li>Thread Block</li>
+<li>Grid of Thread Blocks</li>
+</ul>
+<h2 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h2><p>一个单独的线程必然属于一个<code>Thread Block</code>, 它有自己的</p>
+<ul>
+<li>thread ID</li>
+<li>program counter</li>
+<li>registers</li>
+<li>per-thread private memory</li>
+<li>inputs</li>
+<li>output</li>
+</ul>
+<h2 id="Thread-Block"><a href="#Thread-Block" class="headerlink" title="Thread Block"></a>Thread Block</h2><p>一个<code>Thread Block</code>必然属于一个<code>Grid</code>, 它是一组并发执行的线程的集合，这些线程之间可以通过<code>barrier synchronization</code>和<code>per-Block shared memory</code>互相协同, 它也有一个<code>Block ID</code>用来索引它在<code>Grid</code>中的位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dim3 blockDim;</span><br><span class="line">uint3 blockIdx;</span><br></pre></td></tr></table></figure>
+<h2 id="Grid-of-Thread-Blocks"><a href="#Grid-of-Thread-Blocks" class="headerlink" title="Grid of Thread Blocks"></a>Grid of Thread Blocks</h2><p>一个<code>Grid</code>由一组执行相同<code>kernel</code>的<code>Thread Blocks</code>组成。可以这样说，一个<code>Grid</code>是所有执行同一个<code>Kernel</code>的线程的集合。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dim3 gridDim;</span><br></pre></td></tr></table></figure>
+<h1 id="CUDA-Thread-Map"><a href="#CUDA-Thread-Map" class="headerlink" title="CUDA Thread Map"></a>CUDA Thread Map</h1><p>CUDA的threads层级结构可以映射到GPU的processors的层级结构上。</p>
+<ul>
+<li>一个GPU执行一个或多个grids(kernels)</li>
+<li>一个SM(Streaming Multiprocessor)执行一个或多个Thread Blocks</li>
+<li>CUDA Cores和一个SM里的其它执行单元(SFU, LDST)执行多个线程</li>
+</ul>
+<p>SM执行线程的单位是<code>warp</code>, 一般是32个线程一组，一个<code>warp</code>里的32个线程是真正并行执行的。</p>
+<img src="/usr/compute-model/cuda-thread-map.png" class="">
+<h2 id="CUDA-Memory"><a href="#CUDA-Memory" class="headerlink" title="CUDA Memory"></a>CUDA Memory</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t cudaMemcpy(void *dst,</span><br><span class="line">                       const void *src,</span><br><span class="line">                       size_t count,</span><br><span class="line">                       cudaMemcpyKind kind);</span><br></pre></td></tr></table></figure>
+<p>除了最后一个参数，其它参数都顾名知意。<code>kind</code>指示内存拷贝的方向:</p>
+<ul>
+<li>cudaMemcpyHostToHost</li>
+<li>cudaMemcpyHostToDevice</li>
+<li>cudaMemcpyDeviceToHost</li>
+<li>cudaMemcpyDeviceToDevice</li>
+</ul>
+<h1 id="OpenGL-Compute-Shader-Thread-Hierarchy"><a href="#OpenGL-Compute-Shader-Thread-Hierarchy" class="headerlink" title="OpenGL Compute Shader Thread Hierarchy"></a>OpenGL Compute Shader Thread Hierarchy</h1><p>有了前面的CUDA的Thread Hierarchy的了解，OpenGL的Compute Shader的线程层级就好理解了，本质上是一样的。一个OpenGL <code>Compute Shader(cs)</code>就相当于一个cuda中的<code>kernel</code>函数， 这些任务最终被分发到GPU的各个物理核心上去执行。在<code>cs</code>中，单个任务叫做<code>work item</code>, 除了<code>work item</code>之外, 还有以下概念:</p>
+<ul>
+<li>subgroups</li>
+</ul>
+<p>也就是<code>warps</code>或者<code>wavefronts</code>或者<code>Compute Units</code>, 它们实际上就是<code>threads</code>, <code>shader cores</code>, <code>cuda cores</code></p>
+<ul>
+<li>local workgroup</li>
+</ul>
+<p>它的大小(维度)在<code>cs</code>中通过<code>layout</code>修饰符指定</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">layout(local_size_x &#x3D; 16, local_size_y &#x3D; 16, local_size_z &#x3D; 1) in;</span><br></pre></td></tr></table></figure>
+<p><code>local workgroup</code>相当于cuda的<a href="#thread-block">Thread Block</a></p>
+<ul>
+<li>global workgroup</li>
+</ul>
+<p>它的大小(维度)通过OpenGL API设置, <code>glDispatchCompute</code>发起一个或多个compute work groups, 此处的work groups就是<strong>local work group</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void glDispatchCompute(GLuint num_groups_x,</span><br><span class="line">                       GLuint num_groups_y,</span><br><span class="line">                       GLuint num_groups_z);</span><br></pre></td></tr></table></figure>
+<p><code>global workgroup</code>相当于cuda的<a href="#grid-of-thread-blocks">Grid</a></p>
+<h1 id="CUDA和Compute-Shader变量对比"><a href="#CUDA和Compute-Shader变量对比" class="headerlink" title="CUDA和Compute Shader变量对比"></a>CUDA和Compute Shader变量对比</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">type</th>
+<th style="text-align:left">CUDA</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">Compute Shader</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">dim3</td>
+<td style="text-align:left">gridDim</td>
+<td style="text-align:left">uvec3</td>
+<td style="text-align:left">gl_NumWorkGroups</td>
+</tr>
+<tr>
+<td style="text-align:left">uint3</td>
+<td style="text-align:left">blockIdx</td>
+<td style="text-align:left">uvec3</td>
+<td style="text-align:left">gl_WorkGroupID</td>
+</tr>
+<tr>
+<td style="text-align:left">dim3</td>
+<td style="text-align:left">blockDim</td>
+<td style="text-align:left">const uvec3</td>
+<td style="text-align:left">gl_WorkGroupSize</td>
+</tr>
+<tr>
+<td style="text-align:left">uint3</td>
+<td style="text-align:left">threadIdx</td>
+<td style="text-align:left">uvec3</td>
+<td style="text-align:left">gl_LocalInvocationID</td>
+</tr>
+<tr>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">uvec3</td>
+<td style="text-align:left">gl_GlobalInvocationID</td>
+</tr>
+<tr>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">uint</td>
+<td style="text-align:left">gl_LocalInvocationIndex</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>References:</p>
+<ol>
+<li><a href="https://www.nvidia.com/content/PDF/fermi_white_papers/NVIDIAFermiComputeArchitectureWhitepaper.pdf" target="_blank" rel="noopener">NVIDIA Fermi Architecture Whitepaper</a></li>
+<li><a href="https://developer.download.nvidia.cn/compute/DevZone/docs/html/C/doc/CUDA_C_Programming_Guide.pdf" target="_blank" rel="noopener">NVIDIA CUDA Programming Guide</a></li>
+<li><a href="https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glDispatchCompute.xhtml" target="_blank" rel="noopener">glDispatchCompute</a></li>
+</ol>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/cuda/">cuda</a>
+            <a href="/tags/compute/">compute</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/bin/nvidia-docker/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">CUDA on WSL2</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/bin/perf_event/">
+        <span class="next-text nav-default">Linux perf初探</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

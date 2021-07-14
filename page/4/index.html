@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="https://lucmann.github.io/page/4/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><section id="posts" class="posts"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/sys/x-window-system/">X Window System</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-12-20
+        </span><span class="post-category">
+            <a href="/categories/sys/">sys</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p>最近在看<a href="https://gitlab.freedesktop.org/xorg/xserver" target="_blank" rel="noopener">X11 Server的代码</a>,顺手记录一些基本概念和想法。X11 Server的代码很古老了，有的是1993年写的，目前的X Server实现<a href="https://zh.wikipedia.org/wiki/X.Org_Server" target="_blank" rel="noopener">X.org</a>是从最早的一个X Server实现<a href="https://zh.wikipedia.org/wiki/XFree86" target="_blank" rel="noopener">XFree86</a> 4.4 RC2版本(2004年)派生出来的。</p>
+          <div class="read-more">
+            <a href="/sys/x-window-system/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/bin/update-alternatives/">Altering Your GCC/Python Version Easily</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-12-04
+        </span><span class="post-category">
+            <a href="/categories/bin/">bin</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="What’s-the-problem"><a href="#What’s-the-problem" class="headerlink" title="What’s the problem"></a>What’s the problem</h1><p>有时在你的系统上可能已经安装了多个gcc版本(gcc-4.8, gcc-8, gcc-9)或Python版本(Python, Python 2.7, Python 3.8), 那么当你执行gcc或python命令时，到底用的是哪个gcc或python版本呢？而且如何方便地指定我们期望使用的版本呢？在大多数Linux发行版都有一个<strong>update-alternatives</strong>命令专门处理这种情况。</p>
+          <div class="read-more">
+            <a href="/bin/update-alternatives/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lib/egl-image/">EGLImage</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-11-12
+        </span></div>
+    </header>
+
+    <div class="post-content"><h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>EGLImage的存在是为了更方便地在EGL client API之间共享2D Image Data. 那什么是EGL client API呢？OpenGL, OpenGL ES, OpenVG都是EGL client API. EGLImage与下面3个EGL Extensions有关:</p>
+<ul>
+<li>EGL_KHR_image</li>
+<li>EGL_KHR_image_base</li>
+<li>EGL_KHR_image_pixmap</li>
+</ul>
+          <div class="read-more">
+            <a href="/lib/egl-image/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/sys/drm-fmt-mod/">DRM format modifier</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-11-11
+        </span><span class="post-category">
+            <a href="/categories/sys/">sys</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="FourCC"><a href="#FourCC" class="headerlink" title="FourCC"></a>FourCC</h1><p>FourCC format code是Linux内核DRM子系统用来描述framebuffer像素格式。它们被定义在内核源码<a href="https://github.com/torvalds/linux/blob/master/include/uapi/drm/drm_fourcc.h#L156" target="_blank" rel="noopener">include/uapi/drm/drm_fourcc.h</a>. 基本上FourCC format code足以描述framebuffer中像素的内容了，但是随着GPU的更新，原来线性排列的buffers，为了获取更好的性能，可能会采取vendor specific的布局方式。另外，这些buffer也可能保存的是各种不同的压缩数据，这样一来，原来的FourCC format code就无法携带新的buffer<br>layout或compression format的信息，DRM format modifier就是用来解决这些问题的。</p>
+          <div class="read-more">
+            <a href="/sys/drm-fmt-mod/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/sys/glamor/">glamor</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-11-10
+        </span><span class="post-category">
+            <a href="/categories/sys/">sys</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>glamor是一个开源的2D加速驱动，它作为Xorg的一个模块被实现。相比传统的DDX 2D加速驱动，glamor主要有以下2个好处:</p>
+<ul>
+<li>使用非常通用的EGL/OpenGL API去操作GPU硬件，省去了手动为每个不同的GPU编写2D加速驱动的麻烦</li>
+<li>有了glamor，不再需要传统的2D DDX驱动</li>
+</ul>
+          <div class="read-more">
+            <a href="/sys/glamor/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/sys/build-xserver/">Build Xserver from Source</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-10-19
+        </span><span class="post-category">
+            <a href="/categories/sys/">sys</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>Given that a difficulty to add a custom X11 device driver or module or extension for Xserver, I try to find out how an Xserver is built and its dependent drivers and modules and extensions are orgnized together by building it from <a href="https://gitlab.freedesktop.org/xorg/xserver.git" target="_blank" rel="noopener">source</a>.</p>
+          <div class="read-more">
+            <a href="/sys/build-xserver/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/sys/pixmap/">Pixmap in X</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-09-27
+        </span><span class="post-category">
+            <a href="/categories/sys/">sys</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="XYPixmap"><a href="#XYPixmap" class="headerlink" title="XYPixmap"></a>XYPixmap</h1><p>The data for a XYPixmap is organized as a set of bitmaps representing individual bit planes, with the planes appearing from MSB to LSB in bit order just as demonstrated below. Every pixel value is 0x55 (b’01010101) in this example. </p>
+          <div class="read-more">
+            <a href="/sys/pixmap/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lib/draw-command/">Draw Commands</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-09-15
+        </span><span class="post-category">
+            <a href="/categories/lib/">lib</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Category"><a href="#Category" class="headerlink" title="Category"></a>Category</h1><p>OpenGL中的Draw Commands是一组生成GPU渲染Command Stream的API，我们可以将它们简单分为4类:</p>
+<ul>
+<li>Basic Draw</li>
+<li>Indexed Draw</li>
+<li>Instanced Draw</li>
+<li>Indirect Draw</li>
+</ul>
+          <div class="read-more">
+            <a href="/lib/draw-command/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/sys/x-display/">X11中的Display, Screen, Depth和Visual</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-09-03
+        </span><span class="post-category">
+            <a href="/categories/sys/">sys</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="X窗口系统"><a href="#X窗口系统" class="headerlink" title="X窗口系统"></a>X窗口系统</h1><p><a href="https://en.wikipedia.org/wiki/X_Window_System" target="_blank" rel="noopener">X窗口系统</a>诞生于1984年MIT的研究，后来成为Unix, 类UNIX等操作系统所一致适用的标准化软件工具包及显示架构的运作协议。目前使用最普遍最受欢迎的一个实现是<a href="https://www.x.org/wiki/" target="_blank" rel="noopener">X.Org</a>，它所用的协议版本是<strong>X11</strong>, 所以Xorg也经常被叫做X11。</p>
+          <div class="read-more">
+            <a href="/sys/x-display/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/var/sfinae/">SFINAE</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-07-24
+        </span><span class="post-category">
+            <a href="/categories/var/">var</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="What-is-it"><a href="#What-is-it" class="headerlink" title="What is it"></a>What is it</h1><p>SFINAE是Substitution Failure Is Not An Error的缩写，意思是在函数模板或类模板（包括类模板特化）类型推导时，由于类型或值替换导致的Ill-formed code(Subsititution Failure)不被作为一个编译时错误。</p>
+          <div class="read-more">
+            <a href="/var/sfinae/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <nav class="pagination"><a class="prev" href="/page/3/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text">Prev</span>
+      </a>
+    <a class="next" href="/page/5/">
+        <span class="next-text">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></section></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

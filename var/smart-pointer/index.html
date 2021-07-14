@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Smart Pointer"/><meta name="keywords" content="cxx, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="https://lucmann.github.io/var/smart-pointer/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Smart Pointer - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Smart Pointer
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-07-04
+        </span><span class="post-category">
+            <a href="/categories/var/">var</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#shared-ptr"><span class="toc-text">shared_ptr</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#creation"><span class="toc-text">creation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference-counting"><span class="toc-text">reference counting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#detachment"><span class="toc-text">detachment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#psuedo-pointer"><span class="toc-text">psuedo pointer</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#unique-ptr"><span class="toc-text">unique_ptr</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#weak-ptr"><span class="toc-text">weak_ptr</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>smart pointer是C++11引入的，被包含在C++标准库中。smart pointer是为了管理对象的所属(object ownership)而设计的，smart pointer对象负责自动地销毁所关联对象。常见的smart pointer有:</p>
+<a id="more"></a>
+<ul>
+<li><code>std::shared_ptr</code></li>
+<li><code>std::unique_ptr</code></li>
+<li><code>std::weak_ptr</code></li>
+</ul>
+<h1 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a><code>shared_ptr</code></h1><p>shared_ptr主要用在多个对象共享同一个资源的场景(sharing ownership)。它允许当指针指向的对象在任何地方都不再被使用的时候自动销毁所指对象。C++引入它的目的是消除内存泄漏(memory leak)和野指针(dangling pointer). 从实现的角度看，shared_ptr是通过消耗更多的内存来换取程序的健壮性。每个shared_ptr对象的内部都指向两块内存区域:</p>
+<ul>
+<li>Pointer to object</li>
+<li>Pointer to control data that is used for reference counting</li>
+</ul>
+<div align=center><img src="/var/smart-pointer/shared_ptr.png" class="" title="shared_ptr memory layout"></div>
+
+<p>通常一个<code>shared_ptr</code>对象的内存大小不小于40字节，这是32位平台普通指针变量大小的10倍。<code>shared_ptr</code>的destructor和虚成员函数意味着这些成员函数的调用是动态解析的，这就增加了额外的运行时开销。</p>
+<h2 id="creation"><a href="#creation" class="headerlink" title="creation"></a>creation</h2><ul>
+<li><p>binding a <code>shared_ptr</code> object with raw pointer</p>
+<p><code>std::shared_ptr&lt;int&gt; p1(new int());</code></p>
+</li>
+<li><p>using <code>std::make_shared</code></p>
+<p><code>std::shared_ptr&lt;int&gt; p1 = std::make_shared&lt;int&gt;();</code></p>
+</li>
+</ul>
+<h2 id="reference-counting"><a href="#reference-counting" class="headerlink" title="reference counting"></a>reference counting</h2><p><code>p1.use_count();</code></p>
+<h2 id="detachment"><a href="#detachment" class="headerlink" title="detachment"></a>detachment</h2><ul>
+<li><p>calling <code>reset()</code> with no parameter</p>
+<p><code>p1.reset();</code></p>
+<p>这个调用将<code>p1</code>的reference count减1， 如果reference count变成0，则自动删除<code>p1</code>关联的raw pointer.</p>
+</li>
+<li><p>calling <code>reset()</code> with parameter</p>
+<p><code>p1.reset(new int(42));</code></p>
+<p>这个调用将<code>p1</code>关联到一个新的raw pointer, 因此<code>p1</code>的reference count还是1.</p>
+</li>
+<li><p>using <code>nullptr</code></p>
+<p><code>p1 = nullptr;</code></p>
+</li>
+</ul>
+<h2 id="psuedo-pointer"><a href="#psuedo-pointer" class="headerlink" title="psuedo pointer"></a>psuedo pointer</h2><h1 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a><code>unique_ptr</code></h1><p><code>unique_ptr</code>同样是为了管理对象的所属(unique ownership)，但与<code>shared_ptr</code>相反，<code>unique_ptr</code>允许在程序的生命周期的任何时候只有一个指针指向对象，所以<code>unique_ptr</code>是不可复制的。</p>
+<h1 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a><code>weak_ptr</code></h1>
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/cxx/">cxx</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/lib/ARB-sparse-texture/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">ARB_sparse_texture</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/lib/ARB-texture-storage/">
+        <span class="next-text nav-default">ARB_texture_storage</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

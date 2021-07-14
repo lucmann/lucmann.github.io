@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Modern CMake"/><meta name="keywords" content="cmake, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="https://lucmann.github.io/bin/cmake/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Modern CMake - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Modern CMake
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-01-10
+        </span><span class="post-category">
+            <a href="/categories/bin/">bin</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#What-Modern-CMake-Provides"><span class="toc-text">What Modern CMake Provides?</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Build"><span class="toc-text">Build</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Guideline"><span class="toc-text">Guideline</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Targets-and-Properties"><span class="toc-text">Targets and Properties</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Generator-Expressions"><span class="toc-text">Generator Expressions</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Appendix-CMake-Built-in-Variables"><span class="toc-text">Appendix: CMake Built-in Variables</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>最近看了一些关于Modern CMake(since 3.0.0)的教程，这里记录一下.</p>
+<a id="more"></a>
+<h1 id="What-Modern-CMake-Provides"><a href="#What-Modern-CMake-Provides" class="headerlink" title="What Modern CMake Provides?"></a>What Modern CMake Provides?</h1><p>作为一个<em>Build System Generator</em>, 现代CMake可以帮助我们做哪些事情呢？</p>
+<ul>
+<li>Build</li>
+<li>Install</li>
+<li>Test</li>
+<li>Package</li>
+</ul>
+<h2 id="Build"><a href="#Build" class="headerlink" title="Build"></a>Build</h2><p>Build的工作主要包括解决依赖关系，构建目标(库,应用,测试用例)。<code>cmake</code>命令有很多选项可以帮助我们灵活有效地构建目标， 例如：</p>
+<p>Out-of-source构建，意思是不污染源代码目录，在指定的单独的目录下生成构建系统, 如果build不存在，cmake会创建它</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -B build</span><br></pre></td></tr></table></figure>
+<p>将构建目标间的依赖关系输出Graphivz dot, 生成的<code>file.dot</code>可以用dot命令生成图片<code>dot -Tpng -o file.png file.dot</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -B build --graphviz&#x3D;file.dot</span><br></pre></td></tr></table></figure>
+<p>开始构建, 通过<code>-B</code>, <code>--build</code>选项可以省去<code>mkdir build &amp;&amp; cd build &amp;&amp; cmake .. &amp;&amp; make</code>繁琐的操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --build build</span><br></pre></td></tr></table></figure>
+<p>全量构建</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --build build --clean-first</span><br></pre></td></tr></table></figure>
+<p>只构建指定的目标<code>lib1</code>, 如果<code>lib1</code>依赖其它目标，被依赖的目标也会被构建</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --build build --target lib1</span><br></pre></td></tr></table></figure>
+<p>安装, 一般需要root权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --install build</span><br></pre></td></tr></table></figure>
+<p>查询CMAKE变量配置值，包括内置变量和自定义变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -L build</span><br></pre></td></tr></table></figure>
+<p>列出生成的Makefile里有效的<code>target</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --build build --target help</span><br></pre></td></tr></table></figure>
+<h1 id="Guideline"><a href="#Guideline" class="headerlink" title="Guideline"></a>Guideline</h1><ul>
+<li>Declare your module with <code>ADD_LIBRARY</code> or <code>ADD_EXECUTABLE</code>.</li>
+<li>Declare your build flags with <code>TARGET_xxx()</code>.</li>
+<li>Declare your dependencies with <code>TARGET_LINK_LIBRARIES</code></li>
+<li>Specify what is <code>PUBLIC</code> and what is <code>PRIVATE</code></li>
+<li>Don’t make any assumption about the platform and compiler.</li>
+<li>Make sure that all your projects can be built both standalone and as a subproject of another project.</li>
+<li>Always add namespaced aliases for libraries.  <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">add_library</span>(foo STATIC</span><br><span class="line">  foo1.cpp</span><br><span class="line">  foo2.cpp</span><br><span class="line">  )</span><br><span class="line"><span class="keyword">add_library</span>(my::foo ALIAS foo)</span><br></pre></td></tr></table></figure></li>
+<li>Don’t make libraries STATIC/SHARED unless they cannot be built otherwise.</li>
+<li>Leave the control of BUILD_SHARED_LIBS to your clients.</li>
+<li>Create macros to wrap commands that have output parameters. Otherwise, creat a function.</li>
+<li>Modern CMake is about Targets and Properties!</li>
+<li>Avoid custom variables in the arguments of project commands.</li>
+<li>CMake is not a build system, but a build system generator.</li>
+<li>Forget those commands:<ul>
+<li>add_compile_options()</li>
+<li>include_directories()</li>
+<li>link_directories()</li>
+<li>link_libraries()</li>
+</ul>
+</li>
+<li>Non-INTERFACE_ properties define the build specification of a targt</li>
+<li>INTERFACE_ properties define the usage requirements of a target</li>
+<li>Use target_link_libraries() to express direct dependencies</li>
+<li>Don’t use <code>TARGET_LINK_LIBRARIES()</code> without specifying <code>PUBLIC</code>, <code>PRIVATE</code> or <code>INTERFACE</code>.</li>
+</ul>
+<h1 id="Targets-and-Properties"><a href="#Targets-and-Properties" class="headerlink" title="Targets and Properties"></a>Targets and Properties</h1><p>Modern CMake更像一个面向对象编程语言， Targets是Objects, 它们有Properties(Member Variables)和Commands(Methods),<br>Targets的Properties包括编译这个Target的源文件，编译选项，以及最后链接的库这些都是一个Target的Properties. 只要是Properties，就有这个Property的作用域(Scope). Properties也有作用域的概念(scope), 对应<code>INTERFACE</code>和<code>PRIVATE</code>.<br>INTERFACE properties是外部用的，也就是给导入或使用本Targets的其它Targets用的。PRIVATE properties是Targets内部用的。</p>
+<h1 id="Generator-Expressions"><a href="#Generator-Expressions" class="headerlink" title="Generator Expressions"></a>Generator Expressions</h1><p>Generator Expressions（生成表达式）是指在生成构建系统的过程中（如果是Make构建系统，就是在生成Makefile的过程中）针对每个构建配置生成特定的值. 生成表达式有3类:</p>
+<ul>
+<li>Logical Expressions</li>
+<li>Informational Expressions</li>
+<li>Output Expressions</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">target_compile_definitions(foo PRIVATE</span><br><span class="line">    &quot;VERBOSITY&#x3D;$&lt;IF:$&lt;CONFIG:Debug&gt;,30,10&gt;&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>上例中使用了嵌套的generator expressions, <code>$&lt;CONFIG:cfg&gt;</code>嵌套在<code>$&lt;IF:?,true-value...,false-value...&gt;</code>, 两者都是logical expressions, 注意后者是CMake 3.8才有的。<code>$&lt;CONFIG:Debug&gt;</code>的意思是如果<code>CONFIG</code>是<code>Debug</code>,那么这个表达式的值是<code>1</code>,否则是<code>0</code>, 注意这个比较是不区分大小写的字符串比较。<code>$&lt;IF:?,true-value...,false-value...&gt;</code>就像三元表达式<code>a ? b : c</code>一样。</p>
+<p>注意<code>0</code>和<code>1</code>是两个basic logical expressions,所有其它logical expressions的最终值都是<code>0</code>或<code>1</code>,所以下面的表达式是有效的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&lt;$&lt;CONFIG:Debug&gt;:DEBUG_MODE&gt;</span><br></pre></td></tr></table></figure>
+<p>它展开后是<code>$&lt;0:DEBUG_MODE&gt;</code>或<code>$&lt;1:DEBUG_MODE&gt;</code>,所以整个表达式最终值是<code>DEBUG_MODE</code>或空。</p>
+<h1 id="Appendix-CMake-Built-in-Variables"><a href="#Appendix-CMake-Built-in-Variables" class="headerlink" title="Appendix: CMake Built-in Variables"></a>Appendix: <strong>CMake Built-in Variables</strong></h1><ul>
+<li>CMAKE_CURRENT_SOURCE_DIR</li>
+</ul>
+<p>指<code>CMakeLists.txt</code>所在当前目录的绝对路径，一般随着<code>CMakeLists.txt</code>所在目录的变化而变化。</p>
+<ul>
+<li>CMAKE_SOURCE_DIR</li>
+</ul>
+<p>指所在工程顶层目录绝对路径，一般源码<code>clone</code>下来后就确定了。</p>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/cmake/">cmake</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/bin/gitignore/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">gitignore</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/sys/x-window-system/">
+        <span class="next-text nav-default">X Window System</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
