@@ -8,14 +8,12 @@ categories: lib
 # Category
 OpenGL中的Draw Commands是一组生成GPU渲染Command Stream的API，我们可以将它们简单分为4类:
 
-- Array Drawing
-  * 通用场景
-- Indexed Drawing
-  * 解决重复的顶点多的场景绘制 (Vertices)
-- Instanced Drawing
-  * 解决重复的模型多的场景绘制 (Models)
-- Indirect Drawing
-  * 把Array/Indexed Drawing的参数直接放在Buffer Object(`GL_DRAW_INDIRECT_BUFFER`)
+| Drawing   | 适用场景                       | Vertex Attributes Buffer Object Binding类型 |
+|:----------|:-------------------------------|:--------------------------------------------|
+| Array     | 普通                           | GL_ARRAY_BUFFER                             |
+| Indexed   | 重复的顶点                     | GL_ELEMENT_ARRAY_BUFFER                     |
+| Instanced | 重复的模型(Instance/Model)     | GL_ARRAY_BUFFER<br>GL_ELEMENT_ARRAY_BUFFER  |
+| Indirect  | Drawing命令的参数直接放在GPU   | GL_DRAW_INDIRECT_BUFFER                     |
 
 <!--more-->
 
@@ -190,14 +188,51 @@ void glDrawArraysOneInstance(GLenum mode,
                              GLuint baseinstance);
 ```
 
-## Array Indices in Buffer Objects
-如果将一个`Buffer Object`的名字(A GLuint)通过
+Instanced Drawing简单说就是一次Draw Call绘制多个实例，比如一个布满树叶的场景，每片树叶的顶点数据可能是相似的，可能就是在世界坐标系中的位置不同，其它顶点属性可能都相同。那么Instanced Drawing是如何复制相同的实例到不同的位置上的呢?
 
-```
-glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, name);
+OpenGL主要通过以下两个变量控制Instanced Drawing
+
+- gl_InstanceID (Vertex Shader)
+- divisor (glVertexAttribDivisor)
+
+## gl_InstanceID
+gl_InstanceID是Vertex Shader里的内置变量，如果你这样调用
+
+```c
+glDrawArraysInstanced(GL_TRIANGLES, 0, 3, 100);
 ```
 
-绑定，那么这个Buffer Object
+那么`gl_InstanceID`的取值范围就是[0, 99]
+
+## divisor
+
+假设location为2的Vertex Attribute用来设置每个实例的位置偏移，shader如下:
+
+```c
+#version 330 core
+layout (location = 0) in vec2 aPos;
+layout (location = 1) in vec3 aColor;
+layout (location = 2) in vec2 aOffset;
+
+out vec3 fColor;
+
+void main()
+{
+    gl_Position = vec4(aPos + aOffset, 0.0, 1.0);
+    fColor = aColor;
+        
+}
+```
+
+我们可以通过下面的API告诉OpenGL, 每画一个实例更新一下index=2这个属性，而不是默认的，每一个顶点更新一次属性。
+
+```c
+glEnableVertexAttribArray(2);
+glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+glBindBuffer(GL_ARRAY_BUFFER, 0);
+glVertexAttribDivisor(2, 1);
+```
 
 # Indirect Drawing
 
