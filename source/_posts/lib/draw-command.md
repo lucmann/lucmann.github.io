@@ -7,9 +7,9 @@ categories: lib
 
 # Category
 OpenGL中的Draw Commands是一组生成GPU渲染Command Stream的API，我们可以将它们简单分为4类:
-- Basic Draw
-- Indexed Draw
-- Instanced Draw
+- Basic Draw        通用场景
+- Indexed Draw      解决重复的顶点多的场景绘制 (Vertices)
+- Instanced Draw    解决重复的模型多的场景绘制 (Models)
 - Indirect Draw
 
 <!--more-->
@@ -23,19 +23,26 @@ void glDrawArrays(GLenum mode,
                   GLsizei count);
 ```
 
-`glDrawArrays`是OpenGL中最基本的绘制命令，它的第一个参数可接受的图元类型有:
-- GL_POINTS
-- GL_LINE_STRIP
-- GL_LINE_LOOP
-- GL_LINES
-- GL_LINE_STRIP_ADJACENCY
-- GL_LINES_ADJACENCY
-- GL_TRIANGLE_STRIP
-- GL_TRIANGLE_FAN
-- GL_TRIANGLES
-- GL_TRIANGLE_STRIP_ADJACENCY
-- GL_TRIANGLES_ADJACENCY
-- GL_PATCHES
+`glDrawArrays`是OpenGL中最基本的绘制命令，`mode`接受的图元类型是下面的一个子集:
+
+```
+/* Primitives */
+#define GL_POINTS                         0x0000
+#define GL_LINES                          0x0001
+#define GL_LINE_LOOP                      0x0002
+#define GL_LINE_STRIP                     0x0003
+#define GL_TRIANGLES                      0x0004
+#define GL_TRIANGLE_STRIP                 0x0005
+#define GL_TRIANGLE_FAN                   0x0006
+#define GL_QUADS                          0x0007
+#define GL_QUAD_STRIP                     0x0008
+#define GL_POLYGON                        0x0009
+#define GL_LINES_ADJACENCY                0x000A (since OpenGL 3.2) 
+#define GL_LINE_STRIP_ADJACENCY           0x000B (since OpenGL 3.2)
+#define GL_TRIANGLES_ADJACENCY            0x000C (since OpenGL 3.2)
+#define GL_TRIANGLE_STRIP_ADJACENCY       0x000D (since OpenGL 3.2)
+#define GL_PATCHES                        0x000E (since OpenGL 3.2)
+```
 
 例如顶点数组如下
 ```c
@@ -166,6 +173,25 @@ void glDrawElementsInstancedBaseVertex(GLenum mode,
                                        GLint basevertex);
 ```
 
+要理解上面这些OpenGL Instanced Draw命令，首先我们要理解一个OpenGL里并不存在的Draw命令
+
+```
+void glDrawArraysOneInstance(GLenum mode,
+                             GLint first,
+                             GLsizei count,
+                             GLint instance,
+                             GLuint baseinstance);
+```
+
+### Array Indices in Buffer Objects
+如果将一个`Buffer Object`的名字(A GLuint)通过
+
+```
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, name);
+```
+
+绑定，那么这个Buffer Object
+
 ## Indirect Draw
 **Indirect Draw**有基本和Instanced Draw一样，除了那些**Draw Parameters**会被上传到由`indirect`指向的专门的`GL_DRAW_INDIRECT_BUFFER`缓冲区。
 ### DrawArraysIndirect
@@ -241,3 +267,6 @@ typedef struct {
     uint baseInstance;
 } DrawElementsIndirectCommand;
 ```
+
+# References
+[[1]https://learnopengl.com/Advanced-OpenGL/Instancing](https://learnopengl.com/Advanced-OpenGL/Instancing)
