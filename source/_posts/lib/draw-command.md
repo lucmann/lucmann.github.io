@@ -7,16 +7,21 @@ categories: lib
 
 # Category
 OpenGL中的Draw Commands是一组生成GPU渲染Command Stream的API，我们可以将它们简单分为4类:
-- Basic Draw        通用场景
-- Indexed Draw      解决重复的顶点多的场景绘制 (Vertices)
-- Instanced Draw    解决重复的模型多的场景绘制 (Models)
-- Indirect Draw
+
+- Array Drawing
+  * 通用场景
+- Indexed Drawing
+  * 解决重复的顶点多的场景绘制 (Vertices)
+- Instanced Drawing
+  * 解决重复的模型多的场景绘制 (Models)
+- Indirect Drawing
+  * 把Array/Indexed Drawing的参数直接放在Buffer Object(`GL_DRAW_INDIRECT_BUFFER`)
 
 <!--more-->
 
-Basic Draw是最基本的Draw命令，其它3类都是从它衍生来的，为了某种绘制便利或顶点复用对Basic Draw API进行扩展，从而得到相应的索引绘制、实例绘制、间接绘制。
+Array Drawing是最基本的Draw命令，其它3类都是从它衍生来的，为了某种绘制便利或顶点复用对Array Drawing API进行扩展，从而得到相应的索引绘制、实例绘制、间接绘制。
 
-## Basic Draw
+# Array Drawing
 ```c
 void glDrawArrays(GLenum mode,
                   GLint first,
@@ -25,7 +30,7 @@ void glDrawArrays(GLenum mode,
 
 `glDrawArrays`是OpenGL中最基本的绘制命令，`mode`接受的图元类型是下面的一个子集:
 
-```
+```c
 /* Primitives */
 #define GL_POINTS                         0x0000
 #define GL_LINES                          0x0001
@@ -59,7 +64,8 @@ void glDrawArrays(GLenum mode,
 glDrawArrays(GL_TRIANGLES, 0, 3);
 ```
 
-## Indexed Draw
+# Indexed Drawing
+
 ```c
 void glDrawElements(GLenum mode,
                     GLsizei count,
@@ -95,6 +101,7 @@ void glDrawElementsBaseVertex(GLenum mode,
    -----
 ```
 调用命令如下
+
 ```c
 glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, &indices);
 ```
@@ -139,7 +146,7 @@ glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, &indices);
 glDrawElementsBaseVertex(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, &indices, 100);
 ```
 
-## Instanced Draw
+# Instanced Draw
 ```c
 void glDrawArraysInstanced(GLenum mode,
                            GLint first,
@@ -183,7 +190,7 @@ void glDrawArraysOneInstance(GLenum mode,
                              GLuint baseinstance);
 ```
 
-### Array Indices in Buffer Objects
+## Array Indices in Buffer Objects
 如果将一个`Buffer Object`的名字(A GLuint)通过
 
 ```
@@ -192,15 +199,19 @@ glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, name);
 
 绑定，那么这个Buffer Object
 
-## Indirect Draw
-**Indirect Draw**有基本和Instanced Draw一样，除了那些**Draw Parameters**会被上传到由`indirect`指向的专门的`GL_DRAW_INDIRECT_BUFFER`缓冲区。
-### DrawArraysIndirect
-```
+# Indirect Drawing
+
+Indirect Drawing是将Array/Indexed Drawing命令的参数存入专门的Buffer Object，也就是GPU Storage里，这里的Buffer Object的绑定类型是`GL_DRAW_INDIRECT_BUFFER`。之所以这样做，是为了能让GPU直接写回这些值，比方Compute Shader, 或者为Transform Feedback设计的Geometry Shader, 亦或是OpenCL/CUDA kernel函数。这样避免了这些参数在GPU和CPU之间来回地复制(round-trip)
+
+## DrawArraysIndirect
+
+```c
 void glDrawArraysIndirect(GLenum mode, const void *indirect);
 ```
 
 在OpenGL ES 3.1及以上，DrawArraysIndirect的Draw Parameters被定义成下面的结构体:
-```
+
+```c
 typedef struct {
     uint count;
     uint instanceCount;
@@ -210,7 +221,8 @@ typedef struct {
 ```
 
 在OpenGL 4.0及以上，DrawArraysIndirect的Draw Parameters被定义成下面的结构体:
-```
+
+```c
 typedef struct {
     uint count;
     uint instanceCount;
@@ -220,7 +232,8 @@ typedef struct {
 ```
 
 这所以在OpenGL ES和OpenGL里有`baseInstance`的区别，是因为在OpenGL ES中没有下面的draw command:
-```
+
+```c
 void glDrawArraysIntancedBaseInstance(GLenum mode,
 				      GLint first,
 				      GLsizei count,
@@ -229,25 +242,29 @@ void glDrawArraysIntancedBaseInstance(GLenum mode,
 ```
 
 因此在OpenGL ES中，`glDrawArraysIndirect`相当于
-```
+
+```c
 DrawArraysIndirectCommand *cmd = (DrawArraysIndirectCommand *)indirect;
 DrawArraysInstanced(mode, cmd->first, cmd->count, cmd->instanceCount);
 ```
 
 而在OpenGL中，`glDrawArraysIndirect`相当于
-```
+
+```c
 DrawArraysIndirectCommand *cmd = (DrawArraysIndirectCommand *)indirect;
 DrawArraysInstancedBaseInstance(mode, cmd->first, cmd->count,
                 cmd->instanceCount, cmd->baseInstance);
 ```
 
-### DrawElementsIndirect
+## DrawElementsIndirect
+
 ```
 void glDrawElementsIndirect(GLenum mode, GLenum type, const void *indirect);
 ```
 
 在ES 3.1中, DrawElementsIndirect的Draw Parameters被定义成下面这个结构体:
-```
+
+```c
 typedef struct {
     uint count;
     uint instanceCount;
@@ -258,7 +275,8 @@ typedef struct {
 ```
 
 而在OpenGL 4.0及以上, DrawElementsIndirect的`indirect`指向的Draw Parameters被定义成下面的结构体:
-```
+
+```c
 typedef struct {
     uint count;
     uint primCount;
@@ -269,4 +287,5 @@ typedef struct {
 ```
 
 # References
-[[1]https://learnopengl.com/Advanced-OpenGL/Instancing](https://learnopengl.com/Advanced-OpenGL/Instancing)
+
+[[1] https://learnopengl.com/Advanced-OpenGL/Instancing](https://learnopengl.com/Advanced-OpenGL/Instancing)
