@@ -55,6 +55,19 @@ TTM中主要的数据结构有
 - `ttm_resource_manager`
 - `ttm_resource_manager_func`
 
+主要的API有
+
+- `ttm_bo_device_init`
+
+    ```
+    int ttm_bo_device_init(struct ttm_bo_device *bdev,
+                   struct ttm_bo_driver *driver,
+                   struct device *dev,
+                   struct address_space *mapping,
+                   struct drm_vma_offset_manager *vma_manager,
+                   bool use_dma_alloc, bool use_dma32)
+    ```
+
 
 # 参考
 [freelancer-leon's notes](https://github.com/freelancer-leon/notes/blob/master/kernel/graphic/Linux-Graphic.md)

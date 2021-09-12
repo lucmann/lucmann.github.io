@@ -94,8 +94,9 @@ struct {
 
 - `buckets`是按BO大小划分的链表数组，目前共有11个，即4KB, 8KB, 16KB, 32KB, 64KB, 128KB, 256KB, 512KB, 1MB, 2MB, 4MB。
 
-NOTE: BO并不是只有这11种大小，例如4KB链表中的BO大小都小于8KB, 所有大小超过4MB(包括4MB)的BO都在4MB链表里。特别地，panfrost不会申请小于4KB的BO。这样这11个链表就囊括了所有大小的BO。
+NOTE: 一个bucket链表下的BO不一定都是同样的大小，且BO的大小总是以4KB对齐的,也即所有BO都是4KB的整数倍。例如bucket-4KB链表中的BO大小都是4KB, 而bucket-8KB链表下可能有12KB大小的BO. 
 
+![bo-cache](panfrost_bo-cache.png)
 
 # 基于`panfrost_bo`的操作(Method)有哪些呢？
 
@@ -197,8 +198,12 @@ panfrost_bo_cache_fetch(struct panfrost_device *dev,
 2. 遍历步骤1中那个`bucket`, 对其中每个BO，向内核确认两件事:
 
 - BO准备好了吗？
+
+一个BO一般有两种状态: **ready**和**busy**. 如果是ready，`panfrost_bo_wait`返回`true`, 否则返回`false`.而且`panfrost_bo_wait`只对那些`flag`包含了`PAN_BO_SHARED`标签的BO才需要向kernel进行确认该BO是ready还是busy, 因为shared BO是被其它进程Imported或者Exported的，本进程的BO cache是不可能知道它的状态的。
+
 - BO保留了吗？
 
+当第一步的BO状态确认完成后，如果BO是ready的，那么还需要向kernel发送madvise=`MADV_WILLNEED`的确认请求，如果backing这个BO的page(物理页)仍然存在，则kernel返回的`retained`为`true`, 这时我们即可不用再向kernel发起`create_bo`请求，直接从BO cache里取出这个BO, 返回给调用者。否则kernel返回的`retained`为`false`, 用户态释放掉这个BO, 并继续查找可用的BO, 如果整个cache里都没有找到合适的BO, 则返回NULL.
 
 +---------------------------------------+------------------------------------------------+--------------------------------+
 |IOCTL_PANFROST_WAIT_BO                 |```                                             | - 如果BO准备好了，返回true,    |
@@ -271,4 +276,15 @@ panfrost_batch_submit_ioctl(struct panfrost_batch *batch,
 ```
 
 BO Submit的主要问题在于BO同步(或者说Job Descriptor同步，因为Job Descriptors都是放在BO里的)，panfrost采用DRM子系统的`syncobj`实现，所以同步问题主要是由内核处理的。BO同步是另外一个重要话题，我们会记录在另一篇文档中，这里不再讨论。
+
+### drm_panfrost_submit
+
+- jc Job描述符的首地址(gpu va)
+- in_syncs 可选的一组sync objects在开始这个Job前
+- in_sync_count 上面的数组的元素个数
+- out_sync 可选的保存completion fence的sync object
+- bo_handles u32类型的数组，保存提交的所有BO的handles
+- bo_handle_count 上面的数组的元素个数, bo_handles数组的内存大小是该值x4
+- requirements PANFROST_JD_REQ_*的组合
+
 
