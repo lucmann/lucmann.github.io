@@ -5,7 +5,7 @@ tags: DRM
 categories: kernel
 ---
 
-dma-buf是Linux kernel中实现内存共享的一种机制，在Linux中"Everything is file"的思想的指导下，内存（大多时候是显存）被封闭成`file`, 它的**file descriptor(FD)**被用来在进程之间传递(共享)，传出者叫**exporter**, 接收者叫**importer**. dma-buf可以说是披着`file`皮的`drm_gem_object`, 它所封装的内容还是DRM的内存管理对象。在kernel中，`drm_gem_object`的ID叫handle. 所以kernel中便有了以下两个函数:
+dma-buf是Linux kernel中实现内存共享的一种机制，在Linux中"Everything is file"的思想的指导下，内存（大多时候是显存）被封装成`file`, 它的**file descriptor(FD)**被用来在进程之间传递(共享)，传出者叫**exporter**, 接收者叫**importer**. dma-buf可以说是披着`file`皮的`drm_gem_object`, 它所封装的内容还是DRM的内存管理对象。在kernel中，`drm_gem_object`的ID叫handle. 所以kernel中便有了以下两个函数:
 
 <!--more-->
 
@@ -61,8 +61,7 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 - dma_buf fd
 - drm_gem_object handle
 
-显然两个函数里的`dev`一定是**不同**的`drm_device`, `dma_buf` fd一定是同一个FD（也即同一个dma-buf, 要不然也不叫共享了），那么`handle`呢？肯定也是**不同**的`handle`, 因为`handle`其实是对`device`而言的，它是一个设备持有的`drm_gem_object`的ID.
-但这个ID背后的东西(backing storage)可能是**同一个**东西。
+显然两个函数里的`dev`一定是**不同**的`drm_device`, `dma_buf` fd一定是同一个FD（也即同一个dma-buf, 要不然也不叫共享了），那么`handle`呢？肯定也是**不同**的`handle`, 因为`handle`其实是对`device`而言的，它是一个设备持有的`drm_gem_object`的ID. 但这个ID背后的东西(backing storage)可能是**同一个**东西。
 
-可以打个比方，你去银行要办两种业务，两种业务分别排号，假如你要办的A业务排到7号，B业务排到8号，但是很有可能是同一个业务员为你办理这两种业务，这里的业务就是设备驱动，而那个业务员就是dma-buf(或者它封装的那块显存)。
+可以打个比方，你去银行要办两种业务，两种业务分别排号，假如你要办的A业务排到7号，B业务也刚好排到8号（注意，号码相同，但是两个号），但是很有可能是同一个业务员为你办理这两种业务，这里的业务就是设备驱动，而那个业务员就是dma-buf(或者它封装的那块显存)。
 
