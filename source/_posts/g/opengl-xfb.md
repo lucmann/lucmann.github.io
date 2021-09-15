@@ -2,7 +2,7 @@
 title: OpenGL Transform Feedback
 date: 2021-05-08 09:04:30
 tags: [OpenGL]
-categories: lib
+categories: graphics
 ---
 
 # [Transform Feedback](https://www.khronos.org/opengl/wiki/Transform_Feedback)

@@ -2,7 +2,7 @@
 title: Mesa Gallium驱动框架
 date: 2021-04-08 08:07:49
 tags: [mesa]
-categories: lib
+categories: graphics
 ---
 
 # Gallium Pipe

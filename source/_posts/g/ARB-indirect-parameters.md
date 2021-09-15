@@ -2,7 +2,7 @@
 title: ARB_indirect_parameters
 date: 2021-03-18 11:29:57
 tags: [OpenGL]
-categories: lib
+categories: graphics
 ---
 
 # [Overview](https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_indirect_parameters.txt)

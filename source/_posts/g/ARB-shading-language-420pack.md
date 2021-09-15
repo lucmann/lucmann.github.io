@@ -2,7 +2,7 @@
 title: ARB_shading_language_420pack
 date: 2021-03-18 19:08:34
 tags: [OpenGL]
-categories: lib
+categories: graphics
 ---
 
 # [Overview](https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_shading_language_420pack.txt)

@@ -2,7 +2,7 @@
 title: ARB_texture_view
 date: 2020-06-09 12:17:07
 tags: [OpenGL]
-categories: lib
+categories: graphics
 ---
 
 # 概述(#124)

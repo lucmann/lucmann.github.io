@@ -2,7 +2,7 @@
 title: ARB_sparse_texture
 date: 2020-07-23 11:33:59
 tags: [OpenGL]
-categories: lib
+categories: graphics
 ---
 
 # Overview(#158)

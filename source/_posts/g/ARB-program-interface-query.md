@@ -2,7 +2,7 @@
 title: ARB_program_interface_query
 date: 2021-03-18 15:33:31
 tags: [OpenGL]
-categories: lib
+categories: graphics
 ---
 
 # [Overview](https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_program_interface_query.txt)

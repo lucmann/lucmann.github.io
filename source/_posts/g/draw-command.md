@@ -2,7 +2,7 @@
 title: Draw Commands
 date: 2020-09-15 16:44:37
 tags: [OpenGL]
-categories: lib
+categories: graphics
 ---
 
 # Category
