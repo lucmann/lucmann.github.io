@@ -1,7 +1,7 @@
 ---
 title: OpenGL (ES) and GLSL (ES) Version
 date: 2021-03-31 11:52:59
-tags: [GL]
+tags: [OpenGL]
 categories: lib
 ---
 

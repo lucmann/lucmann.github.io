@@ -1,7 +1,7 @@
 ---
 title: OpenGL Extensions
 date: 2021-04-22 10:47:45
-tags: [GL]
+tags: [OpenGL]
 categories: lib
 ---
 

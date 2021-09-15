@@ -1,7 +1,7 @@
 ---
 title: ARB_indirect_parameters
 date: 2021-03-18 11:29:57
-tags: [GL]
+tags: [OpenGL]
 categories: lib
 ---
 

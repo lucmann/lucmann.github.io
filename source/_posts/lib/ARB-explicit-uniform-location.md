@@ -1,7 +1,7 @@
 ---
 title: ARB_explicit_uniform_location
 date: 2021-03-18 14:14:04
-tags: [GL]
+tags: [OpenGL]
 categories: lib
 ---
 

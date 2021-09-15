@@ -1,7 +1,7 @@
 ---
 title: ARB_shader_storage_buffer_object
 date: 2021-03-18 15:29:39
-tags: [GL]
+tags: [OpenGL]
 categories: lib
 ---
 

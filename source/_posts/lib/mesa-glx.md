@@ -1,7 +1,7 @@
 ---
 title: GLX in Mesa
 date: 2021-03-11 14:44:56
-tags: [GL]
+tags: [OpenGL]
 categories: lib
 ---
 

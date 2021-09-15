@@ -1,7 +1,7 @@
 ---
 title: ARB_program_interface_query
 date: 2021-03-18 15:33:31
-tags: [GL]
+tags: [OpenGL]
 categories: lib
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: OpenGL Objects
 date: 2021-05-07 20:48:24
-tags: [GL]
+tags: [OpenGL]
 categories: lib
 ---
 

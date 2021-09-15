@@ -1,7 +1,7 @@
 ---
 title: ARB_shading_language_420pack
 date: 2021-03-18 19:08:34
-tags: [GL]
+tags: [OpenGL]
 categories: lib
 ---
 

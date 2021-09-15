@@ -1,7 +1,7 @@
 ---
 title: OpenGL Transform Feedback
 date: 2021-05-08 09:04:30
-tags: [GL]
+tags: [OpenGL]
 categories: lib
 ---
 
