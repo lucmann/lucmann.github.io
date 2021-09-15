@@ -189,10 +189,39 @@ dri3_pixmap_from_fds(PixmapPtr *ppixmap, ScreenPtr screen,
 }
 ```
 
-可以看到最终是调用了`pixmap_from_fds`或`pixmap_from_fd`, 接下来的工作由display GPU的kmd完成，最后当display GPU `gbm_bo_import`调用了`drmPrimeFDToHandle`函数后，X Server进程进入内核态，接下来内核DRM子系统的ioctl会调用`drm_prime_fd_to_handle_ioctl`, 它会调用display GPU的`prime_fd_to_handle` callback. 整个过程其实是将显存(buffer, 确切说是back buffer)抽象成dma-buf(dma-buf实际上是一个文件，所以它有fd, 可供在进程间传递)来实现用户应用进程与X
-Server进程间的Buffer共享。
+可以看到最终是调用了`pixmap_from_fds`或`pixmap_from_fd`, 接下来的工作由display GPU的kmd完成，最后当display GPU `gbm_bo_import`调用了`drmPrimeFDToHandle`函数后，X Server进程进入内核态，接下来内核DRM子系统的ioctl会调用`drm_prime_fd_to_handle_ioctl`, 它会调用display GPU的`prime_fd_to_handle` callback. 整个过程其实是将显存(buffer, 确切说是back buffer)抽象成dma-buf(dma-buf实际上是一个文件，所以它有fd, 可供在进程间传递)来实现用户应用进程与X Server进程间的Buffer共享。
 
 {% asset_img winsys-Page-9.drawio.png "dma-buf" %}
+
+下面是内核函数`dma_buf_get`的实现，从这个小函数的实现我们可以清楚地看到fd -> file -> dma_buf的转换
+
+```c
+/**
+ * dma_buf_get - returns the struct dma_buf related to an fd
+ * @fd:	[in]	fd associated with the struct dma_buf to be returned
+ *
+ * On success, returns the struct dma_buf associated with an fd; uses
+ * file's refcounting done by fget to increase refcount. returns ERR_PTR
+ * otherwise.
+ */
+struct dma_buf *dma_buf_get(int fd)
+{
+	struct file *file;
+
+	file = fget(fd);
+
+	if (!file)
+		return ERR_PTR(-EBADF);
+
+	if (!is_dma_buf_file(file)) {
+		fput(file);
+		return ERR_PTR(-EINVAL);
+	}
+
+	return file->private_data;
+}
+EXPORT_SYMBOL_GPL(dma_buf_get);
+```
 
 ### 基于dri winsys的gallium driver的winsys实现
 winsys是一个桥梁，它主要要实现的就是将color buffer传输到窗口系统的framebuffer.那么基于dri的winsys是怎么实现这个桥梁的? 它主要依赖下面两个对象:
