@@ -5,9 +5,23 @@ tags: drm
 categories: kernel
 ---
 
-Linux内核的GPU scheduler是负责向GPU硬件提交作业的，它被编译到内核模块`gpu-sched`. 它本身是一个内核线程`kthread`, 这个线程的入口函数是`drm_sched_main`, 它的启动是在`drm_sched_init`. 
+# 缩略词
+| 缩略词                      | 解释                                      |
+|:----------------------------|:------------------------------------------|
+| rq                          | run queue                                 |
+| SPSC                        | Single Producer Single Consumer           |
 
 <!--more-->
+
+- `drm_gpu_scheduler`
+- `drm_sched_backend_ops`
+- `drm_sched_rq`
+- `drm_sched_entity`
+- `drm_sched_job`
+- `drm_sched_fence`
+
+Linux内核的GPU scheduler是负责向GPU硬件提交作业的，它被编译到内核模块`gpu-sched`. 它本身是一个内核线程`kthread`, 这个线程的入口函数是`drm_sched_main`, 它的启动是在`drm_sched_init`. 
+
 
 ```c
 /**

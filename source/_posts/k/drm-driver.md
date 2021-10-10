@@ -1,8 +1,8 @@
 ---
 title: DRM Driver
 date: 2021-04-12 17:07:27
-tags: [dri]
-categories: sys
+tags: [DRM]
+categories: kernel
 ---
 
 # DRM driver features
@@ -25,7 +25,7 @@ categories: sys
 
 - DRIVER_SYNCOBJ
 
-支持**drm_syncobj**, 用于渲染命令提交的显示同步。
+支持**drm_syncobj**, 用于渲染命令提交的显式同步。
 
 - DRIVER_SYNCOBJ_TIMELINE
 
