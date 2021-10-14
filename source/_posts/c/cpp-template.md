@@ -45,6 +45,16 @@ inline bool isBoolean(void) { return false; } // Primary template definition
 template<> inline bool isBoolean<bool>(void) { return true; } // template specialization
 ```
 
+# `typename` vs `class`
+
+大多数情况下，`typename`和`class`可以互换使用，但它们也有不能互换的时候，下面的情况只能使用`typename`关键字:
+
+```cpp
+template<class Option>
+struct OptTraits {
+    typedef typename Option::ValueType ValueType;
+};  // Indicates Option::ValueType is a type
+```
 
 # Constraints & Rules
 
