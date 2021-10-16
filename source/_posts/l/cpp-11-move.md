@@ -2,7 +2,7 @@
 title: cpp-11-move
 date: 2021-02-02 23:12:21
 tags: [cxx]
-categories: var
+categories: language
 ---
 
 # Lessons

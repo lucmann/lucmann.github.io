@@ -2,7 +2,7 @@
 title: C++ Template
 date: 2021-10-14 16:07:50
 tags: gp
-categories: cpp
+categories: language
 ---
 
 # C++中的模板
