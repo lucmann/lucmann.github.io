@@ -1,7 +1,7 @@
 ---
 title: ReadPixels in Mesa
 date: 2021-09-15 16:57:44
-tags: OpenGL
+tags: [OpenGL, Mesa]
 categories: graphics
 ---
 
