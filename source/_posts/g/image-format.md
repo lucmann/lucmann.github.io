@@ -61,3 +61,16 @@ float texture(samplerCubeArrayShadow sampler, vec4 P, float compare)
 1. sampler1DShadow的纹理坐标的第二个component不使用
 2. samplerCubeArray的Texture Lookup函数的纹理坐标本身就是一个4维的，所以samplerCubeArrayShadow的重载新加了一个单独用来比较的参数，避免使用5维向量。
 
+具体如何比较由Texture Parameter `GL_TEXTURE_COMPARE_FUNC`决定：
+
+| Texture Comparison Function        |  Result 1.0  | Result 0.0  |
+|:-----------------------------------|:-------------|:------------|
+| GL_LEQUAL                          | r <= Dt      | r > Dt      |
+| GL_GEQUAL                          | r >= Dt      | r < Dt      |
+| GL_LESS                            | r <  Dt      | r >= Dt     |
+| GL_GREATER                         | r >  Dt      | r <= Dt     |
+| GL_EQUAL                           | r == Dt      | r != Dt     |
+| GL_NOTEQUAL                        | r != Dt      | r == Dt     |
+| GL_ALWAYS                          | Always       | Never       |
+| GL_NEVER                           | Never        | Always      |
+
