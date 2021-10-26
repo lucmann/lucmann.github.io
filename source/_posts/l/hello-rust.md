@@ -5,6 +5,11 @@ tags: rust
 categories: language
 ---
 
+# Rust Basic
+
+- Rust的编译器 `rustc`
+- Rust程序的构建系统或包管理器 `cargo`
+
 # Cargo.toml
 ## [dependencies]
 增加`rand` crate包后再执行构建
