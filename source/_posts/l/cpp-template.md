@@ -36,14 +36,60 @@ template void f(int);  // explicit instantiation, template args deduced
 
 ## Implicit Instantiation
 
-# 模板的特化(Specialization)
+# 模板特化(template specialisation)
+
+模板特化是C++泛型编程的一个重要技术，它的一个典型应用就是type trait的实现
+
+## 全特化(full specialisation)
 
 ```cpp
-template<typename T>
-inline bool isBoolean(void) { return false; } // Primary template definition
+template <typename T>
+struct is_boolean {
+    static const bool value = false;
+}; // primary template
 
-template<> inline bool isBoolean<bool>(void) { return true; } // template specialization
+template <>
+struct is_boolean<bool> {
+    static const bool value = true;
+}; // full specialization
 ```
+
+## 偏特化(partial specialisation)
+
+虽然模板类的全物化是一个重要的泛型编程技术，但有时候我们可能需要一个介于完全泛化和全特化之间的一个特化版本，这就是偏特化。下面的例子`is_pointer<T>`，这里我们需要一个完全泛化的模板版本来处理所有`T`不是一个指针类型的情形，而需要一个偏特化版本来处理所有`T`是一个指针类型的情形。
+
+```cpp
+template <typename T>
+struct is_pointer {
+    static const bool value = false;
+}; // primary version that handles all the cases where T is not a pointer
+
+template <typename T>
+struct is_pointer<T*> {
+    static const bool value = true;
+}; // partial specialisation to handle all the cases where T is a pointer
+```
+
+从上面两个例子`is_boolean<T>`和`is_pointer<T>`可以看出，全特化和偏特化的语法不是有明显区别的，偏特化在类名后面有一个额外的包含模板参数的`<>`, 而全特化版本的类名后面的`<>`里不是模板参数，而是已经特化的具体类型名。
+
+下面的例子是一个更复杂的偏特化的例子`remove_bounds<T>`, 这个模板类仅仅定义一个与`T`类型相同的typedef成员类型，但是高层的数组关联被移除了，这样的模板类可以完成一个类型的转化
+
+```cpp
+template <typename T>
+struct remove_bounds {
+    typedef T type;
+}; // primary version
+
+template <typename T, std::size_t N>
+struct remove_bounds<T[N]> {
+    typedef T type;
+}; // partial specialisation
+```
+
+从这个例子可以看出:
+
+- 偏特化版本的模板参数的个数不一定和默认模板的相等
+- 偏特化版本的类名后面的模板参数的个数和类型必须匹配默认模板的参数的个数和类型
 
 # `typename` vs `class`
 
