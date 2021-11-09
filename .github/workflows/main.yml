@@ -54,7 +54,7 @@ jobs:
           npm install hexo
 
       - name: Generate html
-        run: hexo generate
+        run: /usr/bin/hexo generate
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.5
