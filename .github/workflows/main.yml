@@ -30,7 +30,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-        run: npm install
 
       # Caching dependencies to speed up workflows
       - name: Cache node modules
