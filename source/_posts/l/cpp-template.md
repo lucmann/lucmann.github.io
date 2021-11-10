@@ -102,6 +102,20 @@ struct OptTraits {
 };  // Indicates Option::ValueType is a type
 ```
 
+# template parameters vs template arguments
+
+template parameters之于template arguments相当于函数的形参之于实参。C++模板的通用语法是:
+
+```
+template <parameter-list> declaration
+```
+
+parameter-list中的每个形参都可以是下列3种中的任何一种:
+
+- non-type template parameter
+- type template parameter
+- template template parameter
+
 # Constraints & Rules
 
 - Explicit instantiation时，如果可以从function parameter推导出类型，可以省去template args.
