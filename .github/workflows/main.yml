@@ -33,22 +33,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: 14
-
-      # Caching dependencies to speed up workflows
-      - name: Cache node modules
-        uses: actions/cache@v2
-        id: cache
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          npm ci
+          node-version: 10
 
       - name: Setting for git-push
         env:
