@@ -26,10 +26,10 @@ jobs:
           submodules: true
 
       # Setup Node.js environment
-      - name: Setup node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      - name: Install node-sass with cnpm
+        run: |
+          npm install -g cnpm --registry=https://registry.npm.taobao.org
+          cnpm install node-sass@latest
 
       # Caching dependencies to speed up workflows
       - name: Cache node modules
