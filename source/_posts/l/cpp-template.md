@@ -56,7 +56,7 @@ struct is_boolean<bool> {
 
 ## 偏特化(partial specialisation)
 
-虽然模板类的全物化是一个重要的泛型编程技术，但有时候我们可能需要一个介于完全泛化和全特化之间的一个特化版本，这就是偏特化。下面的例子`is_pointer<T>`，这里我们需要一个完全泛化的模板版本来处理所有`T`不是一个指针类型的情形，而需要一个偏特化版本来处理所有`T`是一个指针类型的情形。
+虽然模板类的全特化是一个重要的泛型编程技术，但有时候我们可能需要一个介于完全泛化和全特化之间的一个特化版本，这就是偏特化。下面的例子`is_pointer<T>`，这里我们需要一个完全泛化的模板版本来处理所有`T`不是一个指针类型的情形，而需要一个偏特化版本来处理所有`T`是一个指针类型的情形。
 
 ```cpp
 template <typename T>
@@ -104,7 +104,7 @@ struct OptTraits {
 
 # Constraints & Rules
 
-[1]Explicit instantiation时，如果可以从function parameter推导出类型，可以省去template args.
-[2]Function template或class template的member function的Explicit实例化不能使用`inline`和`constexpr`关键字。
-[3]Different template instantiations are distinct types.
+- Explicit instantiation时，如果可以从function parameter推导出类型，可以省去template args.
+- Function template或class template的member function的Explicit实例化不能使用`inline`和`constexpr`关键字。
+- Different template instantiations are distinct types.
 
