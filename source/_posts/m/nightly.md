@@ -1,5 +1,5 @@
 ---
-title: 词汇: nightly
+title: '词汇: nightly'
 date: 2021-11-19 15:00:41
 tags:
 categories: misc
