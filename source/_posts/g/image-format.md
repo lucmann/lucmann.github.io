@@ -7,6 +7,8 @@ categories: graphics
 
 # Color Format
 
+<!--more-->
+
 # Depth Format
 
 ## Normalized Integer
