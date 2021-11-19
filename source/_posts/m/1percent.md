@@ -1,8 +1,8 @@
 ---
 title: 观“老石谈芯”视频记
 date: 2021-10-10 20:47:35
-tags: others
-categories: moment
+tags: 
+categories: misc
 ---
 
 # 1%定律
