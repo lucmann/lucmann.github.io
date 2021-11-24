@@ -116,6 +116,57 @@ parameter-list中的每个形参都可以是下列3种中的任何一种:
 - type template parameter
 - template template parameter
 
+## 模板类的模板构造函数
+
+模板类的模板构造函数，意思是一个模板类的一个构造函数也是一个模板函数。这种情况有两点需要注意:
+
+- 模板类的模板参数名不能和构造函数的模板参数名相同 (*template parameter* cannot share the same name)
+- 不能显式地指定模板构造函数的模板实参 (cannot explicitly specify *template argument* for constructor)
+
+这种情况可以很好的体现template parameter和template argument的区别，请看下面的例子:
+
+```cpp
+
+template<typename OptName>
+struct Option {
+    typedef typename OptName::ValueType ValueType;
+
+    ...
+
+    // Constructor
+    template<size_t NumNamedValues>
+    Option(const char* shortName_
+         , const char* longName_
+         , const char* description_
+         , const NamedValue<ValueType> (&namedValues_)[NumNamedValues]
+         , const char* defaultValue_ = DE_NULL)
+         : shortName(shortName_)
+         , longName(longName_)
+         , description(description_)
+         , defaultValue(defaultValue_)
+         , parse((ParseFunc)DE_NULL)
+         , namedValues(DE_ARRAY_BEGIN(namedValues_))
+         , namedValuesEnd(DE_ARRAY_END(namedValues_))
+    {
+    }
+};
+
+static const NamedValue<bool> s_enableNames[] = {
+    { "enable", true },
+    { "disable", false }
+};
+
+// Instantiation to call constructor above
+Option<TestOOM> opt = Option<TestOOM>(DE_NULL, "deqp-test-oom", "Run tests that exhaust memory", s_enableNames, "disable");
+```
+
+从这个例子看到模板构造函数被调用时本该指定的non-type template argument(size_t) `NumNamedValues`并没有被指定, 原因是模板函数的template argument list应该紧跟在函数名后面，但是构建函数模板(类型转换函数模板conversion member function template也是同样情况)被调用的时候**不使用函数名**，所以没有一种方法可以显式地指定
+
+- constructor member function template
+- conversion member function template
+
+的template argument list.
+
 # Constraints & Rules
 
 - Explicit instantiation时，如果可以从function parameter推导出类型，可以省去template args.
