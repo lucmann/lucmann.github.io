@@ -10,6 +10,8 @@ categories: graphics
 
 <!--more-->
 
+Transform Feedback最常见的应用是在构建粒子系统(Particle System), 它是在OpenGL 3.0之后被引入的，而DirectX10引入类似的功能更早一些，在DirectX10中，它被叫做**Stream Output**.
+
 # [Vertex Processing](https://www.khronos.org/opengl/wiki/Vertex_Processing)
 **xfb**的输入来自Vertex Processing, 所以首先要确定Vertex Processing阶段都是什么，输出什么。Vertex Processing的输出是图元(Primitives), 它至少包含一个vertex shader.
 
