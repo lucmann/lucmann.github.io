@@ -30,7 +30,7 @@ TF是将Vertex_Processing阶段产生的图元的顶点属性(vertex attributes)
 
 某种意义上讲，TF是OpenGL第一种compute shader的形式，在TF之前，唯一能从shader的输出读取数据的方式是`glReadPixels`和其同族API.
 
-![OpenGL 3.1 Pipeline](ogl-xfb/tf-gles-31.jpg)
+![OpenGL 3.1 Pipeline](tf-gles-31.jpg)
 
 ## [Vertex Processing](https://www.khronos.org/opengl/wiki/Vertex_Processing)
 
@@ -207,7 +207,7 @@ VERSION: 4.3 (Core Profile) Mesa 20.0.8
 RENDERER: llvmpipe (LLVM 9.0.1, 128 bits)
 ```
 
-![ompparticles](ogl-xfb/ompparticles.png)
+![ompparticles](ompparticles.png)
 
 [ompparticles.cpp](https://github.com/lwtbn1/OpenGL_Superbible_7th/blob/master/src/ompparticles/ompparticles.cpp)
 
