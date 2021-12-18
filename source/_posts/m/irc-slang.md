@@ -19,10 +19,10 @@ categories: misc
 
 # 短句 Phrases
 
-- AFAIK
+* AFAIK
     * As far as I know
     * 所我了解
 
-- FWIW
+* FWIW
     * For what it's worth
     * 陈述见解或建议的谦逊说法，比如我觉得这是有用的信息，但是从听者的角度未必也是。
