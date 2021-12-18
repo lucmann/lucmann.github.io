@@ -1,0 +1,28 @@
+---
+title: IRC 用语
+date: 2021-12-18 20:20:40
+tags:
+categories: misc
+---
+
+# [IRC(Internet Relay Chat)](https://zh.wikipedia.org/wiki/IRC)
+
+- 一种应用层协议，用于聊天沟通 
+- 一种开源社区常用的通讯方式
+- 服务端口号6667[明文], 6697[加密]
+- [webchat.oftc.net](https://webchat.oftc.net/)是其中一种基于web的客户端
+
+# 频道 Channels
+
+- #dri-devel
+- #panfrost
+
+# 短句 Phrases
+
+- AFAIK
+    * As far as I know
+    * 所我了解
+
+- FWIW
+    * For what it's worth
+    * 陈述见解或建议的谦逊说法，比如我觉得这是有用的信息，但是从听者的角度未必也是。
