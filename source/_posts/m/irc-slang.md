@@ -12,6 +12,8 @@ categories: misc
 - 服务端口号6667[明文], 6697[加密]
 - [webchat.oftc.net](https://webchat.oftc.net/)是其中一种基于web的客户端
 
+<!--more-->
+
 # 频道 Channels
 
 - #dri-devel
