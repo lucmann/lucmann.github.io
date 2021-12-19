@@ -1,7 +1,7 @@
 ---
-title: IRC 用语
+title: 英语角：IRC那些短语
 date: 2021-12-18 20:20:40
-tags:
+tags: English
 categories: misc
 ---
 
@@ -23,8 +23,16 @@ categories: misc
 
 * AFAIK
     * As far as I know
-    * 所我了解
+    * 据我了解
+
+* IIRC
+    * If I recall correctly / If I remember correctly
+    * 如果我没有记错
 
 * FWIW
     * For what it's worth
     * 陈述见解或建议的谦逊说法，比如我觉得这是有用的信息，但是从听者的角度未必也是。
+
+* TBH
+    * To be honest
+    * 老实讲
