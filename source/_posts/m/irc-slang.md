@@ -19,20 +19,44 @@ categories: misc
 - #dri-devel
 - #panfrost
 
-# 短句 Phrases
+# 短句 Acronym/Phrases
 
 * AFAIK
     * As far as I know
     * 据我了解
 
-* IIRC
-    * If I recall correctly / If I remember correctly
-    * 如果我没有记错
+* BTW
+    * By the way
+    * 顺便
 
 * FWIW
     * For what it's worth
     * 陈述见解或建议的谦逊说法，比如我觉得这是有用的信息，但是从听者的角度未必也是。
 
+* FYI
+    * For your information
+    * 供您参考
+
+* HTH
+    * Hope this helps
+    * 希望奏效
+
+* IIRC
+    * If I recall correctly / If I remember correctly
+    * 如果我没有记错
+
+* IMHO
+    * In my humble opinion
+    * 在下愚见
+
+* IMO
+    * In my opinion
+    * 依我之见
+
 * TBH
     * To be honest
     * 老实讲
+
+* WFM
+    * Work for me
+    * 对我来说可以
