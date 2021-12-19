@@ -1,8 +1,10 @@
 ---
 title: Notes for Mesa
 date: 2020-2-4
-tags: [OpenGL]
+tags: [OpenGL, mesa]
+categories: graphics
 ---
+
 [Mesa](https://mesa3d.org/) is an open source implementation for OpenGL. Check [repository](https://gitlab.freedesktop.org/mesa/mesa) for its source code. There are something worth to learn about this project for a graphic driver developer.
 
 ## Build
@@ -397,7 +399,7 @@ requires these programs or packages below pre-installed.
     - libdrm-dev
     - libx11-dev
     - libxext-dev
-    
+
 ``` bash
 meson build
 ```
