@@ -104,6 +104,8 @@ void glTransformFeedbackVaryings(GLuint program,
 - arrays
 - members of interface blocks
 
+## Varyings
+
 # Transform Feedback 处理过程
 
 ## Feedback Buffer Binding
@@ -197,14 +199,51 @@ NOTE:
 
 TF最常见的应用是粒子系统(Particle System), 即包含许许多多小颗粒的场景，如烟，雾，火等，这些场景的共同点是包含大量顶点，而且顶点属性在不断变化，如果没有TF, 会大大增加CPU向GPU传送顶点数据的开销，不论是总线的带宽还是CPU的使用率都可能无法承受。
 
-## ompparticles
+## 例子 springmass
 
 - 使用的Renderer
 
 ```
-VENDOR: VMware, Inc.
-VERSION: 4.3 (Core Profile) Mesa 20.0.8
-RENDERER: llvmpipe (LLVM 9.0.1, 128 bits)
+    void render(double t)
+    {
+        int i;
+        glUseProgram(m_update_program);
+
+        glEnable(GL_RASTERIZER_DISCARD);
+
+        for (i = iterations_per_frame; i != 0; --i)
+        {
+            glBindVertexArray(m_vao[m_iteration_index & 1]);
+            glBindTexture(GL_TEXTURE_BUFFER, m_pos_tbo[m_iteration_index & 1]);
+            m_iteration_index++;
+            glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_vbo[POSITION_A + (m_iteration_index & 1)]);
+            glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 1, m_vbo[VELOCITY_A + (m_iteration_index & 1)]);
+            glBeginTransformFeedback(GL_POINTS);
+            glDrawArrays(GL_POINTS, 0, POINTS_TOTAL);
+            glEndTransformFeedback();
+        }
+
+        glDisable(GL_RASTERIZER_DISCARD);
+
+        static const GLfloat black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+        glViewport(0, 0, info.windowWidth, info.windowHeight);
+        glClearBufferfv(GL_COLOR, 0, black);
+
+        glUseProgram(m_render_program);
+
+        if (draw_points)
+        {
+            glPointSize(4.0f);
+            glDrawArrays(GL_POINTS, 0, POINTS_TOTAL);
+        }
+
+        if (draw_lines)
+        {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer);
+            glDrawElements(GL_LINES, CONNECTIONS_TOTAL * 2, GL_UNSIGNED_INT, NULL);
+        }
+    }
 ```
 
 ![ompparticles](ompparticles.png)
