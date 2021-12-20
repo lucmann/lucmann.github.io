@@ -2,7 +2,7 @@
 title: regex in vi
 date: 2020-02-29 21:58:03
 tags: [vim]
-categories: bin
+categories: programming
 ---
 ## Multiline
 Remove the multilined comment in the separated paragraphs

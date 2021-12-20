@@ -2,7 +2,7 @@
 title: 除了编译gcc还能干什么
 date: 2021-04-15 15:58:26
 tags: [gcc]
-categories: bin
+categories: programming
 ---
 
 # 交叉编译

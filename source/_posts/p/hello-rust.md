@@ -2,7 +2,7 @@
 title: Hello, Rust
 date: 2021-07-11 23:47:20
 tags: rust
-categories: language
+categories: programming
 ---
 
 # Rust Basic

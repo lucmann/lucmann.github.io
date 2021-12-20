@@ -2,7 +2,7 @@
 title: SFINAE
 date: 2020-07-24 17:02:49
 tags: c++
-categories: language
+categories: programming
 ---
 
 # RAII
