@@ -201,49 +201,93 @@ TF最常见的应用是粒子系统(Particle System), 即包含许许多多小�
 
 ## 例子 springmass
 
-- 使用的Renderer
+- 两个Shader programs
+	- `m_update_program`, 用来更新(重新计算)顶点属性
+	- `m_render_program`, 用来渲染最后的画面
 
 ```
-    void render(double t)
+void render(double t)
+{
+    int i;
+    glUseProgram(m_update_program);
+
+    glEnable(GL_RASTERIZER_DISCARD);
+
+    for (i = iterations_per_frame; i != 0; --i)
     {
-        int i;
-        glUseProgram(m_update_program);
-
-        glEnable(GL_RASTERIZER_DISCARD);
-
-        for (i = iterations_per_frame; i != 0; --i)
-        {
-            glBindVertexArray(m_vao[m_iteration_index & 1]);
-            glBindTexture(GL_TEXTURE_BUFFER, m_pos_tbo[m_iteration_index & 1]);
-            m_iteration_index++;
-            glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_vbo[POSITION_A + (m_iteration_index & 1)]);
-            glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 1, m_vbo[VELOCITY_A + (m_iteration_index & 1)]);
-            glBeginTransformFeedback(GL_POINTS);
-            glDrawArrays(GL_POINTS, 0, POINTS_TOTAL);
-            glEndTransformFeedback();
-        }
-
-        glDisable(GL_RASTERIZER_DISCARD);
-
-        static const GLfloat black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-
-        glViewport(0, 0, info.windowWidth, info.windowHeight);
-        glClearBufferfv(GL_COLOR, 0, black);
-
-        glUseProgram(m_render_program);
-
-        if (draw_points)
-        {
-            glPointSize(4.0f);
-            glDrawArrays(GL_POINTS, 0, POINTS_TOTAL);
-        }
-
-        if (draw_lines)
-        {
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer);
-            glDrawElements(GL_LINES, CONNECTIONS_TOTAL * 2, GL_UNSIGNED_INT, NULL);
-        }
+        glBindVertexArray(m_vao[m_iteration_index & 1]);
+        glBindTexture(GL_TEXTURE_BUFFER, m_pos_tbo[m_iteration_index & 1]);
+        m_iteration_index++;
+        glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_vbo[POSITION_A + (m_iteration_index & 1)]);
+        glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 1, m_vbo[VELOCITY_A + (m_iteration_index & 1)]);
+        glBeginTransformFeedback(GL_POINTS);
+        glDrawArrays(GL_POINTS, 0, POINTS_TOTAL);
+        glEndTransformFeedback();
     }
+
+    glDisable(GL_RASTERIZER_DISCARD);
+
+    static const GLfloat black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+    glViewport(0, 0, info.windowWidth, info.windowHeight);
+    glClearBufferfv(GL_COLOR, 0, black);
+
+    glUseProgram(m_render_program);
+
+    if (draw_points)
+    {
+        glPointSize(4.0f);
+        glDrawArrays(GL_POINTS, 0, POINTS_TOTAL);
+    }
+
+    if (draw_lines)
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer);
+        glDrawElements(GL_LINES, CONNECTIONS_TOTAL * 2, GL_UNSIGNED_INT, NULL);
+    }
+}
+```
+
+上面这段`render()`函数的前半段是一个双缓冲交替的模式, 用来倒换TFB和Vertex Array Buffer的数据。后半段是简单的`DrawArrays()`或`DrawElements()`。我们简单说下前半段的for-loop.
+
+首先定义了3个Buffer数组：分别用作Vertex Array Buffer, Transform Feedback Buffer和Texture Buffer
+
+- `m_vao[2] = {1, 2}` 
+- `m_vbo[5] = {1, 2, 3, 4, 5}`
+- `m_pos_tbo[2] = {1, 2}`
+
+循环展开后:
+
+```c
+// 0
+glBindVertexArray(1);
+glBindTexture(GL_TEXTURE_BUFFER, 1);
+m_iteration_index++;
+glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, 2);
+glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 1, 4);
+glBeginTransformFeedback(GL_POINTS);
+glDrawArrays(GL_POINTS, 0，POINTS_TOTAL);
+glEndTransformFeedback();
+
+// 1
+glBindVertexArray(2);
+glBindTexture(GL_TEXTURE_BUFFER, 2);
+m_iteration_index++;
+glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, 1);
+glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 1, 3);
+glBeginTransformFeedback(GL_POINTS);
+glDrawArrays(GL_POINTS, 0，POINTS_TOTAL);
+glEndTransformFeedback();
+
+// 2
+glBindVertexArray(1);
+glBindTexture(GL_TEXTURE_BUFFER, 1);
+m_iteration_index++;
+glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, 2);
+glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 1, 4);
+glBeginTransformFeedback(GL_POINTS);
+glDrawArrays(GL_POINTS, 0，POINTS_TOTAL);
+glEndTransformFeedback();
 ```
 
 ![ompparticles](ompparticles.png)
