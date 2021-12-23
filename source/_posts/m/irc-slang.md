@@ -53,6 +53,10 @@ categories: misc
     * In my opinion
     * 依我之见
 
+* LGTM
+    * Looks good to me
+    * 我看不错
+
 * TBH
     * To be honest
     * 老实讲
