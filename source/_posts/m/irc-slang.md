@@ -21,6 +21,10 @@ categories: misc
 
 # 短句 Acronym/Phrases
 
+* AFAICT
+    * As far as I can tell
+    * 个人认为
+
 * AFAIK
     * As far as I know
     * 据我了解
