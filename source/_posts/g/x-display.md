@@ -2,7 +2,7 @@
 title: X11中的Display, Screen, Depth和Visual
 date: 2020-09-03 16:49:16
 tags: [xorg]
-categories: sys
+categories: graphics
 ---
 
 # X窗口系统

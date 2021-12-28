@@ -2,7 +2,7 @@
 title: DRM Device
 date: 2021-04-07 15:49:16
 tags: [dri]
-categories: sys
+categories: graphics
 ---
 
 # DRM Introduction

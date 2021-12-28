@@ -2,7 +2,7 @@
 title: CPU Hotplug in Linux
 date: 2021-05-21 16:09:13
 tags: [linux]
-categories: sys
+categories: graphics
 ---
 
 # A Puzzle

@@ -2,7 +2,7 @@
 title: Windows Insider Program
 date: 2020-02-08 17:57:46
 tags: [wsl]
-categories: sys
+categories: graphics
 ---
 
 The story begins with debugging an OpenGL demo on the WSL with the Mesa libraries compiled by myself. Every time the executable will crash when it stops at the breakpoint and steps into the function. The gdb outputs as follows:

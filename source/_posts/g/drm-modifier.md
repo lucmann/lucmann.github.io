@@ -2,7 +2,7 @@
 title: DRM format modifier
 date: 2020-11-11 15:35:43
 tags: [dri]
-categories: sys
+categories: graphics
 ---
 
 # FourCC

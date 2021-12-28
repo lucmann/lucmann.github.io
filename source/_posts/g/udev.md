@@ -2,7 +2,7 @@
 title: udev, sysfs & libudev
 date: 2021-05-19 11:38:10
 tags: [linux]
-categories: sys
+categories: graphics
 ---
 
 # udev

@@ -2,7 +2,7 @@
 title: glmark2-desktop
 date: 2021-03-23 16:08:16
 tags: [OpenGL]
-categories: bin
+categories: graphics
 ---
 
 # glmark2
