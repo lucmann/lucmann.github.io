@@ -1,9 +1,22 @@
 ---
 title: Draw Commands
 date: 2020-09-15 16:44:37
-tags: [OpenGL]
+tags: OpenGL
 categories: graphics
 ---
+
+# 绘制那些事
+
+OpenGL中有多种绘制(Draw)方式:
+
+- Basic
+- Indexed
+- Instanced
+- Indirect
+
+<!--more-->
+
+所谓的绘制，如果从pipeline的角度看，实际上主要是顶点着色(vertex shading)的过程。所以这些绘制方式中主要涉及的问题是顶点(vertices)及这些顶点如果构成图元(primitives)。这些绘制方式的不同主要在于它们各自是如何看待顶点，例如，在Basic绘制中，顶点就是顶点，而在Indexed绘制中，除了顶点本身外，还给出了构造三角形的顶点索引，这在特定场景下，是一种更有效率的绘制方式。
 
 # Category
 OpenGL中的Draw Commands是一组生成GPU渲染Command Stream的API，我们可以将它们简单分为4类:
@@ -14,8 +27,6 @@ OpenGL中的Draw Commands是一组生成GPU渲染Command Stream的API，我们�
 | Indexed   | 重复的顶点                     | GL_ELEMENT_ARRAY_BUFFER                     |
 | Instanced | 重复的模型(Instance/Model)     | GL_ARRAY_BUFFER<br>GL_ELEMENT_ARRAY_BUFFER  |
 | Indirect  | Drawing命令的参数直接放在GPU   | GL_DRAW_INDIRECT_BUFFER                     |
-
-<!--more-->
 
 Array Drawing是最基本的Draw命令，其它3类都是从它衍生来的，为了某种绘制便利或顶点复用对Array Drawing API进行扩展，从而得到相应的索引绘制、实例绘制、间接绘制。
 
