@@ -13,7 +13,7 @@ X11 Server编译后会生成若干动态链接库形式的驱动程序和一个�
 
 # 同一个使用glfw的OpenGL程序在Kylin V10系统上可以修改alpha通道改变窗口背景的透明度，而在Ubuntu Focal Fossa系统上却不能？
 
-Alpha通道控制窗口的透明度(transparency)。而上X11系统上，alpha通道是否可用，和X11 Server的RENDER扩展有关，下面来自glfw的代码是自明的(self-explanatory)
+Alpha通道控制窗口的透明度(transparency)。而X11窗口系统上，alpha通道是否可用，和X11 Server的RENDER扩展有关，下面来自glfw的代码是自明的(self-explanatory)
 
 ```
 GLFWbool _glfwIsVisualTransparentX11(Visual* visual)
@@ -26,7 +26,7 @@ GLFWbool _glfwIsVisualTransparentX11(Visual* visual)
 }
 ```
 
-关于系统上的X11 Server的RENDER扩展的信息可以通过`xdpyinfo`命令查看(此命令输出很多), 而且RENDER扩展大多数情况下是可用的
+关于系统上的X11 Server的RENDER扩展的信息可以通过`xdpyinfo`命令查看(此命令输出很多信息), 而且RENDER扩展大多数情况下是可用的
 
 ```
 xdpyinfo -ext RENDER
