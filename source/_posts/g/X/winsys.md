@@ -1,7 +1,8 @@
 ---
-title: winsys in Mesa
+title: mesa中的winsys层
 date: 2021-09-12 11:10:57
-tags: winsys
+tags: Window System
+categories: graphics
 ---
 
 # winsys有什么用
