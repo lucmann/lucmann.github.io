@@ -16,8 +16,9 @@ categories: misc
 
 # 频道 Channels
 
-- #dri-devel
-- #panfrost
+- [#dri-devel](https://webchat.oftc.net/)
+- [#llvm](https://webchat.oftc.net/)
+- [#panfrost](https://webchat.oftc.net/)
 
 # 短句 Acronym/Phrases
 
