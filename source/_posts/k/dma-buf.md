@@ -1,11 +1,11 @@
 ---
 title: Buffer Sharing and Synchronization
 date: 2021-09-15 18:30:15
-tags: [drm, dma-buf]
+tags: drm
 categories: kernel
 ---
 
-本文的标题来自[Linux Kernel 5.6.0-rc4文档](https://01.org/linuxgraphics/gfx-docs/drm/driver-api/dma-buf.html), dma-buf作为一个内核子系统，它的使用场景不局限于drm "[prime]()" multi-GPU支持，它主要由3个组件支撑:
+本文的标题来自[Linux Kernel 5.6.0-rc4文档](https://01.org/linuxgraphics/gfx-docs/drm/driver-api/dma-buf.html), dma-buf作为一个内核子系统，它的使用场景不局限于drm "[PRIME](https://blog.csdn.net/hexiaolong2009/article/details/105961192)" multi-GPU支持，它主要由3个组件支撑:
 
 <!--more-->
 

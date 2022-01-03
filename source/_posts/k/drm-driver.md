@@ -1,12 +1,14 @@
 ---
-title: DRM Driver
+title: 了解 Linux DRM 子系统
 date: 2021-04-12 17:07:27
-tags: [DRM]
+tags: drm
 categories: kernel
 ---
 
 # DRM driver features
+
 ## 新DRM驱动的特性
+
 - DRIVER_GEM
 
 使用**GEM**内存管理器，所有新的驱动都应该支持。
@@ -40,3 +42,8 @@ categories: kernel
 - DRIVER_HAVE_IRQ
 - DRIVER_KMS_LEGACY_CONTEXT
 
+# 内核 DRM 子系统是如何维护的
+
+# 参考
+
+[[0] DRM Maintainer Tools](https://drm.pages.freedesktop.org/maintainer-tools/repositories.html)

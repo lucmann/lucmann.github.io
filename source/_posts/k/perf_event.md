@@ -1,8 +1,8 @@
 ---
 title: Linux perf初探
 date: 2021-06-25 07:57:06
-tags: [perf]
-categories: [bin]
+tags: performance
+categories: kernel
 ---
 
 # 环境 & 版本

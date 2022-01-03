@@ -1,7 +1,7 @@
 ---
 title: TTM vs GEM
 date: 2021-08-19 15:42:45
-tags: [mm, vram]
+tags: drm
 categories: kernel
 ---
 
