@@ -1,11 +1,11 @@
 ---
-title: 除了编译gcc还能干什么
+title: gcc那些事儿
 date: 2021-04-15 15:58:26
-tags: [gcc]
+tags: gcc
 categories: programming
 ---
 
-# 交叉编译
+# 内置宏
 编译器会预定义许多宏，尤其在交叉编译时，不同的工具链编译器会定义不同的宏。例如:
 
 - __aarch64__
@@ -30,3 +30,5 @@ aarch64-linux-gnu-gcc -march=armv8-a -E -dM - < /dev/null
   * `-dU` 功能和`-dD`类似，但只输出那些被展开的宏或在预处理中被`#if`, `#ifndef`测试过的宏。
 
 # 内置函数
+
+- `__sync_val_compare_and_swap`
