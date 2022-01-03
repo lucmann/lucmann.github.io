@@ -20,6 +20,8 @@ categories: misc
 - [#llvm](https://webchat.oftc.net/)
 - [#panfrost](https://webchat.oftc.net/)
 
+如果你想知道谁在跟你交流或你的问题应该@谁，请查看[Who's Who on IRC](https://dri.freedesktop.org/wiki/WhosWho/)
+
 # 短句 Acronym/Phrases
 
 * AFAICT
