@@ -34,6 +34,7 @@ categories: kernel
 支持**drm_syncobj**的**timeline**特性
 
 ## 旧DRM驱动的特性
+
 - DRIVER_USE_AGP
 - DRIVER_LEGACY
 - DRIVER_PCI_DMA
@@ -43,6 +44,14 @@ categories: kernel
 - DRIVER_KMS_LEGACY_CONTEXT
 
 # 内核 DRM 子系统是如何维护的
+
+内核 DRM 子系统的代码仓库托管在cgit上，[Upstream DRM Subsystem Repository](https://cgit.freedesktop.org/drm/drm), 这个仓库最主要的两个分支
+
+- drm-next
+
+    这个分支的补丁包括 DRM 核心和所有 GPU 驱动的新特性
+
+- drm-fixes
 
 # 参考
 
