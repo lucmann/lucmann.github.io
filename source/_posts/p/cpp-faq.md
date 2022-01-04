@@ -31,3 +31,31 @@ Substitution Failure Is Not An Error
 
 - Don't declare objects `const` if you want to move from them.
 - Using `std::move` doesn't guarantee anything will be moved.
+
+# Frequently Asked Questions
+
+- 在 C++11 之前，编译器可能会为一个类创建的函数有哪些?
+
+- 如果要阻止一个类的对象被复制(copyable), 有哪些做法?
+
+    1. 将 copy 构造函数和 copy assignment 操作符声明为 private, 并不予实现。
+    2. 实现一个 base class, 这个 base class 的 copy 构造函数和 copy assignment 操作符都为 private。
+
+- C++ Template parameters 有哪几种?
+
+    1. non-type template parameter
+
+        - lvalue reference type
+        - integral type
+        - pointer type
+        - pointer member type
+        - enumeration type
+        - std::nullptr_t (自从C++11)
+        - floating type (自从C++20)
+
+    2. type template parameter
+    3. template template parameter
+
+- C++ Template 定义为什么通常都在头文件中?
+
+    因为 Template 定义必须在模板隐式实例化([implicit instantiation](https://lucmann.github.io/p/cpp-template/))之前，通常我们在`.cpp` 源文件里直接使用模板都属于隐式实例化。所以将模板定义在头文件中，可以有效防止模板实例化之前没有定义。
