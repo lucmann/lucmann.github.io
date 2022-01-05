@@ -16,9 +16,9 @@ template <class T, class U> T f(U obj); // Primary template
 template <class U> void f<void, U>(U obj); // Illegal
 ```
 
-# 模板的实例化(Instantiation)
+# 模板实例化(Template Instantiation)
 
-模板的实例化又分为Explicit Instantiation和Implicit Instantiation.
+模板的实例化分为Explicit Instantiation和Implicit Instantiation.
 
 ## Explicit Instantiation
 
@@ -35,6 +35,14 @@ template void f(int);  // explicit instantiation, template args deduced
 ```
 
 ## Implicit Instantiation
+
+实际中，我们使用模板的大多数时候都是 implicit instantiation, 即我们一般不会像上面一样，显式地声明一个具体类型的模板实例，更常见的是直接声明一个模板实例(type)的对象(object)。
+
+```cpp
+template<int... A> class NonTypeVariadicTemplate {};  // should be in .h
+
+NonTypeVariadicTemplate<1, 0, 2> ntvt; // implicit instantiation
+```
 
 # 模板特化(template specialisation)
 
@@ -89,7 +97,12 @@ struct remove_bounds<T[N]> {
 从这个例子可以看出:
 
 - 偏特化版本的模板参数的个数不一定和默认模板的相等
+
+    * 即 `<typename T, std::size_t N>` 比默认模板多出了 `std::size_t N`
+
 - 偏特化版本的类名后面的模板参数的个数和类型必须匹配默认模板的参数的个数和类型
+
+    * 即 `remove_bounds<T[N]>` 中的 `T[N]`
 
 # `typename` vs `class`
 
