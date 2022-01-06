@@ -32,6 +32,10 @@ categories: misc
     * As far as I know
     * 据我了解
 
+* AFAIU
+    * As far as I understand
+    * 按我理解
+
 * BTW
     * By the way
     * 顺便
