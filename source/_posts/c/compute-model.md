@@ -1,15 +1,15 @@
 ---
 title: CUDA Thread Hierarchy vs OpenGL Compute Shader Thread Hierarchy
 date: 2021-06-28 15:33:52
-tags: [cuda, compute]
-categories: usr
+tags: CUDA, OpenGL
+categories: computing
 ---
 
 # CUDA Thread Hierarchy
 
-<!--more-->
-
 {% asset_img cuda-thread-hier.png %}
+
+<!--more-->
 
 CUDA中的`kernel`是一段可在GPU独立运行的小程序，而且这段程序会被实例化(类似的说法还有**launched**, **issued**, **executed**, **invoked**)成非常多的`thread`, 这些线程可**并发地**在GPU上运行。程序员或者说编译器将这些线程组织成
 
