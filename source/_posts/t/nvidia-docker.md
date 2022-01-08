@@ -2,7 +2,7 @@
 title: CUDA on WSL2
 date: 2021-07-01 08:41:36
 tags: [wsl, cuda]
-categories: bin
+categories: tools
 ---
 
 {% asset_img nbody.png %}
