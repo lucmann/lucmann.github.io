@@ -59,3 +59,7 @@ Substitution Failure Is Not An Error
 - C++ Template 定义为什么通常都在头文件中?
 
     因为 Template 定义必须在模板隐式实例化([implicit instantiation](https://lucmann.github.io/p/cpp-template/))之前，通常我们在`.cpp` 源文件里直接使用模板都属于隐式实例化。所以将模板定义在头文件中，可以有效防止模板实例化之前没有定义。
+
+- `std::endl` 和 `\n` 有何区别？
+
+    对 `std::endl` 的每次调用都会 flush output buffer
