@@ -75,3 +75,12 @@ categories: misc
 * WFM
     * Work for me
     * 对我来说可以
+
+# 粘贴服务 Paste Service
+
+在 IRC 上交流时，有时可能需要粘贴 Log，Config 之类的大段文本，但这些又不便直接粘到 IRC 上，这时以下基于 Web 的 Paste 服务可能帮得上你
+
+- [http://ix.io](http://ix.io)
+- [https://paste.rs](https://paste.rs)
+- [https://bpaste.net](https://bpaste.net)
+- [https://gist.github.com](https://gist.github.com)
