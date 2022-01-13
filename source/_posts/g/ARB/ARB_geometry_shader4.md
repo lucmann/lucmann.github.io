@@ -65,3 +65,21 @@ out gl_PerVertex {
 out int gl_PrimitiveID;
 out int gl_Layer;
 ```
+
+# Geometry Shader Built-in Functions
+
+- `void EmitVertex()`
+
+    向当前的输出图元增加一个顶点，也即表示一个顶点完成了。增加一个顶点的意思是，使用 GS 中输出变量的当前值做为这个顶点的相关值，一旦 `EmitVertex()` 返回后，这些输出变量的值都将变成未定义的，这些输出变量包括
+
+    * `gl_Position` (vec4)
+    * `gl_PointSize` (float)
+    * `gl_ClipDistance` (float)
+    * `gl_PrimitiveID` (integer)
+    * `gl_Layer` (integer)
+
+    前3个其实就是 `gl_PerVertex`
+
+- `void EndPrimitive()`
+
+    表示当前的图元输出完成，开始由后续的 `EmitVertex()` 输出下一个图元。如果 GS 只写一个图元，可以不用调 `EndPrimitive()`。

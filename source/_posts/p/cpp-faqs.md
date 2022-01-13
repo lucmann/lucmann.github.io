@@ -63,3 +63,51 @@ Substitution Failure Is Not An Error
 - `std::endl` 和 `\n` 有何区别？
 
     对 `std::endl` 的每次调用都会 flush output buffer
+
+- Qt
+
+    - 信号与槽
+    - 对象管理
+
+- pure virtual vs. virtual function
+
+- g++ 指定 -std=c++11
+
+- 并行编程模型/框架，多线程
+
+    - std::atomic
+    - std::thread
+
+
+# Linux & C
+
+- vim 有哪几种工作模式
+
+Normal mode:
+
+a
+10yy
+dgg
+dG
+10j
+
+Command-line mode:
+
+10,.y
+g/^$/d
+s/hello//
+s/hello//g
+s/Hello,/& World/
+
+- gdb common commands
+
+backtrace (bt)
+command (comm)
+continue (c)
+finish (fin)
+frame (frame)
+
+- epoll vs. poll vs. select
+
+- C 中的 `static` 关键字常见用法
+
