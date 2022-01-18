@@ -111,3 +111,9 @@ frame (frame)
 
 - C 中的 `static` 关键字常见用法
 
+# GPUImage 如果使用 OpenGL ES 2.0，为什么不能在 iPhone, iPhone 3G 和 1st and 2nd generation iPod touches 上运行?
+
+# OpenGL ES 到目前为止一共有几个版本？
+
+1.0, 1.1, 2.0 (开始支持 shader), 3.0, 3.1, 3.2
+

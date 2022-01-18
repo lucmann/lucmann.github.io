@@ -99,14 +99,14 @@ Khronos-approved, multivendor, 以及vendor-specific extensions都可以被_晋�
 | 4.6        | 2017    | 4.60         | #version 460 |
 
 ## OpenGL (Shading Language) ES Version
-| ES Version | Release | GLSL ES Version | Preprocessor   | Based on GLSL |
-|:----------:|:-------:|:---------------:|:---------------|:-------------:|
-| 1.0        | 2003    |                 |                |               | 
-| 1.1        | 2004    |                 |                |               |
-| 2.0        | 2007    | 1.00            | #version 100   | 1.20          |
-| 3.0        | 2012    | 3.00            | #version 300 es| 3.30          |
-| 3.1        | 2014    | 3.10            | #version 310 es| 3.30          |
-| 3.2        | 2015    | 3.20            | #version 320 es| 3.30          |
+| OpenGL ES  | Release | GLSL ES (ESSL)  | Directive         | GLSL based |
+|:----------:|:-------:|:---------------:|:------------------|:----------:|
+| 1.0        | 2003    | N/A             | N/A               | N/A        | 
+| 1.1        | 2004    | N/A             | N/A               | N/A        |
+| 2.0        | 2007    | 1.00            | `#version 100`    | 1.20       |
+| 3.0        | 2012    | 3.00            | `#version 300 es` | 3.30       |
+| 3.1        | 2014    | 3.10            | `#version 310 es` | 3.30       |
+| 3.2        | 2015    | 3.20            | `#version 320 es` | 3.30       |
 
 # `PIPE_CAP_*` vs Extensions in Mesa
 
