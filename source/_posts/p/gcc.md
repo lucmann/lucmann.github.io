@@ -29,6 +29,10 @@ aarch64-linux-gnu-gcc -march=armv8-a -E -dM - < /dev/null
   * `-dI` 除了预处理结果外，还输出`#include`.
   * `-dU` 功能和`-dD`类似，但只输出那些被展开的宏或在预处理中被`#if`, `#ifndef`测试过的宏。
 
+## [`__builtin_offsetof`](https://gcc.gnu.org/onlinedocs/gcc/Offsetof.html)
+
+- C/C++ 宏 `offsetof` 包含在头文件 `stddef.h`
+
 # 内置函数
 
 - `__sync_val_compare_and_swap`
