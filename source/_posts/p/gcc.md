@@ -33,6 +33,17 @@ aarch64-linux-gnu-gcc -march=armv8-a -E -dM - < /dev/null
 
 - C/C++ 宏 `offsetof` 包含在头文件 `stddef.h`
 
-# 内置函数
+# 内置函数 Built-in Functions
 
-- `__sync_val_compare_and_swap`
+## [`__builtin_clz`](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html)
+
+`int __builtin_clz(unsigned int x);`
+
+返回一个数的高位端的 `0` 的个数
+
+## [`__sync_val_compare_and_swap`](https://gcc.gnu.org/onlinedocs/gcc-4.1.2/gcc/Atomic-Builtins.html)
+
+- `type __sync_val_compare_and_swap (type *ptr, type oldval, type newval, ...)`
+
+内置的原子比较和交换操作，也就是说，如果 `*ptr` 的当前值是 `oldval`, 则把 `newval` 写入 `*ptr`, 并且返回写入前的 `*ptr` 值。
+
