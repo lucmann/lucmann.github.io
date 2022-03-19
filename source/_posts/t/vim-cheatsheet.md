@@ -5,6 +5,23 @@ tags: vim
 categories: tools
 ---
 
+# 粘贴/复制
+
+## X11 selections
+
+X11 window system 有 3 个 selections:
+
+- PRIMARY 表示当前的可见 selection
+- SECONDARY
+- CLIPBOARD 通常所说的剪贴板，用来完成剪贴，复制和粘贴操作
+
+Vim 有两个专门的寄存器分别与 PRIMARY selection 和 CLIPBOARD selection 对应
+
+- **"\*** (quotestar) PRIMARY
+- **"+** (quoteplus) CLIPBOARD
+
+如果要在 Vim 内部剪贴，复制/粘贴就使用 **quotestar**, 如果要将内容剪贴，复制/粘贴到系统剪贴板，就使用 **quoteplus**
+
 # 查找/替换 Search/Replace
 
 ## 删除多行 C-style 注释
