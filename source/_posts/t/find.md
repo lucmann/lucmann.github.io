@@ -24,7 +24,7 @@ categories: utilities
 
 ## 测试的目录
 
-<p>
+```
 ➜  phy git:(main) ls -1 -a
 .
 ..
@@ -34,4 +34,4 @@ categories: utilities
 README.md
 phy.png
 phy.py
-</p>
+```

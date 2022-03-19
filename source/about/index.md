@@ -4,9 +4,20 @@ date: 2020-02-05 19:14:44
 layout: about
 ---
 
-# About me
+# 关于我
 
-- 图形学和编程爱好者，主要关注的方面有[GPU](https://www.gpuinsight.com/), OpenGL, Vulkan, GLSL等。
-- 感兴趣的开源项目有[Mesa](https://gitlab.freedesktop.org/lucmann/mesa), [LLVM](https://github.com/llvm/llvm-project).
-- 主要使用C++, Python.
-- 个人生活爱好有Logo Design, [Postcrossing](https://www.postcrossing.com/), 围棋等。
+- 中年程序员
+- 从事过通信软件的开发和 Linux 图形驱动的开发工作
+- 感兴趣的技术方向
+    * [图形 GPU](https://www.gpuinsight.com/)
+    * [Linux kernel](https://git.kernel.org/pub/scm/linux/kernel/git)
+    * [Khronos Vulkan](https://www.khronos.org/registry/vulkan/)
+    * 其它任何能让生活和工作变得不那么费劲的技术
+- 参与过的开源项目
+    * [Mesa](https://gitlab.freedesktop.org/mesa/mesa)
+    * [The Ultimate vimrc](https://github.com/amix/vimrc).
+- 除了代码之外的乐趣
+    * 电影
+    * [读书](https://zh.z-lib.org/)
+    * [明信片](https://www.postcrossing.com/)
+    * [围棋](http://www.eweiqi.com/)
