@@ -2,7 +2,7 @@
 title: vim 速查手册
 date: 2020-02-29 21:58:03
 tags: vim
-categories: tools
+categories: utilities
 ---
 
 # 粘贴/复制

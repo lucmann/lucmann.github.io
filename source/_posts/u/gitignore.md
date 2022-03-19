@@ -2,7 +2,7 @@
 title: gitignore
 date: 2021-01-25 20:42:05
 tags: git
-categories: tools
+categories: utilities
 ---
 
 # 记几个与gitignore相关的命令：

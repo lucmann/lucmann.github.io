@@ -2,7 +2,7 @@
 title: WSLg Has Come
 date: 2021-04-25 11:53:40
 tags: [WSL2]
-categories: tools
+categories: utilities
 ---
 
 Microsoft在`Build 21364.co_release`版本内发布了[WSLg](https://github.com/microsoft/wslg)功能，该功能允许在**WSL**里运行**X11**和**Wayland**的客户端程序(GUI Application).
