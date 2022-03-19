@@ -117,3 +117,22 @@ frame (frame)
 
 1.0, 1.1, 2.0 (开始支持 shader), 3.0, 3.1, 3.2
 
+# GLSL 语言里 vs fs 里的内置变量和内置函数
+
+- vs
+    * `gl_VertexID`
+    * `gl_InstanceID`
+    * `gl_Position`
+    * `gl_PointSize`
+- fs
+    * `in   highp   vec4    gl_FragCoord`
+    * `in           bool    gl_FrontFacing`
+    * `out  highp   float   gl_FragDepth`
+    * `in   mediump vec2    gl_PointCoord`
+
+# GLSL 语言里 Varying vs Uniform 的区别
+
+# 举一个滤镜的例子，说说它的实现和算法，及使用到的 OpenGL ES 的扩展/功能
+
+# 说说 OGRE 渲染引擎的优缺点
+
