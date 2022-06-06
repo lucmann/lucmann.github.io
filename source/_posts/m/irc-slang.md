@@ -52,6 +52,10 @@ categories: misc
     * Hope this helps
     * 希望奏效
 
+* IDK
+    * I don't know
+    * 我不知道
+
 * IIRC
     * If I recall correctly / If I remember correctly
     * 如果我没有记错
