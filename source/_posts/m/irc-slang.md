@@ -24,61 +24,22 @@ categories: misc
 
 # 短句 Acronym/Phrases
 
-* AFAICT
-    * As far as I can tell
-    * 个人认为
-
-* AFAIK
-    * As far as I know
-    * 据我了解
-
-* AFAIU
-    * As far as I understand
-    * 按我理解
-
-* BTW
-    * By the way
-    * 顺便
-
-* FWIW
-    * For what it's worth
-    * 陈述见解或建议的谦逊说法，比如我觉得这是有用的信息，但是从听者的角度未必也是。
-
-* FYI
-    * For your information
-    * 供您参考
-
-* HTH
-    * Hope this helps
-    * 希望奏效
-
-* IDK
-    * I don't know
-    * 我不知道
-
-* IIRC
-    * If I recall correctly / If I remember correctly
-    * 如果我没有记错
-
-* IMHO
-    * In my humble opinion
-    * 在下愚见
-
-* IMO
-    * In my opinion
-    * 依我之见
-
-* LGTM
-    * Looks good to me
-    * 我看不错
-
-* TBH
-    * To be honest
-    * 老实讲
-
-* WFM
-    * Work for me
-    * 对我来说可以
+| Acronym | Phrase | 中文 |
+|:--------|:-------|:-----|
+| AFAICT | As far as I can tell | 个人认为 |
+| AFAIK | As far as I know | 据我了解 |
+| AFAIU | As far as I understand | 按我理解 |
+| BTW | By the way | 顺便 |
+| FWIW | For what it's worth | 陈述见解或建议的谦逊说法，比如我觉得这是有用的信息，但是从听者的角度未必也是 |
+| FYI | For your information | 供您参考 |
+| HTH | Hope this helps | 希望奏效 |
+| IDK | I don't know | 我不知道 |
+| IIRC | If I recall correctly / If I remember correctly | 如果我没有记错 |
+| IMHO | In my humble opinion | 在下愚见 |
+| IMO | In my opinion | 依我之见 |
+| LGTM | Looks good to me | 我看不错 |
+| TBH | To be honest | 老实讲 |
+| WFM | Work for me | 对我来说可以 |
 
 # 粘贴服务 Paste Service
 
