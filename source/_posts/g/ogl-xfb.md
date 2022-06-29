@@ -143,7 +143,7 @@ Transform Feedback模式被激活后，在没有调用`glPauseTransformFeedback`
 - 重新申请这些绑定的`GL_TRANSFORM_FEEDBACK_BUFFER`的存储
 - 修改当前使用的program, 也就是不能调用`glUseProgram`或`glBindProgramPipeline`, 还有`glUseProgramStages`
 
-即出Transform Feedback模式调用:
+退出Transform Feedback模式调用:
 
 ```
 void glEndTransformFeedback();
