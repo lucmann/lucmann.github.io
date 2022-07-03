@@ -1,7 +1,7 @@
 ---
 title: CUDA on WSL2
 date: 2021-07-01 08:41:36
-tags: [wsl, cuda]
+tags: [WSL, CUDA]
 categories: utilities
 ---
 

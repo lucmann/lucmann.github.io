@@ -1,7 +1,7 @@
 ---
 title: CUDA Thread Hierarchy vs OpenGL Compute Shader Thread Hierarchy
 date: 2021-06-28 15:33:52
-tags: CUDA, OpenGL
+tags: [CUDA, OpenGL]
 categories: computing
 ---
 

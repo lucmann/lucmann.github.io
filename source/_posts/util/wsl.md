@@ -1,9 +1,19 @@
 ---
-title: Windows Insider Program
+title: Windows Subsystem for Linux
 date: 2020-02-08 17:57:46
-tags: [wsl]
-categories: graphics
+tags: [WSL]
+categories: utilities
 ---
+
+# WSL 是何物?
+
+[WSL](https://zh.wikipedia.org/zh-cn/%E9%80%82%E7%94%A8%E4%BA%8ELinux%E7%9A%84Windows%E5%AD%90%E7%B3%BB%E7%BB%9F)是一个能够在 Windows 系统(Windows 10及以上版本)上原生运行 Linux 可执行文件的兼容层。
+
+个人感觉有了 WSL/WSL2 后，以下事物基本成为过去:
+
+- 双系统 (Windows + Linux)
+- [Cygwin](https://www.cygwin.com/)
+- VMWare (Windows Host 上安装 Linux Guests)
 
 The story begins with debugging an OpenGL demo on the WSL with the Mesa libraries compiled by myself. Every time the executable will crash when it stops at the breakpoint and steps into the function. The gdb outputs as follows:
 ``` bash

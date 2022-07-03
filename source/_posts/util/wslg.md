@@ -1,7 +1,7 @@
 ---
 title: WSLg Has Come
 date: 2021-04-25 11:53:40
-tags: [WSL2]
+tags: [WSL]
 categories: utilities
 ---
 
