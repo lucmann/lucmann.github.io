@@ -62,9 +62,66 @@ __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
 ```
 I did not consider this crash as a WSL bug until I found this [issue](https://github.com/Microsoft/WSL/issues/3618) on the github. Then I realized that I had to update my WSL that is updated as the Windows is updated. The easy way to get the latest Windows build version is to register the [Windows Insider Program](https://insider.windows.com/zh-cn/) that only requires
 
-- Windows 10
-- Microsoft Account
+# WSLg
 
-Once you register successfully, you can check the Windows Updates for the latest Windows build.
+Microsoft在`Build 21364.co_release`版本内发布了[WSLg](https://github.com/microsoft/wslg)功能，该功能允许在**WSL**里运行**X11**和**Wayland**的客户端程序(GUI Application).
 
-{% asset_img windows_update.png windows-updates %}
+<!--more-->
+
+如果你已经加入[Windows Insider Program](https://insider.windows.com/zh-cn/)计划并且也正在使用**WSL2**, 那么只需要如下操作即可激活**WSLg**功能。
+
+```
+PS C:\Windows\system32> wsl --update
+正在检查更新...
+正在下载更新...
+正在安装更新...
+此更改将在 WSL 下次完全重启时生效。若要强制重启，请运行“wsl --shutdown”。
+内核版本： 5.10.60.1
+```
+
+启动 WSL2 后，查看内核版本
+
+```
+➜  ~ uname -r
+5.10.60.1-microsoft-standard-WSL2
+```
+
+升级 WSL2 后，在 `/mnt` 目录下会比原来多出一个 `wslg` 的目录
+
+```
+➜  ~ cd /mnt/
+c/     wsl/   wslg/
+```
+
+## nautilus
+
+```
+apt install nautilus -y
+```
+
+![WSLg nautilus](wsl/wslg-nautilus.png) 
+
+## glmark2
+
+![WSLg glmark2](wsl/wslg-glmark2.png) 
+
+# WSL 如何支持 Nvidia
+
+在 `/usr/lib/wsl/lib` 下默认安装了这些 shared libraries (usermode driver). 而且搭配了自动生成的 `/etc/ld.so.conf.d/ld.wsl.conf` 文件，能够让动态库加载器正确找到 nvidia 相关的库。
+
+- libcuda.so
+- libcuda.so.1
+- libcuda.so.1.1
+- libd3d12.so
+- libd3d12core.so
+- libdxcore.so
+- libnvcuvid.so
+- libnvcuvid.so.1
+- libnvdxdlkernels.so
+- libnvidia-encode.so
+- libnvidia-encode.so.1
+- libnvidia-ml.so.1
+- libnvidia-opticalflow.so
+- libnvidia-opticalflow.so.1
+- libnvwgf2umx.so
+- nvidia-smi
