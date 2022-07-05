@@ -1,7 +1,7 @@
 ---
-title: Notes on Linker on Linux
+title: Build Software on Linux
 date: 2022-06-15 17:02:49
-tags: linker
+tags: build
 categories: programming
 ---
 
@@ -47,4 +47,45 @@ drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/share/man/man1/
 -rwxr-xr-x root/root      2235 2020-02-07 17:04 ./usr/share/pkg-config-crosswrapper
 -rwxr-xr-x root/root      1826 2020-02-07 17:04 ./usr/share/pkg-config-dpkghook
 drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/share/pkgconfig/
+```
+
+# `lib*-dev` 与 `lib*` 的区别
+
+```
+$ dpkg -L libxcb1
+/.
+/usr
+/usr/lib
+/usr/lib/x86_64-linux-gnu
+/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+/usr/share
+/usr/share/doc
+/usr/share/doc/libxcb1
+/usr/share/doc/libxcb1/changelog.Debian.gz
+/usr/share/doc/libxcb1/copyright
+/usr/lib/x86_64-linux-gnu/libxcb.so.1
+```
+
+```
+$ dpkg -L libxcb1-dev
+/.
+/usr
+/usr/include
+/usr/include/xcb
+/usr/include/xcb/bigreq.h
+/usr/include/xcb/xc_misc.h
+/usr/include/xcb/xcb.h
+/usr/include/xcb/xcbext.h
+/usr/include/xcb/xproto.h
+/usr/lib
+/usr/lib/x86_64-linux-gnu
+/usr/lib/x86_64-linux-gnu/libxcb.a
+/usr/lib/x86_64-linux-gnu/pkgconfig
+/usr/lib/x86_64-linux-gnu/pkgconfig/xcb.pc
+/usr/share
+/usr/share/doc
+/usr/share/doc/libxcb1-dev
+/usr/share/doc/libxcb1-dev/copyright
+/usr/lib/x86_64-linux-gnu/libxcb.so
+/usr/share/doc/libxcb1-dev/changelog.Debian.gz
 ```
