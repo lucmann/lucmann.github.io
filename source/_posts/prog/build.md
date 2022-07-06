@@ -1,5 +1,5 @@
 ---
-title: Build Software on Linux
+title: Build And Run A Program on Linux
 date: 2022-06-15 17:02:49
 tags: build
 categories: programming
@@ -14,6 +14,8 @@ categories: programming
 - 链接器从哪里找到动态库?
 
 # `pkg-config` vs `ldconfig`
+
+## pkg-config
 
 `dpkg-deb --contents /var/cache/apt/archives/pkg-config_0.29.1-0ubuntu4_amd64.deb`
 
@@ -88,4 +90,27 @@ $ dpkg -L libxcb1-dev
 /usr/share/doc/libxcb1-dev/copyright
 /usr/lib/x86_64-linux-gnu/libxcb.so
 /usr/share/doc/libxcb1-dev/changelog.Debian.gz
+```
+
+## `/usr/sbin/ldconfig`
+
+Configure Dynamic Linker Run Time Bindings
+
+```sh
+#!/bin/sh
+
+if  test $# = 0							\
+    && test x"$LDCONFIG_NOTRIGGER" = x				\
+ && test x"$DPKG_MAINTSCRIPT_PACKAGE" != x			\
+ && dpkg-trigger --check-supported 2>/dev/null
+then
+	if dpkg-trigger --no-await ldconfig; then
+		if test x"$LDCONFIG_TRIGGER_DEBUG" != x; then
+			echo "ldconfig: wrapper deferring update (trigger activated)"
+		fi
+		exit 0
+	fi	
+fi
+
+exec /sbin/ldconfig.real "$@"
 ```
