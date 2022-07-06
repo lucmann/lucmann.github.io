@@ -134,3 +134,47 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
 - CMAKE_SOURCE_DIR
 
 指所在工程顶层目录绝对路径，一般源码`clone`下来后就确定了。
+
+# `find_package()` vs `pkg_check_modules()`
+
+## `find_package()`
+
+```
+find_package(Gradle REQUIRED 4.10)
+find_package(Vulkan QUIET)
+find_package(PkgConfig REQUIRED)
+find_package(${ARGN})
+find_package (PkgConfig)
+find_package(Doxygen)
+find_package(X11 REQUIRED)
+find_package(EpollShim)
+find_package(OSMesa REQUIRED)
+find_package(Threads)
+find_package (Threads)
+find_package(Boost COMPONENTS regex)
+find_package(fmt REQUIRED CONFIG)
+find_package(PythonInterp REQUIRED)
+find_package(Python COMPONENTS Interpreter REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+find_package(Threads REQUIRED)
+find_package(Vulkan)
+find_package(SDL2 REQUIRED)
+find_package(assimp REQUIRED)
+find_package( ZLIB REQUIRED )
+find_package(Git QUIET)
+find_package(Threads)
+find_package(Git QUIET)
+find_package(Sanitizers)
+find_package(Boost 1.61 REQUIRED)
+```
+
+## `pkg_check_modules()`
+
+```
+pkg_check_modules(XCB xcb REQUIRED)
+pkg_check_modules(X11 x11 REQUIRED)
+pkg_check_modules(WAYLAND wayland-client REQUIRED)
+pkg_check_modules (PKG_OSMESA QUIET osmesa)
+pkg_check_modules(Wayland REQUIRED
+pkg_check_modules(WAYLAND_PROTOCOLS REQUIRED wayland-protocols>=1.15)
+```

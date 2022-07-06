@@ -22,6 +22,23 @@ Vim 有两个专门的寄存器分别与 PRIMARY selection 和 CLIPBOARD selecti
 
 如果要在 Vim 内部剪贴，复制/粘贴就使用 **quotestar**, 如果要将内容剪贴，复制/粘贴到系统剪贴板，就使用 **quoteplus**
 
+举个例子，在 WSL Ubuntu 里如果想粘贴 Windows 剪贴板里的内容到 vim (最好是 neovim, 因为 vim 可能 -clipboard)
+
+```
+echo "Hello, world!" | clip.exe
+```
+
+然后在 Normal 模式下， `"+p`.
+
+如果想粘贴 Ubuntu 剪贴板里的内容
+
+```
+echo "Hello, world!" | xclip
+```
+
+此时就需要使用 PRIMARY selection, `"*p`.
+
+
 # 查找/替换 Search/Replace
 
 ## 删除多行 C-style 注释
