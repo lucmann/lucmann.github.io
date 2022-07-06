@@ -1,11 +1,17 @@
 ---
-title: 英语角：IRC那些短语
+title: English Corner
 date: 2021-12-18 20:20:40
 tags: English
 categories: misc
 ---
 
-# [IRC(Internet Relay Chat)](https://zh.wikipedia.org/wiki/IRC)
+> A language that doesn't affect the way you think about programming, is not worth knowing.
+>
+> -- <cite>Alan J. Perlis, Recipient of 1966 Turing Award</cite>
+
+# IRC
+
+## [IRC(Internet Relay Chat)](https://zh.wikipedia.org/wiki/IRC)
 
 - 一种应用层协议，用于聊天沟通 
 - 一种开源社区常用的通讯方式
@@ -14,7 +20,7 @@ categories: misc
 
 <!--more-->
 
-# 频道 Channels
+## 频道 Channels
 
 - [#dri-devel](https://webchat.oftc.net/)
 - [#llvm](https://webchat.oftc.net/)
@@ -22,7 +28,7 @@ categories: misc
 
 如果你想知道谁在跟你交流或你的问题应该@谁，请查看[Who's Who on IRC](https://dri.freedesktop.org/wiki/WhosWho/)
 
-# 短句 Acronym/Phrases
+## 短句 Acronym/Phrases
 
 | Acronym | Phrase | 中文 |
 |:--------|:-------|:-----|
@@ -49,3 +55,8 @@ categories: misc
 - [https://paste.rs](https://paste.rs)
 - [https://bpaste.net](https://bpaste.net)
 - [https://gist.github.com](https://gist.github.com)
+
+# Translation
+
+- "Willing to rubberstamp regardless of this is helping v10 r/e, but I would like to understand what we're up against here."
+- 无论这个是否有助于 v10 r/e，我都愿意给你通过(不检查), 但我还是想明白我们所面临的问题。
