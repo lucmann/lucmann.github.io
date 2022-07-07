@@ -5,7 +5,23 @@ tags: vim
 categories: utilities
 ---
 
-# 粘贴/复制
+# Visual Block Selection
+
+- 选择 `{}`(curly braces) 之间的行(包括 `{}`)
+
+    ```
+    v%
+    ```
+
+- 选择 `{}`(curly braces) 之间的行(不包括 `{}`)
+
+    ```
+    vi{
+    ```
+
+注意：光标必须放在 `{` 或者 `}`
+
+# Copy & Paste
 
 ## X11 selections
 
@@ -39,7 +55,7 @@ echo "Hello, world!" | xclip
 此时就需要使用 PRIMARY selection, `"*p`.
 
 
-# 查找/替换 Search/Replace
+# Search & Replace
 
 ## 删除多行 C-style 注释
 
