@@ -1,7 +1,7 @@
 ---
-title: Know find command
+title: find
 date: 2022-03-19 22:18:16
-tags: command-line
+tags: shell
 categories: utilities
 ---
 
