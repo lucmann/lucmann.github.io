@@ -69,6 +69,7 @@ cmake --build build --target help
 ```
 
 # Guideline
+
 - Declare your module with `ADD_LIBRARY` or `ADD_EXECUTABLE`.
 - Declare your build flags with `TARGET_xxx()`.
 - Declare your dependencies with `TARGET_LINK_LIBRARIES`
@@ -100,9 +101,16 @@ cmake --build build --target help
 - Don't use `TARGET_LINK_LIBRARIES()` without specifying `PUBLIC`, `PRIVATE` or `INTERFACE`.
 
 # Targets and Properties
+
 Modern CMake更像一个面向对象编程语言， Targets是Objects, 它们有Properties(Member Variables)和Commands(Methods), 
 Targets的Properties包括编译这个Target的源文件，编译选项，以及最后链接的库这些都是一个Target的Properties. 只要是Properties，就有这个Property的作用域(Scope). Properties也有作用域的概念(scope), 对应`INTERFACE`和`PRIVATE`. 
 INTERFACE properties是外部用的，也就是给导入或使用本Targets的其它Targets用的。PRIVATE properties是Targets内部用的。
+
+## CMake Inheritance
+
+### Include Inheritance
+
+在 CMake 中，在预处理阶段搜索头文件是从 `INCLUDE_DIRECTORIES` 和 `INTERFACE_INCLUDE_DIRECTORIES` 这两个变量里包含的路径中搜索。`target_include_directories` 会将指定的路径都加入 `INCLUDE_DIRECTORIES`, 但是会依据 `<PRIVATE|PUBLIC|INTERFACE>` 有选择地将指定路径加入 `INTERFACE_INCLUDE_DIRECTORIES`. `INCLUDE_DIRECTORIES` 包含的路径只会被**当前 target** 作为搜索路径, 而 `INTERFACE_INCLUDE_DIRECTORIES` 包含的路径会被加到任何依赖当前 target 的 target 的 `INCLUDE_DIRECTORIES`.
 
 # Generator Expressions
 Generator Expressions（生成表达式）是指在生成构建系统的过程中（如果是Make构建系统，就是在生成Makefile的过程中）针对每个构建配置生成特定的值. 生成表达式有3类:
