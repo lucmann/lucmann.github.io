@@ -68,6 +68,12 @@ cmake -L build
 cmake --build build --target help
 ```
 
+# CMake's `-D`
+
+- `-DCMAKE_EXPORT_COMPILE_COMMANDS=True`    : 生成 `compile_commands.json`, 用来在像 CLion 这样的 IDE 里创建 index
+- `-DCMAKE_VERBOSE_MAKEFILE=True`           : 产生非常详细的编译过程日志，包括目录改变，编译和链接
+- `-DCMAKE_INSTALL_PREFIX=/path/to/install` : 自定义安装路径
+
 # Guideline
 
 - Declare your module with `ADD_LIBRARY` or `ADD_EXECUTABLE`.
