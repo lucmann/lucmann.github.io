@@ -54,6 +54,12 @@ echo "Hello, world!" | xclip
 
 此时就需要使用 PRIMARY selection, `"*p`.
 
+## Copy from above or below
+
+在 Insert 模式下
+
+- `<ctrl-y>` copies the character from the line above
+- `<ctrl-e>` copies the character from the line below (本行就是这样输入的)
 
 # Search & Replace
 
