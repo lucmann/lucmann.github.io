@@ -26,3 +26,17 @@ Sogou 输入法真心做得不错，支持主流的国产 Linux 操作系统。�
 另外，`sogoupinyin-configtool` 也在上面这个目录，而且 sogoupinyin 也支持五笔
 
 ![sogoupinyin config interface](sogoupinyin-configtool.png)
+
+# Alacritty
+
+[Alacritty](https://github.com/alacritty/alacritty)是一个 GPU 加速的 Terminal Emulator.
+
+升级系统后，感觉系统默认的 `gnome-terminal` 的标题栏很碍眼，所以想换一个新的 Terminal Emulator 试试，就选择了之前在学习 Rust 时听说过的 Alacritty, 但目前 Jammy Jellyfish 的官方 PPA 里并没有它的安装包。下面这个 PPA 安装过程很丝滑, 而且它自动将安装好的 `/usr/bin/alacritty` 设置为默认的 `x-terminal-emulator`
+
+```
+sudo add-apt-repository ppa:aslatter/ppa
+```
+
+安装后，`Ctrl-Alt-T`，Good Looking
+
+![Alacritty](alacritty-first-sight.png)
