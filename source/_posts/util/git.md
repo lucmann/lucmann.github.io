@@ -257,8 +257,6 @@ Submodule path 'third_party/vma': checked out 'f9921aefddee2437cc2e3303d3175bd8e
 Submodule path 'third_party/vulkan': checked out '76f00ef6cbb1886eb1162d1fa39bee8b51e22ee8'
 ```
 
-![git-submodule-update](git-submodule-update.png)
-
 # gitignore
 
 ## 记几个与gitignore相关的命令：
