@@ -1,7 +1,7 @@
 ---
-title: 多PCI显卡共存场景下的Linux VGA仲裁(vgaarbiter)
+title: 多 VGA 设备: linux vgaarbiter
 date: 2021-05-14 11:20:00
-tags: [xorg, linux]
+tags: [2D, linux]
 categories: graphics
 ---
 
