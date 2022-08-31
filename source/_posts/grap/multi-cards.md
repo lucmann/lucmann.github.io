@@ -1,5 +1,5 @@
 ---
-title: 多 VGA 设备: linux vgaarbiter
+title: Linux vgaarbiter
 date: 2021-05-14 11:20:00
 tags: [2D, linux]
 categories: graphics
