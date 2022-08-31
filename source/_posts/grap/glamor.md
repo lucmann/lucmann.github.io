@@ -1,7 +1,7 @@
 ---
 title: glamor
 date: 2020-11-10 08:04:15
-tags: [xorg]
+tags: [2D]
 categories: graphics
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Debugging X11 with tcpdump
 date: 2020-02-24 09:18:03
-tags: Window System
+tags: [2D]
 categories: graphics
 ---
 
