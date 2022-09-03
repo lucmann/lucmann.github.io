@@ -1,11 +1,12 @@
 ---
-title: Linux vgaarbiter
+title: Device Probe in Xorg
 date: 2021-05-14 11:20:00
-tags: [2D, linux]
+tags: [2D]
 categories: graphics
 ---
 
-# 引子
+# Output Selection on Multi-Cards System
+
 本文想尝试回答的问题是，当主板上同时存在多张PCI显卡，但只有一个显示器(假设显示器至少有两个HDMI接口)时，Linux系统是如何选择优先使用哪一张显卡输出的。
 
 <!--more-->

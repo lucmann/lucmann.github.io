@@ -1,7 +1,7 @@
 ---
-title: Mesa Gallium驱动框架
+title: Mesa Gallium 驱动框架
 date: 2021-04-08 08:07:49
-tags: [Mesa]
+tags: [mesa]
 categories: graphics
 ---
 
