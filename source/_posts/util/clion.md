@@ -26,7 +26,7 @@ Non-Bundled Plugins: IdeaVIM, Lua, io.zhile.research.ide-eval-resetter, zielu.gi
 
 # On CLion with WSL
 
-## Avoid annoying event reporter every startup
+## Avoid annoying event notification every startup
 
 - filesystem case-sensitivity mismatch
 
