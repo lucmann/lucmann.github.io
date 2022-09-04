@@ -39,6 +39,6 @@ Non-Bundled Plugins: IdeaVIM, Lua, io.zhile.research.ide-eval-resetter, zielu.gi
 这两个问题其实都是我在使用 WSL 的原因，避免方法也很简单 `C:\Users\whoami\AppData\Roaming\JetBrains\CLion2020.2\idea.properties`
 
 ```
-idea.case.sesitive.fs=true
+idea.case.sensitive.fs=true
 idea.filewatcher.disabled=true
 ```
