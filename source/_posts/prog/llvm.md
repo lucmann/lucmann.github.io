@@ -12,7 +12,12 @@ LLVM 是 Low-Level Virtual Machine 的简写，但事实上它与虚拟机关系
 # Building LLVM
 
 ```
-cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_INSTALL_PREFIX=~/.local/llvm -DLLVM_ENABLE_PROJECTS="clang;lld" -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi"
+cmake -S llvm -B build -G Ninja \
+      -DCMAKE_BUILD_TYPE=Debug  \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=On \
+      -DCMAKE_INSTALL_PREFIX=~/.local/llvm \
+      -DLLVM_ENABLE_PROJECTS="clang;lld"   \
+      -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi"
 ```
 
 如果是这样构建，会出现多种 `Targets`, 也就是 LLVM 支持的后端或者说 ISA, 但是你真的需要这么多吗？这会减慢构建速度，况且编译 LLVM 本身就很慢
