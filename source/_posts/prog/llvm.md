@@ -85,3 +85,49 @@ cmake -S llvm -B build -G Ninja \
 -- Looking for sys/resource.h - found
 -- Clang version: 15.0.0
 ```
+
+即使是只构建 X86 Target，编译过程也很占用系统资源，尤其在编译 `jobs > 1` 时，OOM killer happened!
+
+```
+FAILED: lib/CodeGen/CMakeFiles/LLVMCodeGen.dir/CodeGenPrepare.cpp.o
+/usr/bin/c++  -DGTEST_HAS_RTTI=0 -D_DEBUG -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -Ilib/CodeGen -I/home/luc/gh/llvm-project/llvm/lib/CodeGen -Iinclude -I/home/luc/gh/llvm-project/llvm/include -fPIC -fno-semantic-interposition -fvisibility-inlines-hidden -Werror=date-time -Wall -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wno-missing-field-initializers -pedantic -Wno-long-long -Wimplicit-fallthrough -Wno-maybe-uninitialized -Wno-class-memaccess -Wno-redundant-move -Wno-pessimizing-move -Wno-noexcept-type -Wdelete-non-virtual-dtor -Wsuggest-override -Wno-comment -Wmisleading-indentation -fdiagnostics-color -g -fPIC    -fno-exceptions -fno-rtti -std=c++14 -MD -MT lib/CodeGen/CMakeFiles/LLVMCodeGen.dir/CodeGenPrepare.cpp.o -MF lib/CodeGen/CMakeFiles/LLVMCodeGen.dir/CodeGenPrepare.cpp.o.d -o lib/CodeGen/CMakeFiles/LLVMCodeGen.dir/CodeGenPrepare.cpp.o -c /home/luc/gh/llvm-project/llvm/lib/CodeGen/CodeGenPrepare.cpp
+c++: fatal error: Killed signal terminated program cc1plus
+compilation terminated.
+[502/3706] Building CXX object lib/CodeGen/CMakeFiles/LLVMCodeGen.dir/LLVMTargetMachine.cpp.o
+ninja: build stopped: subcommand failed.
+```
+
+```
+[540657.136627] [   8541]  1000  8541      654        0    40960       25             0 sh
+[540657.151290] [   8542]  1000  8542     1746        0    49152       50             0 c++
+[540657.154864] [   8543]  1000  8543   130904   100511  1081344    19437             0 cc1plus
+[540657.159068] [   8545]  1000  8545      654        0    40960       25             0 sh
+[540657.160778] [   8546]  1000  8546     1746        1    53248       48             0 c++
+[540657.162707] [   8547]  1000  8547   124573   104596  1028096     8343             0 cc1plus
+[540657.165039] [   8549]  1000  8549      654        0    45056       24             0 sh
+[540657.166994] [   8550]  1000  8550     1746        0    53248       49             0 c++
+[540657.168885] [   8551]  1000  8551   122111   106441  1007616     4695             0 cc1plus
+[540657.172484] [   8558]  1000  8558      654        0    45056       24             0 sh
+[540657.174632] [   8559]  1000  8559     1746        0    49152       49             0 c++
+[540657.177954] [   8560]  1000  8560   120940   106252   987136     2969             0 cc1plus
+[540657.180532] [   8561]  1000  8561      654        0    45056       25             0 sh
+[540657.182656] [   8562]  1000  8562     1746       32    49152       17             0 c++
+[540657.185691] [   8563]  1000  8563   109267    96518   909312      922             0 cc1plus
+[540657.188119] [   8565]  1000  8565      654       17    40960        1             0 sh
+[540657.190289] [   8566]  1000  8566     1746       48    53248        1             0 c++
+[540657.201087] [   8567]  1000  8567    89082    77087   729088      226             0 cc1plus
+[540657.203247] [   8569]  1000  8569      654       17    45056        1             0 sh
+[540657.206951] [   8570]  1000  8570     1746       48    49152        1             0 c++
+[540657.209564] [   8571]  1000  8571    92682    80523   765952      301             0 cc1plus
+[540657.216663] [   8573]  1000  8573      654       17    45056        1             0 sh
+[540657.218833] [   8574]  1000  8574     1746       49    45056        1             0 c++
+[540657.223173] [   8575]  1000  8575    81953    70017   671744      225             0 cc1plus
+[540657.228410] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=/,mems_allowed=0,global_oom,task_memcg=/,task=cc1plus,pid=8216,uid=1000
+[540657.242256] Out of memory: Killed process 8216 (cc1plus) total-vm:791824kB, anon-rss:130328kB, file-rss:0kB, shmem-rss:0kB, UID:1000 pgtables:1584kB oom_score_adj:0
+```
+
+遇到这种情况，除了换高性能机器，也可以考虑让编译和链接都变成单线程的
+
+```
+-DLLVM_PARALLEL_COMPILE_JOBS=1 -DLLVM_PARALLEL_LINK_JOBS=1
+```
