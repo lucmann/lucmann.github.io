@@ -9,6 +9,8 @@ categories: programming
 
 LLVM 是 Low-Level Virtual Machine 的简写，但事实上它与虚拟机关系不大。我们更熟悉它是一套工具链，包括 clang `/'klæŋ/`, lld, lldb 等等。
 
+<!--more-->
+
 # Building LLVM
 
 ```
@@ -86,7 +88,7 @@ cmake -S llvm -B build -G Ninja \
 -- Clang version: 15.0.0
 ```
 
-即使是只构建 X86 Target，编译过程也很占用系统资源，尤其在编译 `jobs > 1` 时，OOM killer happened!
+即使只是构建 X86 Target，编译过程也很占系统资源，尤其当 `COMPILE_JOBS > 1` 时，OOM killer happened!
 
 ```
 FAILED: lib/CodeGen/CMakeFiles/LLVMCodeGen.dir/CodeGenPrepare.cpp.o
