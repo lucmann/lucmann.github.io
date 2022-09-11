@@ -5,11 +5,13 @@ tags: LLVM
 categories: programming
 ---
 
-# LLVM
+# LLVM & llvm-project
 
 LLVM 是 Low-Level Virtual Machine 的简写，但事实上它与虚拟机关系不大。我们更熟悉它是一套工具链，包括 clang `/'klæŋ/`, lld, lldb 等等。
 
 <!--more-->
+
+llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 bug tracker 被移到了 [GitHub](https://github.com/llvm/llvm-project). 一开始，LLVM 的社区交流和项目沟通主要方式是 Mailing Lists 和 [IRC](https://lucmann.github.io/misc/english/), 在 2019 年，LLVM 社区转向 [Discourse](https://www.discourse.org/) 这个开源社区交流平台。
 
 # Building LLVM
 
@@ -133,3 +135,7 @@ ninja: build stopped: subcommand failed.
 ```
 -DLLVM_PARALLEL_COMPILE_JOBS=1 -DLLVM_PARALLEL_LINK_JOBS=1
 ```
+
+# References
+
+[1][Improving LLVM Infrastructure - Part 1: Mailing lists](https://blog.llvm.org/posts/2022-01-07-moving-to-discourse/)
