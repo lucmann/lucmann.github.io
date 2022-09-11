@@ -90,7 +90,7 @@ cmake -S llvm -B build -G Ninja \
 -- Clang version: 15.0.0
 ```
 
-即使只是构建 X86 Target，编译过程也很占系统资源，尤其当 `COMPILE_JOBS > 1` 时，OOM killer happened!
+即使只是构建 X86 Target，编译过程也很占系统资源，尤其当 `COMPILE_JOBS > 1` 时，oom-kill happened!
 
 ```
 FAILED: lib/CodeGen/CMakeFiles/LLVMCodeGen.dir/CodeGenPrepare.cpp.o
@@ -136,6 +136,47 @@ ninja: build stopped: subcommand failed.
 -DLLVM_PARALLEL_COMPILE_JOBS=1 -DLLVM_PARALLEL_LINK_JOBS=1
 ```
 
+不仅编译器 `cc1plus` 会触发 oom-kill, 链接时 ld 也可能触发 oom-kill
+
+```
+[28979.019282] [    195]     0   195      638        2    40960       28             0 init
+[28979.020947] [    196]  1000   196     1206        1    45056      637             0 zsh
+[28979.022730] [    197]  1000   197    73414        5   290816     2576             0 Xwayland
+[28979.024469] [    290]  1000   290     3201        0    65536       96             0 tmux: client
+[28979.026134] [    293]  1000   293     3052      121    53248      112             0 tmux
+[28979.027407] [    298]  1000   298     3644      236    69632      311             0 tmux: server
+[28979.028840] [    542]  1000   542     1202        1    49152      632             0 zsh
+[28979.030290] [    645]  1000   645     1202        1    45056      631             0 zsh
+[28979.031645] [   1034]  1000  1034     1208        1    45056      641             0 zsh
+[28979.033006] [  23315]  1000 23315     1206        1    45056      637             0 zsh
+[28979.034279] [  30425]  1000 30425    15813        0   110592      492             0 cmake
+[28979.035546] [  30426]  1000 30426    18109     4579   188416    11596             0 ninja
+[28979.036793] [  30442]  1000 30442      736        1    45056       92             0 sh
+[28979.038095] [  30443]  1000 30443     1800        0    49152      105             0 c++
+[28979.039321] [  30444]  1000 30444     1590        1    49152       36             0 collect2
+[28979.041184] [  30445]  1000 30445  1037992   799439  8359936   236319             0 ld
+[28979.042881] [  30459]  1000 30459      654       19    40960        0             0 sh
+[28979.044266] [  30460]  1000 30460     1746       47    49152        0             0 c++
+[28979.045621] [  30461]  1000 30461    96922    84529   794624        0             0 cc1plus
+[28979.046945] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=/,mems_allowed=0,global_oom,task_memcg=/,task=ld,pid=30445,uid=1000
+[28979.049044] Out of memory: Killed process 30445 (ld) total-vm:4151968kB, anon-rss:3197756kB, file-rss:0kB, shmem-rss:0kB, UID:1000 pgtables:8164kB oom_score_adj:0
+```
+
+实际上一般 Linux 系统上 (Ubuntu 20.04), 默认安装有两个链接器
+
+```bash
+lrwxrwxrwx 1   19 Oct 20  2021 /usr/bin/ld -> x86_64-linux-gnu-ld
+lrwxrwxrwx 1   23 Oct 20  2021 /usr/bin/ld.bfd -> x86_64-linux-gnu-ld.bfd
+lrwxrwxrwx 1   24 Oct 20  2021 /usr/bin/ld.gold -> x86_64-linux-gnu-ld.gold
+```
+
+而默认使用的是 `ld.bfd`, 或许让 LLVM 的构建系统去使用 `ld.gold` 可以规避 ld 被 oom-kill 的尴尬
+
+```
+-DLLVM_USE_LINKER=gold
+```
+
 # References
 
 [1][Improving LLVM Infrastructure - Part 1: Mailing lists](https://blog.llvm.org/posts/2022-01-07-moving-to-discourse/)
+[2][ld.gold使用指南](https://blog.csdn.net/ayu_ag/article/details/78552801)
