@@ -162,13 +162,18 @@ ninja: build stopped: subcommand failed.
 [28979.049044] Out of memory: Killed process 30445 (ld) total-vm:4151968kB, anon-rss:3197756kB, file-rss:0kB, shmem-rss:0kB, UID:1000 pgtables:8164kB oom_score_adj:0
 ```
 
-实际上一般 Linux 系统上 (Ubuntu 20.04), 默认安装有两个链接器
+实际上一般 Linux 系统 (e.g. Ubuntu 20.04), 默认安装有两个链接器
 
 ```bash
 lrwxrwxrwx 1   19 Oct 20  2021 /usr/bin/ld -> x86_64-linux-gnu-ld
 lrwxrwxrwx 1   23 Oct 20  2021 /usr/bin/ld.bfd -> x86_64-linux-gnu-ld.bfd
 lrwxrwxrwx 1   24 Oct 20  2021 /usr/bin/ld.gold -> x86_64-linux-gnu-ld.gold
 ```
+
+其中，
+
+- `ld.bfd` 基于 [Binary File Descriptor library](https://en.wikipedia.org/wiki/Binary_File_Descriptor_library), 也即所谓的 GNU Linker (GLD)
+- `ld.gold` 与 `ld.bfd` 不同，它不基于 BFD, 但它比 `ld.bfd` 更快，尤其是在构建大型 C++ 应用时。 
 
 而默认使用的是 `ld.bfd`, 或许让 LLVM 的构建系统去使用 `ld.gold` 可以规避 ld 被 oom-kill 的尴尬
 
