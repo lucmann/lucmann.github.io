@@ -413,6 +413,67 @@ Run-time dependency x11 found: YES 1.6.9
 Run-time dependency xext found: YES 1.3.4
 Run-time dependency xfixes found: YES 5.0.3
 Run-time dependency xcb-glx found: NO (tried pkgconfig and cmake)
+Message: Configuration summary:
+
+        prefix:          /usr
+        libdir:          lib/x86_64-linux-gnu
+        includedir:      include
+
+        OpenGL:          yes (ES1: yes ES2: yes)
+        OSMesa:          no
+
+        DRI platform:    drm
+        DRI drivers:     no
+        DRI driver dir:  /usr/lib/x86_64-linux-gnu/dri
+
+        GLX:             DRI-based
+
+        EGL:             yes
+        EGL drivers:     builtin:egl_dri2 builtin:egl_dri3
+        EGL/Vulkan/VL platforms:   x11 surfaceless drm xcb
+        GBM:             yes
+        GBM backends path: /usr/lib/x86_64-linux-gnu/gbm
+
+        Vulkan drivers:  swrast
+        Vulkan ICD dir:  share/vulkan/icd.d
+
+        llvm:            yes
+        llvm-version:    15.0.0
+
+        Gallium drivers: swrast
+        Gallium st:      mesa
+        HUD lmsensors:   no
+
+        Shared-glapi:    yes
+
+        Perfetto:        no
+        Perfetto ds:     auto
+
+Build targets in project: 174
+```
+
+当编译 Mesa 时，遇到的第一个编译错误是 `No such file or directory`
+
+```
+../src/gallium/auxiliary/gallivm/lp_bld_init.c:52:10: fatal error: llvm-c/Transforms/Coroutines.h: No such file or directory                                                                                                                       52 | #include <llvm-c/Transforms/Coroutines.h>                                                                             |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                                                       compilation terminated.
+```
+
+这个问题似乎不好解决，我转向构建 LLVM 14.0.6
+
+```bash
+➜  llvm-project git:(14.0.6) cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DLLVM_ENABLE_PROJECTS="clang;lld" -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi" -DCMAKE_INSTALL_PREFIX=~/.local/llvm-14 -DLLVM_LIBDIR_SUFFIX="64" -DLLVM_TARGETS_TO_BUILD="host" -DLLVM_BUILD_LLVM_DYLIB=On -DBUILD_SHARED_LIBS=On -DLLVM_PARALLEL_COMPILE_JOBS=1 -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_USE_LINKER=gold
+```
+
+但又遇到下面的错误
+
+```
+CMake Error at /home/luc/gh/llvm-project/libcxx/CMakeLists.txt:880 (message):                                             LIBCXX_ABI_NAMESPACE '__1' is reserved for use by libc++.                                                                                                                                                                                                                                                                                                             -- Configuring incomplete, errors occurred!
+```
+
+查看 `libcxx/CMakeLists.txt` 发现 `LIBCXX_ABI_NAMESPACE` 是一个 CMake 变量, 而且被缓存了，难怪第一次构建时没有报这个错误，所以在编译新的 LLVM 之前一次记得将原来的构建目录删除。
+
+```
+set(LIBCXX_ABI_NAMESPACE "" CACHE STRING "The inline ABI namespace used by libc++. It defaults to __n where `n` is the  current ABI version.")
 ```
 
 # References
