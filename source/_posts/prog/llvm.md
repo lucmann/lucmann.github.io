@@ -181,6 +181,240 @@ lrwxrwxrwx 1   24 Oct 20  2021 /usr/bin/ld.gold -> x86_64-linux-gnu-ld.gold
 -DLLVM_USE_LINKER=gold
 ```
 
+我们编译了 clang, 以及 C++ Runtimes: libcxx; libcxxabi. 可以看到当 clang 被构建成功后，后面的 libcxx, libcxxabi 都会使用它做为编译器，而链接器仍然是 gold
+
+```
+[3548/3706] Performing configure step for 'runtimes'
+-- The C compiler identification is Clang 15.0.0
+-- The CXX compiler identification is Clang 15.0.0
+-- The ASM compiler identification is Clang
+-- Found assembler: /home/luc/gh/llvm-project/build/./bin/clang
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Could NOT find LLVM (missing: LLVM_DIR)
+-- Could NOT find Clang (missing: Clang_DIR)
+-- Performing Test LLVM_RUNTIMES_LINKING_WORKS
+-- Performing Test LLVM_RUNTIMES_LINKING_WORKS - Success
+-- Performing Test CXX_SUPPORTS_NOSTDLIBXX_FLAG
+-- Performing Test CXX_SUPPORTS_NOSTDLIBXX_FLAG - Success
+-- Performing Test CXX_SUPPORTS_NOSTDINCXX_FLAG
+-- Performing Test CXX_SUPPORTS_NOSTDINCXX_FLAG - Success
+-- Linker detection: GNU Gold
+-- Performing Test CXX_SUPPORTS_CUSTOM_LINKER
+-- Performing Test CXX_SUPPORTS_CUSTOM_LINKER - Success
+-- Performing Test SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG
+-- Performing Test SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG - Success
+-- Using libc++abi testing configuration: /home/luc/gh/llvm-project/libcxxabi/test/configs/llvm-libc++abi-shared.cfg.in
+-- Looking for fopen in c
+-- Looking for fopen in c - found
+-- Looking for __gcc_personality_v0 in gcc_s
+-- Looking for __gcc_personality_v0 in gcc_s - found
+-- Looking for __aeabi_uldivmod in gcc
+-- Looking for __aeabi_uldivmod in gcc - not found
+-- Performing Test C_SUPPORTS_COMMENT_LIB_PRAGMA
+-- Performing Test C_SUPPORTS_COMMENT_LIB_PRAGMA - Success
+-- Looking for dladdr in dl
+-- Looking for dladdr in dl - found
+-- Looking for pthread_once in pthread
+-- Looking for pthread_once in pthread - found
+-- Looking for __cxa_thread_atexit_impl in c
+-- Looking for __cxa_thread_atexit_impl in c - found
+-- Looking for write in System
+-- Looking for write in System - not found
+-- Performing Test CXX_SUPPORTS_WERROR_EQ_RETURN_TYPE_FLAG
+-- Performing Test CXX_SUPPORTS_WERROR_EQ_RETURN_TYPE_FLAG - Success
+-- Performing Test CXX_SUPPORTS_W_FLAG
+-- Performing Test CXX_SUPPORTS_W_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WALL_FLAG
+-- Performing Test CXX_SUPPORTS_WALL_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WCHAR_SUBSCRIPTS_FLAG
+-- Performing Test CXX_SUPPORTS_WCHAR_SUBSCRIPTS_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WCONVERSION_FLAG
+-- Performing Test CXX_SUPPORTS_WCONVERSION_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WMISMATCHED_TAGS_FLAG
+-- Performing Test CXX_SUPPORTS_WMISMATCHED_TAGS_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WMISSING_BRACES_FLAG
+-- Performing Test CXX_SUPPORTS_WMISSING_BRACES_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WNEWLINE_EOF_FLAG
+-- Performing Test CXX_SUPPORTS_WNEWLINE_EOF_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WUNUSED_FUNCTION_FLAG
+-- Performing Test CXX_SUPPORTS_WUNUSED_FUNCTION_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WSHADOW_FLAG
+-- Performing Test CXX_SUPPORTS_WSHADOW_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WSHORTEN_64_TO_32_FLAG
+-- Performing Test CXX_SUPPORTS_WSHORTEN_64_TO_32_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WSIGN_COMPARE_FLAG
+-- Performing Test CXX_SUPPORTS_WSIGN_COMPARE_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WSIGN_CONVERSION_FLAG
+-- Performing Test CXX_SUPPORTS_WSIGN_CONVERSION_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WSTRICT_ALIASING_EQ_2_FLAG
+-- Performing Test CXX_SUPPORTS_WSTRICT_ALIASING_EQ_2_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WSTRICT_OVERFLOW_EQ_4_FLAG
+-- Performing Test CXX_SUPPORTS_WSTRICT_OVERFLOW_EQ_4_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WUNUSED_PARAMETER_FLAG
+-- Performing Test CXX_SUPPORTS_WUNUSED_PARAMETER_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WUNUSED_VARIABLE_FLAG
+-- Performing Test CXX_SUPPORTS_WUNUSED_VARIABLE_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WWRITE_STRINGS_FLAG
+-- Performing Test CXX_SUPPORTS_WWRITE_STRINGS_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WUNDEF_FLAG
+-- Performing Test CXX_SUPPORTS_WUNDEF_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WNO_SUGGEST_OVERRIDE_FLAG
+-- Performing Test CXX_SUPPORTS_WNO_SUGGEST_OVERRIDE_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WNO_ERROR_FLAG
+-- Performing Test CXX_SUPPORTS_WNO_ERROR_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WX_FLAG
+-- Performing Test CXX_SUPPORTS_WX_FLAG - Failed
+-- Performing Test CXX_SUPPORTS_PEDANTIC_FLAG
+-- Performing Test CXX_SUPPORTS_PEDANTIC_FLAG - Success
+-- Performing Test CXX_SUPPORTS_FSTRICT_ALIASING_FLAG
+-- Performing Test CXX_SUPPORTS_FSTRICT_ALIASING_FLAG - Success
+-- Performing Test CXX_SUPPORTS_EHSC_FLAG
+-- Performing Test CXX_SUPPORTS_EHSC_FLAG - Failed
+-- Performing Test C_SUPPORTS_FUNWIND_TABLES_FLAG
+-- Performing Test C_SUPPORTS_FUNWIND_TABLES_FLAG - Success
+-- Could not find ParallelSTL, libc++abi will not attempt to use it but the build may fail if the libc++ in use needs it to be available.
+-- Using libc++ testing configuration: /home/luc/gh/llvm-project/libcxx/test/configs/llvm-libc++-shared.cfg.in
+-- Performing Test CXX_SUPPORTS_UNWINDLIB_EQ_NONE_FLAG
+-- Performing Test CXX_SUPPORTS_UNWINDLIB_EQ_NONE_FLAG - Success
+-- Looking for fopen in c
+-- Looking for fopen in c - found
+-- Looking for __gcc_personality_v0 in gcc_s
+-- Looking for __gcc_personality_v0 in gcc_s - found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Looking for ccos in m
+-- Looking for ccos in m - found
+-- Looking for clock_gettime in rt
+-- Looking for clock_gettime in rt - found
+-- Looking for __atomic_fetch_add_8 in atomic
+-- Looking for __atomic_fetch_add_8 in atomic - found
+-- Performing Test CXX_SUPPORTS_FALIGNED_ALLOCATION_FLAG
+-- Performing Test CXX_SUPPORTS_FALIGNED_ALLOCATION_FLAG - Success
+-- Performing Test CXX_SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG
+-- Performing Test CXX_SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG - Success
+-- Performing Test CXX_SUPPORTS_FVISIBILITY_EQ_HIDDEN_FLAG
+-- Performing Test CXX_SUPPORTS_FVISIBILITY_EQ_HIDDEN_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WEXTRA_FLAG
+-- Performing Test CXX_SUPPORTS_WEXTRA_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WNO_UNUSED_PARAMETER_FLAG
+-- Performing Test CXX_SUPPORTS_WNO_UNUSED_PARAMETER_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WNO_LONG_LONG_FLAG
+-- Performing Test CXX_SUPPORTS_WNO_LONG_LONG_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WEXTRA_SEMI_FLAG
+-- Performing Test CXX_SUPPORTS_WEXTRA_SEMI_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WFORMAT_NONLITERAL_FLAG
+-- Performing Test CXX_SUPPORTS_WFORMAT_NONLITERAL_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WNO_USER_DEFINED_LITERALS_FLAG
+-- Performing Test CXX_SUPPORTS_WNO_USER_DEFINED_LITERALS_FLAG - Success
+-- Performing Test CXX_SUPPORTS_WNO_COVERED_SWITCH_DEFAULT_FLAG
+-- Performing Test CXX_SUPPORTS_WNO_COVERED_SWITCH_DEFAULT_FLAG - Success
+CMake Warning at /home/luc/gh/llvm-project/libcxx/benchmarks/CMakeLists.txt:2 (message):
+  The libc++ benchmarks won't be available because the version of CMake is
+  too old to support them.
+
+
+-- Configuring done
+-- Generating done
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    COMPILER_RT_BUILD_BUILTINS
+    LLVM_BUILD_TOOLS
+    LLVM_CONFIG_PATH
+    LLVM_ENABLE_PROJECTS_USED
+    PACKAGE_VERSION
+
+
+-- Build files have been written to: /home/luc/gh/llvm-project/build/runtimes/runtimes-bins
+[3556/3706] Performing build step for 'runtimes'
+[854/854] Linking CXX static library lib/x86_64-unknown-linux-gnu/libc++experimental.a
+[3612/3706] No install step for 'runtimes'
+[3706/3706] Creating library symlink lib64/libbenchmark_main.so.1 lib64/libbenchmark_main.so
+```
+
+安装后，我们需要将 `bin` 目录加入 `PATH`, 并创建 `/etc/ld.so.conf.d/llvm.conf` 包含下面一行
+
+```
+/home/luc/.local/llvm/lib64
+```
+
+```
+-- Up-to-date: /home/luc/.local/llvm/bin/lld
+-- Creating lld-link
+-- Creating ld.lld
+-- Creating ld64.lld
+-- Creating wasm-ld
+-- Installing: /home/luc/.local/llvm/lib64/liblldCOFF.so.15git
+-- Installing: /home/luc/.local/llvm/lib64/liblldCOFF.so
+-- Installing: /home/luc/.local/llvm/lib64/liblldELF.so.15git
+-- Installing: /home/luc/.local/llvm/lib64/liblldELF.so
+-- Installing: /home/luc/.local/llvm/lib64/liblldMachO.so.15git
+-- Installing: /home/luc/.local/llvm/lib64/liblldMachO.so
+-- Installing: /home/luc/.local/llvm/lib64/liblldMinGW.so.15git
+-- Installing: /home/luc/.local/llvm/lib64/liblldMinGW.so
+-- Installing: /home/luc/.local/llvm/lib64/liblldWasm.so.15git
+-- Installing: /home/luc/.local/llvm/lib64/liblldWasm.so
+-- Installing: /home/luc/.local/llvm/lib64/cmake/lld/LLDTargets.cmake
+-- Installing: /home/luc/.local/llvm/lib64/cmake/lld/LLDTargets-debug.cmake
+-- Installing: /home/luc/.local/llvm/lib64/cmake/lld/LLDConfig.cmake
+-- Installing: /home/luc/.local/llvm/bin/bugpoint
+-- Installing: /home/luc/.local/llvm/bin/dsymutil
+-- Installing: /home/luc/.local/llvm/bin/llc
+-- Installing: /home/luc/.local/llvm/bin/lli
+-- Installing: /home/luc/.local/llvm/bin/llvm-as
+-- Installing: /home/luc/.local/llvm/bin/llvm-bcanalyzer
+-- Installing: /home/luc/.local/llvm/bin/llvm-c-test
+-- Installing: /home/luc/.local/llvm/bin/llvm-cat
+-- Installing: /home/luc/.local/llvm/bin/llvm-cfi-verify
+-- Installing: /home/luc/.local/llvm/lib64/libLLVMCFIVerify.so.15git
+-- Installing: /home/luc/.local/llvm/lib64/libLLVMCFIVerify.so
+```
+
+```
+➜  ~ clang --version
+clang version 15.0.0 (git@github.com:lucmann/llvm-project.git b7d09557f6efcf47a905a0e12edf63162dd5e85f)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/luc/.local/llvm/bin
+```
+
+在编译安装完 LLVM 后，就可以会完成真正想要做的，Building Mesa
+
+# Building Mesa llvmpipe and lavapipe
+
+```
+Checking for function "clock_gettime" : YES
+Found pkg-config: /usr/bin/pkg-config (0.29.1)
+Run-time dependency zlib found: YES 1.2.11
+Found CMake: /usr/bin/cmake (3.16.3)
+Run-time dependency libzstd found: NO (tried pkgconfig and cmake)
+Run-time dependency threads found: YES
+Checking for function "pthread_setaffinity_np" with dependency threads: YES
+Run-time dependency expat found: YES 2.2.9
+Library m found: YES
+Run-time dependency libdrm found: YES 2.4.109
+Run-time dependency libudev found: YES 245
+llvm-config found: YES (/home/luc/.local/llvm/bin/llvm-config) 15.0.0
+Run-time dependency LLVM (modules: bitwriter, core, engine, executionengine, instcombine, mcdisassembler, mcjit, native, scalaropts, transformutils, coroutines) found: YES 15.0.0
+Run-time dependency valgrind found: NO (tried pkgconfig)
+Program bison found: YES (/usr/bin/bison)
+Program bison found: YES (/usr/bin/bison)
+Program flex found: YES (/usr/bin/flex)
+Run-time dependency libunwind found: NO (tried pkgconfig and cmake)
+Run-time dependency OpenMP found: YES 4.5
+Run-time dependency x11 found: YES 1.6.9
+Run-time dependency xext found: YES 1.3.4
+Run-time dependency xfixes found: YES 5.0.3
+Run-time dependency xcb-glx found: NO (tried pkgconfig and cmake)
+```
+
 # References
 
 [1][Improving LLVM Infrastructure - Part 1: Mailing lists](https://blog.llvm.org/posts/2022-01-07-moving-to-discourse/)
