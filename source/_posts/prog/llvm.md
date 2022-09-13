@@ -491,7 +491,7 @@ set(LIBCXX_ABI_NAMESPACE "" CACHE STRING "The inline ABI namespace used by libc+
 WARNING: lavapipe is not a conformant vulkan implementation, testing use only.
 ```
 
-![hello_triangle](llvm/hello_triangle.png)
+![hello_triangle](hello_triangle.png)
 
 # References
 
