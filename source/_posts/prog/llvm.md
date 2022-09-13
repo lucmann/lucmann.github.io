@@ -476,6 +476,23 @@ CMake Error at /home/luc/gh/llvm-project/libcxx/CMakeLists.txt:880 (message):   
 set(LIBCXX_ABI_NAMESPACE "" CACHE STRING "The inline ABI namespace used by libc++. It defaults to __n where `n` is the  current ABI version.")
 ```
 
+# [KhronosGroup/Vulkan-Samples](https://github.com/KhronosGroup/Vulkan-Samples) with lavapipe
+
+解决 LLVM 和 Mesa 的构建问题后，我们可以顺利构建并运行 Vulkan-Samples 的 `hello_triangle`
+
+```
+➜  Vulkan-Samples git:(master) ./build/app/bin/Debug/x86_64/vulkan_samples sample hello_triangle
+[info] Logger initialized
+[info] Initializing vulkan instance.
+[info] Enabled Validation Layers:
+[info] Found GPU: llvmpipe (LLVM 14.0.5, 256 bits)
+[info] Found GPU: llvmpipe (LLVM 14.0.5, 256 bits)
+[info] Initializing vulkan device.
+WARNING: lavapipe is not a conformant vulkan implementation, testing use only.
+```
+
+![hello_triangle](llvm/hello_triangle.png)
+
 # References
 
 [1][Improving LLVM Infrastructure - Part 1: Mailing lists](https://blog.llvm.org/posts/2022-01-07-moving-to-discourse/)

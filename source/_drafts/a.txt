@@ -1,0 +1,40 @@
+light travels in straight lines
+light rays do not collide with each other if they cross
+light rays travel from the light sources to the eye
+
+reciprocity 可逆性
+
+and if you gaze long into an abyss, the abyss also gazes into you.
+Nietzsche
+
+Whitted-Style Ray Tracing
+
+假设:
+
+eye is a point
+
+定义:
+
+- eye ray
+- shadow rays
+
+- primary ray
+- secondary rays
+
+Axis-Aligned Bounding Box (AABB) 轴对齐包围盒
+
+- The ray enters the box only when it enters all pairs of slabs
+- The ray exits the box as long as it exits any pair of slabs
+
+
+Objects vs. Spatial Partition
+Bounding Volume Hierarchy (BVH) vs. KD-Tree
+
+  Geometry
+Radiometry
+
+- radiant energy (s)
+- radiant flux (vol)
+- intensity
+- irradiance
+- radiance
