@@ -89,3 +89,6 @@ WARNING: lavapipe is not a conformant vulkan implementation, testing use only.
 ![uniform_buffers](uniform_buffers.png)
 ![HDR](hdr.png)
 ![MSAA](msaa.png)
+![push descriptors](push_descriptors.png)
+![Basic Universal texture compress](texture_compress.png)
+![Texture mipmap generation](mipmap_generation.png)
