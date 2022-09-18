@@ -195,3 +195,11 @@ returning flags string ""
 ```bash
 meson build --prefix=/usr -D{c,cpp}_args=-fuse-ld=gold -Dflavors=x11-gl,x11-glesv2
 ```
+
+## cmake
+
+### use `gold`
+
+```bash
+cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold
+```
