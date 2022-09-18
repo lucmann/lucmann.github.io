@@ -13,7 +13,7 @@ categories: misc
 - RTL: Register-Transfer Level, RTL 语言包括 SystemVerilog, Verilog, VHDL等 
 - FIRRTL: Chisel 的“翻译器”, Chisel -> Verilog
 - shift left: 把验证和调试放在 tape in 阶段
-- GEM5: C Simulator
+- GEM5: C Simulator for GPU
 - PPA: Power, Performance, Area, used in deciding how to optimize semiconductor designs
 
 # Miscellaneous
@@ -37,4 +37,5 @@ categories: misc
 
 [1][RISC-V在中国的发展状况](https://www.bilibili.com/video/BV1oV41127Hy/?spm_id_from=333.788.recommend_more_video.13&vd_source=b3ba1ad08e1b41cd7118d8dd88f0e670)
 [2][揭秘“香山”：高性能开源RISC-V处理器](https://www.bilibili.com/video/BV1Mf4y1b7hm?spm_id_from=333.337.search-card.all.click&vd_source=b3ba1ad08e1b41cd7118d8dd88f0e670)
+[3][RISC-V is the future of computing](https://www.youtube.com/watch?v=lXdx0X2WHfY)
 
