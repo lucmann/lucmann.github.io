@@ -86,3 +86,6 @@ WARNING: lavapipe is not a conformant vulkan implementation, testing use only.
 ![instancing](instancing.png)
 ![compute n-body simulation](n-body.png)
 ![VK_EXT_Debug_Utils](debug_utils.png)
+![uniform_buffers](uniform_buffers.png)
+![HDR](hdr.png)
+![MSAA](msaa.png)
