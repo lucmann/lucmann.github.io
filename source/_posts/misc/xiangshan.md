@@ -16,6 +16,8 @@ categories: misc
 - GEM5: C Simulator for GPU
 - PPA: Power, Performance, Area, used in deciding how to optimize semiconductor designs
 
+<!--more-->
+
 # Miscellaneous
 
 - 中国科学院计算所

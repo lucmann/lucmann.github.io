@@ -9,6 +9,8 @@ categories: graphics
 
 解决 LLVM 和 Mesa 的构建问题后，我们可以顺利构建并运行 Vulkan-Samples 的 `hello_triangle`
 
+<!--more-->
+
 ```
 ➜  Vulkan-Samples git:(master) ./build/app/bin/Debug/x86_64/vulkan_samples sample hello_triangle
 [info] Logger initialized
