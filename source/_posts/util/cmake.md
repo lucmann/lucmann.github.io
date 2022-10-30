@@ -68,11 +68,17 @@ cmake -L build
 cmake --build build --target help
 ```
 
-# CMake's `-D`
+# CMake 的内置变量
 
-- `-DCMAKE_EXPORT_COMPILE_COMMANDS=True`    : 生成 `compile_commands.json`, 用来在像 CLion 这样的 IDE 里创建 index
-- `-DCMAKE_VERBOSE_MAKEFILE=True`           : 产生非常详细的编译过程日志，包括目录改变，编译和链接
-- `-DCMAKE_INSTALL_PREFIX=/path/to/install` : 自定义安装路径
+| 变量                          |  作用                                                                  |
+|:------------------------------|:-----------------------------------------------------------------------|
+| CMAKE_EXPORT_COMPILE_COMMANDS | 生成 compile_commands.json, 用来在代码跳转时使用                       |
+| CMAKE_VERBOSE_MAKEFILE        | 产生非常详细的编译过程日志，包括目录改变，编译器选项和链接器选项       |
+| CMAKE_INSTALL_PREFIX          | 自定义安装路径                                                         |
+| CMAKE_CXX_FLAGS               | C++ 编译器的选项， 如 -std=c++11                                       |
+| CMAKE_CXX_FLAGS_DEBUG         | 如定义编译宏 -DDEBUG=0                                                 |
+| CMAKE_CXX_COMPILER_ID         | 如 GNU, Clang, Intel, MSVC                                             |
+|                               |                                                                        |
 
 # Guideline
 
