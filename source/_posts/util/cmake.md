@@ -198,3 +198,23 @@ pkg_check_modules (PKG_OSMESA QUIET osmesa)
 pkg_check_modules(Wayland REQUIRED
 pkg_check_modules(WAYLAND_PROTOCOLS REQUIRED wayland-protocols>=1.15)
 ```
+
+# CMake 设置 C++ Standard
+
+## 方法一
+
+```
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+```
+
+## 方法二
+
+```
+target_compile_features(appfwSDL PUBLIC c_std_c99 cxx_std_14)
+```
+
+## 方法三
+
+```
+set(CMAKE_CXX_STANDARD 14)
+```
