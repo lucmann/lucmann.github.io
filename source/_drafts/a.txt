@@ -37,4 +37,9 @@ Radiometry
 - radiant flux (vol)
 - intensity
 - irradiance
-- radiance
+
+- radiance def.1: irradiance per solid angle
+- radiance def.2: intensity per projected unit area
+
+- BRDF: Bidirectional Reflectance Distribution Function
+- sr: solid radius
