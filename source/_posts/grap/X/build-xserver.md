@@ -44,7 +44,7 @@ It is easy to find what are built with `find build -type f -perm /a+x -regex '.*
 
 where `./build/hw/xfree86/Xorg` is newly built Xserver.
 
-# Replacement
+## Replacement
 Now that we have an Xorg out there, we can try it. I have an *xrdp* installed on my WSL as its desktop environment. We can replace `xorgxrdp` with this new one for testing. To do it, we need to modify xrdp's init configuration file `/etc/xrdp/sesman.ini`
 
 <pre>
@@ -98,5 +98,23 @@ grep -E '(Driver | Load)' /etc/X11/xrdp/xorg.conf
     Driver "xrdpdev"
 </pre>
 
-# Conclusion
+## Conclusion
+
 Xserver/Xorg is built in a flexible and easy way. We can implement our own device-dependent functionality and add it to Xserver as its another driver or module.
+
+# Xserver 相关工具
+
+## xinit
+
+```bash
+➜  ~ dpkg --contents /var/cache/apt/archives/xinit_1.4.1-0ubuntu2_amd64.deb | awk '{print $NF}' | rg -v '/$'
+./etc/X11/xinit/xinitrc
+./etc/X11/xinit/xserverrc
+./usr/bin/startx
+./usr/bin/xinit
+./usr/share/doc/xinit/NEWS.Debian.gz
+./usr/share/doc/xinit/changelog.Debian.gz
+./usr/share/doc/xinit/copyright
+./usr/share/man/man1/startx.1.gz
+./usr/share/man/man1/xinit.1.gz
+```
