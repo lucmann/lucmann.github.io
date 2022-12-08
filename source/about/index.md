@@ -14,7 +14,8 @@ layout: about
     * [Khronos Vulkan](https://www.khronos.org/registry/vulkan/)
     * 其它任何能让生活和工作变得不那么费劲的技术
 - 参与过的开源项目
-    * [Mesa](https://gitlab.freedesktop.org/mesa/mesa)
+    * [glmark2](https://github.com/glmark2/glmark2/commits?author=lucmann)
+    * [Mesa](https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/11515)
     * [The Ultimate vimrc](https://github.com/amix/vimrc).
 - 除了代码之外的乐趣
     * 电影
