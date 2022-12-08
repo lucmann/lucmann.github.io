@@ -9,8 +9,9 @@ layout: about
 - 中年程序员
 - 从事过通信软件的开发和 Linux 图形驱动的开发工作
 - 感兴趣的技术方向
-    * [图形 GPU](https://www.gpuinsight.com/)
-    * [Linux kernel](https://git.kernel.org/pub/scm/linux/kernel/git)
+    * [GPU](https://www.gpuinsight.com/)
+    * [LLVM](https://github.com/lucmann/llvm-project/tree/test-based-14.0.5)
+    * [Linux Kernel](https://git.kernel.org/pub/scm/linux/kernel/git)
     * [Khronos Vulkan](https://www.khronos.org/registry/vulkan/)
     * 其它任何能让生活和工作变得不那么费劲的技术
 - 参与过的开源项目
