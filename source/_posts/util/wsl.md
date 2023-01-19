@@ -53,11 +53,11 @@ c/     wsl/   wslg/
 apt install nautilus -y
 ```
 
-![WSLg nautilus](wsl/wslg-nautilus.png) 
+![WSLg nautilus](wslg-nautilus.png)
 
 ## glmark2
 
-![WSLg glmark2](wsl/wslg-glmark2.png) 
+![WSLg glmark2](wslg-glmark2.png)
 
 # WSL 如何支持 Nvidia
 
@@ -82,8 +82,7 @@ apt install nautilus -y
 
 # LKM in WSL2
 
-WSL2 上没有可加载的内核模块，因为所有模块是被直接编进内核的。如果 `lsmod`, 不会输出任何模块。 但我们仍可以通过查看内核配置文件找到有哪些
-模块被编译进内核了。
+WSL2 上没有可加载的内核模块，因为所有模块是被直接编进内核的。如果 `lsmod`, 不会输出任何模块。 但我们仍可以通过查看内核配置文件找到有哪些模块被编译进内核了。
 
 ```bash
 zcat /proc/config.gz | rg '^[^#].*' | sort | awk -F'=' '{printf("%-52s%-48s\n", $1, $2)}'
