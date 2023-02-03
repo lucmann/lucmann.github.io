@@ -13,7 +13,6 @@ categories: graphics
 
 - 开发包依赖
     * libpam0g-dev
-    * libpam0g-dev
     * libgcrypt20-dev
     * libglib2.0-dev
     * libxklavier-dev
