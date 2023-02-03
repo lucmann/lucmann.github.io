@@ -24,10 +24,14 @@ categories: graphics
 
 - 安装
 
-Lightdm 可执行程序路径 `/usr/sbin/lightdm`, 日志默认路径 `/var/log/lightdm/lightdm.log`. 所以构建时可以使用 `--prefix` 指定安装路径 (默认 /usr/local), 用 `--localstatedir` 指定日志路径 (默认 $prefix/var/log/lightdm).
+Lightdm 可执行程序路径 `/usr/sbin/lightdm`, 日志默认路径 `/var/log/lightdm/lightdm.log`. 所以构建时可以使用
+
+* `--prefix` 指定安装路径 (默认 /usr/local)
+* `--localstatedir` 指定日志路径 (默认 $prefix/var/log/lightdm)
+* `--sysconfdir` 指定 `lightdm.conf` 路径 （默认 $prefix/etc/lightdm)
 
 ```
-./autogen.sh --prefix=/usr --localstatedir=/var --disable-tests
+./autogen.sh --prefix=/usr --localstatedir=/var --sysconfdir=/etc --disable-tests
 make -j $JOBS
 sudo make install
 ```
