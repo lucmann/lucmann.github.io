@@ -1,5 +1,5 @@
 ---
-title: Build Xserver from Source
+title: Build X Server (Xorg) from Source
 date: 2020-10-19 17:47:39
 tags: [2D]
 categories: graphics
@@ -11,12 +11,38 @@ Given that a difficulty to add a custom X11 device driver or module or extension
 <!--more-->
 
 # Build
-Fortunately the xserver has already an alternative build system support for [Meson](https://mesonbuild.com/) more than autotools before. Build configuration options are listed in the file `meson_options.txt` which makes easy configure the build. On the other hand, Meson does not permit in-source builds, a separate build directory makes it clearer for checking the output.
 
-A few simple commands can get done with building:
-```shell
-meson build
+Xorg 的源码库克隆下来后，checkout 到目标分支或 tag, 假设我们想编译 xorg-server-1.20.4 这个版本
+
+```
+git checkout xorg-server-1.20.4 -b 1.20.4  // 将这个 tag 检出后命名为 1.20.4 分支
+```
+
+X Server 的源码库中除了 Xorg，还包含 modesetting_drv.so, xnest, xwin, xvfb 等，这些组件并不全都需要，如果全都编译，可能会有更多的依赖。
+另外，Xorg 本身安装在 /usr/bin/ 目录, 其它相关 DDX 驱动安装在 /usr/lib/xorg/modules 目录，为了让编译好的 Xorg 和相关驱动安装后能够覆盖原来的，需要通过指定 meson 的 `prefix` 和 `libdir` 构建变量
+
+```
+meson build -Dprefix=/usr -Dlibdir=lib -Dxnest=false -Dxwin=false -Dxvfb=false
+```
+
+NOTES: 默认情况下，`prefix=/usr/local`, `libdir=lib/x86_64-linux-gnu`
+
+构建配置完成后，进行编译
+
+```
 ninja -C build
+```
+
+编译完成后，使用 sudo 进行安装
+
+```
+sudo ninja install -C build
+```
+
+安装成功后，使用 systemd 重启 X Server 服务 （假设使用的窗口管理器是 lightdm)
+
+```
+sudo systemctl restart lightdm
 ```
 
 It is easy to find what are built with `find build -type f -perm /a+x -regex '.*[^0-9h]$'`
