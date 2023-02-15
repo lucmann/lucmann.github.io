@@ -118,3 +118,14 @@ Starting subtest: writeback-check-output
 Subtest writeback-check-output: SUCCESS (0.124s)
 ```
 
+- dmesg
+
+```
+[10893.662944] [IGT] kms_writeback: executing
+[10893.673240] [IGT] kms_writeback: starting subtest writeback-pixel-formats
+[10893.674026] [IGT] kms_writeback: starting subtest writeback-invalid-parameters
+[10893.675055] [IGT] kms_writeback: starting subtest writeback-fb-id
+[10893.693563] [IGT] kms_writeback: starting subtest writeback-check-output
+[10893.826984] [IGT] kms_writeback: exiting, ret=0
+```
+
