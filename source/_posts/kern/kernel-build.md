@@ -75,24 +75,17 @@ Kernel: arch/x86/boot/bzImage is ready  (#3)
 
 ### 新内核生效
 
-编辑 [`/mnt/c/Users/luc/.wslconfig`](https://falco.org/blog/falco-wsl2-custom-kernel/), 添加下面两行
+[编辑 /mnt/c/Users/luc/.wslconfig](https://falco.org/blog/falco-wsl2-custom-kernel/), 添加下面两行
 
 ```
 [wsl2]
 kernel=C:\\Users\\luc\\bzImage
 ```
 
-> NOTE: 不能通过向 [`/etc/wsl.conf`](https://devblogs.microsoft.com/commandline/automatically-configuring-wsl/), 添加下面两行
-> 
-> ```
-> [wsl2]
-> kernel=C:\\Users\\luc\\bzImage
-> ```
->
-> 来告诉 WSL 使用新内核，因为 `/etc/wsl.conf` 不支持 `wsl2` Section
+> NOTE: 如果[以上两行添加进 /etc/wsl.conf 文件，不会有任何作用](https://devblogs.microsoft.com/commandline/automatically-configuring-wsl/), 因为 `/etc/wsl.conf` 不支持 `wsl2` Section
 
 
-配置完成后，重启 WSL Ubuntu 20.04
+配置完成后，重启 WSL Ubuntu 20.04, 新编译的内核将生效。
 
 ```
 wsl --shutdown
