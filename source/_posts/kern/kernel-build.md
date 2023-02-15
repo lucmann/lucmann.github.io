@@ -91,3 +91,30 @@ kernel=C:\\Users\\luc\\bzImage
 wsl --shutdown
 ```
 
+## 打开 [CONFIG_DRM_VKMS](https://docs.kernel.org/gpu/vkms.html)
+
+```
+make nconfig
+```
+
+> NOTE: [在 WSL 上不能将配置项置为 'M', 而要 'Y'](https://unix.stackexchange.com/questions/594470/wsl-2-does-not-have-lib-modules)
+
+
+配置更改后重新 make
+
+## Testing With IGT on WSL2
+
+```
+➜  tests git:(master) sudo ./kms_writeback --device "sys:/sys/devices/platform/vkms"
+IGT-Version: 1.27.1-g45da871d (x86_64) (Linux: 5.15.90.1-microsoft-standard-WSL2+ x86_64)
+(kms_writeback:9671) igt_kms-WARNING: Output Writeback-1 could not be assigned to a pipe
+Starting subtest: writeback-pixel-formats
+Subtest writeback-pixel-formats: SUCCESS (0.000s)
+Starting subtest: writeback-invalid-parameters
+Subtest writeback-invalid-parameters: SUCCESS (0.000s)
+Starting subtest: writeback-fb-id
+Subtest writeback-fb-id: SUCCESS (0.018s)
+Starting subtest: writeback-check-output
+Subtest writeback-check-output: SUCCESS (0.124s)
+```
+
