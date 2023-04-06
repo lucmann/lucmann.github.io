@@ -56,7 +56,20 @@ categories: misc
 - [https://bpaste.net](https://bpaste.net)
 - [https://gist.github.com](https://gist.github.com)
 
-# Translation
+# 软件开发中的常用词汇
 
-- "Willing to rubberstamp regardless of this is helping v10 r/e, but I would like to understand what we're up against here."
-- 无论这个是否有助于 v10 r/e，我都愿意给你通过(不检查), 但我还是想明白我们所面临的问题。
+## rubberstamp
+
+- 例句
+
+    > Willing to rubberstamp regardless of this is helping v10 r/e, but I would like to understand what we're up against here.
+
+    无论这个是否有助于 v10 版本硬件的逆向，我都愿意给你通过(不检查), 但我还是想明白我们所面临的问题。
+
+## scaffolding
+
+scaffolding 是指脚手架，通常用于建筑施工中支撑人员和材料的临时结构。在计算机科学中，scaffolding 可以指代软件开发过程中的一些临时结构和代码，用于辅助开发人员快速完成某个功能或实现某个目标。这些临时结构和代码通常会被移除或重构，只留下最终的代码和结构。
+
+- 例句
+
+    > have the minimal scaffolding to support the preempt-ctx fence in drm_sched_entity
