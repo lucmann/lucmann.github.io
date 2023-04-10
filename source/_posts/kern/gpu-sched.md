@@ -105,3 +105,18 @@ struct drm_sched_fence {
 	void				*owner;
 };
 ```
+
+# drm_scheduler 的一些问题
+
+## 如果在 `run_job()` path 存在内存申请，就有可能导致内核死锁
+
+我们试着从 [dri-devel IRC 频道](https://oftc.irclog.whitequark.org/dri-devel/2023-03-10#31964051;) 上的一段讨论来理解这个问题。
+
+> 16:51 <gfxstrand> The dma_fence design itself is fine. It's designed that way for very good reasons. There are problems we need to solve but they're more around how things have become tangled up inside drm than they are about dma_fence.
+> 16:54 <bbrezillon> DemiMarie: if you have a way to swapout some memory accessed by in-flight jobs, you might be able to unblock the situation, but I'm sure this 'no allocation in the scheduler path' rule is here to address the problem where a job takes too long to finish and the shrinker decides to reclaim memory anyway.
+> 16:56 <bbrezillon> I think the problem is that drm_sched exposes a fence to the outside world, and it needs a guarantee that this fence will be signaled, otherwise other parties (the shrinker) might wait for an event that's never going to happen
+> 16:56 <gfxstrand> Yup
+> 16:57 <bbrezillon> that comes from the fact it's not the driver fence that's exposed to the outside world, but an intermediate object, which is indirectly signaled by the driver fence, that's created later on when the scheduler calls ->run_job()
+> 16:58 <gfxstrand> Once a fence has been exposed, even internally within the kernel, it MUST signal in finite time.
+> 16:59 <gfxstrand> If you allocate memory, that could kick off reclaim which can then have to wait on the GPU and you're stuck.
+> 17:00 <bbrezillon> so the issue most drivers have, is that they allocate this driver fence in the ->run_job() path with GFP_KERNEL (waitable allocation), which might kick the GPU driver shrinker, which in turn will wait on the fence exposed by the drm_sched, which will never be signaled because the driver is waiting for memory to allocate its driver fence :-)
