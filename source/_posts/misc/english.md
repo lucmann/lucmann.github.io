@@ -56,6 +56,23 @@ categories: misc
 - [https://bpaste.net](https://bpaste.net)
 - [https://gist.github.com](https://gist.github.com)
 
+# 短语汇
+
+## Wiggle Room
+
+（进行解释或表达意见所留的）余地、回旋空间
+
+> there's pretty much zero wiggle room in semantics
+
+在语义方面几乎没有任何余地
+
+## Hand Roll/Hand-rolled
+
+"Hand roll"或"hand-rolled"是一个英语词汇，通常用于描述手工制作的东西。这个词汇可以用来形容手工制作的食品，如手卷寿司（hand-rolled sushi），也可以用来形容手工制作的烟卷（hand-rolled cigarettes）或手工制作的纸卷（hand-rolled paper）。在其他领域，"hand roll"或"hand-rolled"也可以指手工制作的家具、纺织品、珠宝、音乐乐器等。
+
+>  I think we're way past the point where drivers hand-rolling entire gem from nothing is ready for upstream
+
+
 # 软件开发中的常用词汇
 
 ## rubberstamp
