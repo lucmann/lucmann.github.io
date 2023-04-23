@@ -74,3 +74,6 @@ drwxr-xr-x root/root         0 2020-04-09 03:55 ./usr/share/doc/intel-opencl-icd
 -rw-r--r-- root/root       389 2020-04-09 03:55 ./usr/share/doc/intel-opencl-icd/changelog.Debian.gz
 -rw-r--r-- root/root      5085 2020-04-06 17:05 ./usr/share/doc/intel-opencl-icd/copyright
 ```
+
+安装 `*-opencl-icd` 软件包并不会安装 OpenCL 开发相关头文件：`<CL/cl.h>`
+
