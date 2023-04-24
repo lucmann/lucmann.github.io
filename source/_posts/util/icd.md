@@ -11,6 +11,8 @@ categories: utilities
 
 > Vulkan ICD (Installable Client Driver) is a software component that enables the Vulkan API (Application Programming Interface) to interact with the hardware of a computer system. Vulkan is a low-level graphics API developed by the Khronos Group, which provides developers with more control over hardware resources, leading to improved performance and efficiency in graphics-intensive applications such as video games. The Vulkan ICD is responsible for managing the communication between the Vulkan API and the graphics hardware of a system. It is typically provided by the manufacturer of the graphics card as a driver for the system.
 
+<!--more-->
+
 ## What is OpenCL ICD?
 
 > OpenCL ICD (Installable Client Driver) is a component of OpenCL (Open Computing Language) that enables a computer system to access the processing power of multiple devices, such as CPUs and GPUs, as a unified compute resource. OpenCL is a framework for programming heterogeneous systems, which means systems that consist of multiple processing units with different architectures. The OpenCL ICD manages the communication between the OpenCL API and the devices available on the system, allowing developers to write code that can run on a variety of devices. It provides flexibility to the developers in choosing the device based on the requirements of the application. The OpenCL ICD is typically provided by the manufacturer of the device as a driver for the system.
