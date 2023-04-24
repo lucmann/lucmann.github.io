@@ -9,6 +9,8 @@ categories: misc
 >
 > -- <cite>Alan J. Perlis, Recipient of 1966 Turing Award</cite>
 
+<!--more-->
+
 # IRC
 
 ## [IRC(Internet Relay Chat)](https://zh.wikipedia.org/wiki/IRC)
