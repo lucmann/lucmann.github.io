@@ -51,6 +51,6 @@ mutt -H /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch "`.
 - mutt 需要配置 IMAP/SMTP, 即邮件收发协议配置 (这是整个过程中最费劲的)
     mutt 的配置文件默认路径是 `$HOME/.mutt/muttrc`
 - git 需要配置完整的 `user.name`, `user.email`.
-- `git commit` 时需要加 `-s` (`--signoff`) 来自动增加 Signed-off-by 标签 (如果你 Signed-off-by 标签的邮件地址和发送 patch 的邮箱地址不同的话，还需要在邮件主体的第一行手动添加 `Zhang San <xxx@yourmail.com>`, xxx@yourmail.com 是你的 Signed-off-by 邮件地址) 
+- `git commit` 时需要加 `-s` (`--signoff`) 来自动增加 Signed-off-by 标签 (如果你 Signed-off-by 标签的邮件地址和发送 patch 的邮箱地址不同的话，还需要在邮件主体的第一行手动添加 `From: Zhang San <xxx@yourmail.com>`, xxx@yourmail.com 是你的 Signed-off-by 邮件地址) 
 
 
