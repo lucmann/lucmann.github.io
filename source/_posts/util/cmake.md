@@ -1,13 +1,23 @@
 ---
-title: Modern CMake
+title: CMake Cheatsheet
 date: 2021-01-10 07:42:04
 tags: [cmake]
 categories: utilities
 ---
 
-最近看了一些关于Modern CMake(since 3.0.0)的教程，这里记录一下.
+# Common Command-lines
+
+- `-DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold"`
+    将 linker 由默认的 bfd 换成 gold
+- `-DCMAKE_EXPORT_COMPILE_COMMANDS=on`
+    生成 compile_commands.json
+- `-DCMAKE_CXX_FLAGS="-Wno-error=missing-field-initializers"`
+    将 `missing-field-initializers` 由 error 转为 warning
 
 <!--more-->
+
+最近看了一些关于Modern CMake(since 3.0.0)的教程，这里记录一下.
+
 
 # What Modern CMake Provides?
 作为一个*Build System Generator*, 现代CMake可以帮助我们做哪些事情呢？
