@@ -13,6 +13,8 @@ categories: utilities
     生成 compile_commands.json
 - `-DCMAKE_CXX_FLAGS="-Wno-error=missing-field-initializers"`
     将 `missing-field-initializers` 由 error 转为 warning
+- `-DCMAKE_EXE_LINKER_FLAGS="-nostartfiles"`
+    解决 "Scrt1.o: undefined reference to `main`"
 
 <!--more-->
 
