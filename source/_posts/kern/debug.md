@@ -30,9 +30,34 @@ debugfs     /sys/kernel/debug       debugfs defaults        0 0
 在添加后，执行 `mount -a` 命令将看到 `/sys/kernel/debug` 文件系统的内容
 
 ```
-acpi   btt              clk               dma_buf          extfrag             kprobes        ras         split_huge_pages  usb
-bdi    ceph             device_component  dri              fault_around_bytes  kvm            sched       swiotlb           virtio-ports
-block  clear_warn_once  devices_deferred  error_injection  hid                 ramdisk_pages  sleep_time  tracing           x86
+$ ls -ld ./* | sort -k 1.2
+--w-------  1 root root 0 May 19 17:03 ./clear_warn_once
+--w-------  1 root root 0 May 19 17:03 ./split_huge_pages
+-r--r--r--  1 root root 0 May 19 17:03 ./devices_deferred
+-r--r--r--  1 root root 0 May 19 17:03 ./sleep_time
+-rw-r--r--  1 root root 0 May 19 17:03 ./fault_around_bytes
+drwx------  8 root root 0 May 19 17:03 ./tracing
+drwxr-xr-x  2 root root 0 May 19 17:03 ./acpi
+drwxr-xr-x  2 root root 0 May 19 17:03 ./btt
+drwxr-xr-x  2 root root 0 May 19 17:03 ./ceph
+drwxr-xr-x  2 root root 0 May 19 17:03 ./clk
+drwxr-xr-x  2 root root 0 May 19 17:03 ./device_component
+drwxr-xr-x  2 root root 0 May 19 17:03 ./dma_buf
+drwxr-xr-x  2 root root 0 May 19 17:03 ./error_injection
+drwxr-xr-x  2 root root 0 May 19 17:03 ./extfrag
+drwxr-xr-x  2 root root 0 May 19 17:03 ./hid
+drwxr-xr-x  2 root root 0 May 19 17:03 ./kprobes
+drwxr-xr-x  2 root root 0 May 19 17:03 ./kvm
+drwxr-xr-x  2 root root 0 May 19 17:03 ./ramdisk_pages
+drwxr-xr-x  2 root root 0 May 19 17:03 ./ras
+drwxr-xr-x  2 root root 0 May 19 17:03 ./swiotlb
+drwxr-xr-x  2 root root 0 May 19 17:03 ./usb
+drwxr-xr-x  2 root root 0 May 19 17:03 ./virtio-ports
+drwxr-xr-x  2 root root 0 May 19 17:03 ./x86
+drwxr-xr-x  3 root root 0 May 19 17:03 ./dri
+drwxr-xr-x  3 root root 0 May 19 17:03 ./sched
+drwxr-xr-x 29 root root 0 May 19 17:03 ./block
+drwxr-xr-x 35 root root 0 May 19 17:03 ./bdi
 ```
 
 `/sys/kernel/debug` 目录的权限是 700, 只有 root 用户才能进入，sudo 也不行
