@@ -14,5 +14,5 @@ categories: graphics
 
 | 缩写   | 解释                                                   | 厂家        |
 |:-------|:-------------------------------------------------------|:------------|
-| GSP    | Graphics system processor                              | NVIDIA      |
-| GSC    | Graphics system controller                             | Intel       |
+| GSP    | Graphics System Processor                              | NVIDIA      |
+| GSC    | Graphics System Controller                             | Intel       |
