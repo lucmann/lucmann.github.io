@@ -1,441 +1,13 @@
 ---
 title: Notes for Mesa
 date: 2020-2-4
-tags: [OpenGL, mesa]
+tags: [mesa]
 categories: graphics
 ---
 
+# Build
+
 [Mesa](https://mesa3d.org/) is an open source implementation for OpenGL. Check [repository](https://gitlab.freedesktop.org/mesa/mesa) for its source code. There are something worth to learn about this project for a graphic driver developer.
-
-## Build
-It's good choice for exploring any project's source code to start with its build script. So here is the start.
-
-### Dependencies
-Mesa is a highly configurable project that means it allows to customize your own particular components by command-line options or a pure text file(meson_options.txt).
-
-Generally speaking, which dependencies are required is determined by your configuration. For example, the following configuration
-
-```
-option(
-  'platforms',
-  type : 'array',
-  value : ['x11'],
-  choices : [
-    'auto', 'x11', 'wayland', 'drm', 'surfaceless', 'haiku', 'android',
-    'windows',
-  ],
-  description : 'window systems to support. If this is set to `auto`, all platforms applicable will be enabled.'
-)
-option(
-  'dri3',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'disabled', 'enabled'],
-  description : 'enable support for dri3'
-)
-option(
-  'dri-drivers',
-  type : 'array',
-  value : [],
-  choices : ['auto', 'i915', 'i965', 'r100', 'r200', 'nouveau', 'swrast'],
-  description : 'List of dri drivers to build. If this is set to auto all drivers applicable to the target OS/architecture will be built'
-)
-option(
-  'dri-drivers-path',
-  type : 'string',
-  value : '',
-  description : 'Location to install dri drivers. Default: $libdir/dri.'
-)
-option(
-  'dri-search-path',
-  type : 'string',
-  value : '',
-  description : 'Locations to search for dri drivers, passed as colon separated list. Default: dri-drivers-path.'
-)
-option(
-  'gallium-drivers',
-  type : 'array',
-  value : ['swrast'],
-  choices : [
-    'auto', 'kmsro', 'radeonsi', 'r300', 'r600', 'nouveau', 'freedreno',
-    'swrast', 'v3d', 'vc4', 'etnaviv', 'tegra', 'i915', 'svga', 'virgl',
-    'swr', 'panfrost', 'iris', 'lima', 'zink'
-  ],
-  description : 'List of gallium drivers to build. If this is set to auto all drivers applicable to the target OS/architecture will be built'
-)
-option(
-  'gallium-extra-hud',
-  type : 'boolean',
-  value : false,
-  description : 'Enable HUD block/NIC I/O HUD status support',
-)
-option(
-  'gallium-vdpau',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'enable gallium vdpau frontend.',
-)
-option(
-  'vdpau-libs-path',
-  type : 'string',
-  value : '',
-  description : 'path to put vdpau libraries. defaults to $libdir/vdpau.'
-)
-option(
-  'gallium-xvmc',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'enable gallium xvmc frontend.',
-)
-option(
-  'xvmc-libs-path',
-  type : 'string',
-  value : '',
-  description : 'path to put xvmc libraries. defaults to $libdir.'
-)
-option(
-  'gallium-omx',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'disabled', 'bellagio', 'tizonia'],
-  description : 'enable gallium omx frontend.',
-)
-option(
-  'omx-libs-path',
-  type : 'string',
-  value : '',
-  description : 'path to put omx libraries. defaults to omx-bellagio pkg-config pluginsdir.'
-)
-option(
-  'gallium-va',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'enable gallium va frontend.',
-)
-option(
-  'va-libs-path',
-  type : 'string',
-  value : '',
-  description : 'path to put va libraries. defaults to $libdir/dri.'
-)
-option(
-  'gallium-xa',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'enable gallium xa frontend.',
-)
-option(
-  'gallium-nine',
-  type : 'boolean',
-  value : false,
-  description : 'build gallium "nine" Direct3D 9.x frontend.',
-)
-option(
-  'gallium-opencl',
-  type : 'combo',
-  choices : ['icd', 'standalone', 'disabled'],
-  value : 'disabled',
-  description : 'build gallium "clover" OpenCL frontend.',
-)
-option(
-  'opencl-spirv',
-  type : 'boolean',
-  value : false,
-  description : 'build gallium "clover" OpenCL frontend with SPIR-V binary support.',
-)
-option(
-  'd3d-drivers-path',
-  type : 'string',
-  value : '',
-  description : 'Location of D3D drivers. Default: $libdir/d3d',
-)
-option(
-  'vulkan-drivers',
-  type : 'array',
-  value : [],
-  choices : ['auto', 'amd', 'freedreno', 'intel'],
-  description : 'List of vulkan drivers to build. If this is set to auto all drivers applicable to the target OS/architecture will be built'
-)
-option(
-  'shader-cache',
-  type : 'combo',
-  value : 'auto',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Build with on-disk shader cache support'
-)
-option(
-  'vulkan-icd-dir',
-  type : 'string',
-  value : '',
-  description : 'Location relative to prefix to put vulkan icds on install. Default: $datadir/vulkan/icd.d'
-)
-option(
-  'vulkan-overlay-layer',
-  type : 'boolean',
-  value : false,
-  description : 'Whether to build the vulkan overlay layer'
-)
-option(
-  'vulkan-device-select-layer',
-  type : 'boolean',
-  value : false,
-  description : 'Whether to build the vulkan device select layer'
-)
-option(
-  'shared-glapi',
-  type : 'combo',
-  value : 'enabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Whether to build a shared or static glapi. Defaults to false on Windows, true elsewhere'
-)
-option(
-  'gles1',
-  type : 'combo',
-  value : 'enabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Build support for OpenGL ES 1.x'
-)
-option(
-  'gles2',
-  type : 'combo',
-  value : 'enabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Build support for OpenGL ES 2.x and 3.x'
-)
-option(
-  'opengl',
-  type : 'boolean',
-  value : true,
-  description : 'Build support for OpenGL (all versions)'
-)
-option(
-  'gbm',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Build support for gbm platform'
-)
-option(
-  'glx',
-  type : 'combo',
-  value : 'gallium-xlib',
-  choices : ['auto', 'disabled', 'dri', 'xlib', 'gallium-xlib'],
-  description : 'Build support for GLX platform'
-)
-option(
-  'egl',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Build support for EGL platform'
-)
-option(
-  'glvnd',
-  type : 'boolean',
-  value : false,
-  description : 'Enable GLVND support.'
-)
-option(
-   'glx-read-only-text',
-   type : 'boolean',
-   value : false,
-   description : 'Disable writable .text section on x86 (decreases performance)'
-)
-option(
-  'llvm',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Build with LLVM support.'
-)
-option(
-  'shared-llvm',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Whether to link LLVM shared or statically.'
-)
-option(
-  'valgrind',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Build with valgrind support'
-)
-option(
-  'libunwind',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Use libunwind for stack-traces'
-)
-option(
-  'lmsensors',
-  type : 'combo',
-  value : 'disabled',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Enable HUD lmsensors support.'
-)
-option(
-  'build-tests',
-  type : 'boolean',
-  value : false,
-  description : 'Build unit tests. Currently this will build *all* unit tests, which may build more than expected.'
-)
-option(
-  'install-intel-gpu-tests',
-  type : 'boolean',
-  value : false,
-  description : 'Build and install Intel unit tests which require the GPU.  This option is for developers and the Intel CI system only.'
-)
-option(
-  'selinux',
-  type : 'boolean',
-  value : false,
-  description : 'Build an SELinux-aware Mesa'
-)
-option(
-  'osmesa',
-  type : 'combo',
-  value : 'none',
-  choices : ['none', 'classic', 'gallium'],
-  description : 'Build OSmesa.'
-)
-option(
-  'osmesa-bits',
-  type : 'combo',
-  value : '8',
-  choices : ['8', '16', '32'],
-  description : 'Number of channel bits for OSMesa.'
-)
-option(
-  'swr-arches',
-  type : 'array',
-  value : ['avx', 'avx2'],
-  choices : ['avx', 'avx2', 'knl', 'skx'],
-  description : 'Architectures to build SWR support for.',
-)
-option(
-  'shared-swr',
-  type : 'boolean',
-  value : true,
-  description : 'Whether to link SWR shared or statically.',
-)
-
-option(
-  'tools',
-  type : 'array',
-  value : [],
-  choices : ['drm-shim', 'etnaviv', 'freedreno', 'glsl', 'intel', 'intel-ui', 'nir', 'nouveau', 'xvmc', 'lima', 'panfrost', 'all'],
-  description : 'List of tools to build. (Note: `intel-ui` selects `intel`)',
-)
-option(
-  'power8',
-  type : 'combo',
-  value : 'auto',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Enable power8 optimizations.',
-)
-option(
-  'xlib-lease',
-  type : 'combo',
-  value : 'auto',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  description : 'Enable VK_EXT_acquire_xlib_display.'
-)
-option(
-  'glx-direct',
-  type : 'boolean',
-  value : true,
-  description : 'Enable direct rendering in GLX and EGL for DRI',
-)
-option(
-  'prefer-iris',
-  type : 'boolean',
-  value : true,
-  description : 'Prefer new Intel iris driver over older i965 driver'
-)
-option('egl-lib-suffix',
-  type : 'string',
-  value : '',
-  description : 'Suffix to append to EGL library name.  Default: none.'
-)
-option(
-  'gles-lib-suffix',
-  type : 'string',
-  value : '',
-  description : 'Suffix to append to GLES library names.  Default: none.'
-)
-option(
-  'platform-sdk-version',
-  type : 'integer',
-  min : 25,
-  max : 28,
-  value : 25,
-  description : 'Android Platform SDK version. Default: Nougat version.'
-)
-option(
-  'zstd',
-  type : 'combo',
-  choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-  value : 'auto',
-  description : 'Use ZSTD instead of ZLIB in some cases.'
-)
-
-```
-
-requires these programs or packages below pre-installed.
-
-* Programs
-    - pkg-config
-    - bison
-    - flex
-
-* Development Packages
-    - libdrm-dev
-    - libx11-dev
-    - libxext-dev
-
-``` bash
-meson build
-```
-
-You can configure a minimal dependencies mesa given that WSL is not a desktop platform as the following my configuration result:
-
-```
-Message: Configuration summary:
-
-        prefix:          /usr/local
-        libdir:          lib/x86_64-linux-gnu
-        includedir:      include
-
-        OpenGL:          yes (ES1: yes ES2: yes)
-        OSMesa:          no
-
-        GLX:             Xlib-based (Gallium)
-
-        EGL:             no
-        GBM:             no
-        EGL/Vulkan/VL platforms:   x11
-
-        Vulkan drivers:  no
-
-        llvm:            no
-
-        Gallium drivers: swrast
-        Gallium st:      mesa
-        HUD lmsensors:   no
-
-        Shared-glapi:    yes
-
-Build targets in project: 97
-```
-
-As you see this configuration supports quite a few components which are essential for off-screen rendering. Once dependencies check passed fully you can begin to compile and install:
 
 ``` bash
 ninja -C build && sudo ninja -C build install
@@ -468,10 +40,12 @@ NOTE:
 meson setup --wipe build
 ```
 
-## Off-screen Demos
+
+
+# Off-screen Demos
 Now that mesa have been built and installed we can give a try to run an OGL application. Similarly without window system supportd on the WSL, [off-screen rendering](https://mesa3d.org/osmesa.html) is my choice. We can clone the mesa [demos](https://gitlab.freedesktop.org/mesa/demos) which includes a lot of demos besides off-screen demos. 
 
-### Requisite
+## Requisite
 We need some more libraries besides libOSMesa and libGL before you can get these off-screen demos worked. They are:
 - [GLU](https://gitlab.freedesktop.org/mesa/glu)
 - libm
@@ -488,23 +62,23 @@ The executable osdemo saves the rendered pixels as the portable pixmap format. Y
 ## OSMesa Call Graphs
 Mesa supports many features from software pipelines to hardware drivers. For example [Gallium](https://www.freedesktop.org/wiki/Software/gallium/), it features with several software or hardware implementations which include the two software pipelines, softpipe and [llvmpipe](https://www.mesa3d.org/llvmpipe.html). With the different pipes enabled will the calls walk in the different paths. 
 
-### Three Different Build Configuration (reference to **meson_options.txt**)
+## Three Different Build Configuration (reference to **meson_options.txt**)
 | Option | *platform* | *glx* | *dri-drivers* | *gallium-drivers* | *llvm* | *osmesa* |
 |-|-|-|-|-|-|-|
 | **llvmpipe** | x11 | gallium-xlib | | swrast | true  | gallium |
 | **softpipe** | x11 | gallium-xlib | | swrast | false | gallium |
 | **tnl**      | x11 | gallium-xlib | | swrast | true  | classic |
 
-### Three Different Call Paths
-#### Context
+## Three Different Call Paths
+### Context
 <div align=center>{% asset_img OSMesaCreateContextExt.png "context initialization" %}</div>
 
 NOTE: As for softpipe and llvmpipe `gl_api` and `gl_context` are created respectively while both of them are created in one path for the classic osmesa.
 
-#### Draw
+### Draw
 <div align=center>{% asset_img PopMatrix.png "draw command" %}</div>
 
-## Gallium-Based GLX Demos
+# Gallium-Based GLX Demos
 If you want to know the full graphic stack of an OpenGL demo, you can not get rid of the window system. That is why I will try some GLX demos. Evidently GLX demos must depend on X11. You can cope with this problem by installing [vcXsrv](https://sourceforge.net/projects/vcxsrv/) on the Windows 10 which hosts your WSL. 
 
 <div align=center>{% asset_img glxgears.png "glx demo" %}</div>
@@ -768,31 +342,9 @@ xmesa_init_display( Display *display )
 
 where `driver.create_pipe_screen(display)` is instantiated as `xlib_driver.swrast_xlib_create_screen`. As we see, the dynamic library routine `_init()` will set `xlib_driver.create_pipe_screen` to `swrast_xlib_create_screen` that return a `pipe_screen` to be set to the `st_manager->screen`. Eventually those two helper functions decide which gallium driver backend will be used by compilation macros.
 
-## Gallium Genbu
-To verify the analysis above we will try to add a customized gallium driver named **genbu** as a clone from the existing softpipe based GLX. All that we will do is three parts work below.
+# DRI-Based GLX Demos
 
-- key data structures: genbu_screen, genbu_context, the related callbacks and definitions 
-- helper functions for loading software rasterizers for GLX
-- build scripts
-
-### [Added or Modified Sources and Build Scripts](https://gitlab.freedesktop.org/lucmaa/mesa/tree/gallium-gb-1.0)
-
-### Trace
-
-| *belong* | *hook* | *callback* | *caller* | *X/GL API* |
-|-|-|-|-|-|
-| pipe_screen | resource_create | softpipe_resource_create | bufferobj_data | |
-| pipe_context | transfer_map | softpipe_transfer_map | | |
-| pipe_context | create_surface | softpipe_create_surface | st_framebuffer_validate | |
-| pipe_context | flush | softpipe_flush_wrapped | st_context_flush | glXSwapBuffers |
-| pipe_context | clear | softpipe_clear | st_Clear | glClear |
-| pipe_context | draw_vbo | softpipe_draw_vbo | st_draw_vbo | glCallList |
-| pipe_context | draw_vbo | softpipe_draw_vbo | st_draw_vbo | glCallList |
-
-
-## DRI-Based GLX Demos
-
-### Loading
+## Loading
 
 - `__glXInitialize`
 - `driOpenDriver`
@@ -1072,7 +624,7 @@ struct gl_vertex_array_object
 - util
 - vl
 
-## Q&A
+# Q&A
 #### When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
 
 The answer is **`sw_winsys`**. All of target helpers's parameter is a `sw_winsys`. Check mesa source directory: [mesa/src/gallium/winsys](https://gitlab.freedesktop.org/mesa/mesa/tree/master/src/gallium/winsys)
