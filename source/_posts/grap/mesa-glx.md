@@ -1,7 +1,7 @@
 ---
-title: GLX in Mesa
+title: Mesa 的 GLX 实现
 date: 2021-03-11 14:44:56
-tags: [OpenGL]
+tags: [mesa]
 categories: graphics
 ---
 
