@@ -2,7 +2,7 @@
 title: Submitting My First Linux Kernel Patch
 date: 2023-05-08 11:38:43
 tags: [linux]
-categories: kernel
+categories: linux
 ---
 
 Linux 内核的 patch 是以纯文本的邮件形式进行提交和代码走查的，而且 patch 是先到内核子系统 maintainer 维护的 git tree, 再到 [Linus Torvalds 的 main tree](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/)。本文主要是以一个 patch 提交的实例来记录一下整个过程中的一些具体操作要点，至于 kernel patch 提交的规范和操作细节[内核文档](https://www.kernel.org/doc/html/latest/process/submitting-patches.html) 和各种博客文章有很多，这里不再赘述。

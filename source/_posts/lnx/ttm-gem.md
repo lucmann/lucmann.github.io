@@ -2,7 +2,7 @@
 title: TTM vs GEM
 date: 2021-08-19 15:42:45
 tags: drm
-categories: kernel
+categories: linux
 ---
 
 # TTM和GEM

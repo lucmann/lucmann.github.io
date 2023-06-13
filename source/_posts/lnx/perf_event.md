@@ -2,7 +2,7 @@
 title: Linux perf初探
 date: 2021-06-25 07:57:06
 tags: performance
-categories: kernel
+categories: linux
 ---
 
 # 环境 & 版本

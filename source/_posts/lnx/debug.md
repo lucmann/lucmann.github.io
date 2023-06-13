@@ -2,7 +2,7 @@
 title: Linux Kernel Debugging
 date: 2023-05-19 11:38:43
 tags: linux
-categories: kernel
+categories: linux
 ---
 
 # debugfs

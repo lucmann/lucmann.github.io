@@ -2,7 +2,7 @@
 title: 了解 Linux DRM 子系统
 date: 2021-04-12 17:07:27
 tags: drm
-categories: kernel
+categories: linux
 ---
 
 # DRM driver features

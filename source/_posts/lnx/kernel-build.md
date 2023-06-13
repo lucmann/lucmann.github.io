@@ -2,7 +2,7 @@
 title: Building Linux Kernel
 date: 2022-11-06 11:38:43
 tags: [build]
-categories: kernel
+categories: linux
 ---
 
 # Should Know Something About Kernel Building
