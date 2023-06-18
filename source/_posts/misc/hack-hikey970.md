@@ -53,3 +53,11 @@ HiKey970 有两个 Type-C 接口，而且当板子被设置为 Recovery 模式�
 ![USB-to-Serial on Hikey970](USB-Serial.png)
 
 ![Select CONFIG_USB_SERIAL_OPTION on WSL2 Kernal config](Huawei-USB-SER.png)
+
+
+
+# 参考
+
+[1. HiKey970 官方文档](https://www.96boards.org/documentation/consumer/hikey/hikey970/installation/board-recovery.md.html)
+[2. usbipd-win github issues](https://github.com/dorssel/usbipd-win/issues/59)
+
