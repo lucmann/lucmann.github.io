@@ -52,7 +52,7 @@ HiKey970 有两个 Type-C 接口，而且当板子被设置为 Recovery 模式�
 
 ![USB-to-Serial on Hikey970](USB-Serial.png)
 
-![Select CONFIG_USB_SERIAL_OPTION on WSL2 Kernal config](Huawei-USB-SER.png)
+![Select CONFIG_USB_SERIAL_OPTION on WSL2 Kernal config](huawei-USB-SER-driver.png)
 
 
 
