@@ -44,13 +44,15 @@ BUSID  VID:PID    DEVICE                                                        
 
 HiKey970 有两个 Type-C 接口，而且当板子被设置为 Recovery 模式时，两个接口均会被识别为“串口”。在左手边的 (J3101) 是用来访问 Debug UART 的，而在 HDMI 和 USB 中间的那个(J1801)是在 Recovery 模式下使用的。而且这两个接口是两个不同厂家提供的芯片，使用完全不同的内核驱动模块
 
+![USB-to-Serial on Hikey970](USB-Serial.png)
+
 - 前者(J3101)：
     `Bus 001 Device 003: ID 04e2:1410 Exar Corp. XR21V1410 USB-UART IC`
 
+![Select CONFIG_USB_SERIAL_XR on WSL2 Kernal config](exar-USB-SER-driver.png)
+
 - 后者(J1801)：
     `Bus 001 Device 002: ID 12d1:3609 Huawei Technologies Co., Ltd. USB SER`
-
-![USB-to-Serial on Hikey970](USB-Serial.png)
 
 ![Select CONFIG_USB_SERIAL_OPTION on WSL2 Kernal config](huawei-USB-SER-driver.png)
 
