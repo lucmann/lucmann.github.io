@@ -14,8 +14,8 @@ categories: linux
 | int dup2(int oldfd, int newfd);                  |                                                         |
 | uid_t getuid(void);                              |                                                         |
 | uid_t geteuid(void);                             |                                                         |
-|                                                  |                                                         |
-|                                                  |                                                         |
+| pid_t getpid(void);                              | return process ID of calling process                    |
+| pid_t getppid(void);                             | return process ID of parent of calling process          |
 |                                                  |                                                         |
 |                                                  |                                                         |
 |                                                  |                                                         |

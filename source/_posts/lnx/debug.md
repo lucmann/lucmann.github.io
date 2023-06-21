@@ -5,7 +5,7 @@ tags: linux
 categories: linux
 ---
 
-# debugfs
+# `CONFIG_DEBUG_FS`
 
 ## 如何在 WSL2 上启用 debugfs
 
@@ -20,6 +20,8 @@ zcat /proc/config.gz | grep CONFIG_DEBUG_FS
 ```
 mount -t debugfs none /sys/kernel/debug/
 ```
+
+<!--more-->
 
 如果想让挂载在系统重启后自动挂载，在 `/etc/fstab` 加下面一行
 
@@ -61,6 +63,10 @@ drwxr-xr-x 35 root root 0 May 19 17:03 ./bdi
 ```
 
 `/sys/kernel/debug` 目录的权限是 700, 只有 root 用户才能进入，sudo 也不行
+
+# `CONFIG_DEBUG_ATOMIC_SLEEP`
+
+[`dma_fence_wait_timeout()`](https://www.kernel.org/doc/html/latest/driver-api/dma-buf.html?highlight=dma_fence_wait_timeout#c.dma_fence_wait_timeout) 会睡眠调用进程直到 fence 被 signaled 或者指定定时器超时。该函数中会调用 `might_sleep()` 来标识 (annotation) 调用进程可能进入睡眠状态，并打印源文件名和行号，帮助调试。 但只有内核配置了 `CONFIG_DEBUG_ATOMIC_SLEEP` 才有效，否则 `__might_sleep()` 是一个空函数。
 
 # References
 
