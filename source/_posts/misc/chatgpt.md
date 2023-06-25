@@ -38,6 +38,14 @@ In summary, the wound/wait mutex is capable of deadlock avoidance because it use
 
 总体而言，在Linux内核中，伤口/等待互斥锁能够避免死锁，因为它具有高效的等待机制，并且能够检测和解决潜在的死锁情况。
 
+## 为什么 Sleep to RAM 在 Linux 里又被称为 S3?
+
+在Linux中，Sleep to RAM模式被称为S3，因为它对应于ACPI（高级配置和电源接口）规范的系统状态S3。 ACPI规范为计算机系统定义了几种电源状态，从完全开启（S0）到完全关闭（S5）。
+
+系统状态S3表示“睡眠”状态，在此状态下，计算机将其当前状态保存到RAM内存中，然后关闭大部分组件以节省电力。当用户唤醒计算机时，它会从RAM中恢复保存的状态并恢复操作。
+
+在ACPI中，每个电源状态都被分配一个唯一的标识符，以"S"开头，后面跟着一个数字。因此，S3特指将内容保存在易失性内存中以便快速恢复操作的Sleep to RAM模式。
+
 # 计算机术语
 
 ## 什么是 Snoop the cache?
