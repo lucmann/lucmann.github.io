@@ -5,11 +5,20 @@ tags: build
 categories: programming
 ---
 
-# compilers - `gcc`/`g++`/`clang`/`clang++`
+# 编译器
+
+- gcc 
+- g++ (GNU, latest version 12 ~ 13)
+- clang
+- clang++ (LLVM, latest version 16 ~ 17)
 
 <!--more-->
 
-# linkers - `ld.bfd`/`ld.gold`/`mold`
+# 链接器
+
+- bfd (使用 Binary File Descriptor 库构建的 Linker)
+- gold (Google linker, faster than bfd, but fewer features)
+- mold ([A modern linker](https://github.com/rui314/mold))
 
 动态链接库 (shared library) 无处不在。使用动态链接库基本上是通过链接器 (linker, generally a program suffixing with "ld")。本文主要回答以下问题:
 
@@ -202,4 +211,15 @@ meson build --prefix=/usr -D{c,cpp}_args=-fuse-ld=gold -Dflavors=x11-gl,x11-gles
 
 ```bash
 cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold
+```
+
+# 编译 mold
+
+``` under WSL2 Ubuntu 20.04 hosted Windows 11 Dell OptiPlex 3090
+$ cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_EXPORT_COMPILE_COMMANDS=On
+$ time cmake --build build -j 8
+...
+[100%] Linking CXX executable mold
+[100%] Built target mold
+cmake --build build -j 8  844.42s user 94.17s system 674% cpu 2:19.20 total
 ```
