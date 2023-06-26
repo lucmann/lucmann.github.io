@@ -223,3 +223,21 @@ $ time cmake --build build -j 8
 [100%] Built target mold
 cmake --build build -j 8  844.42s user 94.17s system 674% cpu 2:19.20 total
 ```
+
+# 编译 mesa
+
+```
+➜  forked git:(23.1.3) meson build -Dprefix=/usr/local -Dbuildtype=debug -Dplatforms=x11 -Dvulkan-drivers=swrast -Dgallium-drivers=swrast,radeonsi,panfrost -Dglx=dri -Dllvm=enabled -Dcpp_rtti=false
+➜  forked git:(23.1.3) time ninja -C build
+ninja: Entering directory `build'
+[1559/1559] Generating src/gallium/targets/dri/devenv_panfrost_dri.so with a custom command
+ninja -C build  1214.38s user 240.13s system 710% cpu 3:24.62 total
+```
+
+```
+➜  forked git:(23.1.3) ✗ CC=clang CC_LD=mold meson build -Dprefix=/usr/local -Dbuildtype=debug -Dplatforms=x11 -Dvulkan-drivers=swrast -Dgallium-drivers=swrast,radeonsi,panfrost -Dglx=dri -Dllvm=enabled -Dcpp_rtti=false
+➜  forked git:(23.1.3) ✗ time ninja -C build
+2 warnings generated.
+[1559/1559] Generating src/gallium/targets/dri/devenv_mcde_dri.so with a custom command
+ninja -C build  12971.24s user 158.32s system 1146% cpu 19:04.81 total
+```
