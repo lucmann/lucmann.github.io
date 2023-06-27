@@ -241,3 +241,30 @@ ninja -C build  1214.38s user 240.13s system 710% cpu 3:24.62 total
 [1559/1559] Generating src/gallium/targets/dri/devenv_mcde_dri.so with a custom command
 ninja -C build  12971.24s user 158.32s system 1146% cpu 19:04.81 total
 ```
+
+# 编译 LLVM
+
+## 主要的配置
+
+```
+cmake -S llvm -B build -G Ninja                                     \
+  -DCMAKE_C_COMPILER=gcc-10                                         \
+  -DCMAKE_CXX_COMPILER=g++-10                                       \
+  -DCMAKE_BUILD_TYPE=Release                                        \
+  -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR"                             \
+  -DLLVM_LIBDIR_SUFFIX="64"                                         \
+  -DLLVM_TARGETS_TO_BUILD="host;AMDGPU"                             \
+  -DLLVM_BUILD_LLVM_DYLIB="ON"                                      \
+  -DBUILD_SHARED_LIBS="ON"                                          \
+  -DLLVM_USE_LINKER="gold"                                          \
+  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld"              \
+  -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind"               \
+  -DLLVM_PARALLEL_COMPILE_JOBS="1"                                  \
+  -DLLVM_PARALLEL_LINK_JOBS="1"
+```
+
+## OOM 问题
+
+如果机器内存不够在编译 LLVM 的时候可能会触发 OOM Killer (我在 WSL2 下就100%触发). 可以通过临时添加 swap 分区的方法避免这个问题 （[Linux Add a Swap File Tutorial](https://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/)）
+
+
