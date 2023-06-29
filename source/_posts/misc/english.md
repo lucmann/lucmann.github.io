@@ -1,5 +1,5 @@
 ---
-title: English Corner
+title: My english is poor
 date: 2021-12-18 20:20:40
 tags: English
 categories: misc
@@ -60,35 +60,29 @@ categories: misc
 
 # 短语汇
 
-## Wiggle Room
+## Wiggle Room（进行解释或表达意见所留的）余地、回旋空间。
 
-（进行解释或表达意见所留的）余地、回旋空间
-
-> there's pretty much zero wiggle room in semantics
-
-在语义方面几乎没有任何余地
+there's pretty much zero wiggle room in semantics 在语义上没有什么可讨论的。
 
 ## Hand Roll/Hand-rolled
 
 "Hand roll"或"hand-rolled"是一个英语词汇，通常用于描述手工制作的东西。这个词汇可以用来形容手工制作的食品，如手卷寿司（hand-rolled sushi），也可以用来形容手工制作的烟卷（hand-rolled cigarettes）或手工制作的纸卷（hand-rolled paper）。在其他领域，"hand roll"或"hand-rolled"也可以指手工制作的家具、纺织品、珠宝、音乐乐器等。
 
->  I think we're way past the point where drivers hand-rolling entire gem from nothing is ready for upstream
+I think we're way past the point where drivers hand-rolling entire gem from nothing is ready for upstream
 
+## rubberstamp (不带检查地) 允许或通过
 
-# 软件开发中的常用词汇
+无论这个是否有助于 v10 版本硬件的逆向，我都愿意给你通过(不检查), 但我还是想明白我们所面临的问题。
 
-## rubberstamp
+Willing to rubberstamp regardless of this is helping v10 r/e, but I would like to understand what we're up against here.
 
-- 例句
+## scaffolding 临时结构和代码
 
-    > Willing to rubberstamp regardless of this is helping v10 r/e, but I would like to understand what we're up against here.
+scaffolding 是指脚手架，通常用于建筑施工中支撑人员和材料的临时结构。在计算机科学中，scaffolding 可以指代软件开发过程中的一些临时结构和代码，用于辅助开发人员快速完成某个功能或实现某个目标。这些临时结构和代码通常会被移除或重构，只留下最终的代码和结构
 
-    无论这个是否有助于 v10 版本硬件的逆向，我都愿意给你通过(不检查), 但我还是想明白我们所面临的问题。
+have the minimal scaffolding to support the preempt-ctx fence in drm_sched_entity
 
-## scaffolding
+## Scratching my head 挠头，表示遇到难题或困扰
 
-scaffolding 是指脚手架，通常用于建筑施工中支撑人员和材料的临时结构。在计算机科学中，scaffolding 可以指代软件开发过程中的一些临时结构和代码，用于辅助开发人员快速完成某个功能或实现某个目标。这些临时结构和代码通常会被移除或重构，只留下最终的代码和结构。
+"Scratching my head" 可以翻译为“挠头”，表示困惑、疑惑或思考时的动作。这个表达方式通常用于描述遇到难题或困扰时的情况。
 
-- 例句
-
-    > have the minimal scaffolding to support the preempt-ctx fence in drm_sched_entity
