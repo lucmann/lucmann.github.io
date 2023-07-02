@@ -7,11 +7,15 @@ categories: graphics
 
 # Build
 
-[Mesa](https://mesa3d.org/) is an open source implementation for OpenGL. Check [repository](https://gitlab.freedesktop.org/mesa/mesa) for its source code. There are something worth to learn about this project for a graphic driver developer.
+```
+meson build -Dprefix=/usr -Dplatforms=x11 -Dgallium-drivers=swrast,panfrost,radeonsi -Dvulkan-drivers=swrast -Dglx=dri -Dllvm=enabled -Dcpp_rtti=false -Dxmlconfig=enabled -Dglvnd=true
+```
 
 ``` bash
 ninja -C build && sudo ninja -C build install
 ```
+
+<!--more-->
 
 After compilation and installed as follow:
 
@@ -40,6 +44,26 @@ NOTE:
 meson setup --wipe build
 ```
 
+# 与 mesa 相关的一些常用软件包
+
+## mesa-utils
+
+包含以下 glx demo 或 test program
+
+- glxdemo
+- glxgears
+- glxheads
+- glxinfo
+
+## mesa-utils-extra
+
+包含以下 egl demo 或 test program
+
+- eglinfo
+- es2_info
+- es2gears_wayland
+- es2gears_x11
+- es2tri
 
 
 # Off-screen Demos
@@ -822,4 +846,5 @@ XExtDisplayInfo *XextAddDisplay (
     return dpyinfo;
 }
 ```
+
 
