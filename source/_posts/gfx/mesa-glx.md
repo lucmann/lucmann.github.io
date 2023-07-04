@@ -50,3 +50,7 @@ graph TD
 | [dri3_glx.c](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/dri3_glx.c)   | [dri3_create_screen()](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/dri3_glx.c#L789)                     |
 | [drisw_glx.c](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/drisw_glx.c) | [driswCreateScreenDriver()](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/drisw_glx.c#L925)                |
 
+## dri2CreateScreen
+
+![dri2CreateScreen](dri2CreateScreen.drawio.png)
+
