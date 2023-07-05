@@ -1,18 +1,23 @@
 ---
 title: Device Probe in Xorg
-date: 2021-05-14 11:20:00
-tags: [2D]
+date: 2023-07-05 11:20:00
+tags: [xserver]
 categories: graphics
 ---
 
-# Output Selection on Multi-Cards System
+# 古老的 Xserver
+
+![20-year-old Xserver code](20-years-old-patch.png)
+
+# 多显卡系统的显示输出
+
+要想弄清楚 Xserver 在多显卡 Linux 系统是如何选择显示输出设备的，按目前 Xserver 的实现，我们先要了解
+
+- Platform Bus Devices
+- [libpciaccess](https://gitlab.freedesktop.org/xorg/lib/libpciaccess)
+- udev (主要与 hotplug 有关)
 
 <!--more-->
-
-要想弄清楚 Xorg 在多显卡系统是如何选择显示输出设备的，按目前 Xorg 的实现，我们先要了解
-
-- [pciaccess](https://gitlab.freedesktop.org/xorg/lib/libpciaccess)
-- udev
 
 本文想尝试回答的问题是，当主板上同时存在多张PCI显卡，但只有一个显示器(假设显示器至少有两个HDMI接口)时，Linux系统是如何选择优先使用哪一张显卡输出的。
 
