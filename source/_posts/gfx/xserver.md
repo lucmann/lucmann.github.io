@@ -69,33 +69,36 @@ struct OdevAttributes {
 
 - busid
 
-    DRI格式的Bus ID， `pci:0000:04:00.0`, 这种格式包含4个数字，分别表示：
-
-    1. PCI domain
-    2. PCI bus
-    3. PCI device
-    4. PCI function
+    DRI 风格的Bus ID， 如 "pci:0000:04:00.0"
 
 - fd
 
-文件描述符，`open(/dev/dri/card0)`返回值
+    文件描述符，`open(/dev/dri/card0)`返回值
 
 - major
 
-主设备号
+    主设备号
 
 - minor
 
-次设备号
+    次设备号
 
 - driver
 
-kernel driver name, 如 "amdgpu"
+    kernel driver name, 如 "amdgpu"
 
 # PCI BusID
 
 ## DRI-style 
 
+```
+pci:0000:04:00.0
+```
+
+- `0000` PCI domain
+- `  04` PCI bus
+- `  00` PCI device
+- `   0` PCI function
 
 ## Xorg 日志
 
