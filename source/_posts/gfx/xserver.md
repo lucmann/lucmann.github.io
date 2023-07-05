@@ -61,46 +61,20 @@ struct OdevAttributes {
 
 - path
 
-字符串，kernel device node, `/dev/dri/card0`
+    kernel device node, `/dev/dri/card0`
 
 - syspath
 
-字符串，system device path, `/sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/drm/card1`
+    system device path, `/sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/drm/card1`
 
 - busid
 
-字符串，DRI格式的Bus ID， `pci:0000:04:00.0`, 这种格式包含4个数字，分别表示：
+    DRI格式的Bus ID， `pci:0000:04:00.0`, 这种格式包含4个数字，分别表示：
 
-1. PCI domain
-2. PCI bus
-3. PCI device
-4. PCI function
-
-要注意这种格式与`Xorg.0.log`中的那种打印格式的区别
-
-``` xorg-server-1.18.4
-[     8.456] (--) PCI: (0:5:0:0) 1002:677b:174b:3000 rev 0, Mem @ 0x1040000000/268435456, 0x58600000/131072, I/O @ 0x00002000/256, BIOS @ 0x????????/131072
-```
-
-这种格式`PCI: (0:5:0:0) 1002:677b:174b:3000`, 一共包含了8个数字，分别表示：
-1. PCI domain
-2. PCI bus
-3. PCI device
-4. PCI function
-5. PCI vendor ID
-6. PCI device ID
-7. PCI subvendor ID
-8. PCI subdevice ID
-
-``` xorg-server-1.20.0
-[    40.891] (--) PCI: (10@0:0:0) 1a03:2000:1a03:2000 rev 65, Mem @ 0x60000000/16777216, 0x61000000/131072, I/O @ 0x00002000/128, BIOS @ 0x????????/65536
-```
-
-这种格式`PCI: (10@0:0:0) 1a03:2000:1a03:2000`, 也是共8个数字，与前面的区别是PCI domain与PCI bus换了位置。
-
-上面两种格式都可以作为`Device`段里`BusID`的格式，X11规定的`BusID`的格式是
-
-"bus<font color="green">[@domain]</font>:device<font color="green">[:func]</font>"
+    1. PCI domain
+    2. PCI bus
+    3. PCI device
+    4. PCI function
 
 - fd
 
@@ -116,7 +90,59 @@ struct OdevAttributes {
 
 - driver
 
-字符串， kernel driver name, `drm_driver.name`
+kernel driver name, 如 "amdgpu"
+
+# PCI BusID
+
+## DRI-style 
+
+
+## Xorg 日志
+
+- 来自 xorg-server-1.18.4 版本的 Xorg 日志
+
+```
+[     8.456] (--) PCI: (0:5:0:0) 1002:677b:174b:3000 rev 0, Mem @ 0x1040000000/268435456, 0x58600000/131072, I/O @ 0x00002000/256, BIOS @ 0x????????/131072
+```
+
+- 来自 xorg-server-1.20.0 版本的 Xorg 日志
+
+```
+[    40.891] (--) PCI: (10@0:0:0) 1a03:2000:1a03:2000 rev 65, Mem @ 0x60000000/16777216, 0x61000000/131072, I/O @ 0x00002000/128, BIOS @ 0x????????/65536
+```
+
+变更发生于 2017-06-19:
+
+```
+commit e905b19a53f96013c4417bec993a1dea5a3b0a5f
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Mon Jun 19 19:05:29 2017 +0900
+
+    xfree86: Print BusID stanza compatible bus IDs for found devices
+
+    The PCI domain has to be specified like this:
+
+     "PCI:<bus>@<domain>:<device>:<function>"
+
+    Example before:
+
+     (--) PCI:*(0:0:1:0) 1002:130f:1043:85cb [...]
+     (--) PCI: (0:1:0:0) 1002:6939:1458:229d [...]
+
+    after:
+
+     (--) PCI:*(0@0:1:0) 1002:130f:1043:85cb [...]
+     (--) PCI: (1@0:0:0) 1002:6939:1458:229d [...]
+
+    Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+```
+
+## Xorg 配置文件 "Device" Section
+
+上面两种格式都可以作为`Device`段里`BusID`的格式，X11规定的`BusID`的格式是
+
+"bus<font color="green">[@domain]</font>:device<font color="green">[:func]</font>"
 
 
 Xserver依赖下面的用户空间库来填写该结构，这个过程也体现了Xserver检测显卡及加载驱动的过程
