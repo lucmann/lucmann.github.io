@@ -16,7 +16,7 @@ categories: linux
 | uid_t geteuid(void);                             |                                                         |
 | pid_t getpid(void);                              | return process ID of calling process                    |
 | pid_t getppid(void);                             | return process ID of parent of calling process          |
-|                                                  |                                                         |
+| int ioctl(int fd, unsigned long request, ...);   | 操作底层设备参数，尤其像终端这种字符设备                |
 |                                                  |                                                         |
 |                                                  |                                                         |
 |                                                  |                                                         |

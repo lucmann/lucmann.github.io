@@ -68,6 +68,8 @@ drwxr-xr-x 35 root root 0 May 19 17:03 ./bdi
 
 [`dma_fence_wait_timeout()`](https://www.kernel.org/doc/html/latest/driver-api/dma-buf.html?highlight=dma_fence_wait_timeout#c.dma_fence_wait_timeout) 会睡眠调用进程直到 fence 被 signaled 或者指定定时器超时。该函数中会调用 `might_sleep()` 来标识 (annotation) 调用进程可能进入睡眠状态，并打印源文件名和行号，帮助调试。 但只有内核配置了 `CONFIG_DEBUG_ATOMIC_SLEEP` 才有效，否则 `__might_sleep()` 是一个空函数。
 
+# `CONFIG_DRM_USE_DYNAMIC_DEBUG`
+
 # References
 
 [1] https://access.redhat.com/solutions/5914171
