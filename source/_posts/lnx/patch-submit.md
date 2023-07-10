@@ -46,6 +46,10 @@ mutt [-Enx] [-e cmd] [-F file] [-H file] [-i file] [-s subj] [-b addr] [-c addr]
 mutt -H /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch "`./scripts/get_maintainer.pl --separator , --norolestats /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch`"
 ```
 
+带有 `Fixes:` tag 的patch 应该会被 backport 到以前必要 -stable tree.
+
+![patch-backport](patch-backport.png)
+
 ## 注意事项
 
 - mutt 需要配置 IMAP/SMTP, 即邮件收发协议配置 (这是整个过程中最费劲的)
