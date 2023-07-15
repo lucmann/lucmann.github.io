@@ -86,3 +86,7 @@ have the minimal scaffolding to support the preempt-ctx fence in drm_sched_entit
 
 "Scratching my head" 可以翻译为“挠头”，表示困惑、疑惑或思考时的动作。这个表达方式通常用于描述遇到难题或困扰时的情况。
 
+## footgun/foot-gun 自伤行为。指在尝试解决问题时，不小心采用了导致问题恶化的行动。类似于“搬起石头砸自己的脚”
+
+"Is the suggested callback a giant foot-gun in the already treacherous territory of scheduling and fencing?"
+
