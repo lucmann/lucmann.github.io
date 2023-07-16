@@ -94,7 +94,9 @@ have the minimal scaffolding to support the preempt-ctx fence in drm_sched_entit
 
 |  word                                   | translation                              |
 |:----------------------------------------|:-----------------------------------------|
+| deque / dɛk /                           | n. 双端队列                              |
 | infinite / 'ɪnfɪnət /                   | adj. 无限的，非限定的; n. 无穷大，上帝   |
 | finite / 'fɑɪnɑɪt /                     | adj. 有限的，限定的; n. 有限之物         |
+| opaque / oʊ'peɪk /                      | adj. 不透明的，难懂的; n. 不透明体       |
 | width  / wɪdθ; wɪtθ /                   | n. 宽度                                  |
 
