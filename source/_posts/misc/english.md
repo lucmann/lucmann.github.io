@@ -90,3 +90,10 @@ have the minimal scaffolding to support the preempt-ctx fence in drm_sched_entit
 
 "Is the suggested callback a giant foot-gun in the already treacherous territory of scheduling and fencing?"
 
+# 经常读错的词汇
+
+|  word                                   | translation                              |
+|:----------------------------------------|:-----------------------------------------|
+| finite / 'fɑɪnɑɪt /                     | adj. 有限的，限定的; n. 有限之物         |
+| width  / wɪdθ; wɪtθ /                   | n. 宽度                                  |
+
