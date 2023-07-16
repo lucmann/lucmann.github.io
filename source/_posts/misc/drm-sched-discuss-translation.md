@@ -20,6 +20,8 @@ categories: misc
 
 # 翻译1
 
+(关于 Linux 社区工作方式)
+
 And, to be clear, for the purposes of this discussion, we're ALL
 idiots, myself included.  If there's one thing the DRM community has
 learned over the years, it's that drivers are so complex that we all
@@ -38,4 +40,13 @@ distant memory.
 
 [英文原文](https://patchwork.freedesktop.org/patch/525461/)
 [相关视频](https://www.youtube.com/watch?v=3OqllZONTiQ&t=9937s)
+
+# 翻译2
+
+(关于 DRM device reset 文档建设)
+
+
+
+[英文原文](https://patchwork.freedesktop.org/patch/519860/)
+[英文原文](https://patchwork.freedesktop.org/patch/544431/)
 

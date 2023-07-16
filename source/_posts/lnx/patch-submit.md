@@ -16,6 +16,18 @@ Linux 内核的 patch 是以纯文本的邮件形式进行提交和代码走查�
 - git 2.25.1
 - 内核 DRM 子系统 git tree [drm-misc](https://cgit.freedesktop.org/drm/drm-misc/)
 
+    ```
+    drm     git://anongit.freedesktop.org/drm/drm (fetch)
+    drm     git://anongit.freedesktop.org/drm/drm (push)
+    drm-misc        git://anongit.freedesktop.org/drm/drm-misc (fetch)
+    drm-misc        git://anongit.freedesktop.org/drm/drm-misc (push)
+    origin  git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git (fetch)
+    origin  git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git (push)
+    stable  git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git (fetch)
+    stable  git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git (push)
+
+    ```
+
 # 过程
 
 ## 准备 patch

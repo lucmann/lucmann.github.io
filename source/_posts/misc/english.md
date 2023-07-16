@@ -94,6 +94,7 @@ have the minimal scaffolding to support the preempt-ctx fence in drm_sched_entit
 
 |  word                                   | translation                              |
 |:----------------------------------------|:-----------------------------------------|
+| infinite / 'ɪnfɪnət /                   | adj. 无限的，非限定的; n. 无穷大，上帝   |
 | finite / 'fɑɪnɑɪt /                     | adj. 有限的，限定的; n. 有限之物         |
 | width  / wɪdθ; wɪtθ /                   | n. 宽度                                  |
 

@@ -257,6 +257,16 @@ Submodule path 'third_party/vma': checked out 'f9921aefddee2437cc2e3303d3175bd8e
 Submodule path 'third_party/vulkan': checked out '76f00ef6cbb1886eb1162d1fa39bee8b51e22ee8'
 ```
 
+# git-apply vs. git-am
+
+git-apply 只把 patch 应用到 index, 不会创建 commit
+
+git-am 应用的 patch 必须是 git-format-patch 生成的带有 commit, author 等信息的 patch, git-am 后 patch 的 commit 就存在在你的 git tree 了。
+
+git-am 可以直接应用到从 [patchwork.freedesktop.org](https://patchwork.freedesktop.org/patch/544431/) 下载下来的 patch 文件
+
+![patchwork-download-mbox](patchwork-download-mbox.png)
+
 # gitignore
 
 ## 记几个与gitignore相关的命令：
