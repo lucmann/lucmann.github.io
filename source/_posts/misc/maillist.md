@@ -22,6 +22,10 @@ categories: misc
 
 Easy! 只需要自己有一个 E-mail 地址，然后在这个[网站](https://lists.freedesktop.org/mailman/listinfo/dri-devel#:~:text=Subscribe%20to%20dri-devel%20by%20filling%20out%20the%20following,confirmation%2C%20to%20prevent%20others%20from%20gratuitously%20subscribing%20you.)填一个简单的表格就可以了。
 
+# 邮件列表订阅者的 Digested Members 和 Non-digested Members 有何不同？
+
+[链接:https://td.wku.edu/TDClient/34/Portal/KB/ArticleDet?ID=1620](https://td.wku.edu/TDClient/34/Portal/KB/ArticleDet?ID=1620)
+
 # 翻译1
 
 (关于 Linux 社区工作方式)
