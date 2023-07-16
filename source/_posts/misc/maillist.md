@@ -18,6 +18,10 @@ categories: misc
 
 已经订阅 dri-devel@lists.freedesktop.org 有一年多了，看到过几次激烈的关于 drm 子系统里的像 drm_sched, dma_fence 的讨论。慢慢地我发现在翻译工具的帮助下，邮件列表里的 e-mail thread 可以成为很好的学习英语的地方。这里的表达感觉介于正式的书面语和随意的口语之间，更重要的，在讨论当中有很多技术性的专业词汇及俚语。这些不仅有助于提高英语水平（读写，不包括说听），而且有助于熟悉技术讨论中常用的表述习惯和语句组织。 
 
+# 如何订阅 dri-devel
+
+Easy! 只需要自己有一个 E-mail 地址，然后在这个[网站](https://lists.freedesktop.org/mailman/listinfo/dri-devel#:~:text=Subscribe%20to%20dri-devel%20by%20filling%20out%20the%20following,confirmation%2C%20to%20prevent%20others%20from%20gratuitously%20subscribing%20you.)填一个简单的表格就可以了。
+
 # 翻译1
 
 (关于 Linux 社区工作方式)
