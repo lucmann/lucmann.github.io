@@ -46,6 +46,8 @@ git format-patch HEAD^ -v 2 -o /tmp/
 
 ## 提交 patch
 
+### 使用 mutt 提交 patch
+
 提交 Linux kernel patch 实际上就是用邮件客户端将生成好的 patch 文件发送给相关的 maintainers 和 maillists. `git send-email` 也可以做同样的事，这里使用的是 mutt. mutt 的基本命令行格式是
 
 ```
@@ -61,6 +63,38 @@ mutt -H /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch "`.
 带有 `Fixes:` tag 的patch 应该会被 backport 到以前必要 -stable tree.
 
 ![patch-backport](patch-backport.png)
+
+### 使用 git-send-email 提交 patch
+
+git-send-email 配置 stmp.gmail 和使用都相较于 mutt 简单些。
+
+- 将 user@stmp.gmail.com 的密码配置在 ~/.gitconfig 的 sendemail 段
+
+    ```
+    [sendemail]
+        smtppass = <16 characters Google App Password>
+    ```
+
+    ```
+    ➜  drm git:(drm-misc-next) git send-email --to luc@sietium.com --no-cc /tmp/v5-1-1-drm-doc-Document-DRM-device-reset-expectations.patch
+    /tmp/v5-1-1-drm-doc-Document-DRM-device-reset-expectations.patch
+    OK. Log says:
+    Server: smtp.gmail.com
+    MAIL FROM:<onion0709@gmail.com>
+    RCPT TO:<luc@sietium.com>
+    From: Luc Ma <onion0709@gmail.com>
+    To: luc@sietium.com
+    Subject: [v5,1/1] drm/doc: Document DRM device reset expectations
+    Date: Tue, 18 Jul 2023 22:18:19 +0800
+    Message-Id: <20230627132323.115440-1-andrealmeid@igalia.com>
+    X-Mailer: git-send-email 2.25.1
+    Content-Type: text/plain; charset="utf-8"
+    MIME-Version: 1.0
+    X-Patchwork-Id: 544431
+    Content-Transfer-Encoding: 8bit
+
+    Result: 250
+    ```
 
 ## 注意事项
 
