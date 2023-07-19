@@ -32,6 +32,47 @@ categories: graphics
 
 # [Linux VGAArbiter](https://www.kernel.org/doc/html/v4.10/gpu/vgaarbiter.html)
 
+Linux kernel vgaarbiter 的创建
+
+```
+commit deb2d2ecd43dfc51efe71eed7128fda514da96c6
+Author: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Date:   Tue Aug 11 15:52:06 2009 +1000
+
+    PCI/GPU: implement VGA arbitration on Linux
+
+    Background:
+    Graphic devices are accessed through ranges in I/O or memory space. While most
+    modern devices allow relocation of such ranges, some "Legacy" VGA devices
+    implemented on PCI will typically have the same "hard-decoded" addresses as
+    they did on ISA. For more details see "PCI Bus Binding to IEEE Std 1275-1994
+    Standard for Boot (Initialization Configuration) Firmware Revision 2.1"
+    Section 7, Legacy Devices.
+
+    The Resource Access Control (RAC) module inside the X server currently does
+    the task of arbitration when more than one legacy device co-exists on the same
+    machine. But the problem happens when these devices are trying to be accessed
+    by different userspace clients (e.g. two server in parallel). Their address
+    assignments conflict. Therefore an arbitration scheme _outside_ of the X
+    server is needed to control the sharing of these resources. This document
+    introduces the operation of the VGA arbiter implemented for Linux kernel.
+
+    Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+    Signed-off-by: Tiago Vignatti <tiago.vignatti@nokia.com>
+    Signed-off-by: Dave Airlie <airlied@redhat.com>
+    Signed-off-by: Jesse Barnes <jbarnes@virtuousgeek.org>
+
+ drivers/gpu/Makefile     |    2 +-
+ drivers/gpu/vga/Kconfig  |   10 +
+ drivers/gpu/vga/Makefile |    1 +
+ drivers/gpu/vga/vgaarb.c | 1206 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/pci/pci.c        |   44 ++++
+ drivers/video/Kconfig    |    2 +
+ include/linux/pci.h      |    2 +
+ include/linux/vgaarb.h   |  195 +++++++++++++++++
+ 8 files changed, 1461 insertions(+), 1 deletion(-)
+```
+
 # X Server的输出设备检测和驱动加载
 ## <a name="xf86_platform_device"></a>Xorg抽象的输出设备
 Linux下的显示输出设备一般要么是一个`pci_device`，要么是一个`xf86_platform_device`
