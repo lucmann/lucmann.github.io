@@ -5,28 +5,23 @@ tags: [OpenGL]
 categories: graphics
 ---
 
-# glmark2
-[glmark2](https://github.com/glmark2/glmark2)是一个OpenGL 2.0及OpenGL ES 2.0的测试集。它包含了17个测试场景
+# Something you should know about [glmark2](https://github.com/glmark2/glmark2)
+
+1. glmark2 的命令行参数格式
+
+```
+glmark2 -b desktop:nframes=1000000:show-fps=true -b build:duration=100
+```
 
 <!--more-->
 
-- buffer
-- build
-- bump
-- clear
-- conditionals
-- desktop
-- effect2d
-- function
-- ideas
-- jellyfish
-- loop
-- pulsar
-- refract
-- shading
-- shadow
-- terrain
-- texture
+2. glmark2 每个场景 (Scene) 默认的运行时间 (duration) 是 10 秒
+
+3. glmark2 提供一个公共选项 (Option) **show-fps**, 可以显示 Head-up Display (HUD) 形式的 FPS
+
+![glmark2-desktop show-fps](glmark2-desktop-show-fps.png)
+
+4. glmark2 计算 FPS 的时间精度 (resolution) 是 nanosecond. 它使用的是 `struct timespec`, 而不是 `struct timeval`
 
 # desktop
 
