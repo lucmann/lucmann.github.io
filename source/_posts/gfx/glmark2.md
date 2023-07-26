@@ -9,6 +9,8 @@ categories: graphics
 
 1. glmark2 的命令行参数格式
 
+示例：
+
 ```
 glmark2 -b desktop:nframes=1000000:show-fps=true -b build:duration=100
 ```
@@ -24,8 +26,6 @@ glmark2 -b desktop:nframes=1000000:show-fps=true -b build:duration=100
 4. glmark2 计算 FPS 的时间精度 (resolution) 是 nanosecond. 它使用的是 `struct timespec`, 而不是 `struct timeval`
 
 # desktop
-
-{% asset_img "desktop.png" "glmark2 -b desktop" %}
 
 **desktop**这个场景在fragment shader中使用了**convolution**计算高斯模糊效果, 这里我们比较一下所有17个场景的fragment shader, 并记录一下在**Mesa llvmpipe**下以及`glmark2 -b desktop`不同的选项下的测试结果。
 
