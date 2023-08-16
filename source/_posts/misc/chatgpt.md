@@ -5,6 +5,111 @@ tags: linux
 categories: misc
 ---
 
+# 标准
+
+## ACPI 是什么？
+
+ACPI是一个开放标准，全称为Advanced Configuration and Power Interface（高级配置与电源接口）。它是一种用于电源管理和配置硬件设备的接口规范。
+
+ACPI的主要目的是提供一种标准化的方法，使操作系统能够与计算机的固件（如BIOS）进行交互，管理电源管理、设备配置和系统资源的一致性。它定义了一组操作系统接口和数据结构，用于控制和监测硬件设备的电源状态、配置和事件。
+
+通过ACPI，操作系统能够实现电源管理的功能，如系统的睡眠、休眠和唤醒，以及动态调整设备的功耗和性能。它还提供了高级功能，包括热插拔设备的支持、温度传感器的监测以及处理器性能的调整。
+
+ACPI存在于大多数现代计算机系统中，并得到广泛支持。它在各种操作系统中广泛使用，包括Windows、Linux、Apple macOS等。通过ACPI，计算机系统能够更好地管理电源和硬件资源，实现能效和性能的平衡，提供更好的用户体验。
+
+## UEFI GOP 是什么？
+
+UEFI GOP 是 UEFI(统一可扩展固件接口)中的一个图形输出协议。它提供了在 UEFI 环境下进行图形输出的标准接口。
+
+UEFI GOP 的主要功能包括:
+
+- 提供图形模式设置、获取当前图形模式等图形初始化相关功能。
+
+- 提供绘制像素、填充矩形、绘制线条等基本图形输出功能。
+
+- 提供双缓冲区切换、视口管理等高级图形功能。
+
+- 支持各种颜色格式如 RGB、YUV 等。
+
+- 提供与硬件无关的抽象接口,通过 GOP 驱动与特定硬件交互。
+
+- 支持全屏和窗口两种输出模式。
+
+- 支持各种分辨率的图形输出。
+
+通过使用 UEFI GOP,操作系统和应用可以在 UEFI 阶段实现图形界面和图形输出,如启动菜单、系统配置界面等。许多操作系统的启动器都会使用 GOP 进行图形化显示。
+
+所以简单来说,UEFI GOP 为 UEFI 固件和操作系统提供了标准的图形输出接口,使其可以实现固件过程中的图形化显示和交互。它是实现 UEFI 图形环境的基础。
+
+## HSA 是什么？
+
+HSA(Heterogeneous System Architecture) 是一种异构系统架构,用于在CPU和GPU等异构处理器之间进行并行计算。其主要特点包括:
+
+- 协处理器架构:HSA定义了主处理器(CPU)和协处理器(GPU等)之间的关系,协处理器协助CPU完成计算任务。
+
+- 统一地址空间:CPU和协处理器共享同一个虚拟地址空间,可以直接访问对方的内存。
+
+- 协作计算模型:支持CPU和协处理器之间的并行计算,任务可以自动在最合适的处理器上运行。
+
+- 优化数据传输:通过DMA等机制优化CPU和协处理器之间的数据传输。
+
+- 标准化程序接口:为开发人员提供标准化的程序接口,简化异构计算的软件设计。
+
+HSA让CPU和GPU之间可以高效协作,优化系统整体的并行计算性能,被认为是未来异构计算架构的发展方向。AMD是HSA的主要推动者,其APU产品已经开始支持HSA。HSA也吸引了其他处理器厂商的广泛支持。
+
+总而言之,HSA是一种创新的异构系统架构,通过处理器协作和优化提升整体计算性能,对高效并行计算有重要意义。
+
+目前支持HSA标准的SoC产品不多,主要有:
+
+- AMD Kaveri APU:这是AMD于2014年发布的首款HSA 1.0兼容APU,集成CPU和GPU,支持共享虚拟内存。
+
+- AMD Carrizo APU:2015年发布,同样支持HSA 1.0,并进一步增强了CPU和GPU的协作计算能力。
+
+- AMD Ryzen APU:如Ryzen 5 2400G,集成Vega graphics,支持共享内存和异构计算。
+
+- AMD Raven Ridge APU:首款集成Vega图形的Ryzen移动APU,支持HSA。 
+
+- Qualcomm Snapdragon 820:高通在Snapdragon 820平台增加了HSA 1.1支持。
+
+- 领悟科技(HSA Foundation)Mustang-V100-A10:这是全球首块完全兼容HSA 1.0规范的独立heterogeneous SoC。
+
+- 领悟科技(HSA Foundation)Mustang-F100-A10:进一步优化的heterogeneous SoC。
+
+总体来说,AMD是目前最主要的HSA支持厂商,其多款APU产品都实现了HSA规范。高通也加入了HSA支持。此外,一些创业公司如领悟科技也推出了支持HSA的SoC。随着规范的逐步完善,预计未来将会有更多的异构SoC产品实现HSA兼容。
+
+我：那么符合 HSA 标准的 APU 与普通的 SoC 有什么区别？
+
+ChatGPT:
+
+符合HSA标准的APU和普通SoC的主要区别有:
+
+1. 统一地址空间
+
+HSA APU采用统一地址空间,CPU和GPU可以直接访问对方的缓存和内存,简化数据传输。普通SoC的CPU和GPU存在独立的地址空间。
+
+2. 优化的内存访问
+
+HSA APU支持CPU和GPU直接访问系统内存,无需数据复制,提高效率。普通SoC需要在内存空间之间进行数据复制。
+
+3. 标准化的程序接口 
+
+HSA提供标准化的程序接口如HSAIL,简化异构编程的复杂ity。普通SoC缺乏统一的接口。
+
+4. 优化的协作计算
+
+HSA APU通过协处理器等机制,可根据workload自动在CPU和GPU间分配任务,调度更优化。普通SoC无法做到如此灵活的协作计算。
+
+5. 更高效的互联
+
+HSA APU采用高速互联如AMD的Infinity Fabric,提升CPU和GPU之间的数据传输速度。
+
+6. 更紧密的硬件协作
+
+HSA APU通过硬件级的优化如内存控制器集成,实现更紧密的协作。
+
+综上,HSA APU通过硬件架构和软件接口的优化,实现了CPU与GPU更加紧密、高效的异构计算,相比普通SoC有明显优势。这使其在并行计算性能上有显著提升。
+
+
 # Linux
 
 ## [`mmu_notifier`](https://elixir.bootlin.com/linux/v6.3-rc6/source/include/linux/mmu_notifier.h#L237) vs. [`mmu_interval_notifier`](https://elixir.bootlin.com/linux/v6.3-rc6/source/include/linux/mmu_notifier.h#L257) 
@@ -53,6 +158,8 @@ AMDGPU KFD（Kernel Fusion Driver）是AMDGPU开源驱动的一部分，用于�
 AMDGPU KFD为AMD的异构计算提供了统一的编程接口，使开发人员能够利用GPU和CPU共同完成计算任务。它支持OpenCL和HSA（Heterogeneous System Architecture）等开放标准，允许开发人员在不同的硬件设备上编写并运行并行计算代码。
 
 通过AMDGPU KFD，开发人员可以利用GPU的高度并行处理能力，加速复杂的计算任务，提高应用程序的性能和效率。同时，它也为图形驱动程序提供了必要的功能，以便正确管理和配置GPU和CPU之间的通信和协作。
+
+我：在 linux 源码树里并不能搜到 "Kernel Fusion Driver" 字串。但可以搜到 AMD 出品的 APU (加速处理器) 的名字字串，像 "Kaveri", "Carrizo", 这些 APU 都是符合 HSA 标准的，由此可以说 AMDGPU KFD 主要是为这些 APU 产品所写的内核驱动。
 
 ## AMDGPU KGD 是什么意思？
 
@@ -110,6 +217,24 @@ DMA一致性非常重要，因为如果没有它，缓存中的数据和内存�
 通过异构内存管理，开发人员可以使用特定的API和技术来实现数据在不同内存域之间的传输和共享。这包括将数据从主机内存传输到GPU内存，以便进行并行计算，以及在不同内存域之间进行数据混合和迁移等操作。
 
 异构内存管理可以提高系统性能，有效利用加速处理器的计算能力，并简化开发过程。它使开发人员能够更好地利用不同类型的内存资源，以实现更高效、灵活和可扩展的计算。
+
+## APU 一般应该解释为应用处理器还是加速处理器？
+
+APU 一般来说被解释为加速处理器(Accelerated Processing Unit)更为准确。
+
+主要原因有:
+
+1. AMD 最先提出 APU 的概念,将其定义为集成CPU和GPU的加速处理器。AMD 认为 APU 通过异构计算,可以加速图形、视频等特定应用的处理速度。
+
+2. Intel 虽然也使用 APU 这个词,但官方解释为高级处理器(Advanced Processing Unit),意思相近但侧重点不同。
+
+3. APU 的关键特征是 CPU 与 GPU 的紧密集成,通过协同运算实现计算加速,这与应用处理器的概念有所不同。
+
+4. 应用处理器通常指 ARM 等 RISC 架构的可嵌入式处理器,用于嵌入式、移动等专门应用,而 APU 通常用于 PC、游戏主机等通用计算平台。
+
+5. 行业与媒体解读也更多认为 APU 是加速处理器的概念,能加速特定应用场景下的计算性能。
+
+综合来说,APU 的完整 expansition 更准确地应该是Accelerated Processing Unit,highlight 其异构计算能力带来的加速效果。将其解释为应用处理器存在一定的偏差。
 
 
 # Graphics
