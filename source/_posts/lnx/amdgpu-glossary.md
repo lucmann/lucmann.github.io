@@ -17,5 +17,5 @@ categories: linux
 | KGD        | Kernel Graphics Driver     | AMD GPU 芯片的内核驱动， 主要是驱动独立显卡和 OEM 上的 GPU 芯片                    |
 | RDNA       | Radeon DNA                 | AMD 第5代 GPU 微架构名称， 也有说[RaDeon New Architecture](https://www.reddit.com/r/Amd/comments/i589qr/what_does_rdna_stand_for/)                                                                                     |
 | UVD        | Unified Video Decoder      | AMD 开发的硬件视频解码引擎， 主要是完成硬件级别上加速视频解码任务                  |
-| VCE        | Video Codec/Coding Engine  | AMD 开发的硬件视频编码引擎， 主是提供视频压缩和编码功能                            |
-| VCN        | Video Core Next            |                                                                                    |
+| VCE        | Video Compression Engine   | AMD 开发的硬件视频编码引擎， 主是提供视频压缩和编码功能                            |
+| VCN        | Video Codec Next           | AMD 第4代 VPU 微架构名称                                                           |
