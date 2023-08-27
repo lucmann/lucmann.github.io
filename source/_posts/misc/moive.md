@@ -5,6 +5,11 @@ tags: movie
 categories: misc
 ---
 
+# Scent of a woman (1992)
+
+No mistakes in the Tango, not like life. It's simple, that's what makes the Tango so great. If you make a mistake,
+get all tangled up, just Tango on.
+
 # Rudy (1993)
 
 Having dreams is what makes life tolerable
