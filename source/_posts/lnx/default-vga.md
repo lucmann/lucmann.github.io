@@ -1,8 +1,8 @@
 ---
-title: Device Probe in Xorg
-date: 2023-07-05 11:20:00
-tags: [xserver]
-categories: graphics
+title: 多 GPU 系统中的默认显示设备
+date: 2023-08-30 11:20:00
+tags: [display]
+categories: linux
 ---
 
 # 古老的 Xserver
@@ -311,4 +311,9 @@ out:
 
 
 以上两点规则说明，在多卡系统中，不使用`PrimaryGPU`的情况下，当且仅当目标卡的`drm`设备节点号最大，而且`/sys/bus/pci/devices/XXXX:XX:XX.X/boot_vga`被实现为read它返回ASCII字符`'1'`. 这样目标卡才能做为`primaryBus`设备默认显示输出。
+
+
+# 参考
+
+- [pci/vgaarb: make vga_is_firmware_default() arch independent](https://patchwork.freedesktop.org/patch/539963/?series=118518&rev=1)
 
