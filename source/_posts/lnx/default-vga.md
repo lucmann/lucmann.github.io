@@ -1,34 +1,18 @@
 ---
-title: 多 GPU 系统中的默认显示设备
+title: Boot-up Graphics in Linux
 date: 2023-08-30 11:20:00
 tags: [display]
 categories: linux
 ---
 
-# 古老的 Xserver
 
-![20-year-old Xserver code](20-years-old-patch.png)
-
-# 多显卡系统的显示输出
-
-要想弄清楚 Xserver 在多显卡 Linux 系统是如何选择显示输出设备的，按目前 Xserver 的实现，我们先要了解
-
-- Platform Bus Devices
-- [libpciaccess](https://gitlab.freedesktop.org/xorg/lib/libpciaccess)
-- udev (主要与 hotplug 有关)
+Boot-up Graphics 指在 Linux 系统启动时涉及到一些和图形显示相关的问题。
 
 <!--more-->
 
-本文想尝试回答的问题是，当主板上同时存在多张PCI显卡，但只有一个显示器(假设显示器至少有两个HDMI接口)时，Linux系统是如何选择优先使用哪一张显卡输出的。
+当主板上同时有多张PCI显卡时, 哪一个会做为**默认**显示输出呢？
 
-
-上述场景又可细分为下面3种情况(OS: Kylin V10, Kernel: 4.4, Window System: Xorg 1.20.4)：
-
-| 场景           | 显示                                              |
-|:---------------|:--------------------------------------------------|
-| A卡 + A卡      | 显示器可任意选择输入源, 默认PCI slotX 显示        |
-| A卡 + N卡      | 显示器可任意选择输入源, 默认PCI slotX             |
-| N卡 + N卡      | 显示器可任意选择输入源, 默认PCI slotX             |
+一个最简单的场景，主板上有一个 Intel 的集显，还有一个 AMD 的独显，这两个 GPU 各自通过 HDMI 接口连接到同一个显示器上，那么在Linux 系统启动时（未进入桌面环境），是哪个 GPU 在显示呢？
 
 # [Linux VGAArbiter](https://www.kernel.org/doc/html/v4.10/gpu/vgaarbiter.html)
 
@@ -316,4 +300,5 @@ out:
 # 参考
 
 - [pci/vgaarb: make vga_is_firmware_default() arch independent](https://patchwork.freedesktop.org/patch/539963/?series=118518&rev=1)
+- [discussion on ML](https://lore.kernel.org/dri-devel/20230906132904.4e49e269.alex.williamson@redhat.com/T/#t)
 
