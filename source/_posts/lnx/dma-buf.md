@@ -13,10 +13,45 @@ categories: linux
 - `dma_fence` 通知机制
 - `dma_resv` 管理共享的或专有的fences
 
-## dma-buf
+# DMA-BUF
 
-dma-buf是Linux kernel中实现内存共享的一种机制，在Linux中"Everything is file"的思想的指导下，内存（大多时候是显存）被封装成`file`, 它的**file descriptor(FD)**被用来在进程之间传递(共享)，传出者叫**exporter**, 接收者叫**importer**. dma-buf可以说是披着`file`皮的`drm_gem_object`, 它所封装的内容还是DRM的内存管理对象。在kernel中，`drm_gem_object`的ID叫handle. 所以kernel中便有了以下两个函数:
+dma-buf是Linux内核中在上下文间，进程间，设备间，子系统间进行 buffer 共享的一种实现。 它十几年前就已经合入内核了。
 
+```
+commit 3248877ea1796915419fba7c89315fdbf00cb56a
+Author: Dave Airlie <airlied@redhat.com>
+Date:   Fri Nov 25 15:21:02 2011 +0000
+
+    drm: base prime/dma-buf support (v5)
+
+    This adds the basic drm dma-buf interface layer, called PRIME. This
+    commit doesn't add any driver support, it is simply and agreed upon starting
+    point so we can work towards merging driver support for the next merge window.
+
+    Current drivers with work done are nouveau, i915, udl, exynos and omap.
+
+    The main APIs exposed to userspace allow translating a 32-bit object handle
+    to a file descriptor, and a file descriptor to a 32-bit object handle.
+
+    The flags value is currently limited to O_CLOEXEC.
+
+    Acknowledgements:
+    Daniel Vetter: lots of review
+    Rob Clark: cleaned up lots of the internals and did lifetime review.
+
+    v2: rename some functions after Chris preferred a green shed
+    fix IS_ERR_OR_NULL -> IS_ERR
+    v3: Fix Ville pointed out using buffer + kmalloc
+    v4: add locking as per ickle review
+    v5: allow re-exporting the original dma-buf (Daniel)
+
+    Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+    Reviewed-by: Rob Clark <rob.clark@linaro.org>
+    Reviewed-by: Sumit Semwal <sumit.semwal@linaro.org>
+    Reviewed-by: Inki Dae <inki.dae@samsung.com>
+    Acked-by: Ben Widawsky <benjamin.widawsky@intel.com>
+    Signed-off-by: Dave Airlie <airlied@redhat.com>
+```
 
 - exporter调用
 
@@ -74,12 +109,12 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 
 可以打个比方，你去银行要办两种业务，两种业务分别排号，假如你要办的A业务排到7号，B业务也刚好排到7号（注意:号码相同，但是两个号），但是很有可能是同一个业务员为你办理这两种业务，这里的业务就是设备驱动，而那个业务员就是dma-buf(或者它封装的那块显存)。
 
-## dma_fence
+# dma_fence
 
 
 ## dma_resv
 
-# dma_buf, dma_fence, dma_resv, 还有drm_gem_object, 这4者有什么关系？
+## dma_buf, dma_fence, dma_resv, 还有drm_gem_object, 这4者有什么关系？
 
 {% asset_img dma-buf.drawio.png %}
 

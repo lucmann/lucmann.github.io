@@ -13,6 +13,5 @@ categories: linux
 
 经过几年的开发后，DRM 子系统的 atomic display 驱动 ioctl() 终于在黄金时间(prime time)准备好了。 
 
-![Ancient drm_crtc](drm_crtc.png)
 
 [阅读原文](https://lwn.net/Articles/653071/)
