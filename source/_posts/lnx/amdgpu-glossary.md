@@ -11,7 +11,7 @@ categories: linux
 |:-----------|:---------------------------|:-----------------------------------------------------------------------------------|
 | IB         | Indirect Buffer            | AMD GPU 提供 Indirect Buffer 的方式由 CPU 向 GPU 传递渲染命令                      |
 | CDNA       | Compute DNA                | AMD 第5代计算核心微架构名称                                                        |
-| DCN        | Display Core Next          | AMD 第4代显存芯片的微架构名称                                                      |
+| DCN        | Display Controller Next    | AMD 第4代显示芯片的微架构名称                                                      |
 | GCN        | Graphics Core Next         | AMD 第4代 GPU 微架构名称                                                           |
 | GDS        | Global Data Storage        | Global on-chip data storage used to share data across shader threads               |
 | GDS OA     | GDS Ordered Append         | Ordered append, used by 3D or Compute engines for appending data.                  |
