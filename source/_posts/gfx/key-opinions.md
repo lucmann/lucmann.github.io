@@ -27,7 +27,7 @@ categories: graphics
 | SIMT   | Single Instruction Multi-Threads | SIMD 的一种子类型                                                                          |
 
 
-（以下都是从邮件中摘取的片段，翻译水平有限，请读者误解）
+（以下都是从邮件中摘取的片段，翻译水平有限，请读者谅解）
 
 # 参考
 
