@@ -46,6 +46,7 @@ categories: misc
 | IMHO | In my humble opinion | 在下愚见 |
 | IMO | In my opinion | 依我之见 |
 | LGTM | Looks good to me | 我看不错 |
+| OOC | Out of curiosity | 出于好奇 |
 | TBH | To be honest | 老实讲 |
 | WFM | Work for me | 对我来说可以 |
 
