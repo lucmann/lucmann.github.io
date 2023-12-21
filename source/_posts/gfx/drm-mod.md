@@ -1,7 +1,7 @@
 ---
 title: DRM format modifier
 date: 2020-11-11 15:35:43
-tags: [dri]
+tags: [DRM]
 categories: graphics
 ---
 
@@ -12,3 +12,12 @@ layout或compression format的信息，DRM format modifier就是用来解决这�
 <!--more-->
 
 # Modifier
+
+# Examples
+
+## [DRM_FORMAT_MOD_ARM_16X16_BLOCK_U_INTERLEAVED](https://elixir.bootlin.com/mesa/latest/source/include/drm-uapi/drm_fourcc.h#L1332)
+
+### How U-interleaved improves performance?
+
+![U-interleaved memory layout](u-interleaved.drawio.svg)
+
