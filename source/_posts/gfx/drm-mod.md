@@ -30,7 +30,8 @@ layout或compression format的信息，DRM format modifier就是用来解决这�
 
 block size 被用来计算数据的 row stride(指纹理图片中相邻两行之间的字节数)。对于 Linear 布局的纹理, block size 是 1x1, 它的
 
-$$ \[ row\_stride = bytes\_per\_block * effective\_width * block\_size.height \] $$
+$$ RowStride = BytesPerBlock * EffectiveWidth * BlockSize.Height $$
 
-注意这里的 block 指的是 pixel format 的 block, 而非 layout 的 block. 对于非压缩格式，一个 format block 就是一个像素, 所以对于 Linear 布局的非压缩格式纹理 $bytes\_per\_block$ 即 $bytes\_per\_pixel$, $effective\_width$ 即它本身的 $width$, $block\_size.height$ 即等于 1.
+注意这里的 block 指的是 pixel format 的 block, 而非 layout 的 block. 对于非压缩格式，一个 format block 就是一个像素, 所以对于 Linear 布局的非压缩格式纹理 $BytesPerBlock$ 即 $BytesPerPixel$, $EffectiveWidth$ 即它本身的 $width$, $BlockSize.Height$ 即等于 1.
 
+而对于 U-interleaved 布局的压缩格式 (例如 BC1), $BytesPerBlock$ 等于 $ 4 * 4 * BytesPerPixels $
