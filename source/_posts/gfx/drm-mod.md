@@ -18,20 +18,22 @@ layout或compression format的信息，DRM format modifier就是用来解决这�
 ## [DRM_FORMAT_MOD_ARM_16X16_BLOCK_U_INTERLEAVED](https://elixir.bootlin.com/mesa/latest/source/include/drm-uapi/drm_fourcc.h#L1332)
 
 ### How U-interleaved improves performance?
-
 ![U-interleaved memory layout](u-interleaved.drawio.svg)
 
 ### What is the block size?
-
 对于 U-interleaved 布局的纹理, 有两种可能的 block size:
 
 - 4x4 (压缩格式)
 - 16x16 (非压缩格式)
 
-block size 被用来计算数据的 row stride(指纹理图片中相邻两行之间的字节数)。对于 Linear 布局的纹理, block size 是 1x1, 它的
+### What is the row stride?
+row stride 通常指纹理图片中相邻两行之间的字节数。对于 Linear 布局的纹理, block size 是 1x1, 它的 row stride 即为
 
-$$ RowStride = BytesPerBlock * EffectiveWidth * BlockSize.Height $$
+$$ RowStride = BytesPerPixel * Width $$
 
-注意这里的 block 指的是 pixel format 的 block, 而非 layout 的 block. 对于非压缩格式，一个 format block 就是一个像素, 所以对于 Linear 布局的非压缩格式纹理 $BytesPerBlock$ 即 $BytesPerPixel$, $EffectiveWidth$ 即它本身的 $width$, $BlockSize.Height$ 即等于 1.
+这也是所谓的逻辑 row stride, 而对于 U-interleaved 布局的纹理，由于它在内存中是按块存储的（块与块之间是线性的），所以 U-interleaved 布局的纹理的 row stride 已经不是通常意义的**相邻两行**之间的字节数，而是**相邻两块**之间的字节数。所以 U-interleaved 布局的纹理的 row stride 为
 
-而对于 U-interleaved 布局的压缩格式 (例如 BC1), $BytesPerBlock$ 等于 $ 4 * 4 * BytesPerPixels $
+$$ RowStride (BlockStride) = BytesPerBlock * nBlocksX * nBlocksY $$
+
+以 [BC1 压缩格式](https://sv-journal.org/2014-1/06/en/index.php?lang=en#5)为例, BC1 是 S3TC 家族的一员(所有的 S3TC 家族都使用 4x4 的块大小)，而 DRM_FORMAT_MOD_ARM_16X16_BLOCK_U_INTERLEAVED 是 16x16 大小的，所以上式中的 $nBlocksX = 16/4$, $nBlocksY = 16/4$, 而 $BytesPerBlock$ 则是 4x4 BC1 块的字节数。
+
