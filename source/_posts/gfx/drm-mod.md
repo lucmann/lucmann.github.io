@@ -37,8 +37,10 @@ $$ RowStride = BytesPerBlock * nBlocksX $$
 
 #### 非压缩格式的 U-interleaved 布局的 row stride
 
-![u-interleaved row stride in regular format](u-interleaved-row-stride-non-compress.drawio.png)
+![U-interleaved row stride in regular format](u-interleaved-row-stride-non-compress.drawio.svg)
 
 #### 压缩格式的 U-interleaved 布局的 row stride
-以 [BC1 压缩格式](https://sv-journal.org/2014-1/06/en/index.php?lang=en#5)为例, BC1 是 S3TC 家族的一员(所有的 S3TC 家族都使用 4x4 的块大小)，而 DRM_FORMAT_MOD_ARM_16X16_BLOCK_U_INTERLEAVED 是 16x16 大小的，所以上式中的 $nBlocksX = 16/4$, $nBlocksY = 16/4$, 而 $BytesPerBlock$ 则是 4x4 BC1 块的字节数。
+以 [BC1 压缩格式](https://sv-journal.org/2014-1/06/en/index.php?lang=en#5)为例, BC1 是 S3TC 家族的一员(所有的 S3TC 家族都使用 4x4 的块大小)，而 DRM_FORMAT_MOD_ARM_16X16_BLOCK_U_INTERLEAVED 是 16x16 大小的，所以一个 U-interleaved 块中包含 4x4 个 BC1 压缩块。
+
+![U-interleaved memory layout](u-interleaved-row-stride-compress.drawio.svg)
 
