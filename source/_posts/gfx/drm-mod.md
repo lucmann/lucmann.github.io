@@ -31,9 +31,14 @@ row stride 通常指纹理图片中相邻两行之间的字节数。对于 Linea
 
 $$ RowStride = BytesPerPixel * Width $$
 
-这也是所谓的逻辑 row stride, 而对于 U-interleaved 布局的纹理，由于它在内存中是按块存储的（块与块之间是线性的），所以 U-interleaved 布局的纹理的 row stride 已经不是通常意义的**相邻两行**之间的字节数，而是**相邻两块**之间的字节数。所以 U-interleaved 布局的纹理的 row stride 为
+这也是所谓的逻辑 row stride, 而对于 U-interleaved 布局的纹理，由于它在内存中是按块存储的（块与块之间是线性的），所以 U-interleaved 布局的纹理的 row stride 已经不是通常意义的“行”了，而是由**块**组成的**行**。所以 U-interleaved 布局的纹理的 row stride 为
 
-$$ RowStride (BlockStride) = BytesPerBlock * nBlocksX * nBlocksY $$
+$$ RowStride = BytesPerBlock * nBlocksX $$
 
+#### 非压缩格式的 U-interleaved 布局的 row stride
+
+![u-interleaved row stride in regular format](u-interleaved-row-stride-non-compress.drawio.png)
+
+#### 压缩格式的 U-interleaved 布局的 row stride
 以 [BC1 压缩格式](https://sv-journal.org/2014-1/06/en/index.php?lang=en#5)为例, BC1 是 S3TC 家族的一员(所有的 S3TC 家族都使用 4x4 的块大小)，而 DRM_FORMAT_MOD_ARM_16X16_BLOCK_U_INTERLEAVED 是 16x16 大小的，所以上式中的 $nBlocksX = 16/4$, $nBlocksY = 16/4$, 而 $BytesPerBlock$ 则是 4x4 BC1 块的字节数。
 
