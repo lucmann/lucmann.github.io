@@ -1,5 +1,5 @@
 ---
-title: 关于 Linux 上的程序构建
+title: Build your program
 date: 2022-09-18 17:02:49
 tags: build
 categories: programming
@@ -13,6 +13,58 @@ categories: programming
 - clang++ (LLVM, latest version 16 ~ 17)
 
 <!--more-->
+
+## gcc 的优化级别
+
+-O 和 -O1 是等价的。 -O 会对目标文件大小和执行时间进行优化，但不会进行非常耗时的优化，以下是 -O 打开的优化: (其中红色的是 -Og 关闭的)
+
+- -fauto-inc-dec
+- <span style="color:red">-fbranch-count-reg</span>
+- -fcombine-stack-adjustments
+- -fcompare-elim
+- -fcprop-registers
+- -fdce
+- -fdefer-pop
+- <span style="color:red">-fdelayed-branch</span>
+- <span style="color:red">-fdse</span>
+- -fforward-propagate
+- -fguess-branch-probability
+- <span style="color:red">-fif-conversion</span>
+- <span style="color:red">-fif-conversion2</span>
+- <span style="color:red">-finline-functions-called-once</span>
+- -fipa-modref
+- -fipa-profile
+- -fipa-reference
+- -fipa-reference-addressable
+- -fmerge-constants
+- <span style="color:red">-fmove-loop-invariants</span>
+- <span style="color:red">-fmove-loop-stores</span>
+- -fomit-frame-pointer
+- -freorder-blocks
+- -fshrink-wrap
+- -fshrink-wrap-separate
+- -fsplit-wide-types
+- -fssa-backprop
+- <span style="color:red">-fssa-phiopt</span>
+- <span style="color:red">-ftree-bit-ccp</span>
+- -ftree-ccp
+- -ftree-ch
+- -ftree-coalesce-vars
+- -ftree-copy-prop
+- -ftree-dce
+- -ftree-dominator-opts
+- <span style="color:red">-ftree-dse</span>
+- -ftree-forwprop
+- -ftree-fre
+- -ftree-phiprop
+- <span style="color:red">-ftree-pta</span>
+- -ftree-scev-cprop
+- -ftree-sink
+- -ftree-slsr
+- <span style="color:red">-ftree-sra</span>
+- -ftree-ter
+- -funit-at-a-time
+
 
 # 链接器
 
@@ -198,6 +250,13 @@ returning flags string ""
 - gettext
 
 ## meson
+
+### [-D buildtype](https://mesonbuild.com/Builtin-options.html#details-for-buildtype)
+
+meson 的 buildtype 是用来设定编译优化级别 (optimization levels: -O0, -O1, -O2, -O3, -Os) 和是否有调试信息 (debug: -g)。 实际上，meson 提供两个分开的选项分别控制编译优化级别和调试信息
+
+- -Doptimization (plain|0|2|3|s, plain 指不设置任何 optimization flags)
+- -Ddebug (true|false)
 
 ### use `gold`
 
