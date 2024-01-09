@@ -5,15 +5,22 @@ tags: [OpenGL, mesa]
 categories: graphics
 ---
 
-# ReadPixels有几种实现方法
+# glReadPixels
 
-- blit-based ReadPixels packing
+glReadPixels 是将当前绑定的 FBO 里的内容从显存(renderbuffer, 通常是 read renderbuffer) 读到用户内存。
+
+```
+void glReadPixels(GLint x, GLint y,
+                  GLsizei width, GLsizei height,
+                  GLenum format, GLenum type, void *data);
+```
 
 <!--more-->
 
-它取决于pipe是否支持`PIPE_CAP_PREFER_BLIT_BASED_TEXTURE_TRANSFER`的能力，如果支持，则由pipe完成一次GPU --> CPU的拷贝
+在这次从显存到主存的数据传输中可能源(renderbuffer) 数据格式有可能与请求的(glReadPixels参数 format, type 指定的)格式不相同，这时就需要数据被放入 `*data` 前做一次转换。这就产生了基于 Blit 的 glReadPixels 的实现。 还有与之对应的所谓 slow path (其实就是让 CPU 做这次格式转换)
 
-- CPU-based ReadPixels packing
- 
-否则fallback到`_mesa_readpixels`, 由mesa完成一次CPU --> CPU的拷贝
+## 为什么 slow path 要比 blit-based 慢呢？
+
+主要是 CPU 做这次格式转换慢，无论是CPU做格式转换还是基于 blit 的 GPU 做这次格式转换，在转换完成后都要将转换为要求格式的数据 memcpy 到 `*data`.
+
 
