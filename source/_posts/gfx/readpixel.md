@@ -7,7 +7,7 @@ categories: graphics
 
 # glReadPixels
 
-glReadPixels 是将当前绑定的 FBO 里的内容从显存(renderbuffer, 通常是 read renderbuffer) 读到用户内存。
+glReadPixels 是将当前绑定的 FBO 里的内容从显存(renderbuffer, 通常是 read renderbuffer) 读到 `*data` 指向的内存。
 
 ```
 void glReadPixels(GLint x, GLint y,
