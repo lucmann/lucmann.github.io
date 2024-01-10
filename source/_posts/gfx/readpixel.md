@@ -17,7 +17,7 @@ void glReadPixels(GLint x, GLint y,
 
 <!--more-->
 
-在这次从显存到主存的数据传输中可能源(renderbuffer) 数据格式有可能与请求的(glReadPixels参数 format, type 指定的)格式不相同，这时就需要数据被放入 `*data` 前做一次转换。这就产生了基于 Blit 的 glReadPixels 的实现。 还有与之对应的所谓 slow path (其实就是让 CPU 做这次格式转换)
+在这次从显存到主存的数据传输中可能源(renderbuffer) 数据格式有可能与请求的(glReadPixels参数 format, type 指定的)格式不相同，需要数据在被回读到 `*data` 前做一次格式或字节序转换。为了能够加速这个转换过程，就产生了基于 Blit 的 glReadPixels 的实现。 还有与之对应的所谓 slow path (其实就是让 CPU 做这次格式转换)
 
 ## 为什么 slow path 要比 blit-based 慢呢？
 
