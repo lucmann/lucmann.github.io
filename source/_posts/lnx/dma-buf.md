@@ -121,7 +121,7 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 }
 
 .pre {
-    line_height: normal;
+    line_height: 1.5;
 }
 </style>
 
