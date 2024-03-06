@@ -123,7 +123,58 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 
 <div class="row">
   <div class="column">
-    dma_fence_default_wait();
+signed long
+dma_fence_default_wait(struct dma_fence *fence,
+                       bool intr,
+                       signed long timeout)
+{
+	struct default_wait_cb cb;
+	unsigned long flags;
+	signed long ret = timeout ? timeout : 1;
+
+	spin_lock_irqsave(fence->lock, flags);
+
+	if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT,
+        &fence->flags))
+		goto out;
+
+	if (intr && signal_pending(current)) {
+		ret = -ERESTARTSYS;
+		goto out;
+	}
+
+	if (!timeout) {
+		ret = 0;
+		goto out;
+	}
+
+	cb.base.func = dma_fence_default_wait_cb;
+	cb.task = current;
+	list_add(&cb.base.node, &fence->cb_list);
+
+	while (!test_bit(DMA_FENCE_FLAG_SIGNALED_BIT,
+           &fence->flags) && ret > 0) {
+		if (intr)
+			__set_current_state(TASK_INTERRUPTIBLE);
+		else
+			__set_current_state(TASK_UNINTERRUPTIBLE);
+		spin_unlock_irqrestore(fence->lock, flags);
+
+		ret = schedule_timeout(ret);
+
+		spin_lock_irqsave(fence->lock, flags);
+		if (ret > 0 && intr && signal_pending(current))
+			ret = -ERESTARTSYS;
+	}
+
+	if (!list_empty(&cb.base.node))
+		list_del(&cb.base.node);
+	__set_current_state(TASK_RUNNING);
+
+out:
+	spin_unlock_irqrestore(fence->lock, flags);
+	return ret;
+}
   </div>
   <div class="column">
     fence->ops->wait();
