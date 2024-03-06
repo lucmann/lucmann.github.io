@@ -120,8 +120,12 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
     flex: 50%;
 }
 
+.pre {
+    line-height: 2;
+}
+
 .code {
-    line_height: 1.5;
+    line-height: 2;
 }
 </style>
 
