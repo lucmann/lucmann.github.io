@@ -118,6 +118,7 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 
 .column {
     flex: 50%;
+    line-height: 2;
 }
 
 .pre {
