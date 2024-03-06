@@ -112,22 +112,16 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 # dma_fence
 
 <style>
+.div {
+    line-height: normal;
+}
+
 .row {
     display: flex;
-    line-height: 2;
 }
 
 .column {
     flex: 50%;
-    line-height: 2;
-}
-
-.pre {
-    line-height: 2;
-}
-
-.code {
-    line-height: 2;
 }
 </style>
 
