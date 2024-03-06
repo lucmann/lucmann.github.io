@@ -123,6 +123,8 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 
 <div class="row">
   <div class="column">
+    <pre>
+      <code>
 signed long
 dma_fence_default_wait(struct dma_fence *fence,
                        bool intr,
@@ -175,6 +177,8 @@ out:
 	spin_unlock_irqrestore(fence->lock, flags);
 	return ret;
 }
+      </code>
+    </pre>
   </div>
   <div class="column">
     fence->ops->wait();
