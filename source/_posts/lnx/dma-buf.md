@@ -111,7 +111,7 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 
 # dma_fence
 
-<%- css('css/style.css') %>
+{% asset_path style.css %}
 
 <div class="row">
   <div class="column">
