@@ -111,6 +111,16 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 
 # dma_fence
 
+<%- css('css/style.css') %>
+
+<div class="row">
+  <div class="column">
+    dma_fence_default_wait();
+  </div>
+  <div class="column">
+    fence->ops->wait();
+  </div>
+</div>
 
 ## dma_resv
 
