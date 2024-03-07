@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/page/2/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><section id="posts" class="posts"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/gfx-issue/">Linux Graphics Application Common Issues</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2023-07-01
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="应用启动时-MESA-LOADER-报错"><a href="#应用启动时-MESA-LOADER-报错" class="headerlink" title="应用启动时 MESA-LOADER 报错"></a>应用启动时 MESA-LOADER 报错</h1><p>常见的错误包括如下。这种错误的原因一般是 Mesa gallium 的驱动动态链接库(这里不是指 libGL.so.1, 而是 DRIVERNAME_dri.so)加载出现问题，一般是</p>
+<ul>
+<li>动态链接库不存在</li>
+<li>动态链接库存在，但 dlopen 时发生错误</li>
+</ul>
+<p>第2种情况就是下面第1次错误报出的情况。dl.so 报错是 No such file or directory (), 但是如果你去 /usr 下搜索 swrast_dri.so, 该动态库又是存在的。原因是就是 /usr/lib/x86_64-linux-gnu/dri/swrast_dri.so dlopen 时出错了，又驱动动态链接库的 search paths 是一个列表，MESA-LOADER 打开第1个搜索到 swrast_dri.so 失败，又去下一个搜索路径下搜索，在下面的这种情况下，即去 /usr/lib/dri 下</p>
+          <div class="read-more">
+            <a href="/gfx/gfx-issue/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lnx/cache/">Cache 及一致性</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2023-06-27
+        </span><span class="post-category">
+            <a href="/categories/linux/">linux</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h1><p>音同 cash, 不管是在硬件还是软件都是影响性能的一个重要因素之一。Cache 无论是 CPU cache 还是 GPU cache 一般都分级， L1，L2, 在 Multi-processor CPU/GPU 架构中， L1 一般是分开的，每个 Processor 有一个自己的 L1 Cache, 而 L2 Cache 是全局的，所有 processors 共享的。</p>
+          <div class="read-more">
+            <a href="/lnx/cache/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/mesa-llvm/">Mesa 对 LLVM 的依赖</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2023-06-25
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="LLVM-和-Mesa-简介"><a href="#LLVM-和-Mesa-简介" class="headerlink" title="LLVM 和 Mesa 简介"></a>LLVM 和 Mesa 简介</h1><h2 id="LLVM-Low-Level-Virtual-Machine"><a href="#LLVM-Low-Level-Virtual-Machine" class="headerlink" title="LLVM (Low-Level Virtual Machine)"></a>LLVM (Low-Level Virtual Machine)</h2>
+          <div class="read-more">
+            <a href="/gfx/mesa-llvm/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/misc/hikey970/">Play with HiKey970</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2023-06-14
+        </span><span class="post-category">
+            <a href="/categories/misc/">misc</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><h2 id="WSL2-作为上位机"><a href="#WSL2-作为上位机" class="headerlink" title="WSL2 作为上位机"></a>WSL2 作为上位机</h2><h3 id="识别-Windows-11-Host-的-USB-Serial-Device"><a href="#识别-Windows-11-Host-的-USB-Serial-Device" class="headerlink" title="识别 Windows 11 Host 的 USB Serial Device"></a>识别 Windows 11 Host 的 USB Serial Device</h3><p>分别在 Windows 11 上安装 <a href="https://github.com/dorssel/usbipd-win" target="_blank" rel="noopener">usbipd-win</a>， 在 WSL2 上安装 <a href="https://github.com/dorssel/usbipd-win/wiki/WSL-support" target="_blank" rel="noopener">user space tools for USB/IP</a> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Microsoft Windows [版本 10.0.22621.1702]</span><br><span class="line">(c) Microsoft Corporation。保留所有权利。</span><br><span class="line"></span><br><span class="line">C:\Windows\System32&gt;usbipd wsl list</span><br><span class="line">BUSID  VID:PID    DEVICE                                                        STATE</span><br><span class="line">1-9    046d:c534  USB 输入设备                                                  Not attached</span><br><span class="line">1-13   04e2:1410  USB 串行设备 (COM4)                                           Not attached</span><br></pre></td></tr></table></figure>
+<h3 id="WSL2-Ubuntu-20-04-创建-dev-ttyUSB0"><a href="#WSL2-Ubuntu-20-04-创建-dev-ttyUSB0" class="headerlink" title="WSL2 Ubuntu-20.04 创建 /dev/ttyUSB0"></a>WSL2 Ubuntu-20.04 创建 /dev/ttyUSB0</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[Thu Jun 15 19:19:44 2023] vhci_hcd vhci_hcd.0: pdev(0) rhport(0) sockfd(3)</span><br><span class="line">[Thu Jun 15 19:19:44 2023] vhci_hcd vhci_hcd.0: devid(65546) speed(2) speed_str(full-speed)</span><br><span class="line">[Thu Jun 15 19:19:44 2023] vhci_hcd vhci_hcd.0: Device attached</span><br><span class="line">[Thu Jun 15 19:19:45 2023] vhci_hcd: vhci_device speed not set</span><br><span class="line">[Thu Jun 15 19:19:45 2023] usb 1-1: new full-speed USB device number 2 using vhci_hcd</span><br><span class="line">[Thu Jun 15 19:19:45 2023] vhci_hcd: vhci_device speed not set</span><br><span class="line">[Thu Jun 15 19:19:45 2023] usb 1-1: SetAddress Request (2) to port 0</span><br><span class="line">[Thu Jun 15 19:19:45 2023] usb 1-1: New USB device found, idVendor&#x3D;04e2, idProduct&#x3D;1410, bcdDevice&#x3D; 0.03</span><br><span class="line">[Thu Jun 15 19:19:45 2023] usb 1-1: New USB device strings: Mfr&#x3D;0, Product&#x3D;0, SerialNumber&#x3D;0</span><br><span class="line">[Thu Jun 15 19:19:45 2023] xr_serial 1-1:1.0: xr_serial converter detected</span><br><span class="line">[Thu Jun 15 19:19:45 2023] usb 1-1: xr_serial converter now attached to ttyUSB0</span><br></pre></td></tr></table></figure>
+<h3 id="Recovery-模式应该连接哪个-Type-C-（USB-SERIAL-接口"><a href="#Recovery-模式应该连接哪个-Type-C-（USB-SERIAL-接口" class="headerlink" title="Recovery 模式应该连接哪个 Type-C （USB SERIAL) 接口"></a>Recovery 模式应该连接哪个 Type-C （USB SERIAL) 接口</h3><p>HiKey970 有两个 Type-C 接口，而且当板子被设置为 Recovery 模式时，两个接口均会被识别为“串口”。在左手边的 (J3101) 是用来访问 Debug UART 的，而在 HDMI 和 USB 中间的那个(J1801)是在 Recovery 模式下使用的。而且这两个接口是两个不同厂家提供的芯片，使用完全不同的内核驱动模块</p>
+<p><img src="USB-Serial.png" alt="USB-to-Serial on Hikey970"></p>
+<ul>
+<li>前者(J3101)：<br>  <code>Bus 001 Device 003: ID 04e2:1410 Exar Corp. XR21V1410 USB-UART IC</code></li>
+</ul>
+<p><img src="exar-USB-SER-driver.png" alt="Select CONFIG_USB_SERIAL_XR on WSL2 Kernal config"></p>
+<ul>
+<li>后者(J1801)：<br>  <code>Bus 001 Device 002: ID 12d1:3609 Huawei Technologies Co., Ltd. USB SER</code></li>
+</ul>
+<p><img src="huawei-USB-SER-driver.png" alt="Select CONFIG_USB_SERIAL_OPTION on WSL2 Kernal config"></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.96boards.org/documentation/consumer/hikey/hikey970/installation/board-recovery.md.html" target="_blank" rel="noopener">1. HiKey970 官方文档</a><br><a href="https://github.com/dorssel/usbipd-win/issues/59" target="_blank" rel="noopener">2. usbipd-win github issues</a></p>
+
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lnx/syscall/">Linux System Calls</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2023-06-13
+        </span><span class="post-category">
+            <a href="/categories/linux/">linux</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p>系统调用是Linux 用户态程序与内核通信的接口。 每个特定的文件系统都会在自己的 <code>file_operations</code>里提供各种文件操作接口，这些接口包括像 open, close, ioctl 等等</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Syscall  signature</th>
+<th style="text-align:left">Function description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">int dup(int oldfd);</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">int dup2(int oldfd, int newfd);</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">uid_t getuid(void);</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">uid_t geteuid(void);</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">pid_t getpid(void);</td>
+<td style="text-align:left">return process ID of calling process</td>
+</tr>
+<tr>
+<td style="text-align:left">pid_t getppid(void);</td>
+<td style="text-align:left">return process ID of parent of calling process</td>
+</tr>
+<tr>
+<td style="text-align:left">int ioctl(int fd, unsigned long request, …);</td>
+<td style="text-align:left">操作底层设备参数，尤其像终端这种字符设备</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="ioctl"><a href="#ioctl" class="headerlink" title="ioctl"></a>ioctl</h1><p><img src="ioctl-ioctl.drawio.png" alt="ioctl"></p>
+<h2 id="ioctl-的返回值"><a href="#ioctl-的返回值" class="headerlink" title="ioctl 的返回值"></a>ioctl 的返回值</h2><p>ioctl 成功返回 0， 否则返回 -errno (有的 man ioctl 说ioctl不成功时返回 -1, 这种应该是过时的文档)。</p>
+
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lnx/debug/">Linux Kernel Debugging</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2023-05-19
+        </span><span class="post-category">
+            <a href="/categories/linux/">linux</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="CONFIG-DEBUG-FS"><a href="#CONFIG-DEBUG-FS" class="headerlink" title="CONFIG_DEBUG_FS"></a><code>CONFIG_DEBUG_FS</code></h1><h2 id="如何在-WSL2-上启用-debugfs"><a href="#如何在-WSL2-上启用-debugfs" class="headerlink" title="如何在 WSL2 上启用 debugfs"></a>如何在 WSL2 上启用 debugfs</h2><p>确认下内核是否开启了 debugfs</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zcat &#x2F;proc&#x2F;config.gz | grep CONFIG_DEBUG_FS</span><br></pre></td></tr></table></figure>
+<p>要想使用 debugfs，首先要挂载它到 <code>/sys/kernel/debug</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t debugfs none &#x2F;sys&#x2F;kernel&#x2F;debug&#x2F;</span><br></pre></td></tr></table></figure>
+          <div class="read-more">
+            <a href="/lnx/debug/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/kms/">Knowledge from "[RFC] Plane color pipeline KMS uAPI"</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2023-05-11
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Gamma-LUT-property"><a href="#Gamma-LUT-property" class="headerlink" title="Gamma LUT property"></a>Gamma LUT property</h1><p>Gamma LUT (Look-Up Table) is a property that is used to correct the color and brightness of an image or video. Gamma LUT is basically a table of values that is used to map input values to output values, for example, it may map low input values to higher output values to brighten the image.</p>
+<p>Gamma LUT is used to adjust the gamma curve of an image or video, which means it can be used to correct the brightness and contrast of an image. This property is commonly used in image and video processing applications, such as photo editing software, video editing software, and color grading tools.</p>
+<p>Gamma LUT can also be used to correct color shifts caused by different lighting conditions or camera settings. By adjusting the gamma curve of an image or video, it is possible to create a more natural and accurate representation of the original scene.</p>
+          <div class="read-more">
+            <a href="/gfx/kms/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/lnx/patch-submit/">Submitting My First Linux Kernel Patch</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2023-05-08
+        </span><span class="post-category">
+            <a href="/categories/linux/">linux</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p>Linux 内核的 patch 是以纯文本的邮件形式进行提交和代码走查的，而且 patch 是先到内核子系统 maintainer 维护的 git tree, 再到 <a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/" target="_blank" rel="noopener">Linus Torvalds 的 main tree</a>。本文主要是以一个 patch 提交的实例来记录一下整个过程中的一些具体操作要点，至于 kernel patch 提交的规范和操作细节<a href="https://www.kernel.org/doc/html/latest/process/submitting-patches.html" target="_blank" rel="noopener">内核文档</a> 和各种博客文章有很多，这里不再赘述。</p>
+          <div class="read-more">
+            <a href="/lnx/patch-submit/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/misc/chatgpt/">ChatGPT 告诉我的</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2023-04-24
+        </span><span class="post-category">
+            <a href="/categories/misc/">misc</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h1><h2 id="ACPI-是什么？"><a href="#ACPI-是什么？" class="headerlink" title="ACPI 是什么？"></a>ACPI 是什么？</h2><p>ACPI是一个开放标准，全称为Advanced Configuration and Power Interface（高级配置与电源接口）。它是一种用于电源管理和配置硬件设备的接口规范。</p>
+<p>ACPI的主要目的是提供一种标准化的方法，使操作系统能够与计算机的固件（如BIOS）进行交互，管理电源管理、设备配置和系统资源的一致性。它定义了一组操作系统接口和数据结构，用于控制和监测硬件设备的电源状态、配置和事件。</p>
+<p>通过ACPI，操作系统能够实现电源管理的功能，如系统的睡眠、休眠和唤醒，以及动态调整设备的功耗和性能。它还提供了高级功能，包括热插拔设备的支持、温度传感器的监测以及处理器性能的调整。</p>
+<p>ACPI存在于大多数现代计算机系统中，并得到广泛支持。它在各种操作系统中广泛使用，包括Windows、Linux、Apple macOS等。通过ACPI，计算机系统能够更好地管理电源和硬件资源，实现能效和性能的平衡，提供更好的用户体验。</p>
+<h2 id="UEFI-GOP-是什么？"><a href="#UEFI-GOP-是什么？" class="headerlink" title="UEFI GOP 是什么？"></a>UEFI GOP 是什么？</h2><p>UEFI GOP 是 UEFI(统一可扩展固件接口)中的一个图形输出协议。它提供了在 UEFI 环境下进行图形输出的标准接口。</p>
+<p>UEFI GOP 的主要功能包括:</p>
+<ul>
+<li><p>提供图形模式设置、获取当前图形模式等图形初始化相关功能。</p>
+</li>
+<li><p>提供绘制像素、填充矩形、绘制线条等基本图形输出功能。</p>
+</li>
+<li><p>提供双缓冲区切换、视口管理等高级图形功能。</p>
+</li>
+<li><p>支持各种颜色格式如 RGB、YUV 等。</p>
+</li>
+<li><p>提供与硬件无关的抽象接口,通过 GOP 驱动与特定硬件交互。</p>
+</li>
+<li><p>支持全屏和窗口两种输出模式。</p>
+</li>
+<li><p>支持各种分辨率的图形输出。</p>
+</li>
+</ul>
+<p>通过使用 UEFI GOP,操作系统和应用可以在 UEFI 阶段实现图形界面和图形输出,如启动菜单、系统配置界面等。许多操作系统的启动器都会使用 GOP 进行图形化显示。</p>
+<p>所以简单来说,UEFI GOP 为 UEFI 固件和操作系统提供了标准的图形输出接口,使其可以实现固件过程中的图形化显示和交互。它是实现 UEFI 图形环境的基础。</p>
+<h2 id="HSA-是什么？"><a href="#HSA-是什么？" class="headerlink" title="HSA 是什么？"></a>HSA 是什么？</h2><p>HSA(Heterogeneous System Architecture) 是一种异构系统架构,用于在CPU和GPU等异构处理器之间进行并行计算。其主要特点包括:</p>
+<ul>
+<li><p>协处理器架构:HSA定义了主处理器(CPU)和协处理器(GPU等)之间的关系,协处理器协助CPU完成计算任务。</p>
+</li>
+<li><p>统一地址空间:CPU和协处理器共享同一个虚拟地址空间,可以直接访问对方的内存。</p>
+</li>
+<li><p>协作计算模型:支持CPU和协处理器之间的并行计算,任务可以自动在最合适的处理器上运行。</p>
+</li>
+<li><p>优化数据传输:通过DMA等机制优化CPU和协处理器之间的数据传输。</p>
+</li>
+<li><p>标准化程序接口:为开发人员提供标准化的程序接口,简化异构计算的软件设计。</p>
+</li>
+</ul>
+<p>HSA让CPU和GPU之间可以高效协作,优化系统整体的并行计算性能,被认为是未来异构计算架构的发展方向。AMD是HSA的主要推动者,其APU产品已经开始支持HSA。HSA也吸引了其他处理器厂商的广泛支持。</p>
+<p>总而言之,HSA是一种创新的异构系统架构,通过处理器协作和优化提升整体计算性能,对高效并行计算有重要意义。</p>
+<p>目前支持HSA标准的SoC产品不多,主要有:</p>
+<ul>
+<li><p>AMD Kaveri APU:这是AMD于2014年发布的首款HSA 1.0兼容APU,集成CPU和GPU,支持共享虚拟内存。</p>
+</li>
+<li><p>AMD Carrizo APU:2015年发布,同样支持HSA 1.0,并进一步增强了CPU和GPU的协作计算能力。</p>
+</li>
+<li><p>AMD Ryzen APU:如Ryzen 5 2400G,集成Vega graphics,支持共享内存和异构计算。</p>
+</li>
+<li><p>AMD Raven Ridge APU:首款集成Vega图形的Ryzen移动APU,支持HSA。 </p>
+</li>
+<li><p>Qualcomm Snapdragon 820:高通在Snapdragon 820平台增加了HSA 1.1支持。</p>
+</li>
+<li><p>领悟科技(HSA Foundation)Mustang-V100-A10:这是全球首块完全兼容HSA 1.0规范的独立heterogeneous SoC。</p>
+</li>
+<li><p>领悟科技(HSA Foundation)Mustang-F100-A10:进一步优化的heterogeneous SoC。</p>
+</li>
+</ul>
+<p>总体来说,AMD是目前最主要的HSA支持厂商,其多款APU产品都实现了HSA规范。高通也加入了HSA支持。此外,一些创业公司如领悟科技也推出了支持HSA的SoC。随着规范的逐步完善,预计未来将会有更多的异构SoC产品实现HSA兼容。</p>
+<p>我：那么符合 HSA 标准的 APU 与普通的 SoC 有什么区别？</p>
+<p>ChatGPT:</p>
+<p>符合HSA标准的APU和普通SoC的主要区别有:</p>
+<ol>
+<li>统一地址空间</li>
+</ol>
+<p>HSA APU采用统一地址空间,CPU和GPU可以直接访问对方的缓存和内存,简化数据传输。普通SoC的CPU和GPU存在独立的地址空间。</p>
+<ol>
+<li>优化的内存访问</li>
+</ol>
+<p>HSA APU支持CPU和GPU直接访问系统内存,无需数据复制,提高效率。普通SoC需要在内存空间之间进行数据复制。</p>
+<ol>
+<li>标准化的程序接口 </li>
+</ol>
+<p>HSA提供标准化的程序接口如HSAIL,简化异构编程的复杂ity。普通SoC缺乏统一的接口。</p>
+<ol>
+<li>优化的协作计算</li>
+</ol>
+<p>HSA APU通过协处理器等机制,可根据workload自动在CPU和GPU间分配任务,调度更优化。普通SoC无法做到如此灵活的协作计算。</p>
+<ol>
+<li>更高效的互联</li>
+</ol>
+<p>HSA APU采用高速互联如AMD的Infinity Fabric,提升CPU和GPU之间的数据传输速度。</p>
+<ol>
+<li>更紧密的硬件协作</li>
+</ol>
+<p>HSA APU通过硬件级的优化如内存控制器集成,实现更紧密的协作。</p>
+<p>综上,HSA APU通过硬件架构和软件接口的优化,实现了CPU与GPU更加紧密、高效的异构计算,相比普通SoC有明显优势。这使其在并行计算性能上有显著提升。</p>
+<h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><h2 id="mmu-notifier-vs-mmu-interval-notifier"><a href="#mmu-notifier-vs-mmu-interval-notifier" class="headerlink" title="mmu_notifier vs. mmu_interval_notifier"></a><a href="https://elixir.bootlin.com/linux/v6.3-rc6/source/include/linux/mmu_notifier.h#L237" target="_blank" rel="noopener"><code>mmu_notifier</code></a> vs. <a href="https://elixir.bootlin.com/linux/v6.3-rc6/source/include/linux/mmu_notifier.h#L257" target="_blank" rel="noopener"><code>mmu_interval_notifier</code></a></h2><p>M: please shed light on the distinction mmu_notifier from mmu_interval_notifier in the linux kernel</p>
+<p>C: In the Linux kernel, both MMU notifier and MMU interval notifier are used to track changes in page tables and memory mappings. However, there are some differences between the two:</p>
+<p>MMU notifier is used to track changes to page tables and memory mappings, and it is designed to be a general-purpose notifier. It is used by various subsystems in the kernel, such as memory management, file systems, and device drivers.</p>
+<p>MMU interval notifier, on the other hand, is used specifically to track changes to a range of memory pages. It is used by subsystems that need to be notified of changes to a particular range of memory pages, such as virtualization subsystems.</p>
+<p>In summary, MMU notifier is a more general-purpose notifier used to track changes to page tables and memory mappings, while MMU interval notifier is used specifically to track changes to a range of memory pages.</p>
+          <div class="read-more">
+            <a href="/misc/chatgpt/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/util/icd/">Installable Client Driver</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2023-04-23
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="来自-ChatGPT-的解释"><a href="#来自-ChatGPT-的解释" class="headerlink" title="来自 ChatGPT 的解释"></a>来自 <a href="https://openprompt.co/ChatGPT" target="_blank" rel="noopener">ChatGPT</a> 的解释</h1><h2 id="What-is-Vulkan-ICD"><a href="#What-is-Vulkan-ICD" class="headerlink" title="What is Vulkan ICD?"></a>What is Vulkan ICD?</h2><blockquote>
+<p>Vulkan ICD (Installable Client Driver) is a software component that enables the Vulkan API (Application Programming Interface) to interact with the hardware of a computer system. Vulkan is a low-level graphics API developed by the Khronos Group, which provides developers with more control over hardware resources, leading to improved performance and efficiency in graphics-intensive applications such as video games. The Vulkan ICD is responsible for managing the communication between the Vulkan API and the graphics hardware of a system. It is typically provided by the manufacturer of the graphics card as a driver for the system.</p>
+</blockquote>
+          <div class="read-more">
+            <a href="/util/icd/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <nav class="pagination"><a class="prev" href="/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text">Prev</span>
+      </a>
+    <a class="next" href="/page/3/">
+        <span class="next-text">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></section></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

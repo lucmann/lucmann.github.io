@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/page/4/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><section id="posts" class="posts"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/util/regex/">Regular Expression</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2022-06-19
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Regular-Expressions"><a href="#Regular-Expressions" class="headerlink" title="Regular Expressions"></a>Regular Expressions</h1><ul>
+<li><p><a href="https://www.regular-expressions.info/posix.html#bre" target="_blank" rel="noopener">POSIX Basic Regular Expression</a></p>
+<ul>
+<li>grep</li>
+</ul>
+</li>
+<li><p><a href="https://www.regular-expressions.info/gnu.html#ere" target="_blank" rel="noopener">POSIX Extended Regular Expression</a></p>
+<ul>
+<li>egrep</li>
+<li>awk</li>
+<li>emacs</li>
+</ul>
+</li>
+</ul>
+<h1 id="GNU-Extensions"><a href="#GNU-Extensions" class="headerlink" title="GNU Extensions"></a>GNU Extensions</h1><h2 id="Shorthand-Classes"><a href="#Shorthand-Classes" class="headerlink" title="Shorthand Classes"></a>Shorthand Classes</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">shorthand</th>
+<th style="text-align:left">equivalence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>\w</code></td>
+<td style="text-align:left"><code>[[:alnum:]_]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\W</code></td>
+<td style="text-align:left"><code>[^[:alnum:]_]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\s</code></td>
+<td style="text-align:left"><code>[[:space:]]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\S</code></td>
+<td style="text-align:left"><code>[^[:space:]]</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="Word-Boundaries"><a href="#Word-Boundaries" class="headerlink" title="Word Boundaries"></a>Word Boundaries</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">shorthand</th>
+<th style="text-align:left">matches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>\b</code></td>
+<td style="text-align:left">position at a word boundary</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\B</code></td>
+<td style="text-align:left">position not at a word boundary</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\&lt;</code></td>
+<td style="text-align:left">position at the start of a word</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\&gt;</code></td>
+<td style="text-align:left">position at the end of a word</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\` </code> (backtick)</td>
+<td style="text-align:left">position at the start of subject string</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\&#39;</code> (single quote)</td>
+<td style="text-align:left">position at the end of subject string</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/util/shell/">Advanced Shell</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2022-06-19
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Bash-Shell"><a href="#Bash-Shell" class="headerlink" title="Bash Shell"></a>Bash Shell</h1><h2 id="Parameter-Expansion"><a href="#Parameter-Expansion" class="headerlink" title="Parameter Expansion"></a>Parameter Expansion</h2><h3 id="Use-an-alternate-value"><a href="#Use-an-alternate-value" class="headerlink" title="Use an alternate value"></a>Use an alternate value</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$&#123;var:+WORD&#125;</span></span><br><span class="line"><span class="variable">$&#123;var+WORD&#125;</span></span><br></pre></td></tr></table></figure>
+<p>如果 <code>var</code> 没有设置或为空，则这个变量展开为 Nothing (注意：不是空 empty, 是 nothing), 如果被设置了（不包括被设置成空），它展开为 <code>+</code> 后面的 WORD.</p>
+<p>如果冒号被省略，则 <code>var</code> 即使被设置为空，它也展开为 <code>+</code> 后面的 WORD</p>
+<h3 id="Indirect"><a href="#Indirect" class="headerlink" title="Indirect"></a>Indirect</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$&#123;!var&#125;</span></span><br></pre></td></tr></table></figure>
+<p>如果 <code>var</code> 的值是 <code>MESA_DEBUG</code>, 那么这个形式展开后是变量 <code>MESA_DEBUG</code> 的值，例如 <code>export MESA_DEBUG=1</code>, <code>var=MESA_DEBUG</code>, 则最后的展开结果是 <code>1</code></p>
+<h3 id="Quoted"><a href="#Quoted" class="headerlink" title="Quoted"></a>Quoted</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$&#123;var@Q&#125;</span></span><br></pre></td></tr></table></figure>
+<p>带 <code>@Q</code> 指变量展开后的值被单引号引起来，例如 <code>export ABC=abc</code>, <code>echo &quot;ABC=${ABC@Q}&quot;</code> 的结果是 <code>ABC=&#39;abc&#39;</code></p>
+<h1 id="Text-Manipulation"><a href="#Text-Manipulation" class="headerlink" title="Text Manipulation"></a>Text Manipulation</h1><p>Linux 下的文本处理三剑客: grep, sed, awk, 除了它们其实还有一些小巧的命令，如 <code>tr</code>, <code>cut</code> 也可以帮助我们快速处理和格式化文本。<br>下面以一个例子为例。</p>
+<p><strong>在 Linux 内核源码树里，搜索出目录 <code>drivers/gpu/drm</code> 下所有的 <code>DRIVER_NAME</code> 定义，并排序后格式化输出</strong></p>
+<p>命令如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rg <span class="string">'#define DRIVER_NAME'</span> drivers/gpu/drm --no-heading | tr -s <span class="string">'\t'</span> | tr <span class="string">'\t'</span> <span class="string">' '</span> | tr -s <span class="string">' '</span> | awk -F<span class="string">':'</span> <span class="string">'&#123;printf("%-52s%-40s\n",$1,$2)&#125;'</span> | sort -k4 | xclip -i</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>rg</code> (<a href="https://github.com/BurntSushi/ripgrep" target="_blank" rel="noopener">ripgrep</a>) 比 grep 更快，更强大</li>
+<li><code>tr</code> 在不带任何选项时，默认执行替换，例子是中将 tab 替换成 空格, <code>-s</code> 表示 <code>squeeze-repeats</code>, 就是去重</li>
+<li><code>awk</code> 天生支持 C-Style printf</li>
+</ul>
+<p>输出结果:</p>
+<ul>
+<li>格式化之前:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;solomon&#x2F;ssd130x.c:#define DRIVER_NAME	&quot;ssd130x&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;solomon&#x2F;ssd130x-i2c.c:#define DRIVER_NAME	&quot;ssd130x-i2c&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;solomon&#x2F;ssd130x-spi.c:#define DRIVER_NAME	&quot;ssd130x-spi&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;exynos&#x2F;exynos_drm_drv.c:#define DRIVER_NAME	&quot;exynos&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;imx&#x2F;imx8qxp-pixel-link.c:#define DRIVER_NAME		&quot;imx8qxp-display-pixel-link&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;imx&#x2F;imx8qxp-pxl2dpi.c:#define DRIVER_NAME	&quot;imx8qxp-pxl2dpi&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;imx&#x2F;imx8qxp-pixel-combiner.c:#define DRIVER_NAME			&quot;imx8qxp-pixel-combiner&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;imx&#x2F;imx8qxp-ldb-drv.c:#define DRIVER_NAME		&quot;imx8qxp-ldb&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;imx&#x2F;imx8qm-ldb-drv.c:#define DRIVER_NAME			&quot;imx8qm-ldb&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;synopsys&#x2F;dw-hdmi-gp-audio.c:#define DRIVER_NAME &quot;dw-hdmi-gp-audio&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;synopsys&#x2F;dw-hdmi-ahb-audio.c:#define DRIVER_NAME &quot;dw-hdmi-ahb-audio&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;synopsys&#x2F;dw-hdmi-i2s-audio.c:#define DRIVER_NAME &quot;dw-hdmi-i2s-audio&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;meson&#x2F;meson_dw_hdmi.c:#define DRIVER_NAME &quot;meson-dw-hdmi&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;meson&#x2F;meson_drv.c:#define DRIVER_NAME &quot;meson&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;omapdrm&#x2F;omap_drv.c:#define DRIVER_NAME		MODULE_NAME</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;sprd&#x2F;sprd_drm.c:#define DRIVER_NAME	&quot;sprd&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;savage&#x2F;savage_drv.h:#define DRIVER_NAME	&quot;savage&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;i810&#x2F;i810_drv.h:#define DRIVER_NAME		&quot;i810&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;mediatek&#x2F;mtk_drm_drv.c:#define DRIVER_NAME &quot;mediatek&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;mga&#x2F;mga_drv.h:#define DRIVER_NAME		&quot;mga&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;amd&#x2F;amdgpu&#x2F;amdgpu_drv.h:#define DRIVER_NAME		&quot;amdgpu&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;vboxvideo&#x2F;vbox_drv.h:#define DRIVER_NAME         &quot;vboxvideo&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;vkms&#x2F;vkms_drv.c:#define DRIVER_NAME	&quot;vkms&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;via&#x2F;via_dri1.c:#define DRIVER_NAME		&quot;via&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;sti&#x2F;sti_drv.c:#define DRIVER_NAME	&quot;sti&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;imx&#x2F;ipuv3&#x2F;imx-ldb.c:#define DRIVER_NAME &quot;imx-ldb&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;udl&#x2F;udl_drv.h:#define DRIVER_NAME		&quot;udl&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;nouveau&#x2F;nouveau_drv.h:#define DRIVER_NAME		&quot;nouveau&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;mgag200&#x2F;mgag200_drv.h:#define DRIVER_NAME		&quot;mgag200&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;vgem&#x2F;vgem_drv.c:#define DRIVER_NAME	&quot;vgem&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;qxl&#x2F;qxl_drv.h:#define DRIVER_NAME		&quot;qxl&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;radeon&#x2F;radeon_drv.h:#define DRIVER_NAME		&quot;radeon&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;rockchip&#x2F;rockchip_drm_drv.c:#define DRIVER_NAME	&quot;rockchip&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;virtio&#x2F;virtgpu_drv.h:#define DRIVER_NAME &quot;virtio_gpu&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tiny&#x2F;gm12u320.c:#define DRIVER_NAME		&quot;gm12u320&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tiny&#x2F;simpledrm.c:#define DRIVER_NAME	&quot;simpledrm&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tiny&#x2F;ofdrm.c:#define DRIVER_NAME	&quot;ofdrm&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;v3d&#x2F;v3d_drv.c:#define DRIVER_NAME &quot;v3d&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;gma500&#x2F;psb_drv.h:#define DRIVER_NAME &quot;gma500&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;hyperv&#x2F;hyperv_drm_drv.c:#define DRIVER_NAME &quot;hyperv_drm&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;sis&#x2F;sis_drv.h:#define DRIVER_NAME		&quot;sis&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tdfx&#x2F;tdfx_drv.h:#define DRIVER_NAME		&quot;tdfx&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;i915&#x2F;i915_driver.h:#define DRIVER_NAME		&quot;i915&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;r128&#x2F;r128_drv.h:#define DRIVER_NAME		&quot;r128&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tiny&#x2F;cirrus.c:#define DRIVER_NAME &quot;cirrus&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tegra&#x2F;drm.c:#define DRIVER_NAME &quot;tegra&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;ast&#x2F;ast_drv.h:#define DRIVER_NAME		&quot;ast&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;vc4&#x2F;vc4_drv.c:#define DRIVER_NAME &quot;vc4&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>格式化之后:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;amd&#x2F;amdgpu&#x2F;amdgpu_drv.h             #define DRIVER_NAME &quot;amdgpu&quot;            </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;ast&#x2F;ast_drv.h                       #define DRIVER_NAME &quot;ast&quot;               </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tiny&#x2F;cirrus.c                       #define DRIVER_NAME &quot;cirrus&quot;            </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;synopsys&#x2F;dw-hdmi-ahb-audio.c #define DRIVER_NAME &quot;dw-hdmi-ahb-audio&quot; </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;synopsys&#x2F;dw-hdmi-gp-audio.c  #define DRIVER_NAME &quot;dw-hdmi-gp-audio&quot;  </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;synopsys&#x2F;dw-hdmi-i2s-audio.c #define DRIVER_NAME &quot;dw-hdmi-i2s-audio&quot; </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;exynos&#x2F;exynos_drm_drv.c             #define DRIVER_NAME &quot;exynos&quot;            </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tiny&#x2F;gm12u320.c                     #define DRIVER_NAME &quot;gm12u320&quot;          </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;gma500&#x2F;psb_drv.h                    #define DRIVER_NAME &quot;gma500&quot;            </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;hyperv&#x2F;hyperv_drm_drv.c             #define DRIVER_NAME &quot;hyperv_drm&quot;        </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;i810&#x2F;i810_drv.h                     #define DRIVER_NAME &quot;i810&quot;              </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;i915&#x2F;i915_driver.h                  #define DRIVER_NAME &quot;i915&quot;              </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;imx&#x2F;ipuv3&#x2F;imx-ldb.c                 #define DRIVER_NAME &quot;imx-ldb&quot;           </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;imx&#x2F;imx8qm-ldb-drv.c         #define DRIVER_NAME &quot;imx8qm-ldb&quot;        </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;imx&#x2F;imx8qxp-pixel-link.c     #define DRIVER_NAME &quot;imx8qxp-display-pixel-link&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;imx&#x2F;imx8qxp-ldb-drv.c        #define DRIVER_NAME &quot;imx8qxp-ldb&quot;       </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;imx&#x2F;imx8qxp-pixel-combiner.c #define DRIVER_NAME &quot;imx8qxp-pixel-combiner&quot;</span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;bridge&#x2F;imx&#x2F;imx8qxp-pxl2dpi.c        #define DRIVER_NAME &quot;imx8qxp-pxl2dpi&quot;   </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;mediatek&#x2F;mtk_drm_drv.c              #define DRIVER_NAME &quot;mediatek&quot;          </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;meson&#x2F;meson_drv.c                   #define DRIVER_NAME &quot;meson&quot;             </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;meson&#x2F;meson_dw_hdmi.c               #define DRIVER_NAME &quot;meson-dw-hdmi&quot;     </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;mga&#x2F;mga_drv.h                       #define DRIVER_NAME &quot;mga&quot;               </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;mgag200&#x2F;mgag200_drv.h               #define DRIVER_NAME &quot;mgag200&quot;           </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;nouveau&#x2F;nouveau_drv.h               #define DRIVER_NAME &quot;nouveau&quot;           </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tiny&#x2F;ofdrm.c                        #define DRIVER_NAME &quot;ofdrm&quot;             </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;qxl&#x2F;qxl_drv.h                       #define DRIVER_NAME &quot;qxl&quot;               </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;r128&#x2F;r128_drv.h                     #define DRIVER_NAME &quot;r128&quot;              </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;radeon&#x2F;radeon_drv.h                 #define DRIVER_NAME &quot;radeon&quot;            </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;rockchip&#x2F;rockchip_drm_drv.c         #define DRIVER_NAME &quot;rockchip&quot;          </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;savage&#x2F;savage_drv.h                 #define DRIVER_NAME &quot;savage&quot;            </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tiny&#x2F;simpledrm.c                    #define DRIVER_NAME &quot;simpledrm&quot;         </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;sis&#x2F;sis_drv.h                       #define DRIVER_NAME &quot;sis&quot;               </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;sprd&#x2F;sprd_drm.c                     #define DRIVER_NAME &quot;sprd&quot;              </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;solomon&#x2F;ssd130x.c                   #define DRIVER_NAME &quot;ssd130x&quot;           </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;solomon&#x2F;ssd130x-i2c.c               #define DRIVER_NAME &quot;ssd130x-i2c&quot;       </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;solomon&#x2F;ssd130x-spi.c               #define DRIVER_NAME &quot;ssd130x-spi&quot;       </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;sti&#x2F;sti_drv.c                       #define DRIVER_NAME &quot;sti&quot;               </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tdfx&#x2F;tdfx_drv.h                     #define DRIVER_NAME &quot;tdfx&quot;              </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;tegra&#x2F;drm.c                         #define DRIVER_NAME &quot;tegra&quot;             </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;udl&#x2F;udl_drv.h                       #define DRIVER_NAME &quot;udl&quot;               </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;v3d&#x2F;v3d_drv.c                       #define DRIVER_NAME &quot;v3d&quot;               </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;vboxvideo&#x2F;vbox_drv.h                #define DRIVER_NAME &quot;vboxvideo&quot;         </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;vc4&#x2F;vc4_drv.c                       #define DRIVER_NAME &quot;vc4&quot;               </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;vgem&#x2F;vgem_drv.c                     #define DRIVER_NAME &quot;vgem&quot;              </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;via&#x2F;via_dri1.c                      #define DRIVER_NAME &quot;via&quot;               </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;virtio&#x2F;virtgpu_drv.h                #define DRIVER_NAME &quot;virtio_gpu&quot;        </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;vkms&#x2F;vkms_drv.c                     #define DRIVER_NAME &quot;vkms&quot;              </span><br><span class="line">drivers&#x2F;gpu&#x2F;drm&#x2F;omapdrm&#x2F;omap_drv.c                  #define DRIVER_NAME MODULE_NAME</span><br></pre></td></tr></table></figure>
+
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/util/texlive/">TexLive</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2022-04-17
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Markdown-to-PDF"><a href="#Markdown-to-PDF" class="headerlink" title="Markdown to PDF"></a>Markdown to PDF</h1><p>Highly recommended 3 utilities:</p>
+<ul>
+<li><a href="https://github.com/jgm/pandoc" target="_blank" rel="noopener">pandoc</a> 标记语言转换领域的”瑞士军刀”</li>
+<li><a href="https://ftp.ntou.edu.tw/ctan/systems/texlive/Images/" target="_blank" rel="noopener">TexLive</a> 开发最为活跃的 TeX 发行版之一</li>
+<li><a href="https://github.com/Wandmalfarbe/pandoc-latex-template" target="_blank" rel="noopener">eisvogel</a> 简洁的 pandoc LaTex 模板</li>
+</ul>
+<p>eisvogel 要求一个完整的 TexLive 的安装环境，但通常像 CentOS 这样的 Linux 发行版自带的 TexLive 并不完整。</p>
+<h1 id="How-to-Install-texlive-iso"><a href="#How-to-Install-texlive-iso" class="headerlink" title="How to Install texlive.iso"></a>How to Install <a href="https://www.tug.org/texlive/acquire-iso.html" target="_blank" rel="noopener"><code>texlive.iso</code></a></h1><h2 id="Quick-Install"><a href="#Quick-Install" class="headerlink" title="Quick Install"></a><a href="https://www.tug.org/texlive/quickinstall.html" target="_blank" rel="noopener">Quick Install</a></h2><p>将 TexLive 的镜像下载并挂载后，通过顶层目录下的 <code>install-tl</code> 这个 Perl 脚本程序安装，整个安装过程要注意以下几点。</p>
+<h2 id="mount-ISO-image"><a href="#mount-ISO-image" class="headerlink" title="mount ISO image"></a>mount ISO image</h2><p>假设在 Linux 下，通过 root 用户或 <code>sudo</code> 挂载镜像文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /mnt/iso</span><br><span class="line">mount /path/to/texlive.iso /mnt/iso -o loop</span><br></pre></td></tr></table></figure>
+<h2 id="run-installer"><a href="#run-installer" class="headerlink" title="run installer"></a>run installer</h2><p>TexLive 的 installer 是一个 perl script, 提供 text mode 和 GUI mode 两种安装模式.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt; TeX Live installation procedure &lt;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;   Letters&#x2F;digits in &lt;angle brackets&gt; indicate   &lt;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;   menu items for actions or customizations      &lt;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D; help&gt;   https:&#x2F;&#x2F;tug.org&#x2F;texlive&#x2F;doc&#x2F;install-tl.html   &lt;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line"></span><br><span class="line"> Detected platform: GNU&#x2F;Linux on x86_64</span><br><span class="line"></span><br><span class="line"> &lt;B&gt; set binary platforms: 1 out of 6</span><br><span class="line"></span><br><span class="line"> &lt;S&gt; set installation scheme: scheme-full</span><br><span class="line"></span><br><span class="line"> &lt;C&gt; set installation collections:</span><br><span class="line">     40 collections out of 41, disk space required: 7262 MB (free: 168365 MB)</span><br><span class="line"></span><br><span class="line"> &lt;D&gt; set directories:</span><br><span class="line">   TEXDIR (the main TeX directory):</span><br><span class="line">     !! default location: &#x2F;usr&#x2F;local&#x2F;texlive&#x2F;2022</span><br><span class="line">     !! is not writable or not allowed, please select a different one!</span><br><span class="line">   TEXMFLOCAL (directory for site-wide local files):</span><br><span class="line">     &#x2F;usr&#x2F;local&#x2F;texlive&#x2F;texmf-local</span><br><span class="line">   TEXMFSYSVAR (directory for variable and automatically generated data):</span><br><span class="line">     &#x2F;usr&#x2F;local&#x2F;texlive&#x2F;2022&#x2F;texmf-var</span><br><span class="line">   TEXMFSYSCONFIG (directory for local config):</span><br><span class="line">     &#x2F;usr&#x2F;local&#x2F;texlive&#x2F;2022&#x2F;texmf-config</span><br><span class="line">   TEXMFVAR (personal directory for variable and automatically generated data):</span><br><span class="line">     ~&#x2F;.texlive2022&#x2F;texmf-var</span><br><span class="line">   TEXMFCONFIG (personal directory for local config):</span><br><span class="line">     ~&#x2F;.texlive2022&#x2F;texmf-config</span><br><span class="line">   TEXMFHOME (directory for user-specific files):</span><br><span class="line">     ~&#x2F;texmf</span><br><span class="line"></span><br><span class="line"> &lt;O&gt; options:</span><br><span class="line">   [ ] use letter size instead of A4 by default</span><br><span class="line">   [X] allow execution of restricted list of programs via \write18</span><br><span class="line">   [X] create all format files</span><br><span class="line">   [X] install macro&#x2F;font doc tree</span><br><span class="line">   [X] install macro&#x2F;font source tree</span><br><span class="line">   [ ] create symlinks to standard directories</span><br><span class="line">   [X] after install, set CTAN as source for package updates</span><br><span class="line"></span><br><span class="line"> &lt;V&gt; set up for portable installation</span><br><span class="line"></span><br><span class="line">Actions:</span><br><span class="line"> &lt;I&gt; start installation to hard disk</span><br><span class="line"> &lt;P&gt; save installation profile to &#39;texlive.profile&#39; and exit</span><br><span class="line"> &lt;Q&gt; quit</span><br><span class="line"></span><br><span class="line">Enter command:</span><br></pre></td></tr></table></figure>
+<h2 id="create-symlinks-to-standard-directories"><a href="#create-symlinks-to-standard-directories" class="headerlink" title="create symlinks to standard directories"></a>create symlinks to standard directories</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Options customization:</span><br><span class="line"></span><br><span class="line"> &lt;P&gt; use letter size instead of A4 by default: [ ]</span><br><span class="line"> &lt;E&gt; execution of restricted list of programs: [X]</span><br><span class="line"> &lt;F&gt; create all format files:                  [X]</span><br><span class="line"> &lt;D&gt; install font&#x2F;macro doc tree:              [X]</span><br><span class="line"> &lt;S&gt; install font&#x2F;macro source tree:           [X]</span><br><span class="line"> &lt;L&gt; create symlinks in standard directories:  [X]</span><br><span class="line">            binaries to: &#x2F;usr&#x2F;bin</span><br><span class="line">            manpages to: &#x2F;usr&#x2F;man</span><br><span class="line">                info to: &#x2F;usr&#x2F;info</span><br><span class="line"> &lt;Y&gt; after install, set CTAN as source for package updates:</span><br><span class="line">                                               [X]</span><br></pre></td></tr></table></figure>
+<p>最好勾选此选项，避免使用 TexLive 时各种 <code>Not Found</code>, 原因是 TexLive 默认安装路径并不是标准 Linux 可执行程序的路径(如 <code>/usr/bin</code>), 而是 <code>/usr/local/texlive</code>, 如在 x86_64 安装 <code>texlive2022.iso</code>, 则可执行程序被安装在 <code>/usr/local/texlive/2022/bin/x86_64-linux</code>. 假如不想因为该路径没有在 <code>PATH</code> 里，最好就是在安装时直接在 <code>/usr/bin</code> 下创建相应符号链接。</p>
+
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/util/find/">find</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2022-03-19
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="find-命令"><a href="#find-命令" class="headerlink" title="find 命令"></a><code>find</code> 命令</h1><p><code>find</code> 命令用来在目录树里查找文件。本文主要介绍 GNU find. 它从每个 starting-point 开始递归搜索，通过求值 expression 的真值来确定输出结果。</p>
+<h1 id="find-的命令行组成"><a href="#find-的命令行组成" class="headerlink" title="find 的命令行组成"></a><code>find</code> 的命令行组成</h1><p><img src="find.drawio.png" alt="example-of-find"></p>
+<ul>
+<li>Options</li>
+<li>Starting-point</li>
+<li>Expression<ul>
+<li>Tests</li>
+<li>Actions</li>
+<li>Global options</li>
+<li>Position options</li>
+<li>Operators</li>
+</ul>
+</li>
+</ul>
+<h2 id="测试的目录"><a href="#测试的目录" class="headerlink" title="测试的目录"></a>测试的目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜  phy git:(main) ls -1 -a</span><br><span class="line">.</span><br><span class="line">..</span><br><span class="line">.git</span><br><span class="line">.gitignore</span><br><span class="line">.idea</span><br><span class="line">README.md</span><br><span class="line">phy.png</span><br><span class="line">phy.py</span><br></pre></td></tr></table></figure>
+
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/ARB/ARB_geometry_shader4/">Geometry Shader</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-12-28
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Geometry-Shader-Input-Layout-Qualifiers"><a href="#Geometry-Shader-Input-Layout-Qualifiers" class="headerlink" title="Geometry Shader Input Layout Qualifiers"></a>Geometry Shader Input Layout Qualifiers</h1><p>Geometry shader只能在接口限定符(interface qualifier)<strong>in</strong>前加Input Layout Qualifiers, 不能在输入块(input block), 块成员(block member), 或变量声明(variable declaration)前加Input Layout Qualifiers。</p>
+<p>这些Input Layout Qualifiers有</p>
+          <div class="read-more">
+            <a href="/gfx/ARB/ARB_geometry_shader4/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/misc/english/">My english is poor</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-12-18
+        </span><span class="post-category">
+            <a href="/categories/misc/">misc</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><blockquote>
+<p>A language that doesn’t affect the way you think about programming, is not worth knowing.</p>
+<p>— <cite>Alan J. Perlis, Recipient of 1966 Turing Award</cite></p>
+</blockquote>
+          <div class="read-more">
+            <a href="/misc/english/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/misc/nightly/">词汇: nightly</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-11-19
+        </span><span class="post-category">
+            <a href="/categories/misc/">misc</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p>最近在两个地方看到<strong>nightly</strong>这个词：</p>
+<p><a href="https://cgit.freedesktop.org/drm-tip/" target="_blank" rel="noopener">drm-tip</a>或<a href="https://cgit.freedesktop.org/drm/drm-tip/" target="_blank" rel="noopener">drm/drm-tip</a> (我也不知道这两个仓库有什么区别，除了它们的Owner不同)</p>
+<p>DRM current development and <strong>nightly</strong> trees</p>
+          <div class="read-more">
+            <a href="/misc/nightly/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/misc/weiqi/">弈城围棋</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-11-19
+        </span><span class="post-category">
+            <a href="/categories/misc/">misc</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>弈城围棋是<a href="http://www.eweiqi.com/" target="_blank" rel="noopener">弈城围棋网</a>推出的一款围棋学习和网络对战的 App. 它可安装在包括 Windows, Android, iOS, iPad, MacOS 在内的各个平台。</p>
+<p><img src="20220904092030.jpg" alt="弈城围棋 App"></p>
+<h1 id="下载和安装"><a href="#下载和安装" class="headerlink" title="下载和安装"></a>下载和安装</h1><p>以 Android 手机平台为例，常用的腾讯 “应用宝” 或手机自带的 “应用中心” 里一般搜不到这款 App, 我们可以直接从手机百度中搜索 “弈城围棋” 关键字，结果中的第二个就是，然后从手机浏览器里下载安装即可。</p>
+<p><img src="202209040920307.jpg" alt="弈城围棋下载"></p>
+<h1 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a>主要功能</h1><p>“弈城围棋”是一个比较大的网络围棋平台，涵盖了中国，韩国和日本的职业棋手和业余棋手，以及通过网络学棋的许多围棋爱好者。所以这款 App 设置了许多不同的房间，以便汇集不同水平的棋手。用户可以任意选择进入房间，也可以随意切换房间。</p>
+<p><img src="202209040920302.jpg" alt="弈城围棋房间设置"></p>
+<p>“弈城围棋” App 分别设置了 9 路和 19 路对局以及 AI 9 路， AI 19 路，对于初学者，可以从 9 路对局开始练习。</p>
+<p><img src="202209040920303.jpg" alt="弈城围棋棋路设置"></p>
+<p>“弈城围棋” 具有打谱和复盘的功能，不仅保存有海量职业棋谱，而且保留了自己以往对局的每一张棋谱，还支持搜索功能，方便你随时复盘任意棋局。</p>
+<p><img src="202209040920304.jpg" alt="弈城围棋棋谱设置"><br><img src="202209040920306.jpg" alt="弈城围棋复盘设置"></p>
+
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/image-format/">Image Format in OpenGL</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-10-25
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Color-Format"><a href="#Color-Format" class="headerlink" title="Color Format"></a>Color Format</h1>
+          <div class="read-more">
+            <a href="/gfx/image-format/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/ogl-pipeline/">OpenGL Pipeline</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-10-22
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="OpenGL-Pipeline"><a href="#OpenGL-Pipeline" class="headerlink" title="OpenGL Pipeline"></a>OpenGL Pipeline</h1><p><img src="../ogl-pipeline/ogl-pipeline.png" alt=""></p>
+<h1 id="OpenGL-Pipeline-Stage-Flowchart"><a href="#OpenGL-Pipeline-Stage-Flowchart" class="headerlink" title="OpenGL Pipeline Stage Flowchart"></a>OpenGL Pipeline Stage Flowchart</h1><p><img src="../ogl-pipeline/RenderingPipeline.png" alt=""></p>
+<p>说明:</p>
+<ol>
+<li>蓝色框表示是Programmable Shader Stages</li>
+<li>虚线框表示是Optional Shader Stages</li>
+</ol>
+
+        </div></article>
+      <nav class="pagination"><a class="prev" href="/page/3/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text">Prev</span>
+      </a>
+    <a class="next" href="/page/5/">
+        <span class="next-text">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></section></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

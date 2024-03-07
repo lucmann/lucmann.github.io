@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="OpenGL Extensions和Version"/><meta name="keywords" content="OpenGL, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/gfx/ogl-extension/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>OpenGL Extensions和Version - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">OpenGL Extensions和Version
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-04-22
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Talk-About"><span class="toc-text">Talk About</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenGL-Extensions-Category"><span class="toc-text">OpenGL Extensions Category</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如果按照Khronos的Extensions-Name-Convention可以分为以下三类："><span class="toc-text">如果按照Khronos的Extensions Name Convention可以分为以下三类：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如果按照Khronos的OpenGL-Registry-Extension-Specifications可以分为以下两类"><span class="toc-text">如果按照Khronos的OpenGL Registry Extension Specifications可以分为以下两类:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Khronos-approved-Extensions"><span class="toc-text">Khronos-approved Extensions</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#K-3-ARB-and-Khronos-Extensions"><span class="toc-text">K.3 ARB and Khronos Extensions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#K-3-1-Naming-Conventions"><span class="toc-text">K.3.1 Naming Conventions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#K-3-2-Promoting-Extensions-to-Core-Features"><span class="toc-text">K.3.2 Promoting Extensions to Core Features</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What-Is-The-Relationship-Between-OpenGL-Extensions-And-OpenGL-Versions"><span class="toc-text">What Is The Relationship Between OpenGL Extensions And OpenGL Versions?</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#OpenGL-ES-and-GLSL-ES-Version"><span class="toc-text">OpenGL (ES) and GLSL (ES) Version</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Khronos发布OpenGL-ES-及GLSL-ES-的时间"><span class="toc-text">Khronos发布OpenGL(ES)及GLSL(ES)的时间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenGL-Version"><span class="toc-text">OpenGL Version</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenGL-Shading-Language-ES-Version"><span class="toc-text">OpenGL (Shading Language) ES Version</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#PIPE-CAP-vs-Extensions-in-Mesa"><span class="toc-text">PIPE_CAP_* vs Extensions in Mesa</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#FAQ"><span class="toc-text">FAQ</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="Talk-About"><a href="#Talk-About" class="headerlink" title="Talk About"></a>Talk About</h1><ul>
+<li>OpenGL Extensions有哪些分类？</li>
+<li>Conformant OpenGL implementation是什么?</li>
+<li>OpenGL Extensions和OpenGL Versions有什么关系？</li>
+<li>OpenGL Extensions和conformant OpenGL implementation有什么关系？</li>
+</ul>
+<a id="more"></a>
+<h2 id="OpenGL-Extensions-Category"><a href="#OpenGL-Extensions-Category" class="headerlink" title="OpenGL Extensions Category"></a>OpenGL Extensions Category</h2><p>严格来说，OpenGL Extensions可以分为三类，但也可以分为两类。</p>
+<h3 id="如果按照Khronos的Extensions-Name-Convention可以分为以下三类："><a href="#如果按照Khronos的Extensions-Name-Convention可以分为以下三类：" class="headerlink" title="如果按照Khronos的Extensions Name Convention可以分为以下三类："></a>如果按照Khronos的<a href="https://www.khronos.org/registry/OpenGL/docs/rules.html#spec_naming" target="_blank" rel="noopener">Extensions Name Convention</a>可以分为以下三类：</h3><ul>
+<li>vendor-specific (“NV”, “ATI”, etc)</li>
+<li>multivendor (EXT)</li>
+<li>Khronos-approved (“ARB”, “OES”, “OML”)</li>
+</ul>
+<p>具体说， Khronos的Extension命名规则是<code>api_category_name</code>, 对于<strong>OpenGL</strong> API来说<code>api</code>就是<code>GL</code>, <code>category</code>就是上面的三类，对于第三类<strong>Khronos-approved</strong> Extensions, <code>category</code>还会细分</p>
+<ul>
+<li>“ARB”或”KHR”专门指<strong>OpenGL</strong> Extensions</li>
+<li>“OES”专门指<strong>OpenGL ES</strong> Extensions</li>
+<li>“OML”专门指<strong>OpenML</strong> Extensions</li>
+</ul>
+<h3 id="如果按照Khronos的OpenGL-Registry-Extension-Specifications可以分为以下两类"><a href="#如果按照Khronos的OpenGL-Registry-Extension-Specifications可以分为以下两类" class="headerlink" title="如果按照Khronos的OpenGL Registry Extension Specifications可以分为以下两类:"></a>如果按照Khronos的<a href="https://www.khronos.org/registry/OpenGL/index_gl.php" target="_blank" rel="noopener">OpenGL Registry Extension Specifications</a>可以分为以下两类:</h3><ul>
+<li><a href="https://www.khronos.org/registry/OpenGL/index_gl.php#arbextspecs" target="_blank" rel="noopener">OpenGL ARB Extensions Specifications</a></li>
+<li><a href="https://www.khronos.org/registry/OpenGL/index_gl.php#arbextspecs" target="_blank" rel="noopener">OpenGL Vendor and EXT Extension Specifications</a></li>
+</ul>
+<h3 id="Khronos-approved-Extensions"><a href="#Khronos-approved-Extensions" class="headerlink" title="Khronos-approved Extensions"></a>Khronos-approved Extensions</h3><p>这里重点理一下<strong>Khronos-approved</strong> Extensions(或者<strong>“GL_ARB_*”</strong>和<strong>“GL_KHR_*”</strong>), 因为Khronos-approved Extensions与下面两个问题密切相关：</p>
+<ul>
+<li>OpenGL Extensions和OpenGL Versions有什么关系？</li>
+<li>OpenGL Extensions和conformant OpenGL implementation有什么关系？</li>
+</ul>
+<p>先看一下<a href="https://www.khronos.org/registry/OpenGL/specs/gl/glspec46.core.pdf" target="_blank" rel="noopener">OpenGL 4.6 Core Profile Specification</a></p>
+<h4 id="K-3-ARB-and-Khronos-Extensions"><a href="#K-3-ARB-and-Khronos-Extensions" class="headerlink" title="K.3 ARB and Khronos Extensions"></a>K.3 ARB and Khronos Extensions</h4><blockquote><p>OpenGL extensions that have been approved by the Khronos OpenGL Architectural Review Board Working Group(ARB), or jointly approved by the ARB and the Khronos OpenGL ES Working Group(KHR), are summarized in this section. ARB and KHR extensions are NOT required to be supported by a CONFORMANT OpenGL implementation, but are expected to be widely available; they define functionality that is likely to move into the REQUIRED feature set in a future revision of the specification.</p>
+</blockquote>
+<p>所有被ARB批准的，或者被ARB和KHR联合批准的OpenGL Extensions被罗列在本章节。这些Extensions不是一个<strong>Conformant</strong> OpenGL实现所必须支持的，但它们应该被大多数OpenGL实现都支持；它们所定义的功能很有可能在未来的OpenGL Specification里加到<strong>必须支持的特性集</strong>中。</p>
+<h4 id="K-3-1-Naming-Conventions"><a href="#K-3-1-Naming-Conventions" class="headerlink" title="K.3.1 Naming Conventions"></a>K.3.1 Naming Conventions</h4><p>为了区分<strong>ARB</strong>和<strong>KHR</strong> extensions和core OpenGL extensions(required core features), 以及vendor-specific extensions, 有以下extension命名规范：</p>
+<ul>
+<li>每个Khronos-approved extension都有一个唯一的名字字符串”GL_ARB_name”或”GL_KHR_name”, 如果某个OpenGL实现支持某个extension,那么这个extension的名字字符串就要出现在调用<code>glGetStringi(EXTENSIONS);</code>的返回值里。</li>
+<li>所有在这个extension里定义的函数，函数名都以<code>FunctionARB</code>或<code>FunctionKHR</code>命名。</li>
+<li>所有在这个extension里定义的枚举，枚举名都以<code>NAME_ARB</code>或<code>NAME_KHR</code>命名。</li>
+</ul>
+<h4 id="K-3-2-Promoting-Extensions-to-Core-Features"><a href="#K-3-2-Promoting-Extensions-to-Core-Features" class="headerlink" title="K.3.2 Promoting Extensions to Core Features"></a>K.3.2 Promoting Extensions to Core Features</h4><p>Khronos-approved, multivendor, 以及vendor-specific extensions都可以被<em>晋升</em>(<em>promoted</em>)加入到OpenGL核心特性集(required core features). 一旦被加入，相应的extension specification将被合入到core specification. 在这个extension里定义的函数和枚举也将<em>删除</em>它们的<strong>ARB</strong>, <strong>KHR</strong>, <strong>EXT</strong>, 或者<strong>vendor后缀</strong>。而且支持这些被<em>晋升</em>的extension的OpenGL实现应该继续支持带后缀的函数名和枚举名。</p>
+<h2 id="What-Is-The-Relationship-Between-OpenGL-Extensions-And-OpenGL-Versions"><a href="#What-Is-The-Relationship-Between-OpenGL-Extensions-And-OpenGL-Versions" class="headerlink" title="What Is The Relationship Between OpenGL Extensions And OpenGL Versions?"></a>What Is The Relationship Between OpenGL Extensions And OpenGL Versions?</h2><p>下面这张图展示各种OpenGL extensions集合的关系。只有那些<strong>Required Core Features(Extensions)</strong>才会被纳入到各个<strong>OpenGL Core Profile Specification</strong>， 也即OpenGL versions是通过不断加入新的Required Core Features来升级的。</p>
+<div align=center><img src="/gfx/ogl-extension/extensions.png" class="" title="venn diagram of extensions"></div>
+
+
+<h1 id="OpenGL-ES-and-GLSL-ES-Version"><a href="#OpenGL-ES-and-GLSL-ES-Version" class="headerlink" title="OpenGL (ES) and GLSL (ES) Version"></a>OpenGL (ES) and GLSL (ES) Version</h1><h2 id="Khronos发布OpenGL-ES-及GLSL-ES-的时间"><a href="#Khronos发布OpenGL-ES-及GLSL-ES-的时间" class="headerlink" title="Khronos发布OpenGL(ES)及GLSL(ES)的时间"></a>Khronos发布OpenGL(ES)及GLSL(ES)的时间</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Standard</th>
+<th style="text-align:center">Birth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">OpenGL</td>
+<td style="text-align:center">1992</td>
+</tr>
+<tr>
+<td style="text-align:left">OpenGL ES</td>
+<td style="text-align:center">2003</td>
+</tr>
+<tr>
+<td style="text-align:left">GLSL</td>
+<td style="text-align:center">2004</td>
+</tr>
+<tr>
+<td style="text-align:left">GLSL ES</td>
+<td style="text-align:center">2007</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="OpenGL-Version"><a href="#OpenGL-Version" class="headerlink" title="OpenGL Version"></a>OpenGL Version</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">GL Version</th>
+<th style="text-align:center">Release</th>
+<th style="text-align:center">GLSL Version</th>
+<th style="text-align:left">Preprocessor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1.0</td>
+<td style="text-align:center">1992</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">1.1</td>
+<td style="text-align:center">1997</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">1.2</td>
+<td style="text-align:center">1998</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">1.3</td>
+<td style="text-align:center">2001</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">1.4</td>
+<td style="text-align:center">2002</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">1.5</td>
+<td style="text-align:center">2003</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">2.0</td>
+<td style="text-align:center">2004</td>
+<td style="text-align:center">1.10</td>
+<td style="text-align:left">#version 110</td>
+</tr>
+<tr>
+<td style="text-align:center">2.1</td>
+<td style="text-align:center">2006</td>
+<td style="text-align:center">1.20</td>
+<td style="text-align:left">#version 120</td>
+</tr>
+<tr>
+<td style="text-align:center">3.0</td>
+<td style="text-align:center">2008</td>
+<td style="text-align:center">1.30</td>
+<td style="text-align:left">#version 130</td>
+</tr>
+<tr>
+<td style="text-align:center">3.1</td>
+<td style="text-align:center">2009</td>
+<td style="text-align:center">1.40</td>
+<td style="text-align:left">#version 140</td>
+</tr>
+<tr>
+<td style="text-align:center">3.2</td>
+<td style="text-align:center">2009</td>
+<td style="text-align:center">1.50</td>
+<td style="text-align:left">#version 150</td>
+</tr>
+<tr>
+<td style="text-align:center">3.3</td>
+<td style="text-align:center">2010</td>
+<td style="text-align:center">3.30</td>
+<td style="text-align:left">#version 330</td>
+</tr>
+<tr>
+<td style="text-align:center">4.0</td>
+<td style="text-align:center">2010</td>
+<td style="text-align:center">4.00</td>
+<td style="text-align:left">#version 400</td>
+</tr>
+<tr>
+<td style="text-align:center">4.1</td>
+<td style="text-align:center">2010</td>
+<td style="text-align:center">4.10</td>
+<td style="text-align:left">#version 410</td>
+</tr>
+<tr>
+<td style="text-align:center">4.2</td>
+<td style="text-align:center">2011</td>
+<td style="text-align:center">4.20</td>
+<td style="text-align:left">#version 420</td>
+</tr>
+<tr>
+<td style="text-align:center">4.3</td>
+<td style="text-align:center">2012</td>
+<td style="text-align:center">4.30</td>
+<td style="text-align:left">#version 430</td>
+</tr>
+<tr>
+<td style="text-align:center">4.4</td>
+<td style="text-align:center">2013</td>
+<td style="text-align:center">4.40</td>
+<td style="text-align:left">#version 440</td>
+</tr>
+<tr>
+<td style="text-align:center">4.5</td>
+<td style="text-align:center">2014</td>
+<td style="text-align:center">4.50</td>
+<td style="text-align:left">#version 450</td>
+</tr>
+<tr>
+<td style="text-align:center">4.6</td>
+<td style="text-align:center">2017</td>
+<td style="text-align:center">4.60</td>
+<td style="text-align:left">#version 460</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="OpenGL-Shading-Language-ES-Version"><a href="#OpenGL-Shading-Language-ES-Version" class="headerlink" title="OpenGL (Shading Language) ES Version"></a>OpenGL (Shading Language) ES Version</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">OpenGL ES</th>
+<th style="text-align:center">Release</th>
+<th style="text-align:center">GLSL ES (ESSL)</th>
+<th style="text-align:left">Directive</th>
+<th style="text-align:center">GLSL based</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1.0</td>
+<td style="text-align:center">2003</td>
+<td style="text-align:center">N/A</td>
+<td style="text-align:left">N/A</td>
+<td style="text-align:center">N/A</td>
+</tr>
+<tr>
+<td style="text-align:center">1.1</td>
+<td style="text-align:center">2004</td>
+<td style="text-align:center">N/A</td>
+<td style="text-align:left">N/A</td>
+<td style="text-align:center">N/A</td>
+</tr>
+<tr>
+<td style="text-align:center">2.0</td>
+<td style="text-align:center">2007</td>
+<td style="text-align:center">1.00</td>
+<td style="text-align:left"><code>#version 100</code></td>
+<td style="text-align:center">1.20</td>
+</tr>
+<tr>
+<td style="text-align:center">3.0</td>
+<td style="text-align:center">2012</td>
+<td style="text-align:center">3.00</td>
+<td style="text-align:left"><code>#version 300 es</code></td>
+<td style="text-align:center">3.30</td>
+</tr>
+<tr>
+<td style="text-align:center">3.1</td>
+<td style="text-align:center">2014</td>
+<td style="text-align:center">3.10</td>
+<td style="text-align:left"><code>#version 310 es</code></td>
+<td style="text-align:center">3.30</td>
+</tr>
+<tr>
+<td style="text-align:center">3.2</td>
+<td style="text-align:center">2015</td>
+<td style="text-align:center">3.20</td>
+<td style="text-align:left"><code>#version 320 es</code></td>
+<td style="text-align:center">3.30</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="PIPE-CAP-vs-Extensions-in-Mesa"><a href="#PIPE-CAP-vs-Extensions-in-Mesa" class="headerlink" title="PIPE_CAP_* vs Extensions in Mesa"></a><code>PIPE_CAP_*</code> vs Extensions in Mesa</h1><p><img src="extension2version.png" alt="determination of gl version"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Use pipe_screen::get_param() to query PIPE_CAP_ values to determine</span></span><br><span class="line"><span class="comment"> * which GL extensions are supported.</span></span><br><span class="line"><span class="comment"> * Quite a few extensions are always supported because they are standard</span></span><br><span class="line"><span class="comment"> * features or can be built on top of other gallium features.</span></span><br><span class="line"><span class="comment"> * Some fine tuning may still be needed.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">st_init_extensions</span><span class="params">(struct pipe_screen *screen,</span></span></span><br><span class="line"><span class="function"><span class="params">                        struct gl_constants *consts,</span></span></span><br><span class="line"><span class="function"><span class="params">                        struct gl_extensions *extensions,</span></span></span><br><span class="line"><span class="function"><span class="params">                        struct st_config_options *options,</span></span></span><br><span class="line"><span class="function"><span class="params">                        gl_api api)</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Examine enabled GL extensions to determine GL version.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> GLuint</span><br><span class="line">compute_version(<span class="keyword">const</span> struct gl_extensions *extensions,</span><br><span class="line">                <span class="keyword">const</span> struct gl_constants *consts, gl_api api)</span><br></pre></td></tr></table></figure>
+<h1 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h1><ol>
+<li>为什么GLSL ES 1.00后面是3.00版本？</li>
+</ol>
+<p>在GLSL ES 3.00 Spec里有这样一段说明：<br><blockquote><p>This version of the language is based on version 3.30 of the desktop GLSL. However it includes a number of features that are in version 4.20 but not 3.30. The previous version of GLSL ES was version 1.00 so this version could be called version 2.00.</p>
+<p>RESOLUTION: Follow the desktop GLSL convention so that the language version matches the API version. Hence this version will be called 3.00</p>
+</blockquote></p>
+<p>GLSL ES 3.10 &amp; 3.20里同样有这段说明，所以，3.00主要是为了对应OpenGL ES API的版本号，3.10, 3.20同样是。</p>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/OpenGL/">OpenGL</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/gfx/opengl-objects/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">OpenGL Objects</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/prog/g++/">
+        <span class="next-text nav-default">g++ 那些事儿</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

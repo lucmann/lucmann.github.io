@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Mesa Gallium 驱动框架"/><meta name="keywords" content="mesa, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/gfx/gallium-driver/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Mesa Gallium 驱动框架 - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Mesa Gallium 驱动框架
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-04-08
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Gallium-Framework"><span class="toc-text">Gallium Framework</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Dgallium-drivers-与-Ddri-drivers-的区别，以及它们与-Degl-的关系"><span class="toc-text">-Dgallium-drivers 与 -Ddri-drivers 的区别，以及它们与 -Degl 的关系</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="Gallium-Framework"><a href="#Gallium-Framework" class="headerlink" title="Gallium Framework"></a>Gallium Framework</h1><h2 id="Dgallium-drivers-与-Ddri-drivers-的区别，以及它们与-Degl-的关系"><a href="#Dgallium-drivers-与-Ddri-drivers-的区别，以及它们与-Degl-的关系" class="headerlink" title="-Dgallium-drivers 与 -Ddri-drivers 的区别，以及它们与 -Degl 的关系"></a><code>-Dgallium-drivers</code> 与 <code>-Ddri-drivers</code> 的区别，以及它们与 <code>-Degl</code> 的关系</h2><p>从构建的角度看， <code>-Dgallium-drivers</code> 与 <code>-Ddri-drivers</code> 是无关的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DRI platform:    drm</span><br><span class="line">DRI drivers:     no</span><br><span class="line">DRI driver dir:  &#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;dri</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">EGL:             yes</span><br><span class="line">EGL drivers:     builtin:egl_dri2 builtin:egl_dri3</span><br><span class="line">EGL&#x2F;Vulkan&#x2F;VL platforms:   x11 surfaceless drm xcb</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Gallium drivers: swrast panfrost</span><br><span class="line">Gallium st:      mesa</span><br><span class="line">HUD lmsensors:   no</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">build&#x2F;src&#x2F;gallium&#x2F;targets&#x2F;dri&#x2F;libgallium_dri.so</span><br><span class="line">build&#x2F;src&#x2F;gallium&#x2F;targets&#x2F;dri&#x2F;8381c20@@gallium_dri@sha&#x2F;target.c.o</span><br><span class="line">build&#x2F;src&#x2F;gallium&#x2F;targets&#x2F;dri&#x2F;8381c20@@gallium_dri@sha&#x2F;megadriver_stub.c.o</span><br></pre></td></tr></table></figure>
+<img class="kroki" src='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXMtYXNjaWkiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U3R5bGVUeXBlPSJ0ZXh0L2NzcyIgaGVpZ2h0PSIyNTVweCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgc3R5bGU9IndpZHRoOjQ1MXB4O2hlaWdodDoyNTVweDtiYWNrZ3JvdW5kOiNGRkZGRkY7IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA0NTEgMjU1IiB3aWR0aD0iNDUxcHgiIHpvb21BbmRQYW49Im1hZ25pZnkiPjxkZWZzLz48Zz48IS0tY2xhc3MgcGlwZV9sb2FkZXJfZGV2aWNlLS0+PGcgaWQ9ImVsZW1fcGlwZV9sb2FkZXJfZGV2aWNlIj48cmVjdCBjb2RlTGluZT0iMSIgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSI0OCIgaWQ9InBpcGVfbG9hZGVyX2RldmljZSIgcng9IjIuNSIgcnk9IjIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMTY0IiB4PSIxNDMuNSIgeT0iNyIvPjxlbGxpcHNlIGN4PSIxNTguNSIgY3k9IjIzIiBmaWxsPSIjQUREMUIyIiByeD0iMTEiIHJ5PSIxMSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBhdGggZD0iTTE2MS40Njg4LDI4LjY0MDYgUTE2MC44OTA2LDI4LjkzNzUgMTYwLjI1LDI5LjA3ODEgUTE1OS42MDk0LDI5LjIzNDQgMTU4LjkwNjMsMjkuMjM0NCBRMTU2LjQwNjMsMjkuMjM0NCAxNTUuMDc4MSwyNy41OTM4IFExNTMuNzY1NiwyNS45Mzc1IDE1My43NjU2LDIyLjgxMjUgUTE1My43NjU2LDE5LjY4NzUgMTU1LjA3ODEsMTguMDMxMyBRMTU2LjQwNjMsMTYuMzc1IDE1OC45MDYzLDE2LjM3NSBRMTU5LjYwOTQsMTYuMzc1IDE2MC4yNSwxNi41MzEzIFExNjAuOTA2MywxNi42ODc1IDE2MS40Njg4LDE2Ljk4NDQgTDE2MS40Njg4LDE5LjcwMzEgUTE2MC44NDM4LDE5LjEyNSAxNjAuMjUsMTguODU5NCBRMTU5LjY1NjMsMTguNTc4MSAxNTkuMDMxMywxOC41NzgxIFExNTcuNjg3NSwxOC41NzgxIDE1NywxOS42NTYzIFExNTYuMzEyNSwyMC43MTg4IDE1Ni4zMTI1LDIyLjgxMjUgUTE1Ni4zMTI1LDI0LjkwNjMgMTU3LDI1Ljk4NDQgUTE1Ny42ODc1LDI3LjA0NjkgMTU5LjAzMTMsMjcuMDQ2OSBRMTU5LjY1NjMsMjcuMDQ2OSAxNjAuMjUsMjYuNzgxMyBRMTYwLjg0MzgsMjYuNSAxNjEuNDY4OCwyNS45MjE5IEwxNjEuNDY4OCwyOC42NDA2IFogIiBmaWxsPSIjMDAwMDAwIi8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTMyIiB4PSIxNzIuNSIgeT0iMjcuODQ2NyI+cGlwZV9sb2FkZXJfZGV2aWNlPC90ZXh0PjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgeDE9IjE0NC41IiB4Mj0iMzA2LjUiIHkxPSIzOSIgeTI9IjM5Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB4MT0iMTQ0LjUiIHgyPSIzMDYuNSIgeTE9IjQ3IiB5Mj0iNDciLz48L2c+PCEtLWNsYXNzIHBpcGVfbG9hZGVyX3N3X2RldmljZS0tPjxnIGlkPSJlbGVtX3BpcGVfbG9hZGVyX3N3X2RldmljZSI+PHJlY3QgY29kZUxpbmU9IjMiIGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMTMzLjQ4NDQiIGlkPSJwaXBlX2xvYWRlcl9zd19kZXZpY2UiIHJ4PSIyLjUiIHJ5PSIyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjIwMSIgeD0iNyIgeT0iMTE1Ii8+PGVsbGlwc2UgY3g9IjI2Ljk1IiBjeT0iMTMxIiBmaWxsPSIjQUREMUIyIiByeD0iMTEiIHJ5PSIxMSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBhdGggZD0iTTI5LjkxODgsMTM2LjY0MDYgUTI5LjM0MDYsMTM2LjkzNzUgMjguNywxMzcuMDc4MSBRMjguMDU5NCwxMzcuMjM0NCAyNy4zNTYzLDEzNy4yMzQ0IFEyNC44NTYzLDEzNy4yMzQ0IDIzLjUyODEsMTM1LjU5MzggUTIyLjIxNTYsMTMzLjkzNzUgMjIuMjE1NiwxMzAuODEyNSBRMjIuMjE1NiwxMjcuNjg3NSAyMy41MjgxLDEyNi4wMzEzIFEyNC44NTYzLDEyNC4zNzUgMjcuMzU2MywxMjQuMzc1IFEyOC4wNTk0LDEyNC4zNzUgMjguNywxMjQuNTMxMyBRMjkuMzU2MywxMjQuNjg3NSAyOS45MTg4LDEyNC45ODQ0IEwyOS45MTg4LDEyNy43MDMxIFEyOS4yOTM4LDEyNy4xMjUgMjguNywxMjYuODU5NCBRMjguMTA2MywxMjYuNTc4MSAyNy40ODEzLDEyNi41NzgxIFEyNi4xMzc1LDEyNi41NzgxIDI1LjQ1LDEyNy42NTYzIFEyNC43NjI1LDEyOC43MTg4IDI0Ljc2MjUsMTMwLjgxMjUgUTI0Ljc2MjUsMTMyLjkwNjMgMjUuNDUsMTMzLjk4NDQgUTI2LjEzNzUsMTM1LjA0NjkgMjcuNDgxMywxMzUuMDQ2OSBRMjguMTA2MywxMzUuMDQ2OSAyOC43LDEzNC43ODEzIFEyOS4yOTM4LDEzNC41IDI5LjkxODgsMTMzLjkyMTkgTDI5LjkxODgsMTM2LjY0MDYgWiAiIGZpbGw9IiMwMDAwMDAiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxNTgiIHg9IjQyLjA1IiB5PSIxMzUuODQ2NyI+cGlwZV9sb2FkZXJfc3dfZGV2aWNlPC90ZXh0PjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgeDE9IjgiIHgyPSIyMDciIHkxPSIxNDciIHkyPSIxNDciLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxNzQiIHg9IjEzIiB5PSIxNjMuOTk1MSI+c3dfZHJpdmVyX2Rlc2NyaXB0b3IgKiBkZDwvdGV4dD48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxMTYiIHg9IjEzIiB5PSIyMDAuNTg4OSI+dXRpbF9kbF9saWJyYXJ5ICogbGliPC90ZXh0PjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wO3N0cm9rZS1kYXNoYXJyYXk6MS4wLDIuMDsiIHgxPSI4IiB4Mj0iMTEiIHkxPSIxNzkuNDQ1MyIgeTI9IjE3OS40NDUzIi8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTkzIiB4PSIxMSIgeT0iMTgzLjc5MiI+IUdBTExJVU1fU1RBVElDX1RBUkdFVFM8L3RleHQ+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7c3Ryb2tlLWRhc2hhcnJheToxLjAsMi4wOyIgeDE9IjIwNCIgeDI9IjIwNyIgeTE9IjE3OS40NDUzIiB5Mj0iMTc5LjQ0NTMiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDtzdHJva2UtZGFzaGFycmF5OjEuMCwyLjA7IiB4MT0iOCIgeDI9IjIwNyIgeTE9IjIwNy44OTA2IiB5Mj0iMjA3Ljg5MDYiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxMDYiIHg9IjEzIiB5PSIyMjQuODg1NyI+c3dfd2luc3lzICogd3M8L3RleHQ+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMzQiIHg9IjEzIiB5PSIyNDEuMTgyNiI+aW50IGZkPC90ZXh0PjwvZz48IS0tY2xhc3MgcGlwZV9sb2FkZXJfZHJtX2RldmljZS0tPjxnIGlkPSJlbGVtX3BpcGVfbG9hZGVyX2RybV9kZXZpY2UiPjxyZWN0IGNvZGVMaW5lPSIxMiIgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIxMTcuMTg3NSIgaWQ9InBpcGVfbG9hZGVyX2RybV9kZXZpY2UiIHJ4PSIyLjUiIHJ5PSIyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjIwMSIgeD0iMjQzIiB5PSIxMjMuMTQiLz48ZWxsaXBzZSBjeD0iMjU5LjM1IiBjeT0iMTM5LjE0IiBmaWxsPSIjQUREMUIyIiByeD0iMTEiIHJ5PSIxMSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBhdGggZD0iTTI2Mi4zMTg4LDE0NC43ODA2IFEyNjEuNzQwNiwxNDUuMDc3NSAyNjEuMSwxNDUuMjE4MSBRMjYwLjQ1OTQsMTQ1LjM3NDQgMjU5Ljc1NjMsMTQ1LjM3NDQgUTI1Ny4yNTYzLDE0NS4zNzQ0IDI1NS45MjgxLDE0My43MzM4IFEyNTQuNjE1NiwxNDIuMDc3NSAyNTQuNjE1NiwxMzguOTUyNSBRMjU0LjYxNTYsMTM1LjgyNzUgMjU1LjkyODEsMTM0LjE3MTMgUTI1Ny4yNTYzLDEzMi41MTUgMjU5Ljc1NjMsMTMyLjUxNSBRMjYwLjQ1OTQsMTMyLjUxNSAyNjEuMSwxMzIuNjcxMyBRMjYxLjc1NjMsMTMyLjgyNzUgMjYyLjMxODgsMTMzLjEyNDQgTDI2Mi4zMTg4LDEzNS44NDMxIFEyNjEuNjkzOCwxMzUuMjY1IDI2MS4xLDEzNC45OTk0IFEyNjAuNTA2MywxMzQuNzE4MSAyNTkuODgxMywxMzQuNzE4MSBRMjU4LjUzNzUsMTM0LjcxODEgMjU3Ljg1LDEzNS43OTYzIFEyNTcuMTYyNSwxMzYuODU4OCAyNTcuMTYyNSwxMzguOTUyNSBRMjU3LjE2MjUsMTQxLjA0NjMgMjU3Ljg1LDE0Mi4xMjQ0IFEyNTguNTM3NSwxNDMuMTg2OSAyNTkuODgxMywxNDMuMTg2OSBRMjYwLjUwNjMsMTQzLjE4NjkgMjYxLjEsMTQyLjkyMTMgUTI2MS42OTM4LDE0Mi42NCAyNjIuMzE4OCwxNDIuMDYxOSBMMjYyLjMxODgsMTQ0Ljc4MDYgWiAiIGZpbGw9IiMwMDAwMDAiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxNjYiIHg9IjI3My42NSIgeT0iMTQzLjk4NjciPnBpcGVfbG9hZGVyX2RybV9kZXZpY2U8L3RleHQ+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB4MT0iMjQ0IiB4Mj0iNDQzIiB5MT0iMTU1LjE0IiB5Mj0iMTU1LjE0Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTgyIiB4PSIyNDkiIHk9IjE3Mi4xMzUxIj5kcm1fZHJpdmVyX2Rlc2NyaXB0b3IgKiBkZDwvdGV4dD48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxMTYiIHg9IjI0OSIgeT0iMjA4LjcyODkiPnV0aWxfZGxfbGlicmFyeSAqIGxpYjwvdGV4dD48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDtzdHJva2UtZGFzaGFycmF5OjEuMCwyLjA7IiB4MT0iMjQ0IiB4Mj0iMjQ3IiB5MT0iMTg3LjU4NTMiIHkyPSIxODcuNTg1MyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjE5MyIgeD0iMjQ3IiB5PSIxOTEuOTMyIj4hR0FMTElVTV9TVEFUSUNfVEFSR0VUUzwvdGV4dD48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDtzdHJva2UtZGFzaGFycmF5OjEuMCwyLjA7IiB4MT0iNDQwIiB4Mj0iNDQzIiB5MT0iMTg3LjU4NTMiIHkyPSIxODcuNTg1MyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wO3N0cm9rZS1kYXNoYXJyYXk6MS4wLDIuMDsiIHgxPSIyNDQiIHgyPSI0NDMiIHkxPSIyMTYuMDMwNiIgeTI9IjIxNi4wMzA2Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMzQiIHg9IjI0OSIgeT0iMjMzLjAyNTciPmludCBmZDwvdGV4dD48L2c+PCEtLXJldmVyc2UgbGluayBwaXBlX2xvYWRlcl9kZXZpY2UgdG8gcGlwZV9sb2FkZXJfZHJtX2RldmljZS0tPjxnIGlkPSJsaW5rX3BpcGVfbG9hZGVyX2RldmljZV9waXBlX2xvYWRlcl9kcm1fZGV2aWNlIj48cGF0aCBjb2RlTGluZT0iMjAiIGQ9Ik0yNTUuMTI3Myw2OS4zNDEzIEMyNjkuNDQ3Myw4Ny4zOTEzIDI3OC43Nyw5OS4xNSAyOTcuNDYsMTIyLjcgIiBmaWxsPSJub25lIiBpZD0icGlwZV9sb2FkZXJfZGV2aWNlLWJhY2t0by1waXBlX2xvYWRlcl9kcm1fZGV2aWNlIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48cG9seWdvbiBmaWxsPSJub25lIiBwb2ludHM9IjI0My45NCw1NS4yNCwyNTAuNDI2OCw3My4wNzAzLDI1OS44Mjc3LDY1LjYxMjIsMjQzLjk0LDU1LjI0IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48L2c+PCEtLXJldmVyc2UgbGluayBwaXBlX2xvYWRlcl9kZXZpY2UgdG8gcGlwZV9sb2FkZXJfc3dfZGV2aWNlLS0+PGcgaWQ9ImxpbmtfcGlwZV9sb2FkZXJfZGV2aWNlX3BpcGVfbG9hZGVyX3N3X2RldmljZSI+PHBhdGggY29kZUxpbmU9IjIxIiBkPSJNMTk1Ljg3MzYsNjkuMzQxOSBDMTgzLjE3MzYsODUuMzUxOSAxNzYuNzksOTMuNCAxNTkuOTQsMTE0LjYzICIgZmlsbD0ibm9uZSIgaWQ9InBpcGVfbG9hZGVyX2RldmljZS1iYWNrdG8tcGlwZV9sb2FkZXJfc3dfZGV2aWNlIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48cG9seWdvbiBmaWxsPSJub25lIiBwb2ludHM9IjIwNy4wNiw1NS4yNCwxOTEuMTcyOSw2NS42MTMxLDIwMC41NzQyLDczLjA3MDcsMjA3LjA2LDU1LjI0IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48L2c+PCEtLVNSQz1balAzRjJpOG0zOFZsVk9mdTVST2R5Mzk0bmMxVU4zc05zTEc4cjZzYS15REd0enJRZlk5Snk2OUVKUnh5dzRVcUJQczNYWGdaUjVzWU9PTWM5c3M0cTNGWVhXZDJNTzJsVXlfS1h1cEpKNHJSQ29tMUNUMHVYYU1Rdjdjc3R3ZjI5WjlSQXZkaXFlcWlGMGVSTktqTWVMTU0zYnBvd0FGLURNS1Y3bW5La1Q1dkRCV21lZ2c1OHVoaDlwX2FxeGpXNkZwTHlBS3BGbzZpQmI3cUhWMmR6VVV6Um0wMF0tLT48L2c+PC9zdmc+'>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/mesa/">mesa</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/lnx/drm-driver/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">了解 Linux DRM 子系统</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/lnx/drm-device/">
+        <span class="next-text nav-default">DRM Device</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/page/8/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><section id="posts" class="posts"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/mesa-glx/">Mesa 的 GLX 实现</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-03-11
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="GLX"><a href="#GLX" class="headerlink" title="GLX"></a>GLX</h1><blockquote><p>GLX (Initialism for “OpenGL Extension to the X Window System”) is an extension to the X Window System core protocol providing an interface between OpenGL and the X Window System as well as extensions to OpenGL itself. (From WiKi)</p>
+</blockquote>
+<p>Mesa的 GLX 实现自从 <a href="https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/10153" target="_blank" rel="noopener">Delete Mesa Classic</a> 已经从原来的 3 种变成现在的 2 种:</p>
+<ul>
+<li>dri</li>
+<li>xlib</li>
+</ul>
+<img class="kroki" src='data:image/svg+xml;base64,PHN2ZyBhcmlhLXJvbGVkZXNjcmlwdGlvbj0iZmxvd2NoYXJ0LXYyIiByb2xlPSJncmFwaGljcy1kb2N1bWVudCBkb2N1bWVudCIgdmlld0JveD0iLTggLTggNTg4LjU2NjQwNjI1IDEzNCIgaGVpZ2h0PSIxMzQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjU4OC41NjY0MDYyNSIgaWQ9ImNvbnRhaW5lciI+PHN0eWxlPiNjb250YWluZXJ7Zm9udC1mYW1pbHk6InRyZWJ1Y2hldCBtcyIsdmVyZGFuYSxhcmlhbCxzYW5zLXNlcmlmO2ZvbnQtc2l6ZToxNnB4O2ZpbGw6IzMzMzt9I2NvbnRhaW5lciAuZXJyb3ItaWNvbntmaWxsOiM1NTIyMjI7fSNjb250YWluZXIgLmVycm9yLXRleHR7ZmlsbDojNTUyMjIyO3N0cm9rZTojNTUyMjIyO30jY29udGFpbmVyIC5lZGdlLXRoaWNrbmVzcy1ub3JtYWx7c3Ryb2tlLXdpZHRoOjJweDt9I2NvbnRhaW5lciAuZWRnZS10aGlja25lc3MtdGhpY2t7c3Ryb2tlLXdpZHRoOjMuNXB4O30jY29udGFpbmVyIC5lZGdlLXBhdHRlcm4tc29saWR7c3Ryb2tlLWRhc2hhcnJheTowO30jY29udGFpbmVyIC5lZGdlLXBhdHRlcm4tZGFzaGVke3N0cm9rZS1kYXNoYXJyYXk6Mzt9I2NvbnRhaW5lciAuZWRnZS1wYXR0ZXJuLWRvdHRlZHtzdHJva2UtZGFzaGFycmF5OjI7fSNjb250YWluZXIgLm1hcmtlcntmaWxsOiMzMzMzMzM7c3Ryb2tlOiMzMzMzMzM7fSNjb250YWluZXIgLm1hcmtlci5jcm9zc3tzdHJva2U6IzMzMzMzMzt9I2NvbnRhaW5lciBzdmd7Zm9udC1mYW1pbHk6InRyZWJ1Y2hldCBtcyIsdmVyZGFuYSxhcmlhbCxzYW5zLXNlcmlmO2ZvbnQtc2l6ZToxNnB4O30jY29udGFpbmVyIC5sYWJlbHtmb250LWZhbWlseToidHJlYnVjaGV0IG1zIix2ZXJkYW5hLGFyaWFsLHNhbnMtc2VyaWY7Y29sb3I6IzMzMzt9I2NvbnRhaW5lciAuY2x1c3Rlci1sYWJlbCB0ZXh0e2ZpbGw6IzMzMzt9I2NvbnRhaW5lciAuY2x1c3Rlci1sYWJlbCBzcGFuLCNjb250YWluZXIgcHtjb2xvcjojMzMzO30jY29udGFpbmVyIC5sYWJlbCB0ZXh0LCNjb250YWluZXIgc3BhbiwjY29udGFpbmVyIHB7ZmlsbDojMzMzO2NvbG9yOiMzMzM7fSNjb250YWluZXIgLm5vZGUgcmVjdCwjY29udGFpbmVyIC5ub2RlIGNpcmNsZSwjY29udGFpbmVyIC5ub2RlIGVsbGlwc2UsI2NvbnRhaW5lciAubm9kZSBwb2x5Z29uLCNjb250YWluZXIgLm5vZGUgcGF0aHtmaWxsOiNFQ0VDRkY7c3Ryb2tlOiM5MzcwREI7c3Ryb2tlLXdpZHRoOjFweDt9I2NvbnRhaW5lciAuZmxvd2NoYXJ0LWxhYmVsIHRleHR7dGV4dC1hbmNob3I6bWlkZGxlO30jY29udGFpbmVyIC5ub2RlIC5sYWJlbHt0ZXh0LWFsaWduOmNlbnRlcjt9I2NvbnRhaW5lciAubm9kZS5jbGlja2FibGV7Y3Vyc29yOnBvaW50ZXI7fSNjb250YWluZXIgLmFycm93aGVhZFBhdGh7ZmlsbDojMzMzMzMzO30jY29udGFpbmVyIC5lZGdlUGF0aCAucGF0aHtzdHJva2U6IzMzMzMzMztzdHJva2Utd2lkdGg6Mi4wcHg7fSNjb250YWluZXIgLmZsb3djaGFydC1saW5re3N0cm9rZTojMzMzMzMzO2ZpbGw6bm9uZTt9I2NvbnRhaW5lciAuZWRnZUxhYmVse2JhY2tncm91bmQtY29sb3I6I2U4ZThlODt0ZXh0LWFsaWduOmNlbnRlcjt9I2NvbnRhaW5lciAuZWRnZUxhYmVsIHJlY3R7b3BhY2l0eTowLjU7YmFja2dyb3VuZC1jb2xvcjojZThlOGU4O2ZpbGw6I2U4ZThlODt9I2NvbnRhaW5lciAubGFiZWxCa2d7YmFja2dyb3VuZC1jb2xvcjpyZ2JhKDIzMiwgMjMyLCAyMzIsIDAuNSk7fSNjb250YWluZXIgLmNsdXN0ZXIgcmVjdHtmaWxsOiNmZmZmZGU7c3Ryb2tlOiNhYWFhMzM7c3Ryb2tlLXdpZHRoOjFweDt9I2NvbnRhaW5lciAuY2x1c3RlciB0ZXh0e2ZpbGw6IzMzMzt9I2NvbnRhaW5lciAuY2x1c3RlciBzcGFuLCNjb250YWluZXIgcHtjb2xvcjojMzMzO30jY29udGFpbmVyIGRpdi5tZXJtYWlkVG9vbHRpcHtwb3NpdGlvbjphYnNvbHV0ZTt0ZXh0LWFsaWduOmNlbnRlcjttYXgtd2lkdGg6MjAwcHg7cGFkZGluZzoycHg7Zm9udC1mYW1pbHk6InRyZWJ1Y2hldCBtcyIsdmVyZGFuYSxhcmlhbCxzYW5zLXNlcmlmO2ZvbnQtc2l6ZToxMnB4O2JhY2tncm91bmQ6aHNsKDgwLCAxMDAlLCA5Ni4yNzQ1MDk4MDM5JSk7Ym9yZGVyOjFweCBzb2xpZCAjYWFhYTMzO2JvcmRlci1yYWRpdXM6MnB4O3BvaW50ZXItZXZlbnRzOm5vbmU7ei1pbmRleDoxMDA7fSNjb250YWluZXIgLmZsb3djaGFydFRpdGxlVGV4dHt0ZXh0LWFuY2hvcjptaWRkbGU7Zm9udC1zaXplOjE4cHg7ZmlsbDojMzMzO30jY29udGFpbmVyIDpyb290ey0tbWVybWFpZC1mb250LWZhbWlseToidHJlYnVjaGV0IG1zIix2ZXJkYW5hLGFyaWFsLHNhbnMtc2VyaWY7fTwvc3R5bGU+PGc+PG1hcmtlciBvcmllbnQ9ImF1dG8iIG1hcmtlckhlaWdodD0iMTIiIG1hcmtlcldpZHRoPSIxMiIgbWFya2VyVW5pdHM9InVzZXJTcGFjZU9uVXNlIiByZWZZPSI1IiByZWZYPSIxMCIgdmlld0JveD0iMCAwIDEwIDEwIiBjbGFzcz0ibWFya2VyIGZsb3djaGFydCIgaWQ9ImZsb3djaGFydC1wb2ludEVuZCI+PHBhdGggc3R5bGU9InN0cm9rZS13aWR0aDogMTsgc3Ryb2tlLWRhc2hhcnJheTogMSwgMDsiIGNsYXNzPSJhcnJvd01hcmtlclBhdGgiIGQ9Ik0gMCAwIEwgMTAgNSBMIDAgMTAgeiI+PC9wYXRoPjwvbWFya2VyPjxtYXJrZXIgb3JpZW50PSJhdXRvIiBtYXJrZXJIZWlnaHQ9IjEyIiBtYXJrZXJXaWR0aD0iMTIiIG1hcmtlclVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcmVmWT0iNSIgcmVmWD0iMCIgdmlld0JveD0iMCAwIDEwIDEwIiBjbGFzcz0ibWFya2VyIGZsb3djaGFydCIgaWQ9ImZsb3djaGFydC1wb2ludFN0YXJ0Ij48cGF0aCBzdHlsZT0ic3Ryb2tlLXdpZHRoOiAxOyBzdHJva2UtZGFzaGFycmF5OiAxLCAwOyIgY2xhc3M9ImFycm93TWFya2VyUGF0aCIgZD0iTSAwIDUgTCAxMCAxMCBMIDEwIDAgeiI+PC9wYXRoPjwvbWFya2VyPjxtYXJrZXIgb3JpZW50PSJhdXRvIiBtYXJrZXJIZWlnaHQ9IjExIiBtYXJrZXJXaWR0aD0iMTEiIG1hcmtlclVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcmVmWT0iNSIgcmVmWD0iMTEiIHZpZXdCb3g9IjAgMCAxMCAxMCIgY2xhc3M9Im1hcmtlciBmbG93Y2hhcnQiIGlkPSJmbG93Y2hhcnQtY2lyY2xlRW5kIj48Y2lyY2xlIHN0eWxlPSJzdHJva2Utd2lkdGg6IDE7IHN0cm9rZS1kYXNoYXJyYXk6IDEsIDA7IiBjbGFzcz0iYXJyb3dNYXJrZXJQYXRoIiByPSI1IiBjeT0iNSIgY3g9IjUiPjwvY2lyY2xlPjwvbWFya2VyPjxtYXJrZXIgb3JpZW50PSJhdXRvIiBtYXJrZXJIZWlnaHQ9IjExIiBtYXJrZXJXaWR0aD0iMTEiIG1hcmtlclVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcmVmWT0iNSIgcmVmWD0iLTEiIHZpZXdCb3g9IjAgMCAxMCAxMCIgY2xhc3M9Im1hcmtlciBmbG93Y2hhcnQiIGlkPSJmbG93Y2hhcnQtY2lyY2xlU3RhcnQiPjxjaXJjbGUgc3R5bGU9InN0cm9rZS13aWR0aDogMTsgc3Ryb2tlLWRhc2hhcnJheTogMSwgMDsiIGNsYXNzPSJhcnJvd01hcmtlclBhdGgiIHI9IjUiIGN5PSI1IiBjeD0iNSI+PC9jaXJjbGU+PC9tYXJrZXI+PG1hcmtlciBvcmllbnQ9ImF1dG8iIG1hcmtlckhlaWdodD0iMTEiIG1hcmtlcldpZHRoPSIxMSIgbWFya2VyVW5pdHM9InVzZXJTcGFjZU9uVXNlIiByZWZZPSI1LjIiIHJlZlg9IjEyIiB2aWV3Qm94PSIwIDAgMTEgMTEiIGNsYXNzPSJtYXJrZXIgY3Jvc3MgZmxvd2NoYXJ0IiBpZD0iZmxvd2NoYXJ0LWNyb3NzRW5kIj48cGF0aCBzdHlsZT0ic3Ryb2tlLXdpZHRoOiAyOyBzdHJva2UtZGFzaGFycmF5OiAxLCAwOyIgY2xhc3M9ImFycm93TWFya2VyUGF0aCIgZD0iTSAxLDEgbCA5LDkgTSAxMCwxIGwgLTksOSI+PC9wYXRoPjwvbWFya2VyPjxtYXJrZXIgb3JpZW50PSJhdXRvIiBtYXJrZXJIZWlnaHQ9IjExIiBtYXJrZXJXaWR0aD0iMTEiIG1hcmtlclVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcmVmWT0iNS4yIiByZWZYPSItMSIgdmlld0JveD0iMCAwIDExIDExIiBjbGFzcz0ibWFya2VyIGNyb3NzIGZsb3djaGFydCIgaWQ9ImZsb3djaGFydC1jcm9zc1N0YXJ0Ij48cGF0aCBzdHlsZT0ic3Ryb2tlLXdpZHRoOiAyOyBzdHJva2UtZGFzaGFycmF5OiAxLCAwOyIgY2xhc3M9ImFycm93TWFya2VyUGF0aCIgZD0iTSAxLDEgbCA5LDkgTSAxMCwxIGwgLTksOSI+PC9wYXRoPjwvbWFya2VyPjxnIGNsYXNzPSJyb290Ij48ZyBjbGFzcz0iY2x1c3RlcnMiPjwvZz48ZyBjbGFzcz0iZWRnZVBhdGhzIj48cGF0aCBtYXJrZXItZW5kPSJ1cmwoI2Zsb3djaGFydC1wb2ludEVuZCkiIHN0eWxlPSJmaWxsOm5vbmU7IiBjbGFzcz0iZWRnZS10aGlja25lc3Mtbm9ybWFsIGVkZ2UtcGF0dGVybi1zb2xpZCBmbG93Y2hhcnQtbGluayBMUy1BIExFLXgxMSIgaWQ9IkwtQS14MTEtMCIgZD0iTTQ5LjI0ODc5MDkyMjYxOTA1LDM0TDQyLjc3ODI4OTMxMDUxNTg3LDM4LjE2NjY2NjY2NjY2NjY2NEMzNi4zMDc3ODc2OTg0MTI3LDQyLjMzMzMzMzMzMzMzMzMzNiwyMy4zNjY3ODQ0NzQyMDYzNSw1MC42NjY2NjY2NjY2NjY2NjQsMTcuODg4MzQ2MzU0MTY2NjY4LDU5QzEyLjQwOTkwODIzNDEyNjk4Miw2Ny4zMzMzMzMzMzMzMzMzMywxNC4zOTQwMzUyMTgyNTM5NjgsNzUuNjY2NjY2NjY2NjY2NjcsMTUuMzg2MDk4NzEwMzE3NDYsNzkuODMzMzMzMzMzMzMzMzNMMTYuMzc4MTYyMjAyMzgwOTUzLDg0Ij48L3BhdGg+PHBhdGggbWFya2VyLWVuZD0idXJsKCNmbG93Y2hhcnQtcG9pbnRFbmQpIiBzdHlsZT0iZmlsbDpub25lOyIgY2xhc3M9ImVkZ2UtdGhpY2tuZXNzLW5vcm1hbCBlZGdlLXBhdHRlcm4tc29saWQgZmxvd2NoYXJ0LWxpbmsgTFMtQSBMRS14ZXh0IiBpZD0iTC1BLXhleHQtMCIgZD0iTTc1LjY0ODQzNzUsMzRMNzUuNjQ4NDM3NSwzOC4xNjY2NjY2NjY2NjY2NjRDNzUuNjQ4NDM3NSw0Mi4zMzMzMzMzMzMzMzMzMzYsNzUuNjQ4NDM3NSw1MC42NjY2NjY2NjY2NjY2NjQsNzkuMTQyNzQ4NjM1OTEyNyw1OUM4Mi42MzcwNTk3NzE4MjU0LDY3LjMzMzMzMzMzMzMzMzMzLDg5LjYyNTY4MjA0MzY1MDgsNzUuNjY2NjY2NjY2NjY2NjcsOTMuMTE5OTkzMTc5NTYzNSw3OS44MzMzMzMzMzMzMzMzM0w5Ni42MTQzMDQzMTU0NzYxOSw4NCI+PC9wYXRoPjxwYXRoIG1hcmtlci1lbmQ9InVybCgjZmxvd2NoYXJ0LXBvaW50RW5kKSIgc3R5bGU9ImZpbGw6bm9uZTsiIGNsYXNzPSJlZGdlLXRoaWNrbmVzcy1ub3JtYWwgZWRnZS1wYXR0ZXJuLXNvbGlkIGZsb3djaGFydC1saW5rIExTLUEgTEUteGNiIiBpZD0iTC1BLXhjYi0wIiBkPSJNMTI3LjI0NzY3NDg1MTE5MDQ4LDM0TDEzOS44OTQ1NDY3NTA5OTIwOCwzOC4xNjY2NjY2NjY2NjY2NjRDMTUyLjU0MTQxODY1MDc5MzY0LDQyLjMzMzMzMzMzMzMzMzMzNiwxNzcuODM1MTYyNDUwMzk2ODQsNTAuNjY2NjY2NjY2NjY2NjY0LDE5MC40ODIwMzQzNTAxOTg0LDU5QzIwMy4xMjg5MDYyNSw2Ny4zMzMzMzMzMzMzMzMzMywyMDMuMTI4OTA2MjUsNzUuNjY2NjY2NjY2NjY2NjcsMjAzLjEyODkwNjI1LDc5LjgzMzMzMzMzMzMzMzMzTDIwMy4xMjg5MDYyNSw4NCI+PC9wYXRoPjxwYXRoIG1hcmtlci1lbmQ9InVybCgjZmxvd2NoYXJ0LXBvaW50RW5kKSIgc3R5bGU9ImZpbGw6bm9uZTsiIGNsYXNzPSJlZGdlLXRoaWNrbmVzcy1ub3JtYWwgZWRnZS1wYXR0ZXJuLXNvbGlkIGZsb3djaGFydC1saW5rIExTLUIgTEUteDExIiBpZD0iTC1CLXgxMS0wIiBkPSJNMjgzLjI3NzM0Mzc1LDIwLjAxOTU0MjI2MTkzMzIwNEwyNDUuMzM5MTkyNzA4MzMzMzQsMjYuNTE2Mjg1MjE4Mjc3NjdDMjA3LjQwMTA0MTY2NjY2NjY2LDMzLjAxMzAyODE3NDYyMjEzNiwxMzEuNTI0NzM5NTgzMzMzMzQsNDYuMDA2NTE0MDg3MzExMDcsOTAuMDkyMjc3NDA1NzUzOTgsNTYuNjY5OTIzNzEwMzIyMkM0OC42NTk4MTUyMjgxNzQ2LDY3LjMzMzMzMzMzMzMzMzMzLDQxLjY3MTE5Mjk1NjM0OTIxLDc1LjY2NjY2NjY2NjY2NjY3LDM4LjE3Njg4MTgyMDQzNjUwNiw3OS44MzMzMzMzMzMzMzMzM0wzNC42ODI1NzA2ODQ1MjM4MSw4NCI+PC9wYXRoPjxwYXRoIG1hcmtlci1lbmQ9InVybCgjZmxvd2NoYXJ0LXBvaW50RW5kKSIgc3R5bGU9ImZpbGw6bm9uZTsiIGNsYXNzPSJlZGdlLXRoaWNrbmVzcy1ub3JtYWwgZWRnZS1wYXR0ZXJuLXNvbGlkIGZsb3djaGFydC1saW5rIExTLUIgTEUteGV4dCIgaWQ9IkwtQi14ZXh0LTAiIGQ9Ik0yODMuMjc3MzQzNzUsMjEuODExNzU2MDQ2ODAwODRMMjYwLjU2NDQ1MzEyNSwyOC4wMDk3OTY3MDU2NjczNjZDMjM3Ljg1MTU2MjUsMzQuMjA3ODM3MzY0NTMzODk0LDE5Mi40MjU3ODEyNSw0Ni42MDM5MTg2ODIyNjY5NDQsMTY2LjEyODY3MzczNTExOTA3LDU2Ljk2ODYyNjAwNzgwMDE0QzEzOS44MzE1NjYyMjAyMzgxLDY3LjMzMzMzMzMzMzMzMzMzLDEzMi42NjMxMzI0NDA0NzYxOCw3NS42NjY2NjY2NjY2NjY2NywxMjkuMDc4OTE1NTUwNTk1MjQsNzkuODMzMzMzMzMzMzMzMzNMMTI1LjQ5NDY5ODY2MDcxNDI5LDg0Ij48L3BhdGg+PHBhdGggbWFya2VyLWVuZD0idXJsKCNmbG93Y2hhcnQtcG9pbnRFbmQpIiBzdHlsZT0iZmlsbDpub25lOyIgY2xhc3M9ImVkZ2UtdGhpY2tuZXNzLW5vcm1hbCBlZGdlLXBhdHRlcm4tc29saWQgZmxvd2NoYXJ0LWxpbmsgTFMtQiBMRS14Zml4ZXMiIGlkPSJMLUIteGZpeGVzLTAiIGQ9Ik0zMDAuOTEwMTU2MjUsMzRMMzAwLjkxMDE1NjI1LDM4LjE2NjY2NjY2NjY2NjY2NEMzMDAuOTEwMTU2MjUsNDIuMzMzMzMzMzMzMzMzMzM2LDMwMC45MTAxNTYyNSw1MC42NjY2NjY2NjY2NjY2NjQsMzAwLjkxMDE1NjI1LDU5QzMwMC45MTAxNTYyNSw2Ny4zMzMzMzMzMzMzMzMzMywzMDAuOTEwMTU2MjUsNzUuNjY2NjY2NjY2NjY2NjcsMzAwLjkxMDE1NjI1LDc5LjgzMzMzMzMzMzMzMzMzTDMwMC45MTAxNTYyNSw4NCI+PC9wYXRoPjxwYXRoIG1hcmtlci1lbmQ9InVybCgjZmxvd2NoYXJ0LXBvaW50RW5kKSIgc3R5bGU9ImZpbGw6bm9uZTsiIGNsYXNzPSJlZGdlLXRoaWNrbmVzcy1ub3JtYWwgZWRnZS1wYXR0ZXJuLXNvbGlkIGZsb3djaGFydC1saW5rIExTLUIgTEUteGNiLWdseCIgaWQ9IkwtQi14Y2ItZ2x4LTAiIGQ9Ik0zMTguNTQyOTY4NzUsMjMuNjQ4OTQ0Mzc4MjAwMTg0TDMzNC4xNjc5Njg3NSwyOS41NDA3ODY5ODE4MzM0ODhDMzQ5Ljc5Mjk2ODc1LDM1LjQzMjYyOTU4NTQ2Njc5LDM4MS4wNDI5Njg3NSw0Ny4yMTYzMTQ3OTI3MzMzOSwzOTYuNjY3OTY4NzUsNTcuMjc0ODI0MDYzMDMzMzdDNDEyLjI5Mjk2ODc1LDY3LjMzMzMzMzMzMzMzMzMzLDQxMi4yOTI5Njg3NSw3NS42NjY2NjY2NjY2NjY2Nyw0MTIuMjkyOTY4NzUsNzkuODMzMzMzMzMzMzMzMzNMNDEyLjI5Mjk2ODc1LDg0Ij48L3BhdGg+PHBhdGggbWFya2VyLWVuZD0idXJsKCNmbG93Y2hhcnQtcG9pbnRFbmQpIiBzdHlsZT0iZmlsbDpub25lOyIgY2xhc3M9ImVkZ2UtdGhpY2tuZXNzLW5vcm1hbCBlZGdlLXBhdHRlcm4tc29saWQgZmxvd2NoYXJ0LWxpbmsgTFMtQiBMRS14Y2Itc2htIiBpZD0iTC1CLXhjYi1zaG0tMCIgZD0iTTMxOC41NDI5Njg3NSwyMC4xNzQ4Mjc1MTY5MTMzOUwzNTQuNDgxNzcwODMzMzMzMywyNi42NDU2ODk1OTc0Mjc4MjJDMzkwLjQyMDU3MjkxNjY2NjcsMzMuMTE2NTUxNjc3OTQyMjYsNDYyLjI5ODE3NzA4MzMzMzMsNDYuMDU4Mjc1ODM4OTcxMTMsNDk4LjIzNjk3OTE2NjY2NjcsNTYuNjk1ODA0NTg2MTUyMjM1QzUzNC4xNzU3ODEyNSw2Ny4zMzMzMzMzMzMzMzMzMyw1MzQuMTc1NzgxMjUsNzUuNjY2NjY2NjY2NjY2NjcsNTM0LjE3NTc4MTI1LDc5LjgzMzMzMzMzMzMzMzMzTDUzNC4xNzU3ODEyNSw4NCI+PC9wYXRoPjwvZz48ZyBjbGFzcz0iZWRnZUxhYmVscyI+PGcgY2xhc3M9ImVkZ2VMYWJlbCI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMCkiIGNsYXNzPSJsYWJlbCI+PGZvcmVpZ25PYmplY3QgaGVpZ2h0PSIwIiB3aWR0aD0iMCI+PGRpdiBzdHlsZT0iZGlzcGxheTogaW5saW5lLWJsb2NrOyB3aGl0ZS1zcGFjZTogbm93cmFwOyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiPjxzcGFuIGNsYXNzPSJlZGdlTGFiZWwiPjwvc3Bhbj48L2Rpdj48L2ZvcmVpZ25PYmplY3Q+PC9nPjwvZz48ZyBjbGFzcz0iZWRnZUxhYmVsIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLCAwKSIgY2xhc3M9ImxhYmVsIj48Zm9yZWlnbk9iamVjdCBoZWlnaHQ9IjAiIHdpZHRoPSIwIj48ZGl2IHN0eWxlPSJkaXNwbGF5OiBpbmxpbmUtYmxvY2s7IHdoaXRlLXNwYWNlOiBub3dyYXA7IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PHNwYW4gY2xhc3M9ImVkZ2VMYWJlbCI+PC9zcGFuPjwvZGl2PjwvZm9yZWlnbk9iamVjdD48L2c+PC9nPjxnIGNsYXNzPSJlZGdlTGFiZWwiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDApIiBjbGFzcz0ibGFiZWwiPjxmb3JlaWduT2JqZWN0IGhlaWdodD0iMCIgd2lkdGg9IjAiPjxkaXYgc3R5bGU9ImRpc3BsYXk6IGlubGluZS1ibG9jazsgd2hpdGUtc3BhY2U6IG5vd3JhcDsiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hodG1sIj48c3BhbiBjbGFzcz0iZWRnZUxhYmVsIj48L3NwYW4+PC9kaXY+PC9mb3JlaWduT2JqZWN0PjwvZz48L2c+PGcgY2xhc3M9ImVkZ2VMYWJlbCI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMCkiIGNsYXNzPSJsYWJlbCI+PGZvcmVpZ25PYmplY3QgaGVpZ2h0PSIwIiB3aWR0aD0iMCI+PGRpdiBzdHlsZT0iZGlzcGxheTogaW5saW5lLWJsb2NrOyB3aGl0ZS1zcGFjZTogbm93cmFwOyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiPjxzcGFuIGNsYXNzPSJlZGdlTGFiZWwiPjwvc3Bhbj48L2Rpdj48L2ZvcmVpZ25PYmplY3Q+PC9nPjwvZz48ZyBjbGFzcz0iZWRnZUxhYmVsIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLCAwKSIgY2xhc3M9ImxhYmVsIj48Zm9yZWlnbk9iamVjdCBoZWlnaHQ9IjAiIHdpZHRoPSIwIj48ZGl2IHN0eWxlPSJkaXNwbGF5OiBpbmxpbmUtYmxvY2s7IHdoaXRlLXNwYWNlOiBub3dyYXA7IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PHNwYW4gY2xhc3M9ImVkZ2VMYWJlbCI+PC9zcGFuPjwvZGl2PjwvZm9yZWlnbk9iamVjdD48L2c+PC9nPjxnIGNsYXNzPSJlZGdlTGFiZWwiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDApIiBjbGFzcz0ibGFiZWwiPjxmb3JlaWduT2JqZWN0IGhlaWdodD0iMCIgd2lkdGg9IjAiPjxkaXYgc3R5bGU9ImRpc3BsYXk6IGlubGluZS1ibG9jazsgd2hpdGUtc3BhY2U6IG5vd3JhcDsiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hodG1sIj48c3BhbiBjbGFzcz0iZWRnZUxhYmVsIj48L3NwYW4+PC9kaXY+PC9mb3JlaWduT2JqZWN0PjwvZz48L2c+PGcgY2xhc3M9ImVkZ2VMYWJlbCI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMCkiIGNsYXNzPSJsYWJlbCI+PGZvcmVpZ25PYmplY3QgaGVpZ2h0PSIwIiB3aWR0aD0iMCI+PGRpdiBzdHlsZT0iZGlzcGxheTogaW5saW5lLWJsb2NrOyB3aGl0ZS1zcGFjZTogbm93cmFwOyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiPjxzcGFuIGNsYXNzPSJlZGdlTGFiZWwiPjwvc3Bhbj48L2Rpdj48L2ZvcmVpZ25PYmplY3Q+PC9nPjwvZz48ZyBjbGFzcz0iZWRnZUxhYmVsIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLCAwKSIgY2xhc3M9ImxhYmVsIj48Zm9yZWlnbk9iamVjdCBoZWlnaHQ9IjAiIHdpZHRoPSIwIj48ZGl2IHN0eWxlPSJkaXNwbGF5OiBpbmxpbmUtYmxvY2s7IHdoaXRlLXNwYWNlOiBub3dyYXA7IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PHNwYW4gY2xhc3M9ImVkZ2VMYWJlbCI+PC9zcGFuPjwvZGl2PjwvZm9yZWlnbk9iamVjdD48L2c+PC9nPjwvZz48ZyBjbGFzcz0ibm9kZXMiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDc1LjY0ODQzNzUsIDE3KSIgaWQ9ImZsb3djaGFydC1BLTAiIGNsYXNzPSJub2RlIGRlZmF1bHQgZGVmYXVsdCBmbG93Y2hhcnQtbGFiZWwiPjxyZWN0IGhlaWdodD0iMzQiIHdpZHRoPSIxNTEuMjk2ODc1IiB5PSItMTciIHg9Ii03NS42NDg0Mzc1IiByeT0iMCIgcng9IjAiIHN0eWxlPSIiIGNsYXNzPSJiYXNpYyBsYWJlbC1jb250YWluZXIiPjwvcmVjdD48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNjguMTQ4NDM3NSwgLTkuNSkiIHN0eWxlPSIiIGNsYXNzPSJsYWJlbCI+PHJlY3Q+PC9yZWN0Pjxmb3JlaWduT2JqZWN0IGhlaWdodD0iMTkiIHdpZHRoPSIxMzYuMjk2ODc1Ij48ZGl2IHN0eWxlPSJkaXNwbGF5OiBpbmxpbmUtYmxvY2s7IHdoaXRlLXNwYWNlOiBub3dyYXA7IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PHNwYW4gY2xhc3M9Im5vZGVMYWJlbCI+eGxpYiBvciBnYWxsaXVtLXhsaWI8L3NwYW4+PC9kaXY+PC9mb3JlaWduT2JqZWN0PjwvZz48L2c+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjAuNDI1NzgxMjUsIDEwMSkiIGlkPSJmbG93Y2hhcnQteDExLTIiIGNsYXNzPSJub2RlIGRlZmF1bHQgZGVmYXVsdCBmbG93Y2hhcnQtbGFiZWwiPjxyZWN0IGhlaWdodD0iMzQiIHdpZHRoPSIzNi4xNTYyNSIgeT0iLTE3IiB4PSItMTguMDc4MTI1IiByeT0iMCIgcng9IjAiIHN0eWxlPSIiIGNsYXNzPSJiYXNpYyBsYWJlbC1jb250YWluZXIiPjwvcmVjdD48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMTAuNTc4MTI1LCAtOS41KSIgc3R5bGU9IiIgY2xhc3M9ImxhYmVsIj48cmVjdD48L3JlY3Q+PGZvcmVpZ25PYmplY3QgaGVpZ2h0PSIxOSIgd2lkdGg9IjIxLjE1NjI1Ij48ZGl2IHN0eWxlPSJkaXNwbGF5OiBpbmxpbmUtYmxvY2s7IHdoaXRlLXNwYWNlOiBub3dyYXA7IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PHNwYW4gY2xhc3M9Im5vZGVMYWJlbCI+eDExPC9zcGFuPjwvZGl2PjwvZm9yZWlnbk9iamVjdD48L2c+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDExMC44NzEwOTM3NSwgMTAxKSIgaWQ9ImZsb3djaGFydC14ZXh0LTQiIGNsYXNzPSJub2RlIGRlZmF1bHQgZGVmYXVsdCBmbG93Y2hhcnQtbGFiZWwiPjxyZWN0IGhlaWdodD0iMzQiIHdpZHRoPSI0NC43MzQzNzUiIHk9Ii0xNyIgeD0iLTIyLjM2NzE4NzUiIHJ5PSIwIiByeD0iMCIgc3R5bGU9IiIgY2xhc3M9ImJhc2ljIGxhYmVsLWNvbnRhaW5lciI+PC9yZWN0PjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xNC44NjcxODc1LCAtOS41KSIgc3R5bGU9IiIgY2xhc3M9ImxhYmVsIj48cmVjdD48L3JlY3Q+PGZvcmVpZ25PYmplY3QgaGVpZ2h0PSIxOSIgd2lkdGg9IjI5LjczNDM3NSI+PGRpdiBzdHlsZT0iZGlzcGxheTogaW5saW5lLWJsb2NrOyB3aGl0ZS1zcGFjZTogbm93cmFwOyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiPjxzcGFuIGNsYXNzPSJub2RlTGFiZWwiPnhleHQ8L3NwYW4+PC9kaXY+PC9mb3JlaWduT2JqZWN0PjwvZz48L2c+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjAzLjEyODkwNjI1LCAxMDEpIiBpZD0iZmxvd2NoYXJ0LXhjYi02IiBjbGFzcz0ibm9kZSBkZWZhdWx0IGRlZmF1bHQgZmxvd2NoYXJ0LWxhYmVsIj48cmVjdCBoZWlnaHQ9IjM0IiB3aWR0aD0iMzkuNzgxMjUiIHk9Ii0xNyIgeD0iLTE5Ljg5MDYyNSIgcnk9IjAiIHJ4PSIwIiBzdHlsZT0iIiBjbGFzcz0iYmFzaWMgbGFiZWwtY29udGFpbmVyIj48L3JlY3Q+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTEyLjM5MDYyNSwgLTkuNSkiIHN0eWxlPSIiIGNsYXNzPSJsYWJlbCI+PHJlY3Q+PC9yZWN0Pjxmb3JlaWduT2JqZWN0IGhlaWdodD0iMTkiIHdpZHRoPSIyNC43ODEyNSI+PGRpdiBzdHlsZT0iZGlzcGxheTogaW5saW5lLWJsb2NrOyB3aGl0ZS1zcGFjZTogbm93cmFwOyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiPjxzcGFuIGNsYXNzPSJub2RlTGFiZWwiPnhjYjwvc3Bhbj48L2Rpdj48L2ZvcmVpZ25PYmplY3Q+PC9nPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMDAuOTEwMTU2MjUsIDE3KSIgaWQ9ImZsb3djaGFydC1CLTciIGNsYXNzPSJub2RlIGRlZmF1bHQgZGVmYXVsdCBmbG93Y2hhcnQtbGFiZWwiPjxyZWN0IGhlaWdodD0iMzQiIHdpZHRoPSIzNS4yNjU2MjUiIHk9Ii0xNyIgeD0iLTE3LjYzMjgxMjUiIHJ5PSIwIiByeD0iMCIgc3R5bGU9IiIgY2xhc3M9ImJhc2ljIGxhYmVsLWNvbnRhaW5lciI+PC9yZWN0PjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMC4xMzI4MTI1LCAtOS41KSIgc3R5bGU9IiIgY2xhc3M9ImxhYmVsIj48cmVjdD48L3JlY3Q+PGZvcmVpZ25PYmplY3QgaGVpZ2h0PSIxOSIgd2lkdGg9IjIwLjI2NTYyNSI+PGRpdiBzdHlsZT0iZGlzcGxheTogaW5saW5lLWJsb2NrOyB3aGl0ZS1zcGFjZTogbm93cmFwOyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiPjxzcGFuIGNsYXNzPSJub2RlTGFiZWwiPmRyaTwvc3Bhbj48L2Rpdj48L2ZvcmVpZ25PYmplY3Q+PC9nPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMDAuOTEwMTU2MjUsIDEwMSkiIGlkPSJmbG93Y2hhcnQteGZpeGVzLTEzIiBjbGFzcz0ibm9kZSBkZWZhdWx0IGRlZmF1bHQgZmxvd2NoYXJ0LWxhYmVsIj48cmVjdCBoZWlnaHQ9IjM0IiB3aWR0aD0iNTUuNzgxMjUiIHk9Ii0xNyIgeD0iLTI3Ljg5MDYyNSIgcnk9IjAiIHJ4PSIwIiBzdHlsZT0iIiBjbGFzcz0iYmFzaWMgbGFiZWwtY29udGFpbmVyIj48L3JlY3Q+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIwLjM5MDYyNSwgLTkuNSkiIHN0eWxlPSIiIGNsYXNzPSJsYWJlbCI+PHJlY3Q+PC9yZWN0Pjxmb3JlaWduT2JqZWN0IGhlaWdodD0iMTkiIHdpZHRoPSI0MC43ODEyNSI+PGRpdiBzdHlsZT0iZGlzcGxheTogaW5saW5lLWJsb2NrOyB3aGl0ZS1zcGFjZTogbm93cmFwOyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiPjxzcGFuIGNsYXNzPSJub2RlTGFiZWwiPnhmaXhlczwvc3Bhbj48L2Rpdj48L2ZvcmVpZ25PYmplY3Q+PC9nPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0MTIuMjkyOTY4NzUsIDEwMSkiIGlkPSJmbG93Y2hhcnQteGNiLWdseC0xNSIgY2xhc3M9Im5vZGUgZGVmYXVsdCBkZWZhdWx0IGZsb3djaGFydC1sYWJlbCI+PHJlY3QgaGVpZ2h0PSIzNCIgd2lkdGg9IjY2Ljk4NDM3NSIgeT0iLTE3IiB4PSItMzMuNDkyMTg3NSIgcnk9IjAiIHJ4PSIwIiBzdHlsZT0iIiBjbGFzcz0iYmFzaWMgbGFiZWwtY29udGFpbmVyIj48L3JlY3Q+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTI1Ljk5MjE4NzUsIC05LjUpIiBzdHlsZT0iIiBjbGFzcz0ibGFiZWwiPjxyZWN0PjwvcmVjdD48Zm9yZWlnbk9iamVjdCBoZWlnaHQ9IjE5IiB3aWR0aD0iNTEuOTg0Mzc1Ij48ZGl2IHN0eWxlPSJkaXNwbGF5OiBpbmxpbmUtYmxvY2s7IHdoaXRlLXNwYWNlOiBub3dyYXA7IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PHNwYW4gY2xhc3M9Im5vZGVMYWJlbCI+eGNiLWdseDwvc3Bhbj48L2Rpdj48L2ZvcmVpZ25PYmplY3Q+PC9nPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MzQuMTc1NzgxMjUsIDEwMSkiIGlkPSJmbG93Y2hhcnQteGNiLXNobS0xNyIgY2xhc3M9Im5vZGUgZGVmYXVsdCBkZWZhdWx0IGZsb3djaGFydC1sYWJlbCI+PHJlY3QgaGVpZ2h0PSIzNCIgd2lkdGg9Ijc2Ljc4MTI1IiB5PSItMTciIHg9Ii0zOC4zOTA2MjUiIHJ5PSIwIiByeD0iMCIgc3R5bGU9IiIgY2xhc3M9ImJhc2ljIGxhYmVsLWNvbnRhaW5lciI+PC9yZWN0PjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0zMC44OTA2MjUsIC05LjUpIiBzdHlsZT0iIiBjbGFzcz0ibGFiZWwiPjxyZWN0PjwvcmVjdD48Zm9yZWlnbk9iamVjdCBoZWlnaHQ9IjE5IiB3aWR0aD0iNjEuNzgxMjUiPjxkaXYgc3R5bGU9ImRpc3BsYXk6IGlubGluZS1ibG9jazsgd2hpdGUtc3BhY2U6IG5vd3JhcDsiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hodG1sIj48c3BhbiBjbGFzcz0ibm9kZUxhYmVsIj54Y2Itc2htPC9zcGFuPjwvZGl2PjwvZm9yZWlnbk9iamVjdD48L2c+PC9nPjwvZz48L2c+PC9nPjwvc3ZnPg=='>
+<p>如果是xlib, 它的源码位于</p>
+<ul>
+<li>mesa/drivers/x11 </li>
+</ul>
+<p>如果是gallium-xlib, 它的源码位于</p>
+<ul>
+<li>gallium/winsys/sw/xlib</li>
+<li>gallium/frontends/glx/xlib</li>
+<li>gallium/targets/libgl-xlib</li>
+</ul>
+<h1 id="xlib"><a href="#xlib" class="headerlink" title="xlib"></a>xlib</h1><h1 id="dri"><a href="#dri" class="headerlink" title="dri"></a>dri</h1><p>在 Linux 下 dri-based glx 实现我们只关注 3 个实现：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">源文件</th>
+<th style="text-align:left">关键函数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/dri2_glx.c" target="_blank" rel="noopener">dri2_glx.c</a></td>
+<td style="text-align:left"><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/dri2_glx.c#L1001" target="_blank" rel="noopener">dri2CreateScreen()</a></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/dri3_glx.c" target="_blank" rel="noopener">dri3_glx.c</a></td>
+<td style="text-align:left"><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/dri3_glx.c#L789" target="_blank" rel="noopener">dri3_create_screen()</a></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/drisw_glx.c" target="_blank" rel="noopener">drisw_glx.c</a></td>
+<td style="text-align:left"><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/drisw_glx.c#L925" target="_blank" rel="noopener">driswCreateScreenDriver()</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="dri2CreateScreen"><a href="#dri2CreateScreen" class="headerlink" title="dri2CreateScreen"></a>dri2CreateScreen</h2><p><img src="dri2CreateScreen.drawio.png" alt="dri2CreateScreen"></p>
+<h2 id="driswCreateScreenDriver"><a href="#driswCreateScreenDriver" class="headerlink" title="driswCreateScreenDriver"></a>driswCreateScreenDriver</h2><p><img src="dri2CreateScreen-driswCreateScreenDriver.drawio.png" alt="driswCreateScreenDriver"></p>
+<h2 id="dri3-create-screen"><a href="#dri3-create-screen" class="headerlink" title="dri3_create_screen"></a>dri3_create_screen</h2><p><img src="dri2CreateScreen-dri3_create_screen.drawio.png" alt="dri3_create_screen"></p>
+
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/util/git/">git 学习笔记</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-01-25
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="git-submodule"><a href="#git-submodule" class="headerlink" title="git-submodule"></a>git-submodule</h1><p>当克隆一个含有子模块的 git 仓库时，有 2 种方法可以连同它的子模块一起克隆下来。</p>
+          <div class="read-more">
+            <a href="/util/git/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/util/lspci/">lspci 学习笔记</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-01-25
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="与-PCI-设备相关的一些-IDs"><a href="#与-PCI-设备相关的一些-IDs" class="headerlink" title="与 PCI 设备相关的一些 IDs"></a>与 PCI 设备相关的一些 IDs</h1><ul>
+<li>Device ID: 4 位十六进制数字</li>
+<li>Vendor ID: 4 位十六进制数字</li>
+<li>Domain ID: 4 位十六进制数字</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">3772:00:00.0 0100: 1af4:1049 (rev 01)</span><br><span class="line">5401:00:00.0 0880: 1af4:105a (rev 01)</span><br><span class="line">b30b:00:00.0 0302: 1414:008e</span><br><span class="line">c4c5:00:00.0 0100: 1af4:1049 (rev 01)</span><br><span class="line">cdbf:00:00.0 0100: 1af4:1049 (rev 01)</span><br></pre></td></tr></table></figure>
+<p><code>lspci -Dn</code> 的输出格式是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;domain&gt;:&lt;bus&gt;:&lt;slot&gt;.&lt;func&gt;</span><br></pre></td></tr></table></figure>
+<p>这里的 <code>slot</code> 其实就是 <code>device</code>, 而且只包含 2 位十六进制数字。我们可以从 <code>lspci</code> 的<a href="https://github.com/pciutils/pciutils/blob/master/lspci.c" target="_blank" rel="noopener">源码</a>看到</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">void</span></span><br><span class="line">show_slot_path(struct device *d)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pci_dev</span> *<span class="title">p</span> = <span class="title">d</span>-&gt;<span class="title">dev</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (opt_path)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="class"><span class="keyword">struct</span> <span class="title">bus</span> *<span class="title">bus</span> = <span class="title">d</span>-&gt;<span class="title">parent_bus</span>;</span></span><br><span class="line">      <span class="class"><span class="keyword">struct</span> <span class="title">bridge</span> *<span class="title">br</span> = <span class="title">bus</span>-&gt;<span class="title">parent_bridge</span>;</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (br &amp;&amp; br-&gt;br_dev)</span><br><span class="line">	&#123;</span><br><span class="line">	  show_slot_path(br-&gt;br_dev);</span><br><span class="line">	  <span class="keyword">if</span> (opt_path &gt; <span class="number">1</span>)</span><br><span class="line">	    <span class="built_in">printf</span>(<span class="string">"/%02x:%02x.%d"</span>, p-&gt;bus, p-&gt;dev, p-&gt;func);</span><br><span class="line">	  <span class="keyword">else</span></span><br><span class="line">	    <span class="built_in">printf</span>(<span class="string">"/%02x.%d"</span>, p-&gt;dev, p-&gt;func);</span><br><span class="line">	  <span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"%02x:%02x.%d"</span>, p-&gt;bus, p-&gt;dev, p-&gt;func);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>lspci 之所以只使用 2 位十六进制数字分别表示 <code>bus</code>, <code>slot</code>(<code>dev</code>), 是因为它们被定义成 8 位位宽</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pci_dev</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pci_dev</span> *<span class="title">next</span>;</span>			<span class="comment">/* Next device in the chain */</span></span><br><span class="line">  u16 domain_16;			<span class="comment">/* 16-bit version of the PCI domain for backward compatibility */</span></span><br><span class="line">					<span class="comment">/* 0xffff if the real domain doesn't fit in 16 bits */</span></span><br><span class="line">  u8 bus, dev, func;			<span class="comment">/* Bus inside domain, device and function */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* These fields are set by pci_fill_info() */</span></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> known_fields;		<span class="comment">/* Set of info fields already known (see pci_fill_info()) */</span></span><br><span class="line">  u16 vendor_id, device_id;		<span class="comment">/* Identity of the device */</span></span><br><span class="line">  u16 device_class;			<span class="comment">/* PCI device class */</span></span><br><span class="line">  <span class="keyword">int</span> irq;				<span class="comment">/* IRQ number */</span></span><br><span class="line">  <span class="keyword">pciaddr_t</span> base_addr[<span class="number">6</span>];		<span class="comment">/* Base addresses including flags in lower bits */</span></span><br><span class="line">  <span class="keyword">pciaddr_t</span> <span class="built_in">size</span>[<span class="number">6</span>];			<span class="comment">/* Region sizes */</span></span><br><span class="line">  <span class="keyword">pciaddr_t</span> rom_base_addr;		<span class="comment">/* Expansion ROM base address */</span></span><br><span class="line">  <span class="keyword">pciaddr_t</span> rom_size;			<span class="comment">/* Expansion ROM size */</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pci_cap</span> *<span class="title">first_cap</span>;</span>		<span class="comment">/* List of capabilities */</span></span><br><span class="line">  <span class="keyword">char</span> *phy_slot;			<span class="comment">/* Physical slot */</span></span><br><span class="line">  <span class="keyword">char</span> *module_alias;			<span class="comment">/* Linux kernel module alias */</span></span><br><span class="line">  <span class="keyword">char</span> *label;				<span class="comment">/* Device name as exported by BIOS */</span></span><br><span class="line">  <span class="keyword">int</span> numa_node;			<span class="comment">/* NUMA node */</span></span><br><span class="line">  <span class="keyword">pciaddr_t</span> flags[<span class="number">6</span>];			<span class="comment">/* PCI_IORESOURCE_* flags for regions */</span></span><br><span class="line">  <span class="keyword">pciaddr_t</span> rom_flags;			<span class="comment">/* PCI_IORESOURCE_* flags for expansion ROM */</span></span><br><span class="line">  <span class="keyword">int</span> domain;				<span class="comment">/* PCI domain (host bridge) */</span></span><br><span class="line">  <span class="keyword">pciaddr_t</span> bridge_base_addr[<span class="number">4</span>];	<span class="comment">/* Bridge base addresses (without flags) */</span></span><br><span class="line">  <span class="keyword">pciaddr_t</span> bridge_size[<span class="number">4</span>];		<span class="comment">/* Bridge sizes */</span></span><br><span class="line">  <span class="keyword">pciaddr_t</span> bridge_flags[<span class="number">4</span>];		<span class="comment">/* PCI_IORESOURCE_* flags for bridge addresses */</span></span><br><span class="line">  u8 prog_if, rev_id;			<span class="comment">/* Programming interface for device_class and revision id */</span></span><br><span class="line">  u16 subsys_vendor_id, subsys_id;	<span class="comment">/* Subsystem vendor id and subsystem id */</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pci_dev</span> *<span class="title">parent</span>;</span>		<span class="comment">/* Parent device, does not have to be always accessible */</span></span><br><span class="line">  <span class="keyword">int</span> no_config_access;			<span class="comment">/* No access to config space for this device */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Fields used internally */</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pci_access</span> *<span class="title">access</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pci_methods</span> *<span class="title">methods</span>;</span></span><br><span class="line">  u8 *cache;				<span class="comment">/* Cached config registers */</span></span><br><span class="line">  <span class="keyword">int</span> cache_len;</span><br><span class="line">  <span class="keyword">int</span> hdrtype;				<span class="comment">/* Cached low 7 bits of header type, -1 if unknown */</span></span><br><span class="line">  <span class="keyword">void</span> *aux;				<span class="comment">/* Auxiliary data for use by the back-end */</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pci_property</span> *<span class="title">properties</span>;</span>	<span class="comment">/* A linked list of extra properties */</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pci_cap</span> *<span class="title">last_cap</span>;</span>		<span class="comment">/* Last capability in the list */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="Xorg-config-之-Device-Section"><a href="#Xorg-config-之-Device-Section" class="headerlink" title="Xorg config 之 Device Section"></a>Xorg config 之 <code>Device</code> Section</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Section &quot;Device&quot;</span><br><span class="line">Identifier &quot;name&quot;</span><br><span class="line">Driver &quot;driver&quot;</span><br><span class="line">BusID &quot;bus-id&quot;</span><br><span class="line">EndSection</span><br></pre></td></tr></table></figure>
+<p><code>Device</code> Section 中 <code>BusID</code> 的格式是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PCI:bus:device:func</span><br></pre></td></tr></table></figure>
+<h1 id="Xorg-log-中的-PCI-信息格式"><a href="#Xorg-log-中的-PCI-信息格式" class="headerlink" title="Xorg log 中的 PCI 信息格式"></a>Xorg log 中的 PCI 信息格式</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xf86Msg(X_PROBED, <span class="string">"PCI:%s(%u@%u:%u:%u) %04x:%04x:%04x:%04x "</span>, prim,</span><br><span class="line">        info-&gt;bus, info-&gt;domain, info-&gt;dev, info-&gt;func,</span><br><span class="line">        info-&gt;vendor_id, info-&gt;device_id,</span><br><span class="line">        info-&gt;subvendor_id, info-&gt;subdevice_id);</span><br></pre></td></tr></table></figure>
+<p>日志中的 PCI BusID 格式是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bus@domain:device:func</span><br></pre></td></tr></table></figure>
+
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/util/cmake/">CMake Cheatsheet</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-01-10
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Common-Command-lines"><a href="#Common-Command-lines" class="headerlink" title="Common Command-lines"></a>Common Command-lines</h1><ul>
+<li><code>-DCMAKE_EXE_LINKER_FLAGS=&quot;-fuse-ld=gold&quot;</code><br>  将 linker 由默认的 bfd 换成 gold</li>
+<li><code>-DCMAKE_EXPORT_COMPILE_COMMANDS=on</code><br>  生成 compile_commands.json</li>
+<li><code>-DCMAKE_CXX_FLAGS=&quot;-Wno-error=missing-field-initializers&quot;</code><br>  将 <code>missing-field-initializers</code> 由 error 转为 warning</li>
+<li><code>-DCMAKE_EXE_LINKER_FLAGS=&quot;-nostartfiles&quot;</code><br>  解决 “Scrt1.o: undefined reference to <code>main</code>“</li>
+</ul>
+          <div class="read-more">
+            <a href="/util/cmake/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/X/kylin-alpha-issue/">Kylin V10 窗口透明问题</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-12-20
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p>最近在看<a href="https://gitlab.freedesktop.org/xorg/xserver" target="_blank" rel="noopener">X11 Server的代码</a>,顺手做下笔记。X11 Server的代码很古老了，有的是1993年写的，目前的X Server实现<a href="https://zh.wikipedia.org/wiki/X.Org_Server" target="_blank" rel="noopener">X.org</a>是从最早的一个X Server实现<a href="https://zh.wikipedia.org/wiki/XFree86" target="_blank" rel="noopener">XFree86</a> 4.4 RC2版本(2004年)派生出来的。</p>
+          <div class="read-more">
+            <a href="/gfx/X/kylin-alpha-issue/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/util/update-alternatives/">Altering Your GCC/Python Version Easily</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-12-04
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="What’s-the-problem"><a href="#What’s-the-problem" class="headerlink" title="What’s the problem"></a>What’s the problem</h1><p>有时在你的系统上可能已经安装了多个gcc版本(gcc-4.8, gcc-8, gcc-9)或Python版本(Python, Python 2.7, Python 3.8), 那么当你执行gcc或python命令时，到底用的是哪个gcc或python版本呢？而且如何方便地指定我们期望使用的版本呢？在大多数Linux发行版都有一个<strong>update-alternatives</strong>命令专门处理这种情况。</p>
+          <div class="read-more">
+            <a href="/util/update-alternatives/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/egl-image/">EGLImage</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-11-12
+        </span></div>
+    </header>
+
+    <div class="post-content"><h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>EGLImage的存在是为了更方便地在EGL client API之间共享2D Image Data. 那什么是EGL client API呢？OpenGL, OpenGL ES, OpenVG都是EGL client API. EGLImage与下面3个EGL Extensions有关:</p>
+<ul>
+<li>EGL_KHR_image</li>
+<li>EGL_KHR_image_base</li>
+<li>EGL_KHR_image_pixmap</li>
+</ul>
+          <div class="read-more">
+            <a href="/gfx/egl-image/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/drm-mod/">DRM format modifier</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-11-11
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="FourCC"><a href="#FourCC" class="headerlink" title="FourCC"></a>FourCC</h1><p>FourCC format code是Linux内核DRM子系统用来描述framebuffer像素格式。它们被定义在内核源码<a href="https://github.com/torvalds/linux/blob/master/include/uapi/drm/drm_fourcc.h#L156" target="_blank" rel="noopener">include/uapi/drm/drm_fourcc.h</a>. 基本上FourCC format code足以描述framebuffer中像素的内容了，但是随着GPU的更新，原来线性排列的buffers，为了获取更好的性能，可能会采取vendor specific的布局方式。另外，这些buffer也可能保存的是各种不同的压缩数据，这样一来，原来的FourCC format code就无法携带新的buffer<br>layout或compression format的信息，DRM format modifier就是用来解决这些问题的。</p>
+          <div class="read-more">
+            <a href="/gfx/drm-mod/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/glamor/">glamor</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-11-10
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>glamor是一个开源的2D加速驱动，它作为Xorg的一个模块被实现。相比传统的DDX 2D加速驱动，glamor主要有以下2个好处:</p>
+<ul>
+<li>使用非常通用的EGL/OpenGL API去操作GPU硬件，省去了手动为每个不同的GPU编写2D加速驱动的麻烦</li>
+<li>有了glamor，不再需要传统的2D DDX驱动</li>
+</ul>
+          <div class="read-more">
+            <a href="/gfx/glamor/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <article class="post">
+    <header class="post-header">
+      <h1 class="post-title"><a class="post-link" href="/gfx/X/build-xserver/">Build X Server (Xorg) from Source</a>
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-10-19
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>Given that a difficulty to add a custom X11 device driver or module or extension for Xserver, I try to find out how an Xserver is built and its dependent drivers and modules and extensions are orgnized together by building it from <a href="https://gitlab.freedesktop.org/xorg/xserver.git" target="_blank" rel="noopener">source</a>.</p>
+          <div class="read-more">
+            <a href="/gfx/X/build-xserver/" class="read-more-link">Read more..</a>
+          </div>
+        </div></article>
+      <nav class="pagination"><a class="prev" href="/page/7/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text">Prev</span>
+      </a>
+    <a class="next" href="/page/9/">
+        <span class="next-text">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></section></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

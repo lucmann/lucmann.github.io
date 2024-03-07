@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Kylin V10 窗口透明问题"/><meta name="keywords" content="2D, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/gfx/X/kylin-alpha-issue/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Kylin V10 窗口透明问题 - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Kylin V10 窗口透明问题
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-12-20
+        </span><span class="post-category">
+            <a href="/categories/graphics/">graphics</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#同一个使用glfw的OpenGL程序在Kylin-V10系统上可以修改alpha通道改变窗口背景的透明度，而在Ubuntu-Focal-Fossa系统上却不能？"><span class="toc-text">同一个使用glfw的OpenGL程序在Kylin V10系统上可以修改alpha通道改变窗口背景的透明度，而在Ubuntu Focal Fossa系统上却不能？</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>最近在看<a href="https://gitlab.freedesktop.org/xorg/xserver" target="_blank" rel="noopener">X11 Server的代码</a>,顺手做下笔记。X11 Server的代码很古老了，有的是1993年写的，目前的X Server实现<a href="https://zh.wikipedia.org/wiki/X.Org_Server" target="_blank" rel="noopener">X.org</a>是从最早的一个X Server实现<a href="https://zh.wikipedia.org/wiki/XFree86" target="_blank" rel="noopener">XFree86</a> 4.4 RC2版本(2004年)派生出来的。</p>
+<a id="more"></a>
+<p>X11 Server编译后会生成若干动态链接库形式的驱动程序和一个可执行程序Xorg. Xorg本质上是一个服务器程序，像其它所有服务器程序一样，它的main函数里有一个while循环，以保证在程序启动后，到程序退出前能够为客户端持续提供服务。Xorg的另一个特点是极具扩展性，所有动态链接库形式的DDX(Device Dependent X)驱动都是以Xorg Module的方式动态加载的，具体加载哪个DDX Driver由Xorg的Config文件配置。</p>
+<h1 id="同一个使用glfw的OpenGL程序在Kylin-V10系统上可以修改alpha通道改变窗口背景的透明度，而在Ubuntu-Focal-Fossa系统上却不能？"><a href="#同一个使用glfw的OpenGL程序在Kylin-V10系统上可以修改alpha通道改变窗口背景的透明度，而在Ubuntu-Focal-Fossa系统上却不能？" class="headerlink" title="同一个使用glfw的OpenGL程序在Kylin V10系统上可以修改alpha通道改变窗口背景的透明度，而在Ubuntu Focal Fossa系统上却不能？"></a>同一个使用glfw的OpenGL程序在Kylin V10系统上可以修改alpha通道改变窗口背景的透明度，而在Ubuntu Focal Fossa系统上却不能？</h1><p>Alpha通道控制窗口的透明度(transparency)。而X11窗口系统上，alpha通道是否可用，和X11 Server的RENDER扩展有关，下面来自glfw的代码是自明的(self-explanatory)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GLFWbool _glfwIsVisualTransparentX11(Visual* visual)</span><br><span class="line">&#123;</span><br><span class="line">    if (!_glfw.x11.xrender.available)</span><br><span class="line">        return GLFW_FALSE;</span><br><span class="line"></span><br><span class="line">    XRenderPictFormat* pf &#x3D; XRenderFindVisualFormat(_glfw.x11.display, visual);</span><br><span class="line">    return pf &amp;&amp; pf-&gt;direct.alphaMask;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于系统上的X11 Server的RENDER扩展的信息可以通过<code>xdpyinfo</code>命令查看(此命令输出很多信息), 而且RENDER扩展大多数情况下是可用的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xdpyinfo -ext RENDER</span><br></pre></td></tr></table></figure>
+<p>如果你的系统上的RENDER扩展可用，接下来的问题就简单了，你只需要查看一下你的程序(或者glfw)选取的VISUAL的<strong>pict format</strong>的<code>alphaMask</code>是否为<code>0</code>。如果是<code>0</code>, 则意味着glfw从你的系统获取的<code>GLFW_TRANSPARENT_FRAMEBUFFER</code>属性是<code>FALSE</code>, 也即在glfw创建的窗口中，你无法通过修改alpha通道来改变任何透明度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RENDER version 0.11 opcode: 138, base error: 140</span><br><span class="line">  Render formats :</span><br><span class="line">  pict format:</span><br><span class="line">        format id:    0x2c</span><br><span class="line">        type:         Direct</span><br><span class="line">        depth:        24</span><br><span class="line">        alpha:         0 mask 0x0</span><br><span class="line">        red:          16 mask 0xff</span><br><span class="line">        green:         8 mask 0xff</span><br><span class="line">        blue:          0 mask 0xff</span><br></pre></td></tr></table></figure>
+<p>很不幸，我的系统上(Ubuntu Focal Fossa)绝大部分VISUAL对应的都是这个ID为<code>0x2c</code>的<strong>pict format</strong>, 所以我不能通过修改alpha通道改变窗口背景或内容的透明度，除非我强制让glfw选择其它的VISUAL(对应的<strong>pict format</strong>不是<code>0x2c</code>)。</p>
+<p>为了确定这个问题的确是VISUAL惹的祸，我想摆脱glfw，在单纯的GLX环境下测试一下，正好<a href="https://gitlab.freedesktop.org/mesa/demos" target="_blank" rel="noopener">mesa/demos</a>这个工程下有一个<strong>glxgears_fbconfig</strong>，这个demo允许通过<code>GLX_VISUAL_ID</code>来指定你想要的VISUAL，我分别使用下面两个VISUAL进行测试</p>
+<ul>
+<li><p>visual id: 0x5b, pict format id 0x28</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pict format:</span><br><span class="line">      format id:    0x28</span><br><span class="line">      type:         Direct</span><br><span class="line">      depth:        32</span><br><span class="line">      alpha:        24 mask 0xff</span><br><span class="line">      red:          16 mask 0xff</span><br><span class="line">      green:         8 mask 0xff</span><br><span class="line">      blue:          0 mask 0xff</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>visual id: 0x23, pict format id 0x2c</p>
+</li>
+</ul>
+<p>注意，为了更清楚地看出不同，我使用<code>glClearBufferfv</code>将背景设置为半透明</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/src/xdemos/glxgears_fbconfig.c b/src/xdemos/glxgears_fbconfig.c</span><br><span class="line">index 8806dd1c..7d6cbd29 100644</span><br><span class="line"><span class="comment">--- a/src/xdemos/glxgears_fbconfig.c</span></span><br><span class="line"><span class="comment">+++ b/src/xdemos/glxgears_fbconfig.c</span></span><br><span class="line">@@ -35,0 +36 @@</span><br><span class="line"><span class="addition">+#define GL_GLEXT_PROTOTYPES</span></span><br><span class="line">@@ -242,0 +244 @@ draw(void)</span><br><span class="line"><span class="addition">+    static const GLfloat bg[] = &#123;0.0, 0.0, 0.0, 0.5&#125;;</span></span><br><span class="line"><span class="addition">+    @@ -243,0 +246 @@ draw(void)</span></span><br><span class="line"><span class="addition">+    +   glClearBufferfv(GL_COLOR, 0, bg);</span></span><br><span class="line"><span class="addition">+    @@ -439,0 +443 @@ make_window( Display *dpy, const char *name,</span></span><br><span class="line"><span class="addition">+    +            GLX_VISUAL_ID,     0x23,)</span></span><br></pre></td></tr></table></figure>
+<p>测试结果如下:</p>
+<p><img src="visual_0x23.png" alt="VisualID=0x23"><br><img src="visual_0x5b.png" alt="VisualID=0x5b"></p>
+<p>从测试结果看，在<code>VisualID=0x23</code>的情况下，这个VISUAL对应的<code>pict format</code>没有alpha通道，所以修改<code>bg</code>的alpha值不会对窗口背景的透明度有任何影响。</p>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/2D/">2D</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/util/cmake/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">CMake Cheatsheet</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/util/update-alternatives/">
+        <span class="next-text nav-default">Altering Your GCC/Python Version Easily</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
