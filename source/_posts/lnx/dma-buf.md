@@ -112,23 +112,24 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 # dma_fence
 
 <style>
-.div {
+div pre {
     line-height: 120%;
     font-size: 10pt;
 }
 
-.row {
+row {
     display: flex;
 }
 
-.column {
+column {
     flex: 50%;
 }
 </style>
 
 <div class="row">
   <div class="column">
-    <code>
+    <pre>
+      <code>
 signed long
 dma_fence_default_wait(struct dma_fence *fence,
                        bool intr,
@@ -181,12 +182,21 @@ out:
 	spin_unlock_irqrestore(fence->lock, flags);
 	return ret;
 }
-    </code>
+      </code>
+    </pre>
   </div>
   <div class="column">
     fence->ops->wait();
   </div>
 </div>
+
+`dma_fence_default_wait` 是 dma-fence 默认的 wait 操作。该函数会让当前进程(task) 进入睡眠状态 (可中断睡眠或不可中断睡眠，取决于调用者传入的参数 `intr`）, 直到 dma-fence 被 signaled 或者设置的超时时间到。
+
+```c
+	cb.base.func = dma_fence_default_wait_cb;
+	cb.task = current;
+	list_add(&cb.base.node, &fence->cb_list);
+```
 
 ## dma_resv
 
