@@ -113,7 +113,8 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 
 <style>
 .div {
-    line-height: normal;
+    line-height: 120%;
+    font-size: 10pt;
 }
 
 .row {
