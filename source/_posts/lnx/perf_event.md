@@ -33,6 +33,28 @@ perf stat -a sleep
 
 {% asset_img perf_stat.png %}
 
+# tracepoint 使能
+
+通过 debugfs 中的相应文件使能 tracepoint
+
+```
+root@sie-luc:~# find /sys/kernel/debug/tracing/events/ -type d| grep -E 'dma|gpu'
+/sys/kernel/debug/tracing/events/dma_fence
+/sys/kernel/debug/tracing/events/dma_fence/dma_fence_emit
+/sys/kernel/debug/tracing/events/dma_fence/dma_fence_init
+/sys/kernel/debug/tracing/events/dma_fence/dma_fence_destroy
+/sys/kernel/debug/tracing/events/dma_fence/dma_fence_enable_signal
+/sys/kernel/debug/tracing/events/dma_fence/dma_fence_signaled
+/sys/kernel/debug/tracing/events/dma_fence/dma_fence_wait_start
+/sys/kernel/debug/tracing/events/dma_fence/dma_fence_wait_end
+root@sie-luc:~# cat /sys/kernel/debug/tracing/events/dma_fence/dma_fence_enable_signal/
+cat: /sys/kernel/debug/tracing/events/dma_fence/dma_fence_enable_signal/: Is a directory
+root@sie-luc:~# cat /sys/kernel/debug/tracing/events/dma_fence/dma_fence_enable_signal/
+enable   filter   format   id       trigger
+root@sie-luc:~# cat /sys/kernel/debug/tracing/events/dma_fence/dma_fence_enable_signal/enable
+0
+```
+
 # 动态跟踪
 
 ## `perf top`
