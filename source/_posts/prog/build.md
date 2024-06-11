@@ -1,5 +1,5 @@
 ---
-title: Build your program
+title: Build your program from source code on Linux
 date: 2022-09-18 17:02:49
 tags: build
 categories: programming
@@ -82,38 +82,44 @@ categories: programming
 
 ## pkg-config
 
-`dpkg-deb --contents /var/cache/apt/archives/pkg-config_0.29.1-0ubuntu4_amd64.deb`
+`pkg-config` 是二进制可执行程序 `/usr/bin/pkgconf` 的一个符号链接文件，它是 CMake, meson 等构建系统主要使用的系统动态库检测的工具。`pkg-config` 本质上是在解析 `*.pc` 文件。下面是常见的 Mesa OpenGL Library 的 .pc 文件。
 
 ```
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./etc/
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./etc/dpkg/
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./etc/dpkg/dpkg.cfg.d/
--rw-r--r-- root/root       204 2020-02-07 17:04 ./etc/dpkg/dpkg.cfg.d/pkg-config-hook-config
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/bin/
--rwxr-xr-x root/root     55552 2020-02-07 17:04 ./usr/bin/pkg-config
-hrwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/bin/x86_64-pc-linux-gnu-pkg-config link to ./usr/bin/pkg-config
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/lib/
--rw-r--r-- root/root        17 2020-02-07 17:04 ./usr/lib/pkg-config.multiarch
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/lib/pkgconfig/
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/share/
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/share/aclocal/
--rw-r--r-- root/root     10249 2020-02-07 17:04 ./usr/share/aclocal/pkg.m4
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/share/doc/
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/share/doc/pkg-config/
--rw-r--r-- root/root       359 2014-02-09 01:57 ./usr/share/doc/pkg-config/AUTHORS
--rw-r--r-- root/root      5320 2016-03-02 03:40 ./usr/share/doc/pkg-config/NEWS.gz
--rw-r--r-- root/root      2599 2014-02-09 01:57 ./usr/share/doc/pkg-config/README
--rw-r--r-- root/root      1376 2020-02-07 17:04 ./usr/share/doc/pkg-config/changelog.Debian.gz
--rw-r--r-- root/root       772 2020-02-07 17:04 ./usr/share/doc/pkg-config/copyright
--rw-r--r-- root/root     17832 2020-02-07 17:04 ./usr/share/doc/pkg-config/pkg-config-guide.html
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/share/man/
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/share/man/man1/
--rw-r--r-- root/root      7556 2020-02-07 17:04 ./usr/share/man/man1/pkg-config.1.gz
--rwxr-xr-x root/root      2235 2020-02-07 17:04 ./usr/share/pkg-config-crosswrapper
--rwxr-xr-x root/root      1826 2020-02-07 17:04 ./usr/share/pkg-config-dpkghook
-drwxr-xr-x root/root         0 2020-02-07 17:04 ./usr/share/pkgconfig/
+➜  piglit git:(main) ✗ find /usr -name 'gl.pc' -ls
+    78674      4 -rw-r--r--   1 root     root          205 Jan  3  2023 /usr/lib/x86_64-linux-gnu/pkgconfig/gl.pc
+    72985      4 -rw-r--r--   1 root     root          362 Jun  7 18:16 /usr/local/lib/x86_64-linux-gnu/pkgconfig/gl.pc
+➜  piglit git:(main) ✗ bat /usr/local/lib/x86_64-linux-gnu/pkgconfig/gl.pc
+───────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       │ File: /usr/local/lib/x86_64-linux-gnu/pkgconfig/gl.pc
+───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1   │ prefix=/usr/local
+   2   │ includedir=${prefix}/include
+   3   │ libdir=${prefix}/lib/x86_64-linux-gnu
+   4   │
+   5   │ glx_tls=yes
+   6   │
+   7   │ Name: gl
+   8   │ Description: Mesa OpenGL Library
+   9   │ Version: 24.2.0-devel
+  10   │ Requires.private: x11, xext, xfixes, x11-xcb, xcb, xcb-glx >=  1.8.1, xcb-dri2 >=  1.8, xxf86vm, libdrm >=  2.4.75
+  11   │ Libs: -L${libdir} -lGL
+  12   │ Libs.private: -lpthread -pthread -lm
+  13   │ Cflags: -I${includedir}
+───────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+➜  piglit git:(main) ✗ bat /usr/lib/x86_64-linux-gnu/pkgconfig/gl.pc
+───────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       │ File: /usr/lib/x86_64-linux-gnu/pkgconfig/gl.pc
+───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1   │ prefix=/usr
+   2   │ includedir=${prefix}/include
+   3   │ libdir=${prefix}/lib/x86_64-linux-gnu
+   4   │
+   5   │ Name: GL
+   6   │ Description: Legacy OpenGL and GLX library and headers.
+   7   │ Version: 1.2
+   8   │ Libs: -L${libdir} -lGL
+   9   │ Cflags: -I${includedir}
+───────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ```
 
 # `lib*-dev` 与 `lib*` 的区别
