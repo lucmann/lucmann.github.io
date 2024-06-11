@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Building Linux Kernel"/><meta name="keywords" content="build, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/lnx/kernel-build/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Building Linux Kernel - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Building Linux Kernel
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2022-11-06
+        </span><span class="post-category">
+            <a href="/categories/linux/">linux</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Should-Know-Something-About-Kernel-Building"><span class="toc-text">Should Know Something About Kernel Building</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Build-on-Ubuntu-22-04"><span class="toc-text">Build on Ubuntu 22.04</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment"><span class="toc-text">Environment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Compilation-Errors"><span class="toc-text">Compilation Errors</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Build-on-WSL2"><span class="toc-text">Build on WSL2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Build-Config"><span class="toc-text">Build Config</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Compilation-Errors-1"><span class="toc-text">Compilation Errors</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#apt-install-y-dwarves"><span class="toc-text">apt install -y dwarves</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Direct-WSL-to-the-new-vmlinux"><span class="toc-text">Direct WSL to the new vmlinux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#新内核产生"><span class="toc-text">新内核产生</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新内核生效"><span class="toc-text">新内核生效</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打开-CONFIG-DRM-VKMS"><span class="toc-text">打开 CONFIG_DRM_VKMS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Testing-With-IGT-on-WSL2"><span class="toc-text">Testing With IGT on WSL2</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="Should-Know-Something-About-Kernel-Building"><a href="#Should-Know-Something-About-Kernel-Building" class="headerlink" title="Should Know Something About Kernel Building"></a>Should Know Something About Kernel Building</h1><ul>
+<li>配置内核最简单的方法是 <code>make olddefconfig</code></li>
+<li>内核配置保存在 .config</li>
+<li>内核源码树里包含命令行修改 .config 的脚本 scripts/config</li>
+<li>内核构建依赖 flex, bison 词法分析程序</li>
+</ul>
+<h1 id="Build-on-Ubuntu-22-04"><a href="#Build-on-Ubuntu-22-04" class="headerlink" title="Build on Ubuntu 22.04"></a>Build on Ubuntu 22.04</h1><h2 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h2><table>
+<thead>
+<tr>
+<th align="left">configuration</th>
+<th align="left">version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">distro</td>
+<td align="left">Ubuntu 22.04 Jammy Jellyfish</td>
+</tr>
+<tr>
+<td align="left">gcc</td>
+<td align="left">11.2.0</td>
+</tr>
+<tr>
+<td align="left">original kernel</td>
+<td align="left">5.15.0-43-generic</td>
+</tr>
+<tr>
+<td align="left">building kernel</td>
+<td align="left">v6.0</td>
+</tr>
+</tbody></table>
+<h2 id="Compilation-Errors"><a href="#Compilation-Errors" class="headerlink" title="Compilation Errors"></a>Compilation Errors</h2><table>
+<thead>
+<tr>
+<th align="left">Errors</th>
+<th align="left">Resolution</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">gelf.h: No such file or directory</td>
+<td align="left">apt install libelf-dev</td>
+</tr>
+<tr>
+<td align="left">&lt;openssl/opensslv.h&gt;: No such file or directory</td>
+<td align="left">apt install libssl-dev</td>
+</tr>
+<tr>
+<td align="left">No rule to make target ‘debian/canonical-certs.pem’</td>
+<td align="left">scripts/config –disable SYSTEM_TRUSTED_KEYS</td>
+</tr>
+<tr>
+<td align="left">No rule to make target ‘debian/canonical-revoked-certs.pem’</td>
+<td align="left">scripts/config –disable SYSTEM_REVOCATION_KEYS</td>
+</tr>
+</tbody></table>
+<h1 id="Build-on-WSL2"><a href="#Build-on-WSL2" class="headerlink" title="Build on WSL2"></a>Build on WSL2</h1><h2 id="Build-Config"><a href="#Build-Config" class="headerlink" title="Build Config"></a>Build Config</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make KCONFIG_CONFIG&#x3D;Microsoft&#x2F;config-wsl</span><br></pre></td></tr></table></figure>
+
+<h2 id="Compilation-Errors-1"><a href="#Compilation-Errors-1" class="headerlink" title="Compilation Errors"></a>Compilation Errors</h2><h3 id="apt-install-y-dwarves"><a href="#apt-install-y-dwarves" class="headerlink" title="apt install -y dwarves"></a><code>apt install -y dwarves</code></h3><p><a href="https://blog.csdn.net/qq_36393978/article/details/124274364" target="_blank" rel="noopener">这是一个非常常见的依赖问题</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  LD      vmlinux.o</span><br><span class="line">  MODPOST vmlinux.symvers</span><br><span class="line">  MODINFO modules.builtin.modinfo</span><br><span class="line">  GEN     modules.builtin</span><br><span class="line">BTF: .tmp_vmlinux.btf: pahole (pahole) is not available</span><br><span class="line">Failed to generate BTF for vmlinux</span><br><span class="line">Try to disable CONFIG_DEBUG_INFO_BTF</span><br><span class="line">make: *** [Makefile:1218: vmlinux] Error 1</span><br></pre></td></tr></table></figure>
+
+<h2 id="Direct-WSL-to-the-new-vmlinux"><a href="#Direct-WSL-to-the-new-vmlinux" class="headerlink" title="Direct WSL to the new vmlinux"></a>Direct WSL to the new vmlinux</h2><h3 id="新内核产生"><a href="#新内核产生" class="headerlink" title="新内核产生"></a>新内核产生</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">  AS      arch&#x2F;x86&#x2F;boot&#x2F;header.o</span><br><span class="line">  CC      arch&#x2F;x86&#x2F;boot&#x2F;version.o</span><br><span class="line">  LD      arch&#x2F;x86&#x2F;boot&#x2F;setup.elf</span><br><span class="line">  OBJCOPY arch&#x2F;x86&#x2F;boot&#x2F;setup.bin</span><br><span class="line">  OBJCOPY arch&#x2F;x86&#x2F;boot&#x2F;vmlinux.bin</span><br><span class="line">  BUILD   arch&#x2F;x86&#x2F;boot&#x2F;bzImage</span><br><span class="line">Kernel: arch&#x2F;x86&#x2F;boot&#x2F;bzImage is ready  (#3)</span><br><span class="line">  MODPOST modules-only.symvers</span><br><span class="line">  GEN     Module.symvers</span><br></pre></td></tr></table></figure>
+
+<h3 id="新内核生效"><a href="#新内核生效" class="headerlink" title="新内核生效"></a>新内核生效</h3><ol>
+<li><p><code>mv arch/x86/boot/bzImage /mnt/c/Users/luc/</code></p>
+</li>
+<li><p><a href="https://falco.org/blog/falco-wsl2-custom-kernel/" target="_blank" rel="noopener">编辑 /mnt/c/Users/luc/.wslconfig</a>, 添加下面两行</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">kernel&#x3D;C:\\Users\\luc\\bzImage</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>NOTE: 如果<a href="https://devblogs.microsoft.com/commandline/automatically-configuring-wsl/" target="_blank" rel="noopener">以上两行添加进 /etc/wsl.conf 文件，不会有任何作用</a>, 因为 <code>/etc/wsl.conf</code> 不支持 <code>wsl2</code> Section</p>
+</blockquote>
+<ol start="3">
+<li>配置完成后，重启 WSL Ubuntu 20.04, 新编译的内核将生效。不要用 <code>wsl --terminate</code>.</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --shutdown Ubuntu-20.04</span><br></pre></td></tr></table></figure>
+
+<h2 id="打开-CONFIG-DRM-VKMS"><a href="#打开-CONFIG-DRM-VKMS" class="headerlink" title="打开 CONFIG_DRM_VKMS"></a>打开 <a href="https://docs.kernel.org/gpu/vkms.html" target="_blank" rel="noopener">CONFIG_DRM_VKMS</a></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make nconfig</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>NOTE: <a href="https://unix.stackexchange.com/questions/594470/wsl-2-does-not-have-lib-modules" target="_blank" rel="noopener">在 WSL 上不能将配置项置为 ‘M’, 而要 ‘Y’</a></p>
+</blockquote>
+<p>配置更改后重新 make</p>
+<h2 id="Testing-With-IGT-on-WSL2"><a href="#Testing-With-IGT-on-WSL2" class="headerlink" title="Testing With IGT on WSL2"></a>Testing With IGT on WSL2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  tests git:(master) sudo .&#x2F;kms_writeback --device &quot;sys:&#x2F;sys&#x2F;devices&#x2F;platform&#x2F;vkms&quot;</span><br><span class="line">IGT-Version: 1.27.1-g45da871d (x86_64) (Linux: 5.15.90.1-microsoft-standard-WSL2+ x86_64)</span><br><span class="line">(kms_writeback:9671) igt_kms-WARNING: Output Writeback-1 could not be assigned to a pipe</span><br><span class="line">Starting subtest: writeback-pixel-formats</span><br><span class="line">Subtest writeback-pixel-formats: SUCCESS (0.000s)</span><br><span class="line">Starting subtest: writeback-invalid-parameters</span><br><span class="line">Subtest writeback-invalid-parameters: SUCCESS (0.000s)</span><br><span class="line">Starting subtest: writeback-fb-id</span><br><span class="line">Subtest writeback-fb-id: SUCCESS (0.018s)</span><br><span class="line">Starting subtest: writeback-check-output</span><br><span class="line">Subtest writeback-check-output: SUCCESS (0.124s)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>dmesg</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[10893.662944] [IGT] kms_writeback: executing</span><br><span class="line">[10893.673240] [IGT] kms_writeback: starting subtest writeback-pixel-formats</span><br><span class="line">[10893.674026] [IGT] kms_writeback: starting subtest writeback-invalid-parameters</span><br><span class="line">[10893.675055] [IGT] kms_writeback: starting subtest writeback-fb-id</span><br><span class="line">[10893.693563] [IGT] kms_writeback: starting subtest writeback-check-output</span><br><span class="line">[10893.826984] [IGT] kms_writeback: exiting, ret&#x3D;0</span><br></pre></td></tr></table></figure>
+
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/build/">build</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/prog/san/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Using Sanitizers</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/prog/syscall/">
+        <span class="next-text nav-default">FAQs about System Programming</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

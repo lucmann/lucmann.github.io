@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Buffer Sharing and Synchronization"/><meta name="keywords" content="drm, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/lnx/dma-buf/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Buffer Sharing and Synchronization - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Buffer Sharing and Synchronization
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-09-15
+        </span><span class="post-category">
+            <a href="/categories/linux/">linux</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DMA-BUF"><span class="toc-text">DMA-BUF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dma-fence"><span class="toc-text">dma_fence</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dma-resv"><span class="toc-text">dma_resv</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dma-buf-dma-fence-dma-resv-还有drm-gem-object-这4者有什么关系？"><span class="toc-text">dma_buf, dma_fence, dma_resv, 还有drm_gem_object, 这4者有什么关系？</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><p>本文的标题来自<a href="https://01.org/linuxgraphics/gfx-docs/drm/driver-api/dma-buf.html" target="_blank" rel="noopener">Linux Kernel 5.6.0-rc4文档</a>, dma-buf作为一个内核子系统，它的使用场景不局限于drm “<a href="https://blog.csdn.net/hexiaolong2009/article/details/105961192" target="_blank" rel="noopener">PRIME</a>“ multi-GPU支持，它主要由3个组件支撑:</p>
+<a id="more"></a>
+
+<ul>
+<li><code>dma_buf</code> 代表sg_table, 暴露给用户FD</li>
+<li><code>dma_fence</code> 通知机制</li>
+<li><code>dma_resv</code> 管理共享的或专有的fences</li>
+</ul>
+<h1 id="DMA-BUF"><a href="#DMA-BUF" class="headerlink" title="DMA-BUF"></a>DMA-BUF</h1><p>dma-buf是Linux内核中在上下文间，进程间，设备间，子系统间进行 buffer 共享的一种实现。 它十几年前就已经合入内核了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">commit 3248877ea1796915419fba7c89315fdbf00cb56a</span><br><span class="line">Author: Dave Airlie &lt;airlied@redhat.com&gt;</span><br><span class="line">Date:   Fri Nov 25 15:21:02 2011 +0000</span><br><span class="line"></span><br><span class="line">    drm: base prime&#x2F;dma-buf support (v5)</span><br><span class="line"></span><br><span class="line">    This adds the basic drm dma-buf interface layer, called PRIME. This</span><br><span class="line">    commit doesn&#39;t add any driver support, it is simply and agreed upon starting</span><br><span class="line">    point so we can work towards merging driver support for the next merge window.</span><br><span class="line"></span><br><span class="line">    Current drivers with work done are nouveau, i915, udl, exynos and omap.</span><br><span class="line"></span><br><span class="line">    The main APIs exposed to userspace allow translating a 32-bit object handle</span><br><span class="line">    to a file descriptor, and a file descriptor to a 32-bit object handle.</span><br><span class="line"></span><br><span class="line">    The flags value is currently limited to O_CLOEXEC.</span><br><span class="line"></span><br><span class="line">    Acknowledgements:</span><br><span class="line">    Daniel Vetter: lots of review</span><br><span class="line">    Rob Clark: cleaned up lots of the internals and did lifetime review.</span><br><span class="line"></span><br><span class="line">    v2: rename some functions after Chris preferred a green shed</span><br><span class="line">    fix IS_ERR_OR_NULL -&gt; IS_ERR</span><br><span class="line">    v3: Fix Ville pointed out using buffer + kmalloc</span><br><span class="line">    v4: add locking as per ickle review</span><br><span class="line">    v5: allow re-exporting the original dma-buf (Daniel)</span><br><span class="line"></span><br><span class="line">    Reviewed-by: Daniel Vetter &lt;daniel.vetter@ffwll.ch&gt;</span><br><span class="line">    Reviewed-by: Rob Clark &lt;rob.clark@linaro.org&gt;</span><br><span class="line">    Reviewed-by: Sumit Semwal &lt;sumit.semwal@linaro.org&gt;</span><br><span class="line">    Reviewed-by: Inki Dae &lt;inki.dae@samsung.com&gt;</span><br><span class="line">    Acked-by: Ben Widawsky &lt;benjamin.widawsky@intel.com&gt;</span><br><span class="line">    Signed-off-by: Dave Airlie &lt;airlied@redhat.com&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>exporter调用</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * drm_gem_prime_handle_to_fd - PRIME export function for GEM drivers</span></span><br><span class="line"><span class="comment"> * @dev: dev to export the buffer from</span></span><br><span class="line"><span class="comment"> * @file_priv: drm file-private structure</span></span><br><span class="line"><span class="comment"> * @handle: buffer handle to export</span></span><br><span class="line"><span class="comment"> * @flags: flags like DRM_CLOEXEC</span></span><br><span class="line"><span class="comment"> * @prime_fd: pointer to storage for the fd id of the create dma-buf</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This is the PRIME export function which must be used mandatorily by GEM</span></span><br><span class="line"><span class="comment"> * drivers to ensure correct lifetime management of the underlying GEM object.</span></span><br><span class="line"><span class="comment"> * The actual exporting from GEM object to a dma-buf is done through the</span></span><br><span class="line"><span class="comment"> * &amp;drm_gem_object_funcs.export callback.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">drm_gem_prime_handle_to_fd</span><span class="params">(struct drm_device *dev,</span></span></span><br><span class="line"><span class="function"><span class="params">			       struct drm_file *file_priv, <span class="keyword">uint32_t</span> handle,</span></span></span><br><span class="line"><span class="function"><span class="params">			       <span class="keyword">uint32_t</span> flags,</span></span></span><br><span class="line"><span class="function"><span class="params">			       <span class="keyword">int</span> *prime_fd)</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>importer调用</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * drm_gem_prime_fd_to_handle - PRIME import function for GEM drivers</span></span><br><span class="line"><span class="comment"> * @dev: dev to export the buffer from</span></span><br><span class="line"><span class="comment"> * @file_priv: drm file-private structure</span></span><br><span class="line"><span class="comment"> * @prime_fd: fd id of the dma-buf which should be imported</span></span><br><span class="line"><span class="comment"> * @handle: pointer to storage for the handle of the imported buffer object</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This is the PRIME import function which must be used mandatorily by GEM</span></span><br><span class="line"><span class="comment"> * drivers to ensure correct lifetime management of the underlying GEM object.</span></span><br><span class="line"><span class="comment"> * The actual importing of GEM object from the dma-buf is done through the</span></span><br><span class="line"><span class="comment"> * &amp;drm_driver.gem_prime_import driver callback.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Returns 0 on success or a negative error code on failure.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">drm_gem_prime_fd_to_handle</span><span class="params">(struct drm_device *dev,</span></span></span><br><span class="line"><span class="function"><span class="params">			       struct drm_file *file_priv, <span class="keyword">int</span> prime_fd,</span></span></span><br><span class="line"><span class="function"><span class="params">			       <span class="keyword">uint32_t</span> *handle)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>从上面两个函数的接口看，它们共同涉及3个数据对象：</p>
+<ul>
+<li>drm_device</li>
+<li>dma_buf fd</li>
+<li>drm_gem_object handle</li>
+</ul>
+<p>显然两个函数里的<code>dev</code>一定是<strong>不同</strong>的<code>drm_device</code>, <code>dma_buf</code> fd一定是同一个FD（也即同一个dma-buf, 要不然也不叫共享了），那么<code>handle</code>呢？肯定也是<strong>不同</strong>的<code>handle</code>, 因为<code>handle</code>其实是对<code>device</code>而言的，它是一个设备持有的<code>drm_gem_object</code>的ID. 但这个ID背后的东西(backing storage)可能是<strong>同一个</strong>东西。</p>
+<p>可以打个比方，你去银行要办两种业务，两种业务分别排号，假如你要办的A业务排到7号，B业务也刚好排到7号（注意:号码相同，但是两个号），但是很有可能是同一个业务员为你办理这两种业务，这里的业务就是设备驱动，而那个业务员就是dma-buf(或者它封装的那块显存)。</p>
+<h1 id="dma-fence"><a href="#dma-fence" class="headerlink" title="dma_fence"></a>dma_fence</h1><style>
+div pre {
+    line-height: 120%;
+    font-size: 10pt;
+}
+
+row {
+    display: flex;
+}
+
+column {
+    flex: 50%;
+}
+</style>
+
+<div class="row">
+  <div class="column">
+    <pre>
+      <code>
+signed long
+dma_fence_default_wait(struct dma_fence *fence,
+                       bool intr,
+                       signed long timeout)
+{
+    struct default_wait_cb cb;
+    unsigned long flags;
+    signed long ret = timeout ? timeout : 1;
+
+<pre><code>spin_lock_irqsave(fence-&gt;lock, flags);
+
+if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT,
+    &amp;fence-&gt;flags))
+    goto out;
+
+if (intr &amp;&amp; signal_pending(current)) {
+    ret = -ERESTARTSYS;
+    goto out;
+}
+
+if (!timeout) {
+    ret = 0;
+    goto out;
+}
+
+cb.base.func = dma_fence_default_wait_cb;
+cb.task = current;
+list_add(&amp;cb.base.node, &amp;fence-&gt;cb_list);
+
+while (!test_bit(DMA_FENCE_FLAG_SIGNALED_BIT,
+       &amp;fence-&gt;flags) &amp;&amp; ret &gt; 0) {
+    if (intr)
+        __set_current_state(TASK_INTERRUPTIBLE);
+    else
+        __set_current_state(TASK_UNINTERRUPTIBLE);
+    spin_unlock_irqrestore(fence-&gt;lock, flags);
+
+    ret = schedule_timeout(ret);
+
+    spin_lock_irqsave(fence-&gt;lock, flags);
+    if (ret &gt; 0 &amp;&amp; intr &amp;&amp; signal_pending(current))
+        ret = -ERESTARTSYS;
+}
+
+if (!list_empty(&amp;cb.base.node))
+    list_del(&amp;cb.base.node);
+__set_current_state(TASK_RUNNING);
+</code></pre>
+<p>out:<br>    spin_unlock_irqrestore(fence-&gt;lock, flags);<br>    return ret;<br>}<br>      </code><br>    </pre><br>  </div><br>  <div class="column"><br>    fence-&gt;ops-&gt;wait();<br>  </div></p>
+</div>
+
+<p><code>dma_fence_default_wait</code> 是 dma-fence 默认的 wait 操作。该函数会让当前进程(task) 进入睡眠状态 (可中断睡眠或不可中断睡眠，取决于调用者传入的参数 <code>intr</code>）, 直到 dma-fence 被 signaled 或者设置的超时时间到。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cb.base.func = dma_fence_default_wait_cb;</span><br><span class="line">cb.task = current;</span><br><span class="line">list_add(&amp;cb.base.node, &amp;fence-&gt;cb_list);</span><br></pre></td></tr></table></figure>
+
+<h2 id="dma-resv"><a href="#dma-resv" class="headerlink" title="dma_resv"></a>dma_resv</h2><h2 id="dma-buf-dma-fence-dma-resv-还有drm-gem-object-这4者有什么关系？"><a href="#dma-buf-dma-fence-dma-resv-还有drm-gem-object-这4者有什么关系？" class="headerlink" title="dma_buf, dma_fence, dma_resv, 还有drm_gem_object, 这4者有什么关系？"></a>dma_buf, dma_fence, dma_resv, 还有drm_gem_object, 这4者有什么关系？</h2><img src="/lnx/dma-buf/dma-buf.drawio.png" class="">
+
+<p>在这里面dma_fence是用来实现drm_gem_object间的共享和同步的，而dma_resv就是所谓的“胶水”，将这两者联系在一起。</p>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/drm/">drm</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/lnx/gpu-sched/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">GPU Scheduler in Linux Kernel</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/lnx/kms/">
+        <span class="next-text nav-default">Atomic Mode Setting 设计概要 第一部分 （译）</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

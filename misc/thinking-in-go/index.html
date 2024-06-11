@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="我从围棋中学到的"/><meta name="keywords" content="weiqi, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/misc/thinking-in-go/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>我从围棋中学到的 - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">我从围棋中学到的
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2023-08-27
+        </span><span class="post-category">
+            <a href="/categories/misc/">misc</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#“棋”中定有它的道理"><span class="toc-text">“棋”中定有它的道理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#征子与引征"><span class="toc-text">征子与引征</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#扑"><span class="toc-text">扑</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基本棋形的死活"><span class="toc-text">基本棋形的死活</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#围地的常识"><span class="toc-text">围地的常识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中国规则的数子与日本规则的数目"><span class="toc-text">中国规则的数子与日本规则的数目</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="“棋”中定有它的道理"><a href="#“棋”中定有它的道理" class="headerlink" title="“棋”中定有它的道理"></a>“棋”中定有它的道理</h1><p>最近和朋友的孩子下了几盘棋，在惊叹现在孩子的聪慧和学习能力之余，也深感自己的“棋艺”着实有待提高。便又拣起荒废已久的弈城账号，想下几盘找找感觉，结果又一次应了那句，“业精于勤，荒于嬉”。失落之余，索性去 B 站，重看邱百瑞老师的<a href="https://www.bilibili.com/video/BV1tt4y1G7KR/?p=2&spm_id_from=pageDriver&vd_source=b3ba1ad08e1b41cd7118d8dd88f0e670" target="_blank" rel="noopener">带你零基础学围棋</a>.<br>再看确实有不一样的感受。围棋的奥妙和那些千古流传的棋理自不必多说，我想自己学习下棋，试着了解棋理的原因，也是被围棋这种“方寸之间有天地，黑白之处显乾坤”的魅力所折服。</p>
+<h1 id="征子与引征"><a href="#征子与引征" class="headerlink" title="征子与引征"></a>征子与引征</h1><p>征子也叫“扭羊头”，是吃子的一种技巧。邱老师说，征子既厉害又危险。一旦征子失败，“原来追别人的棋现在全变成自己的断点，刚才追得很高兴，现在大概也死得很惨”。</p>
+<p><img src="/misc/thinking-in-go/ladder.png" alt="征子"></p>
+<p>兵家有云，“穷寇莫追”。虽然有可能将对方赶尽杀绝，但也可能在追的时候将自己置于危险之中。竞争也是一样，如果一味地想超越对手，很可能最后把自己搞得惨不忍睹。</p>
+<h1 id="扑"><a href="#扑" class="headerlink" title="扑"></a>扑</h1><p>围棋里“勇敢”的行为，扑 (uchikaki, throw-in), 含有置之死地而后生之意。</p>
+<p><img src="/misc/thinking-in-go/uchikaki.png" alt="扑"></p>
+<h1 id="基本棋形的死活"><a href="#基本棋形的死活" class="headerlink" title="基本棋形的死活"></a>基本棋形的死活</h1><table>
+<thead>
+<tr>
+<th align="left">棋形</th>
+<th align="left">死活类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">直三</td>
+<td align="left">后手活</td>
+</tr>
+<tr>
+<td align="left">直四</td>
+<td align="left">活</td>
+</tr>
+<tr>
+<td align="left">曲四</td>
+<td align="left">活</td>
+</tr>
+<tr>
+<td align="left">丁四</td>
+<td align="left">后手活</td>
+</tr>
+<tr>
+<td align="left">方四</td>
+<td align="left">死</td>
+</tr>
+<tr>
+<td align="left">直五</td>
+<td align="left">活</td>
+</tr>
+<tr>
+<td align="left">曲五</td>
+<td align="left">活</td>
+</tr>
+<tr>
+<td align="left">聚五</td>
+<td align="left">后手活</td>
+</tr>
+<tr>
+<td align="left">刀把五</td>
+<td align="left">后手活</td>
+</tr>
+<tr>
+<td align="left">板六</td>
+<td align="left">活</td>
+</tr>
+<tr>
+<td align="left">梅花六</td>
+<td align="left">后手活</td>
+</tr>
+<tr>
+<td align="left">聚七</td>
+<td align="left">活</td>
+</tr>
+</tbody></table>
+<h1 id="围地的常识"><a href="#围地的常识" class="headerlink" title="围地的常识"></a>围地的常识</h1><p>围棋的争夺主要有两大部分</p>
+<ul>
+<li>围杀对方的子</li>
+<li>高效地围地</li>
+</ul>
+<p>高效地围地才是决定胜负的关键，而围杀对方的子只不过是其中一种手段罢了。</p>
+<p><img src="/misc/thinking-in-go/efficiency.png" alt="围地的效率"></p>
+<h1 id="中国规则的数子与日本规则的数目"><a href="#中国规则的数子与日本规则的数目" class="headerlink" title="中国规则的数子与日本规则的数目"></a>中国规则的数子与日本规则的数目</h1><p>围棋的中国规则是以数子计算，任意选择一方来数棋盘上的活子数以及活子围成的空（交叉点），为了计算方便，一般会用己方的棋子先把围成的空填满。</p>
+<p>而日本规则是数目，所谓“目”，即围成的空。日本规则之所以不去关心棋盘上的活子的数量，而只计算围成的空，是因为围棋一人一手的规则决定了双方算上被吃的死子，在棋盘上放过的子数一定是相等的。所以日本规则在点目前，要将吃掉的对方的死子填入对方围成的空中之后，再清点目数。一目也即一个交叉点。这也是常说的“吃一子的价值是两目棋”的道理。</p>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/weiqi/">weiqi</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/lnx/default-vga/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Boot-up Graphics in Linux</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/lnx/amdgpu-glossary/">
+        <span class="next-text nav-default">AMDGPU 驱动(KMD + UMD)中的一些缩写词解释</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
