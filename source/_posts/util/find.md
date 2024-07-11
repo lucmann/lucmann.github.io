@@ -30,3 +30,9 @@ categories: utilities
 ## 排除/proc 和 /tmp 这两个目录
 - `find / -path '/proc' -prune -o -path '/tmp' -prune -o -name 'README.md'`
 
+## 查找 ~/gh 目录下只有文件属主(u)有执行权限(x)的文件 (精确匹配文件的 permission bits)
+- `find ~/gh -perm u=x -type f`
+
+## 查找 ~/gh 目录下文件属主(u)有执行权限(x) 的文件（组用户(g)或其它用户(o)可能有或没有执行权限）
+- `find ~/gh -perm -u=x -type f`
+
