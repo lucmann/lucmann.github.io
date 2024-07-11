@@ -22,16 +22,11 @@ categories: utilities
     * Position options
     * Operators
 
-## 测试的目录
+# Examples
 
-```
-➜  phy git:(main) ls -1 -a
-.
-..
-.git
-.gitignore
-.idea
-README.md
-phy.png
-phy.py
-```
+## 只在当前目录搜索（不递归）不以 f 或 g 或 h 开头的目录
+- `find . -maxdepth 1 -name '[^fgh]*' -type d`
+
+## 排除/proc 和 /tmp 这两个目录
+- `find / -path '/proc' -prune -o -path '/tmp' -prune -o -name 'README.md'`
+
