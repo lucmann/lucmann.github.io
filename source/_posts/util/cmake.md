@@ -5,7 +5,7 @@ tags: [cmake]
 categories: utilities
 ---
 
-# Common Command-lines
+# CMake cheatsheet
 
 - `-DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold"`
     将 linker 由默认的 bfd 换成 gold
@@ -21,7 +21,7 @@ categories: utilities
 最近看了一些关于Modern CMake(since 3.0.0)的教程，这里记录一下.
 
 
-# What Modern CMake Provides?
+## What Modern CMake Provides?
 作为一个*Build System Generator*, 现代CMake可以帮助我们做哪些事情呢？
 
 - Build
@@ -80,19 +80,22 @@ cmake -L build
 cmake --build build --target help
 ```
 
-# CMake 的内置变量
+## CMake 的内置变量
 
 | 变量                          |  作用                                                                  |
 |:------------------------------|:-----------------------------------------------------------------------|
+| CMAKE_SOURCE_DIR              | 指所在工程顶层目录绝对路径，一般源码git-clone下来后就确定了            |
+| CMAKE_CURRENT_SOURCE_DIR      | 指CMakeLists.txt所在目录的绝对路径，随着CMakeLists.txt位置变化         |
 | CMAKE_EXPORT_COMPILE_COMMANDS | 生成 compile_commands.json, 用来在代码跳转时使用                       |
 | CMAKE_VERBOSE_MAKEFILE        | 产生非常详细的编译过程日志，包括目录改变，编译器选项和链接器选项       |
 | CMAKE_INSTALL_PREFIX          | 自定义安装路径                                                         |
-| CMAKE_CXX_FLAGS               | C++ 编译器的选项， 如 -std=c++11                                       |
-| CMAKE_CXX_FLAGS_DEBUG         | 如定义编译宏 -DDEBUG=0                                                 |
+| CMAKE_CXX_STANDARD            | C++ 版本号, 如 11, 14                                                  | 
 | CMAKE_CXX_COMPILER_ID         | 如 GNU, Clang, Intel, MSVC                                             |
-|                               |                                                                        |
+| CMAKE_CXX_FLAGS               | 编译器选项， 如 -std=c++11                                             |
+| CMAKE_CXX_FLAGS_DEBUG         | 如定义编译宏 -DDEBUG=0                                                 |
+| CMAKE_EXE_LINKER_FLAGS        | 链接器选项, 如 -fuse-ld=gold, -nostartfiles                            |
 
-# Guideline
+## Guideline
 
 - Declare your module with `ADD_LIBRARY` or `ADD_EXECUTABLE`.
 - Declare your build flags with `TARGET_xxx()`.
@@ -124,7 +127,7 @@ cmake --build build --target help
 - Use target_link_libraries() to express direct dependencies
 - Don't use `TARGET_LINK_LIBRARIES()` without specifying `PUBLIC`, `PRIVATE` or `INTERFACE`.
 
-# Targets and Properties
+## Targets and Properties
 
 Modern CMake更像一个面向对象编程语言， Targets是Objects, 它们有Properties(Member Variables)和Commands(Methods), 
 Targets的Properties包括编译这个Target的源文件，编译选项，以及最后链接的库这些都是一个Target的Properties. 只要是Properties，就有这个Property的作用域(Scope). Properties也有作用域的概念(scope), 对应`INTERFACE`和`PRIVATE`. 
@@ -136,7 +139,7 @@ INTERFACE properties是外部用的，也就是给导入或使用本Targets的�
 
 在 CMake 中，在预处理阶段搜索头文件是从 `INCLUDE_DIRECTORIES` 和 `INTERFACE_INCLUDE_DIRECTORIES` 这两个变量里包含的路径中搜索。`target_include_directories` 会将指定的路径都加入 `INCLUDE_DIRECTORIES`, 但是会依据 `<PRIVATE|PUBLIC|INTERFACE>` 有选择地将指定路径加入 `INTERFACE_INCLUDE_DIRECTORIES`. `INCLUDE_DIRECTORIES` 包含的路径只会被**当前 target** 作为搜索路径, 而 `INTERFACE_INCLUDE_DIRECTORIES` 包含的路径会被加到任何依赖当前 target 的 target 的 `INCLUDE_DIRECTORIES`.
 
-# Generator Expressions
+## Generator Expressions
 Generator Expressions（生成表达式）是指在生成构建系统的过程中（如果是Make构建系统，就是在生成Makefile的过程中）针对每个构建配置生成特定的值. 生成表达式有3类:
 - Logical Expressions
 - Informational Expressions
@@ -158,18 +161,10 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
 
 它展开后是`$<0:DEBUG_MODE>`或`$<1:DEBUG_MODE>`,所以整个表达式最终值是`DEBUG_MODE`或空。
 
-# Appendix: **CMake Built-in Variables**
-- CMAKE_CURRENT_SOURCE_DIR
 
-指`CMakeLists.txt`所在当前目录的绝对路径，一般随着`CMakeLists.txt`所在目录的变化而变化。
+## `find_package()` vs `pkg_check_modules()`
 
-- CMAKE_SOURCE_DIR
-
-指所在工程顶层目录绝对路径，一般源码`clone`下来后就确定了。
-
-# `find_package()` vs `pkg_check_modules()`
-
-## `find_package()`
+### `find_package()`
 
 ```
 find_package(Gradle REQUIRED 4.10)
@@ -200,7 +195,7 @@ find_package(Sanitizers)
 find_package(Boost 1.61 REQUIRED)
 ```
 
-## `pkg_check_modules()`
+### `pkg_check_modules()`
 
 ```
 pkg_check_modules(XCB xcb REQUIRED)
@@ -211,22 +206,10 @@ pkg_check_modules(Wayland REQUIRED
 pkg_check_modules(WAYLAND_PROTOCOLS REQUIRED wayland-protocols>=1.15)
 ```
 
-# CMake 设置 C++ Standard
+# Ninja cheatsheet
 
-## 方法一
+- `ninja -C build clean`
+  equivalent `cmake --build build --first-clean` but requires `ninja -C build reconfigure`
+- `time ninja -C build | while read line; do echo $(date +%s.%N) ${line}; done`
+  profiling ninja build
 
-```
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-```
-
-## 方法二
-
-```
-target_compile_features(appfwSDL PUBLIC c_std_c99 cxx_std_14)
-```
-
-## 方法三
-
-```
-set(CMAKE_CXX_STANDARD 14)
-```
