@@ -4,7 +4,6 @@ date: 2024-03-29 15:00:56
 tags: [OpenGL]
 ---
 
-
 # GLVND(Vendor Neutral GL dispatch library)
 
 | Source Directory |  Target              | APT Package                    |
@@ -17,6 +16,8 @@ tags: [OpenGL]
 | GLESv2           | libGLESv2.so         | libgles2                       |
 | GL               | libGL.so.1.7.0       | libgl1                         |
 
+<!--more-->
+
 # Mesa
 
 | APT Package      |  Target              | Description                    |
@@ -27,5 +28,4 @@ tags: [OpenGL]
 |                  |                      |                                |
 |                  |                      |                                |
 
-<!--more-->
 

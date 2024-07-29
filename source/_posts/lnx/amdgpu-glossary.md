@@ -7,6 +7,8 @@ categories: linux
 
 ![AMDGPU Microarchitecture Roadmap](amd-arch.jpg)
 
+<!--more-->
+
 |  缩写      | 全称                       | 解释                                                                               |
 |:-----------|:---------------------------|:-----------------------------------------------------------------------------------|
 | IB         | Indirect Buffer            | AMD GPU 提供 Indirect Buffer 的方式由 CPU 向 GPU 传递渲染命令                      |
