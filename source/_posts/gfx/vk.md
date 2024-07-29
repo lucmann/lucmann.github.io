@@ -9,6 +9,8 @@ categories: graphics
 
 Zink 不是某个具体 GPU 的驱动，而是一个将OpenGL API 调用翻译成 Vulkan API, 以在只有Vulkan 驱动的平台上提供完整OpenGL支持。
 
+<!--more-->
+
 # [Vulkan-Samples](https://github.com/KhronosGroup/Vulkan-Samples)
 
 ```

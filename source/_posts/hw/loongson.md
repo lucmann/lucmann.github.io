@@ -10,6 +10,8 @@ categories: hardware
 
 龙芯的芯片产品可以分为信息化领域和工控/嵌入式领域, 3A6000 也有分别应用于这两个领域的配置，7A2000同样有两种。3A6000 是龙芯第四代微架构的首款产品，同样采用龙芯自主指令集架构LoongArch64(首款LoongArch64架构的处理器是[3A5000](https://www.loongson.cn/product/show?id=10))
 
+<!--more-->
+
 # GPU
 ## [LS7A2000](https://www.loongson.cn/product/show?id=16)
 
