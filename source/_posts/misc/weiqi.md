@@ -1,13 +1,15 @@
 ---
 title: 弈城围棋
 date: 2021-11-19 15:00:41
-tags: [go]
+tags: [weiqi]
 categories: misc
 ---
 
 # 简介
 
 弈城围棋是[弈城围棋网](http://www.eweiqi.com/)推出的一款围棋学习和网络对战的 App. 它可安装在包括 Windows, Android, iOS, iPad, MacOS 在内的各个平台。
+
+<!--more-->
 
 ![弈城围棋 App](20220904092030.jpg)
 
