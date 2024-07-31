@@ -86,3 +86,6 @@ typedef struct present_event {
 
     (XGE指 [X Generic Event extension](https://www.x.org/wiki/Development/Documentation/XGE/))
 
+- 接收事件
+- 处理事件
+
