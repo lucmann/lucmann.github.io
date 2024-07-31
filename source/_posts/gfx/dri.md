@@ -63,5 +63,5 @@ render buffer 的导入/导出操作是Linux 下[Buffer 共享和同步](https:/
                 - [`gbm_bo_import(gbm_device *, GBM_BO_IMPORT_FD_MODIFIER, &import_data, 0)` (libgbm.so)](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gbm/main/gbm.c#L583)
                     - [`image->createImageFromDmaBufs()` (libgbm.so)](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gbm/backends/dri/gbm_dri.c#L801)
 
-    (以上可以看出如果驱动支持DRI3, 那么则有以下依赖关系 **Xserver->Glamor->GBM**)
+    (不难看出如果驱动支持DRI3, 则有以下依赖关系 **Xserver->Glamor->GBM**)
 
