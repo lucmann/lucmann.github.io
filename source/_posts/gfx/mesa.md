@@ -1,6 +1,6 @@
 ---
 title: Notes for Mesa
-date: 2020-2-4
+date: 2020-02-04
 tags: [mesa]
 categories: graphics
 ---
@@ -847,4 +847,8 @@ XExtDisplayInfo *XextAddDisplay (
 }
 ```
 
+# Debug
+
+## envars
+- MESA_GLSL=dump_on_error MESA_DEBUG=1 glmark2
 
