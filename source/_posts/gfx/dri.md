@@ -5,7 +5,7 @@ tags: DRI
 categories: graphics
 ---
 
-[`mesa/src/loader/loader_dri3_helper.c::dri3_alloc_render_buffer()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L1435), 这个函数不长，但却涉及到了DRI框架的许多重要概念，buffer共享(DMABUF), GPU offload (PRIME), buffer同步(X client和server)， modifiers等等，所以非常值得深入分析。
+[`mesa/src/loader/loader_dri3_helper.c::dri3_alloc_render_buffer()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L1435), 这个函数不长，但却涉及到了DRI框架的许多重要概念，buffer共享(DMABUF), GPU offload (PRIME), buffer同步(X client和server)，送显(present), modifiers等等，所以非常值得深入分析。
 
 <!--more-->
 
@@ -64,4 +64,25 @@ render buffer 的导入/导出操作是Linux 下[Buffer 共享和同步](https:/
                     - [`image->createImageFromDmaBufs()` (libgbm.so)](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gbm/backends/dri/gbm_dri.c#L801)
 
     (不难看出如果驱动支持DRI3, 则有以下依赖关系 **Xserver->Glamor->GBM**)
+
+# 送显
+
+如果平台的窗口系统(Winsys)是X11, 则送显主要是通过 Present 扩展完成的。这个与Xserver 的交互过程是通过 [`present_event`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/present/present_priv.h#L226) 完成的
+
+```c
+typedef struct present_event {
+    present_event_ptr next;
+    ClientPtr client;
+    WindowPtr window;
+    XID id;
+    int mask;
+} present_event_rec;
+```
+
+- 注册事件
+    - [`dri3_setup_present_event(struct loader_dri3_drawable *draw)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L1752)
+        - [`xcb_present_select_input()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L1762): 告诉Xserver，client 正在监听这几个事件
+        - [`xcb_register_for_special_xge()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L1779): 创建一个 XGE 事件队列，实质上是初始化了一个 pthread_cond_t
+
+    (XGE指 [X Generic Event extension](https://www.x.org/wiki/Development/Documentation/XGE/))
 
