@@ -9,7 +9,7 @@ categories: graphics
 
 <!--more-->
 
-```src/loader/loader_dri3_helper.c
+```
 static struct loader_dri3_buffer *
 dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
                          unsigned int fourcc,
