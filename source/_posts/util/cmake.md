@@ -166,45 +166,13 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
 
 ### `find_package()`
 
-```
-find_package(Gradle REQUIRED 4.10)
-find_package(Vulkan QUIET)
-find_package(PkgConfig REQUIRED)
-find_package(${ARGN})
-find_package (PkgConfig)
-find_package(Doxygen)
-find_package(X11 REQUIRED)
-find_package(EpollShim)
-find_package(OSMesa REQUIRED)
-find_package(Threads)
-find_package (Threads)
-find_package(Boost COMPONENTS regex)
-find_package(fmt REQUIRED CONFIG)
-find_package(PythonInterp REQUIRED)
-find_package(Python COMPONENTS Interpreter REQUIRED)
-find_package(spdlog CONFIG REQUIRED)
-find_package(Threads REQUIRED)
-find_package(Vulkan)
-find_package(SDL2 REQUIRED)
-find_package(assimp REQUIRED)
-find_package( ZLIB REQUIRED )
-find_package(Git QUIET)
-find_package(Threads)
-find_package(Git QUIET)
-find_package(Sanitizers)
-find_package(Boost 1.61 REQUIRED)
-```
+如果cmake可以成功执行 `find_package(PACKAGE)`，那么说明你的系统上一定存在一个 `FindPACKAGE.cmake`的文件
+
+- `find_package(Threads REQUIRED)`: FindThreads.cmake 文件确定一个系统上的 thread 库，如果在Linux 下，如果找到的话就是 `libpthread.so` (C++ std::thread 依赖 `libpthread.so`)
 
 ### `pkg_check_modules()`
 
-```
-pkg_check_modules(XCB xcb REQUIRED)
-pkg_check_modules(X11 x11 REQUIRED)
-pkg_check_modules(WAYLAND wayland-client REQUIRED)
-pkg_check_modules (PKG_OSMESA QUIET osmesa)
-pkg_check_modules(Wayland REQUIRED
-pkg_check_modules(WAYLAND_PROTOCOLS REQUIRED wayland-protocols>=1.15)
-```
+`pkg_check_modules(XCB xcb REQUIRED)`
 
 # Ninja cheatsheet
 
