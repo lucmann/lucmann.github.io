@@ -9,7 +9,7 @@ categories: graphics
 
 <!--more-->
 
-```
+```c
 static struct loader_dri3_buffer *
 dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
                          unsigned int fourcc,
@@ -82,10 +82,42 @@ typedef struct present_event {
 - 注册事件
     - [`dri3_setup_present_event(struct loader_dri3_drawable *draw)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L1752)
         - [`xcb_present_select_input()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L1762): 告诉Xserver，client 正在监听这几个事件
-        - [`xcb_register_for_special_xge()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L1779): 创建一个 XGE 事件队列，实质上是初始化了一个 pthread_cond_t
+
+- 接收事件
+    - [`dri3_setup_present_event(struct loader_dri3_drawable *draw)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L1752)
+        - [`xcb_register_for_special_xge()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L1779): 创建一个接收Present XGE 事件的队列，实质上是初始化了一个 pthread_cond_t。（这里 special 就special在它是一个带了条件变量的 generic events 的队列)
+            ```c
+            struct xcb_special_event {
+                struct xcb_special_event *next;
+                uint8_t     extension;
+                uint32_t    eid;
+                uint32_t    *stamp;
+
+                struct event_list *events;
+                struct event_list **events_tail;
+
+                pthread_cond_t special_event_cond;
+            };
+            ```
 
     (XGE指 [X Generic Event extension](https://www.x.org/wiki/Development/Documentation/XGE/))
 
-- 接收事件
 - 处理事件
+    - [`dri3_flush_present_events(struct loader_dri3_drawable *draw)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L987)
+        - [`xcb_poll_for_special_event()`](https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_in.c#L787)
+        - [`dri3_handle_present_event(draw, ge)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L483): 处理一个 X generic event
+
+- 等待事件 (Blocking mode)
+    - [`loader_dri3_wait_for_msc()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L611): (阻塞)等待X Server 管理的 MSC 大于等于当前应用的 MSC (target_msc)
+        - [`dri3_wait_for_event_locked(draw, &full_sequence)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L572)
+            - [`xcb_wait_for_special_event(draw->conn, draw->special_event)`](https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_in.c#L806)
+            - [`dri3_handle_present_event(draw, ge)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L483): 处理一个 X generic event
+    - [`loader_dri3_wait_for_sbc()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L649): (阻塞)等待SBC 大于等于当前应用的 SBC (target_sbc)
+        - [`dri3_wait_for_event_locked(draw, NULL)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L572)
+            - [`xcb_wait_for_special_event(draw->conn, draw->special_event)`](https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_in.c#L806)
+            - [`dri3_handle_present_event(draw, ge)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader/loader_dri3_helper.c#L483): 处理一个 X generic event
+
+    (MSC, SBC请参考[GLX_OML_sync_control](https://registry.khronos.org/OpenGL/extensions/OML/GLX_OML_sync_control.txt))
+
+以上无论是 `loader_dri3_wait_for_msc()` 还是 `loader_dri3_wait_for_sbc()`, 当所等待的条件满足后，都会更新(`dri3_handle_present_event()`)当前client 的状态(UST, MSC, SBC), 整个过程是一种同步，也是一种协商。
 
