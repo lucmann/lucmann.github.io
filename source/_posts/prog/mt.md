@@ -1,11 +1,18 @@
 ---
 title: 多线程中的同步
-date: 2020-06-03 11:03:49
 tags: [pthread]
 categories: programming
 ---
 
 # 同步原语
+
+同步原语(Synchronization Primitive)的[确切定义没有一个官方的](https://www.cs.columbia.edu/~hgs/os/sync.html)。但大体来说同步原语可能有以下几种:
+
+- semaphores
+- mutex
+- locks
+- condition variables
+- test-and-set machine instructions
 
 <!--more-->
 
