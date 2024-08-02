@@ -7,11 +7,25 @@ categories: programming
 
 # 同步原语
 
-## xshmfence
-- 基于 futex 原子操作实现
-- 基于 pthread 条件变量实现
-
 <!--more-->
+
+## xshmfence
+- 基于 futex 和原子操作实现
+    ```c
+    int
+    xshmfence_await(struct xshmfence *f)
+    {
+        while (__sync_val_compare_and_swap(&f->v, 0, -1) != 1) {
+            if (futex_wait(&f->v, -1)) { // blocking the caller process until f->v reaches to 0
+                if (errno != EWOULDBLOCK)
+                    return -1;
+            }
+        }
+
+        return 0;
+    }
+    ```
+- 基于 pthread 条件变量实现
 
 # POSIX Threads 实现 - `-lpthread`
 ## Spinlock
@@ -59,3 +73,5 @@ EINVAL - lock指向的不是一个已初始化的自旋锁对象
 int pthread_spin_destroy(pthread_spinlock_t *lock);
 ```
 
+# 参考
+- [linux - futex 原理分析](https://www.openeuler.org/zh/blog/wangshuo/Linux_Futex_Principle_Analysis/Linux_Futex_Principle_Analysis.html)
