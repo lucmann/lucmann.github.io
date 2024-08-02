@@ -1,10 +1,19 @@
 ---
-title: POSIX Threads Synchronization - Spinlock vs. Mutex 
+title: 多线程中的同步
 date: 2020-06-03 11:03:49
 tags: [pthread]
-categories: graphics
+categories: programming
 ---
 
+# 同步原语
+
+## xshmfence
+- 基于 futex 原子操作实现
+- 基于 pthread 条件变量实现
+
+<!--more-->
+
+# POSIX Threads 实现 - `-lpthread`
 ## Spinlock
 自旋锁是解决多处理器共享内存使用的一种底层同步机制。当一个线程试图获取一个已经被另一个线程占有的自旋锁时，这个线程将以循环检查自旋锁是否被释放的方式(自旋)阻塞。一个线程不应该长时间占有一个自旋锁，因为被阻塞的线程仍然消耗CPU资源 (CPU cycles)
 
