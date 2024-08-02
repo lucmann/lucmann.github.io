@@ -1,6 +1,5 @@
 ---
 title: dri3_alloc_render_buffer
-date: 2024-07-30 21:21:27
 tags: DRI
 categories: graphics
 ---
@@ -27,13 +26,13 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 
 这样 X client 和 server 之间的buffer 同步问题就产生了。
 
-## [xshmfence mapping to X SyncFence](https://gitlab.freedesktop.org/xorg/lib/libxshmfence)
+- [xshmfence mapping to X SyncFence](https://gitlab.freedesktop.org/xorg/lib/libxshmfence)
 
 由于client 创建的render buffer 是与 X server 共享的，所以这个 render buffer 被两个进程读写时须要同步，Mesa3D 中是使用 xshmfence 来完成这个需求的。xshmfence 顾名思义它是基于共享内存的，采用它实现进程间对 render buffer 操作的同步，好处就是只需要将 xshmfence 映射到一个 X server SyncFence, 通过一个简单的函数调用([xshmfence_await(struct xshmfence *f)](https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_futex.c?ref_type=heads#L60))就可确定 X server 是否已经对 render buffer 操作完毕，而无需通过接收网络事件(socket event)来确定。
 
-- [`xshmfence_alloc_shm()`](https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_alloc.c?ref_type=heads#L69) 通过`memfd_create()/shm_open()/open()` 之一系统调用返回一个共享内存文件描述符(fence_fd)
-- [`xshmfence_map_shm(fence_fd)`](https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_alloc.c?ref_type=heads#L128) 通过 `mmap()` fence_fd 返回一个指向 struct xshmfence 的地址
-- [`xcb_dri3_fence_from_fd()`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L377) 将这个 xshmfence 的 fence_fd 发送给 X server, 让其知道这个xshmfence 的存在
+    - [`xshmfence_alloc_shm()`](https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_alloc.c?ref_type=heads#L69) 通过`memfd_create()/shm_open()/open()` 之一系统调用返回一个共享内存文件描述符(fence_fd)
+    - [`xshmfence_map_shm(fence_fd)`](https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_alloc.c?ref_type=heads#L128) 通过 `mmap()` fence_fd 返回一个指向 struct xshmfence 的地址
+    - [`xcb_dri3_fence_from_fd()`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L377) 将这个 xshmfence 的 fence_fd 发送给 X server, 让其知道这个xshmfence 的存在
 
 以上3步实际上是利用4个字节(`sizeof(struct xshmfence)`)大小的共享内存在X server 和 client 进程间通过原子操作和 futex 系统调用达到两个进程对 render buffer 的同步访问。
 
@@ -43,7 +42,7 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 
 render buffer 的导入/导出操作是Linux 下[Buffer 共享和同步](https://www.kernel.org/doc/html/latest/driver-api/dma-buf.html)的一个标准流程，不仅仅是在 DRM 子系统使用，在Linux的其它子系统也广泛使用，如Video4Linux, Networking。这里仅仅将 mesa 中的实现与DMABUF 机制中的角色对应一下，作为一个DMABUF的应用案例分析。
 
-## 导出(exporter·mesa)
+- 导出(exporter·mesa)
      - [`image->queryImage(image, __DRI_IMAGE_ATTRIB_FD, &buffer_fds[i])`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L1602)
         - [`dri2_query_image(image, attrib, *value)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/frontends/dri/dri2.c#L1476)
             - [`dri2_query_image_by_resource_handle(image, attrib, *value)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/frontends/dri/dri2.c#L1350)
@@ -53,7 +52,7 @@ render buffer 的导入/导出操作是Linux 下[Buffer 共享和同步](https:/
 
     (以上调到pipe_screen后以AMD Radeon驱动为例)
 
-## 传送(FD transfer·xcb)
+- 传送(FD transfer·xcb)
 
     ```c
     static const xcb_protocol_request_t xcb_req = {
@@ -68,7 +67,7 @@ render buffer 的导入/导出操作是Linux 下[Buffer 共享和同步](https:/
         - [`xcb_send_request_with_fds()`](https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_out.c#L225)
             - [`send_fds(xcb_connection_t *, fds, num_fds)`](https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_out.c#L190)
 
-## 导入(importer·xserver)
+- 导入(importer·xserver)
     - [`proc_dri3_pixmap_from_buffers(ClientPtr client)`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3_request.c#L490)
         - [`dri3_pixmap_from_fds()`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3_screen.c#L63)
             - [`glamor_pixmap_from_fds()`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/glamor/glamor_egl.c#L612)
@@ -91,7 +90,7 @@ typedef struct present_event {
 } present_event_rec;
 ```
 
-## 注册事件
+- 注册事件
     - [`dri3_setup_present_event(struct loader_dri3_drawable *draw)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L1709)
         - [`xcb_present_select_input()`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-present-c-L398): 告诉Xserver，client 正在监听这几个事件:
             - XCB_PRESENT_EVENT_CONFIGURE_NOTIFY
@@ -100,7 +99,7 @@ typedef struct present_event {
 
         (注册时实际上是使用对应事件的 MASK 注册的，因为在向 Xserver 发送的注册消息中，注册的所有消息的MASK ORing 在一个 uint32_t [`event_mask`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-present-c-L416)发送过去的)
 
-## 接收事件
+- 接收事件
     - [`dri3_setup_present_event(struct loader_dri3_drawable *draw)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L1699)
         - [`xcb_register_for_special_xge()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L1779): 创建一个接收Present XGE 事件的队列，实质上是初始化了一个 pthread_cond_t。（这里 special 就special在它是一个带了条件变量的 generic events 的队列)
             ```c
@@ -119,12 +118,12 @@ typedef struct present_event {
 
     (XGE指 [X Generic Event extension](https://www.x.org/wiki/Development/Documentation/XGE/))
 
-## 处理事件
+- 处理事件
     - [`dri3_flush_present_events(struct loader_dri3_drawable *draw)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L987)
         - [`xcb_poll_for_special_event()`](https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_in.c#L787)
         - [`dri3_handle_present_event(draw, ge)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L483): 处理一个 X generic event
 
-## 等待事件 (阻塞式)
+- 等待事件 (阻塞式)
     - [`loader_dri3_wait_for_msc()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L611): (阻塞)等待X Server 管理的 MSC 大于等于当前应用的 MSC (target_msc)
         - [`dri3_wait_for_event_locked(draw, &full_sequence)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L572)
             - [`xcb_wait_for_special_event(draw->conn, draw->special_event)`](https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_in.c#L806)
