@@ -27,9 +27,6 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 这样 X client 和 server 之间的buffer 同步问题就产生了。
 
 - [xshmfence mapping to X SyncFence](https://gitlab.freedesktop.org/xorg/lib/libxshmfence)
-
-由于client 创建的render buffer 是与 X server 共享的，所以这个 render buffer 被两个进程读写时须要同步，Mesa3D 中是使用 xshmfence 来完成这个需求的。xshmfence 顾名思义它是基于共享内存的，采用它实现进程间对 render buffer 操作的同步，好处就是只需要将 xshmfence 映射到一个 X server SyncFence, 通过一个简单的函数调用([xshmfence_await(struct xshmfence *f)](https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_futex.c?ref_type=heads#L60))就可确定 X server 是否已经对 render buffer 操作完毕，而无需通过接收网络事件(socket event)来确定。
-
     - [`xshmfence_alloc_shm()`](https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_alloc.c?ref_type=heads#L69) 通过`memfd_create()/shm_open()/open()` 之一系统调用返回一个共享内存文件描述符(fence_fd)
     - [`xshmfence_map_shm(fence_fd)`](https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_alloc.c?ref_type=heads#L128) 通过 `mmap()` fence_fd 返回一个指向 struct xshmfence 的地址
     - [`xcb_dri3_fence_from_fd()`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L377) 将这个 xshmfence 的 fence_fd 发送给 X server, 让其知道这个xshmfence 的存在
@@ -37,6 +34,8 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 以上3步实际上是利用4个字节(`sizeof(struct xshmfence)`)大小的共享内存在X server 和 client 进程间通过原子操作和 futex 系统调用达到两个进程对 render buffer 的同步访问。
 
 (以上4个字节共享内存的结论是基于futex和原子操作实现的 xshmfence 的版本)
+
+由于client 创建的render buffer 是与 X server 共享的，所以这个 render buffer 被两个进程读写时须要同步，Mesa3D 中是使用 xshmfence 来完成这个需求的。xshmfence 顾名思义它是基于共享内存的，采用它实现进程间对 render buffer 操作的同步，好处就是只需要将 xshmfence 映射到一个 X server SyncFence, 通过一个简单的函数调用([xshmfence_await(struct xshmfence *f)](https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_futex.c?ref_type=heads#L60))就可确定 X server 是否已经对 render buffer 操作完毕，而无需通过接收网络事件(socket event)来确定。
 
 # 导入/导出
 
