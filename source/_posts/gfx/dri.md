@@ -136,3 +136,22 @@ typedef struct present_event {
 
 以上无论是 `loader_dri3_wait_for_msc()` 还是 `loader_dri3_wait_for_sbc()`, 当所等待的条件满足后，都会更新(`dri3_handle_present_event()`)当前client 的状态(UST, MSC, SBC), 整个过程是一种同步，也是一种协商。
 
+# Modifiers
+
+向 X server 查询并获取显示/渲染设备所支持的 modifiers 是执行 [`__DRIimageExtension::createImage()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/include/mesa_interface.h#L1570) 的一个准备工作。但 `createImage()` 允许modifiers 为空，此情况下让实现来选择一个合适的纹理内存布局。
+
+```c
+__DRIimage *
+(*createImage)(__DRIscreen *screen,
+               int width, int height, int format,
+               const uint64_t *modifiers, const unsigned int modifier_count,
+               unsigned int use,
+               void *loaderPrivate);
+```
+
+与 X server 交互的过程包括 3 步:
+
+- [`xcb_dri3_get_supported_modifiers(draw->conn, draw->window, depth, buffer->cpp*8)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L496): 返回一个 cookie
+- [`xcb_dri3_get_supported_modifiers_reply(draw->conn, mod_cookie, &error)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L604): 返回一个 reply 包含实际的modifiers内容
+- [`xcb_dri3_get_supported_modifiers_window_modifiers(mod_reply)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L558)
+    - [`xcb_dri3_get_supported_modifiers_screen_modifiers(mod_reply)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L580): 如果获取window_modifiers 失败则fallback 到screen_modifiers
