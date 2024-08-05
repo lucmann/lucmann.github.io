@@ -153,5 +153,25 @@ __DRIimage *
 
 - [`xcb_dri3_get_supported_modifiers(draw->conn, draw->window, depth, buffer->cpp*8)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L496): 返回一个 cookie
 - [`xcb_dri3_get_supported_modifiers_reply(draw->conn, mod_cookie, &error)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L604): 返回一个 reply 包含实际的modifiers内容
+    - `xcb_dri3_get_supported_modifiers_reply_t`
+    ```c
+    typedef struct xcb_dri3_get_supported_modifiers_reply_t {
+        uint8_t response_type;
+        uint8_t pad0;
+        uint16_t sequence;
+        uint32_t length;
+        uint32_t num_window_modifiers;
+        uint32_t num_window_modifiers;
+        uint8_t pad1[16];
+    } xcb_dri3_get_supported_modifiers_reply_t;
+    ```
+    - [`proc_dri3_get_supported_modifiers(ClientPtr client)`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3_request.c#L394)
+        - [`dri3_get_supported_modifiers()`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3_screen.c#L236): 通过 `drm_format_for_depth(depth, bpp)` 获得一个 `DRM_FORMAT_*`, 实际上[`drm_format_for_depth()`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3.c#L117) 返回的 `format` 也只会是以下4种之一:
+            * `DRM_FORMAT_RGB565` (16)
+            * `DRM_FORMAT_XRGB8888` (24)
+            * `DRM_FORMAT_XRGB2101010` (30)
+            * `DRM_FORMAT_ARGB8888` (32)
+
+            - [`glamor_get_drawable_modifiers(DrawablePtr draw, uint32_t format, uint32_t *num_modifiers, uint64_t **modifiers)`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/glamor/glamor.c#L1003)
 - [`xcb_dri3_get_supported_modifiers_window_modifiers(mod_reply)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L558)
     - [`xcb_dri3_get_supported_modifiers_screen_modifiers(mod_reply)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L580): 如果获取window_modifiers 失败则fallback 到screen_modifiers
