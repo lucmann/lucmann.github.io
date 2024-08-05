@@ -1,6 +1,5 @@
 ---
 title: Windows Subsystem for Linux
-date: 2020-02-08 17:57:46
 tags: [WSL]
 categories: utilities
 ---
@@ -8,6 +7,8 @@ categories: utilities
 # WSL 是何物?
 
 [WSL (Windows Subsystem for Linux)](https://zh.wikipedia.org/zh-cn/%E9%80%82%E7%94%A8%E4%BA%8ELinux%E7%9A%84Windows%E5%AD%90%E7%B3%BB%E7%BB%9F)是一个能够在 Windows 系统(Windows 10及以上版本)上原生运行 Linux 可执行文件的兼容层。目前有两个版本: WSL, WSL2
+
+<!--more-->
 
 查看 Windows 系统上的 WSL 版本
 
@@ -20,7 +21,7 @@ wsl -l -v
 
 Microsoft在`Build 21364.co_release`版本内发布了[WSLg](https://github.com/microsoft/wslg)功能，该功能允许在**WSL**里运行**X11**和**Wayland**的客户端程序(GUI Application).
 
-<!--more-->
+![xeyes on WSL2](wsl.gif)
 
 如果你已经加入[Windows Insider Program](https://insider.windows.com/zh-cn/)计划并且也正在使用**WSL2**, 那么只需要如下操作即可激活**WSLg**功能。
 
