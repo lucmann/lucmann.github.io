@@ -138,7 +138,7 @@ typedef struct present_event {
 
 # Modifiers
 
-向 X server 查询并获取显示/渲染设备所支持的 modifiers 是执行 [`__DRIimageExtension::createImage()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/include/mesa_interface.h#L1570) 的一个准备工作。但 `createImage()` 允许modifiers 为空，此情况下让实现来选择一个合适的纹理内存布局。
+向 X server 查询并获取显示/渲染设备所支持的 modifiers 是执行 [`__DRIimageExtension::createImage()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/include/mesa_interface.h#L1570) 的一个准备工作。但 `createImage()` 允许modifiers 为空，此情况下让驱动来选一个合适的纹理图像内存布局。
 
 ```c
 __DRIimage *
@@ -161,17 +161,21 @@ __DRIimage *
         uint16_t sequence;
         uint32_t length;
         uint32_t num_window_modifiers;
-        uint32_t num_window_modifiers;
+        uint32_t num_screen_modifiers;
         uint8_t pad1[16];
     } xcb_dri3_get_supported_modifiers_reply_t;
     ```
     - [`proc_dri3_get_supported_modifiers(ClientPtr client)`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3_request.c#L394)
         - [`dri3_get_supported_modifiers()`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3_screen.c#L236): 通过 `drm_format_for_depth(depth, bpp)` 获得一个 `DRM_FORMAT_*`, 实际上[`drm_format_for_depth()`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3.c#L117) 返回的 `format` 也只会是以下4种之一:
-            * `DRM_FORMAT_RGB565` (16)
-            * `DRM_FORMAT_XRGB8888` (24)
-            * `DRM_FORMAT_XRGB2101010` (30)
-            * `DRM_FORMAT_ARGB8888` (32)
+            ```c
+            DRM_FORMAT_RGB565       // bpp = 16
+            DRM_FORMAT_XRGB8888     // bpp = 24
+            DRM_FORMAT_XRGB2101010  // bpp = 30
+            DRM_FORMAT_ARGB8888     // bpp = 32
+            ```
 
-            - [`glamor_get_drawable_modifiers(DrawablePtr draw, uint32_t format, uint32_t *num_modifiers, uint64_t **modifiers)`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/glamor/glamor.c#L1003)
+            无论是获取 screen_modifiers 还是 window_modifiers, 实际上都依据 format 获取相应的 modifiers.
+            - [`glamor_get_drawable_modifiers(DrawablePtr draw, uint32_t format, uint32_t *num_modifiers, uint64_t **modifiers)`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/glamor/glamor.c#L1003): 回调由具体的DDX(如modesetting)提供的 `get_drawable_modifiers()` 函数
+                - [`get_drawable_modifiers(DrawablePtr draw, uint32_t format, uint32_t *num_modifiers, uint64_t **modifiers)`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/hw/xfree86/drivers/modesetting/drmmode_display.c#L230)
 - [`xcb_dri3_get_supported_modifiers_window_modifiers(mod_reply)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L558)
     - [`xcb_dri3_get_supported_modifiers_screen_modifiers(mod_reply)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L580): 如果获取window_modifiers 失败则fallback 到screen_modifiers
