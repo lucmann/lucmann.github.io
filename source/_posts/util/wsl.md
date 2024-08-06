@@ -4,7 +4,7 @@ tags: [WSL]
 categories: utilities
 ---
 
-# WSL 是何物?
+# WSL
 
 [WSL (Windows Subsystem for Linux)](https://zh.wikipedia.org/zh-cn/%E9%80%82%E7%94%A8%E4%BA%8ELinux%E7%9A%84Windows%E5%AD%90%E7%B3%BB%E7%BB%9F)是一个能够在 Windows 系统(Windows 10及以上版本)上原生运行 Linux 可执行文件的兼容层。目前有两个版本: WSL, WSL2
 
