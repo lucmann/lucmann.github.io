@@ -105,6 +105,19 @@ ABA 问题出现的场景是，在线程0，前后两次读到ptr 的值的中�
 
 由上面ABA问题的分析可以看到，之所以对线程0来说，A指向的内容可能会发生变化，原因是中间存在申请内存的操作。所以只要保证在整个队列操作中，不会动态申请元素(没有了线程1恰巧又重新分配的A这个地址的可能)，这种场景的ABA问题也就不存在了。这就是为什么 CPU 如果不支持 dwcas, 则无锁队列的容量必须是固定大小的。
 
+## boost::lockfree::queue 源码分析
+
+```c
+private:
+    std::atomic< tagged_node_handle > head_;
+    std::atomic< tagged_node_handle > tail_;
+```
+
+- `std::atomic<T>::load(std::memory_order order = std::memory_order_seq_cst)`
+
+- `std::atomic<T>::compare_exchange_strong(T& expected, T desired, std::memory_order success, std::memory_order failure)`
+
+    - 为什么 `expected` 参数是一个引用类型，而`desired`参数是一个值传递？
 
 # 参考
 
