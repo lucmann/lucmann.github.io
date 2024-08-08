@@ -101,12 +101,14 @@ int pthread_spin_destroy(pthread_spinlock_t *lock);
 
 ABA 问题出现的场景是，在线程0，前后两次读到ptr 的值的中间，有可能线程1，已经修改过 ptr 的值由A 到 B，而后又在线程0 cas 比较线程1又**恰巧**在地址A申请到一个元素遂将ptr 的值又改回A, 结果就是线程1对ptr 的修改(为B)的这步操作对线程0不可见，而A指向的内容可能已经变化，对线程0来说可能导致未预期的结果。
 
-这种场景的ABA问题可以通过将原来单独的一个ptr (64位系统上sizeof(ptr) = 8), 替换成一个ptr, counter 对来解决。每次ptr 被修改，counter就+1, 这样即使最后ptr 是相等的(A->B->A), 但counter 也不相等，这样只要同时对(ptr, counter) 做 cas 比较就可以准确判定ptr 是否被修改过(如果修改过，即使现在的值和之前的值相等，仍然要重新获取这个值，再次访问它指向的内容)。但现在要比较的数据由原来的8字节变成16字节，所以就需要 dwcas 指令。
+这种场景的ABA问题可以通过将原来单独的一个ptr (64位系统上sizeof(ptr) = 8), 替换成一对(ptr, counter)来解决。每次ptr 被修改，counter就+1, 这样即使最后ptr 是相等的(A->B->A), 但counter 也不相等，这样只要同时对(ptr, counter) 做 cas 比较就可以准确判定ptr 是否被修改过(如果修改过，即使现在的值和之前的值相等，仍然要重新获取这个值，再次访问它指向的内容)。但现在要比较的数据由原来的8字节变成16字节，所以就需要 dwcas 指令。
 
 由上面ABA问题的分析可以看到，之所以对线程0来说，A指向的内容可能会发生变化，原因是中间存在申请内存的操作。所以只要保证在整个队列操作中，不会动态申请元素(没有了线程1恰巧又重新分配的A这个地址的可能)，这种场景的ABA问题也就不存在了。这就是为什么 CPU 如果不支持 dwcas, 则无锁队列的容量必须是固定大小的。
 
 
 # 参考
-- [linux - futex 原理分析](https://www.openeuler.org/zh/blog/wangshuo/Linux_Futex_Principle_Analysis/Linux_Futex_Principle_Analysis.html)
-- [Implementing generic double-word compare and swap for x86/64](https://blog.lse.epita.fr//2013/02/27/implementing-generic-double-word-compare-and-swap.html)
+
+- [boost::lockfree::queue](https://github.com/boostorg/lockfree/blob/develop/include/boost/lockfree/detail/tagged_ptr_dcas.hpp#L120)
 - [inline_asm_lockfree_queue](https://github.com/fangcun010/inline_asm_lockfree_queue)
+- [Implementing generic double-word compare and swap for x86/64](https://blog.lse.epita.fr//2013/02/27/implementing-generic-double-word-compare-and-swap.html)
+- [linux - futex 原理分析](https://www.openeuler.org/zh/blog/wangshuo/Linux_Futex_Principle_Analysis/Linux_Futex_Principle_Analysis.html)
