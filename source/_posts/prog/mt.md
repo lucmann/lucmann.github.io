@@ -107,6 +107,37 @@ ABA 问题出现的场景是，在线程0，前后两次读到ptr 的值的中�
 
 ## boost::lockfree::queue 源码分析
 
+### 算法
+
+- 出队
+```c
+pop(Q: pointer to queue, ret: pointer to data type): boolean
+D1:    loop                             # Keep trying until pop is done
+D2:      head = Q->Head                 # Read Head
+D3:      tail = Q->Tail                 # Read Tail
+D4:      next = head->next              # Read Head.ptr->next
+D5:      if head == Q->Head             # Are head, tail, and next consistent?
+D6:        if head.ptr == tail.ptr      # Is queue empty or Tail falling bebind?
+D7:          if next.ptr == NULL        # Is queue empty?
+D8:            return FALSE             # Queue is empty, couldn't pop
+D9:          endif
+             # Tail is falling behind. Try to advance it
+D10:         CAS(&Q->Tail, tail, <next.ptr, tail.count+1>)
+D11:       else                         # No need to deal with Tail
+             # Read value before CAS, otherwise another pop might free the next node
+D12:         *ret = next.ptr->value
+             # Try to swing Head to the next node
+D13:         if CAS(&Q->Head, head, <next.ptr, head.count+1>)
+D14:           break                    # Pop is done, Exit loop
+D15:         endif
+D16:       endif
+D17:     endif
+D18:   endloop
+D19:   free(head.ptr)                   # It is safe now to free the old dummy node
+D20:   return TRUE                      # Queue was not empty, pop succeeded 
+```
+
+### C++实现
 ```c
 private:
     std::atomic< tagged_node_handle > head_;
@@ -121,6 +152,7 @@ private:
 
 # 参考
 
+- [Simple, Fast, and Practical Non-Blocking and Blocking Concurrent Queue Algorithms](https://www.cs.rochester.edu/u/scott/papers/1996_PODC_queues.pdf)
 - [boost::lockfree::queue](https://github.com/boostorg/lockfree/blob/develop/include/boost/lockfree/detail/tagged_ptr_dcas.hpp#L120)
 - [inline_asm_lockfree_queue](https://github.com/fangcun010/inline_asm_lockfree_queue)
 - [Implementing generic double-word compare and swap for x86/64](https://blog.lse.epita.fr//2013/02/27/implementing-generic-double-word-compare-and-swap.html)
