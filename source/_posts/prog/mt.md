@@ -157,7 +157,7 @@ private:
     } memory_order;
     ```
 
-    这个memory_order的顺序，由上到下对原子操作和读写顺序的要求应该是越来越强的。
+    这个memory_order的顺序，由上到下对原子变量的操作和读写顺序的保证应该是越来越严格的(没有读写顺序保证->单个原子变量读写顺序保证->全局读写顺序一致)。
 
     - `memory_order_relaxed`只保证原子操作，不保证指令顺序。
     - `memory_order_acquire`
@@ -168,6 +168,29 @@ private:
         - 用于 `atomic<T>::store()`
         - 对于使用memory_order_release的指令，该指令之前的所有读写操作**不能重排在该指令之后**
         - 当前线程memory_order_release指令之前的所有内存写操作对于其他线程的memory_order_acquire指令都可见。
+    - `memory_order_acq_rel`
+        - 把 memory_order_acquire 和 memory_order_release 结合起来，它可以保证单个原子变量的读写顺序，下面的例子就是不适用 memory_order_acq_rel 的
+
+        ```c
+        bool x = false;
+        bool y = false;
+        int z = 0;
+
+        a() { x = true; }
+        b() { y = true; }
+        c() { while (!x); if (y) z++; }
+        d() { while (!y); if (x) z++; }
+
+        // 同时起4个线程分别执行 a(), b(), c(), d()
+        assert(z != 0)
+        ```
+
+        这种情况下同时有两个原子变量，4个线程影响 z 的自增，memory_order_acq_rel 是无法保证最终 z 的值的确定性
+
+    - `memory_order_seq_cst`
+        - 提供最严格的全局读写顺序一致性保证，上面的例子就只能使用 memory_order_seq_cst
+        - 对于使用memory_order_seq_cst 的 `atomic<T>::store()` 指令来说，它强制flush 每个CPU核心的store buffer, 所以这个store 操作后面的 load (读操作)将被延迟直到store 操作完成所有 store buffer 的刷新(即对全局可见)。
+
 
 - `std::atomic<T>::load(std::memory_order order = std::memory_order_seq_cst)`
 
