@@ -169,23 +169,57 @@ private:
         - 对于使用memory_order_release的指令，该指令之前的所有读写操作**不能重排在该指令之后**
         - 当前线程memory_order_release指令之前的所有内存写操作对于其他线程的memory_order_acquire指令都可见。
     - `memory_order_acq_rel`
+        - 用于 `atomic<T>::fetch_add()`, `atomic<T>::compare_exchange_weak()` 这类 read-modify-write 操作。如果用在普通的 `atomic<T>::load()`，效果与用memory_order_acquire 无异。
         - 把 memory_order_acquire 和 memory_order_release 结合起来，它可以保证单个原子变量的读写顺序，下面的例子就是不适用 memory_order_acq_rel 的
 
         ```c
-        bool x = false;
-        bool y = false;
-        int z = 0;
+        #include <atomic>
+        #include <cassert>
+        #include <thread>
 
-        a() { x = true; }
-        b() { y = true; }
-        c() { while (!x); if (y) z++; }
-        d() { while (!y); if (x) z++; }
+        std::atomic<bool> x = {false};
+        std::atomic<bool> y = {false};
+        std::atomic<int> z = {0};
 
-        // 同时起4个线程分别执行 a(), b(), c(), d()
-        assert(z != 0)
+        void write_x()
+        {
+            x.store(true, std::memory_order_acq_rel);
+        }
+
+        void write_y()
+        {
+            y.store(true, std::memory_order_acq_rel);
+        }
+
+        void read_x_then_y()
+        {
+            while (!x.load(std::memory_order_acq_rel))
+                ;
+            if (y.load(std::memory_order_acq_rel))
+                ++z;
+        }
+
+        void read_y_then_x()
+        {
+            while (!y.load(std::memory_order_acq_rel))
+                ;
+            if (x.load(std::memory_order_acq_rel))
+                ++z;
+        }
+
+        int main()
+        {
+            std::thread a(write_x);
+            std::thread b(write_y);
+            std::thread c(read_x_then_y);
+            std::thread d(read_y_then_x);
+            a.join(); b.join(); c.join(); d.join();
+            assert(z.load() != 0); // will never happen
+        }
+
         ```
 
-        这种情况下同时有两个原子变量，4个线程影响 z 的自增，memory_order_acq_rel 是无法保证最终 z 的值的确定性
+        上面的例子修改自 [cppreference.com/atomic/memory_order Sequentially-consistent ordering](https://en.cppreference.com/w/cpp/atomic/memory_order) 部分。理论上这个例子应该能够说明 memory_order_acq_rel 与 memory_order_seq_cst 的区别，当把原例中的 seq_cst 换成 acq_rel，应该是有可能触发 `z.load() == 0`的情况的(至少在 aarch64 上，因为x86的存储器模型本身就是按序一致性模型)。但实际上却没有触发，其原因在 [stackoverflow 上有解释](https://stackoverflow.com/questions/67397460/does-stlrb-provide-sequential-consistency-on-arm64)。 通过在 [godbolt.org](https://godbolt.org/z/8KbxMEY6s) 上查看这个程序的汇编代码，确实 `y.load(std::memory_order_acq_rel)`和`y.store(true, std::memory_order_acq_rel)`是被分别翻译成了 `ldarb` 和 `stlrb`。
 
     - `memory_order_seq_cst`
         - 提供最严格的全局读写顺序一致性保证，上面的例子就只能使用 memory_order_seq_cst
