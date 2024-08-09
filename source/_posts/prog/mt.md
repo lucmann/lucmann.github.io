@@ -228,7 +228,7 @@ private:
 
 - `std::atomic<T>::load(std::memory_order order = std::memory_order_seq_cst)`
 
-- [std::atomic<T>::compare_exchange_*()](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
+- [`std::atomic<T>::compare_exchange_*()`](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
 
    C++ std::atomic<T> 的 cas 有8个不同的声明，主要区分在 weak/strong, 参数和是否有 volatile. 而boost::lockfree::queue 里使用的是下面两个版本:
     - `std::atomic<T>::compare_exchange_strong(T& expected, T desired, std::memory_order    order = std::memory_order_seq_cst)`
