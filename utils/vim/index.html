@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="vim 速查手册"/><meta name="keywords" content="vim, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/utils/vim/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>vim 速查手册 - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">vim 速查手册
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-02-29
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Visual-Block-Selection"><span class="toc-text">Visual Block Selection</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Copy-amp-Paste"><span class="toc-text">Copy &amp; Paste</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#X11-selections"><span class="toc-text">X11 selections</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Copy-from-above-or-below"><span class="toc-text">Copy from above or below</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Search-amp-Replace"><span class="toc-text">Search &amp; Replace</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#删除多行-C-style-注释"><span class="toc-text">删除多行 C-style 注释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除空白行"><span class="toc-text">删除空白行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搜索不匹配某模式的行，即反向搜索"><span class="toc-text">搜索不匹配某模式的行，即反向搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大小写转换"><span class="toc-text">大小写转换</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="Visual-Block-Selection"><a href="#Visual-Block-Selection" class="headerlink" title="Visual Block Selection"></a>Visual Block Selection</h1><ul>
+<li><p>选择 <code>{}</code>(curly braces) 之间的行(包括 <code>{}</code>)</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v%</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>选择 <code>{}</code>(curly braces) 之间的行(不包括 <code>{}</code>)</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi&#123;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意：光标必须放在 <code>{</code> 或者 <code>}</code></p>
+<h1 id="Copy-amp-Paste"><a href="#Copy-amp-Paste" class="headerlink" title="Copy &amp; Paste"></a>Copy &amp; Paste</h1><h2 id="X11-selections"><a href="#X11-selections" class="headerlink" title="X11 selections"></a>X11 selections</h2><p>X11 window system 有 3 个 selections:</p>
+<ul>
+<li>PRIMARY 表示当前的可见 selection</li>
+<li>SECONDARY</li>
+<li>CLIPBOARD 通常所说的剪贴板，用来完成剪贴，复制和粘贴操作</li>
+</ul>
+<p>Vim 有两个专门的寄存器分别与 PRIMARY selection 和 CLIPBOARD selection 对应</p>
+<ul>
+<li><strong>“*</strong> (quotestar) PRIMARY</li>
+<li><strong>“+</strong> (quoteplus) CLIPBOARD</li>
+</ul>
+<p>如果要在 Vim 内部剪贴，复制/粘贴就使用 <strong>quotestar</strong>, 如果要将内容剪贴，复制/粘贴到系统剪贴板，就使用 <strong>quoteplus</strong></p>
+<p>举个例子，在 WSL Ubuntu 里如果想粘贴 Windows 剪贴板里的内容到 vim (最好是 neovim, 因为 vim 可能 -clipboard)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;Hello, world!&quot; | clip.exe</span><br></pre></td></tr></table></figure>
+<p>然后在 Normal 模式下， <code>&quot;+p</code>.</p>
+<p>如果想粘贴 Ubuntu 剪贴板里的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;Hello, world!&quot; | xclip</span><br></pre></td></tr></table></figure>
+<p>此时就需要使用 PRIMARY selection, <code>&quot;*p</code>.</p>
+<h2 id="Copy-from-above-or-below"><a href="#Copy-from-above-or-below" class="headerlink" title="Copy from above or below"></a>Copy from above or below</h2><p>在 Insert 模式下</p>
+<ul>
+<li><code>&lt;ctrl-y&gt;</code> copies the character from the line above</li>
+<li><code>&lt;ctrl-e&gt;</code> copies the character from the line below (本行就是这样输入的)</li>
+</ul>
+<h1 id="Search-amp-Replace"><a href="#Search-amp-Replace" class="headerlink" title="Search &amp; Replace"></a>Search &amp; Replace</h1><h2 id="删除多行-C-style-注释"><a href="#删除多行-C-style-注释" class="headerlink" title="删除多行 C-style 注释"></a>删除多行 C-style 注释</h2><ul>
+<li><p><code>s;/\*\_.\{-}\*/;;</code></p>
+<ul>
+<li><code>;</code> 因为要匹配 <code>/</code>, 为了省去转义 <code>/</code> 的麻烦，将 search 命令的分隔符由 <code>/</code> 改为 <code>;</code></li>
+<li><code>/\*</code> 匹配开始的 <code>/*</code></li>
+<li><code>\_.</code> 匹配任意字符，包括 <code>\n</code>, 所以常用在多行匹配</li>
+<li><code>\{-}</code> 指非贪婪 (non-greedy) 匹配，即匹配最短的字串，默认是贪婪匹配，匹配最长的字串</li>
+<li><code>\*/</code> 匹配结尾的 <code>*/</code></li>
+<li><p><code>;;</code> 指使用空替换匹配结果，即删除</p>
+</li>
+<li><p>以下是 vim 中在单行中使用的通配符 (wildcard), 这些通配符一般不能匹配换行 <code>\n</code></p>
+<ul>
+<li><code>.</code> 匹配除了 <code>\n</code> 的任意字符</li>
+<li><code>^</code> 行首，即锚点 (anchor)</li>
+<li><code>$</code> 行尾，即锚点</li>
+<li><code>\s</code> 匹配 space, tab, 但不匹配 <code>\n</code></li>
+</ul>
+</li>
+<li><p>以上通配符加上 <code>\_</code> 后可以在多行匹配中使用，即也可以匹配 <code>\n</code></p>
+<ul>
+<li><code>\_.</code> 匹配任意字符，包括 <code>\n</code></li>
+<li><code>\_^</code> 多行中第一行行首</li>
+<li><code>\_$</code> 多行中最后一行行尾</li>
+<li><code>\_s</code> 匹配 space, tab 和 <code>\n</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除空白行"><a href="#删除空白行" class="headerlink" title="删除空白行"></a>删除空白行</h2><ul>
+<li><p><code>g/^\s*$/d</code></p>
+<ul>
+<li><code>g</code> 指所有行搜索，而不是默认的光标所在行</li>
+<li><code>^\s*$</code> 匹配行首到行尾之间任意个空白字符，即空白行</li>
+<li><code>d</code> 删除命令 (delete)</li>
+</ul>
+</li>
+</ul>
+<h2 id="搜索不匹配某模式的行，即反向搜索"><a href="#搜索不匹配某模式的行，即反向搜索" class="headerlink" title="搜索不匹配某模式的行，即反向搜索"></a>搜索不匹配某模式的行，即反向搜索</h2><ul>
+<li><p><code>/^\(\(^# .*$\)\@!.\)*$</code></p>
+<ul>
+<li><code>/</code> 查找命令 (search) 的提示符</li>
+<li><code>^\(\(The_Regex\)\@!.\)*$</code> 反向查找的命令固定模式，本例中 <code>The_Regex</code> 是 <code>^# .*$</code> 即以 <code>#</code> 开头的行，所以整个表达式匹配的就是不以 <code>#</code> 开头的所有行</li>
+</ul>
+</li>
+<li><p><code>:v/^# .*$/p</code></p>
+<ul>
+<li>与上面的反向查找命令功能相同, 但会将匹配结果显示在 Visual 模式下</li>
+</ul>
+</li>
+</ul>
+<h2 id="大小写转换"><a href="#大小写转换" class="headerlink" title="大小写转换"></a>大小写转换</h2><ul>
+<li><p><code>s/\(^# .*$\)/\L\1/</code></p>
+<ul>
+<li><code>\(The_Regex\)</code> 为了<strong>向前索引</strong>，即后面 <code>\1</code> 所指的部分，本例中 <code>The_Regex</code> 是 <code>^# .*$</code>, 意思同上</li>
+<li><code>\L\1</code> <code>\L</code> 指 <strong>L</strong>owercase, 即将 <code>\1</code> 匹配的结果中的所有字母都换成小写</li>
+</ul>
+</li>
+<li><p><code>s/\(^# .*$\)/\U\1/</code></p>
+<ul>
+<li>与上面的表达式功能相反，即将 <code>\1</code> 匹配的结果中的所有字母都换成大写 (<strong>U</strong>ppercase)</li>
+</ul>
+</li>
+</ul>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/vim/">vim</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/gfx/ARB/ARB_point_parameters/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">ARB_point_parameters</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/prog/gcc-attribute/">
+        <span class="next-text nav-default">GCC __attribute__</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:onion0709@gmail.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

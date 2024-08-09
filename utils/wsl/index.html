@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Windows Subsystem for Linux"/><meta name="keywords" content="WSL, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/utils/wsl/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>Windows Subsystem for Linux - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Windows Subsystem for Linux
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2024-08-09
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#WSL"><span class="toc-text">WSL</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#WSLg"><span class="toc-text">WSLg</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#nautilus"><span class="toc-text">nautilus</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#glmark2"><span class="toc-text">glmark2</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#WSL-如何支持-Nvidia"><span class="toc-text">WSL 如何支持 Nvidia</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LKM-in-WSL2"><span class="toc-text">LKM in WSL2</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="WSL"><a href="#WSL" class="headerlink" title="WSL"></a>WSL</h1><p><a href="https://zh.wikipedia.org/zh-cn/%E9%80%82%E7%94%A8%E4%BA%8ELinux%E7%9A%84Windows%E5%AD%90%E7%B3%BB%E7%BB%9F" target="_blank" rel="noopener">WSL (Windows Subsystem for Linux)</a>是一个能够在 Windows 系统(Windows 10及以上版本)上原生运行 Linux 可执行文件的兼容层。目前有两个版本: WSL, WSL2</p>
+<a id="more"></a>
+<p>查看 Windows 系统上的 WSL 版本</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl <span class="literal">-l</span> <span class="literal">-v</span></span><br></pre></td></tr></table></figure>
+<h1 id="WSLg"><a href="#WSLg" class="headerlink" title="WSLg"></a>WSLg</h1><p>Microsoft在<code>Build 21364.co_release</code>版本内发布了<a href="https://github.com/microsoft/wslg" target="_blank" rel="noopener">WSLg</a>功能，该功能允许在<strong>WSL</strong>里运行<strong>X11</strong>和<strong>Wayland</strong>的客户端程序(GUI Application).</p>
+<p><img src="xeyes.gif" alt="xeyes on WSL2"></p>
+<p>如果你已经加入<a href="https://insider.windows.com/zh-cn/" target="_blank" rel="noopener">Windows Insider Program</a>计划并且也正在使用<strong>WSL2</strong>, 那么只需要如下操作即可激活<strong>WSLg</strong>功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Windows\system32&gt; wsl --update</span><br><span class="line">正在检查更新...</span><br><span class="line">正在下载更新...</span><br><span class="line">正在安装更新...</span><br><span class="line">此更改将在 WSL 下次完全重启时生效。若要强制重启，请运行“wsl --shutdown”。</span><br><span class="line">内核版本： 5.10.60.1</span><br></pre></td></tr></table></figure>
+<p>升级 WSL2 后，在 <code>/mnt</code> 目录下会比原来多出一个 <code>wslg</code> 的目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ cd &#x2F;mnt&#x2F;</span><br><span class="line">c&#x2F;     wsl&#x2F;   wslg&#x2F;</span><br></pre></td></tr></table></figure>
+<h2 id="nautilus"><a href="#nautilus" class="headerlink" title="nautilus"></a>nautilus</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install nautilus -y</span><br></pre></td></tr></table></figure>
+<p><img src="wslg-nautilus.png" alt="WSLg nautilus"></p>
+<h2 id="glmark2"><a href="#glmark2" class="headerlink" title="glmark2"></a>glmark2</h2><p><img src="wslg-glmark2.png" alt="WSLg glmark2"></p>
+<h1 id="WSL-如何支持-Nvidia"><a href="#WSL-如何支持-Nvidia" class="headerlink" title="WSL 如何支持 Nvidia"></a>WSL 如何支持 Nvidia</h1><p>在 <code>/usr/lib/wsl/lib</code> 下默认安装了这些 shared libraries (usermode driver). 而且搭配了自动生成的 <code>/etc/ld.so.conf.d/ld.wsl.conf</code> 文件，能够让动态库加载器正确找到 nvidia 相关的库。</p>
+<ul>
+<li>libcuda.so</li>
+<li>libcuda.so.1</li>
+<li>libcuda.so.1.1</li>
+<li>libd3d12.so</li>
+<li>libd3d12core.so</li>
+<li>libdxcore.so</li>
+<li>libnvcuvid.so</li>
+<li>libnvcuvid.so.1</li>
+<li>libnvdxdlkernels.so</li>
+<li>libnvidia-encode.so</li>
+<li>libnvidia-encode.so.1</li>
+<li>libnvidia-ml.so.1</li>
+<li>libnvidia-opticalflow.so</li>
+<li>libnvidia-opticalflow.so.1</li>
+<li>libnvwgf2umx.so</li>
+<li>nvidia-smi</li>
+</ul>
+<h1 id="LKM-in-WSL2"><a href="#LKM-in-WSL2" class="headerlink" title="LKM in WSL2"></a>LKM in WSL2</h1><p>WSL2 上没有可加载的内核模块，因为所有模块是被直接编进内核的。如果 <code>lsmod</code>, 不会输出任何模块。 但我们仍可以通过查看内核配置文件找到有哪些模块被编译进内核了。</p>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/WSL/">WSL</a>
+            </div>
+        
+        <nav class="post-nav"><a class="next" href="/gfx/dri/">
+        <span class="next-text nav-default">dri3_alloc_render_buffer</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:onion0709@gmail.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="git 学习笔记"/><meta name="keywords" content="git, Eureka" /><link rel="alternate" href="/default" title="Eureka"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1" />
+<link rel="canonical" href="https://lucmann.github.io/utils/git/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1" />
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":true};
+</script>
+
+    <title>git 学习笔记 - Eureka</title>
+  <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Eureka</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">git 学习笔记
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-01-25
+        </span><span class="post-category">
+            <a href="/categories/utilities/">utilities</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#git-submodule"><span class="toc-text">git-submodule</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#与子模块相关的-git-配置文件和目录"><span class="toc-text">与子模块相关的 git 配置文件和目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#克隆时出现未完全克隆的子模块"><span class="toc-text">克隆时出现未完全克隆的子模块</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#git-apply-vs-git-am"><span class="toc-text">git-apply vs. git-am</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#gitignore"><span class="toc-text">gitignore</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#记几个与gitignore相关的命令："><span class="toc-text">记几个与gitignore相关的命令：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#记几个与gitignore相关的要点："><span class="toc-text">记几个与gitignore相关的要点：</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="git-submodule"><a href="#git-submodule" class="headerlink" title="git-submodule"></a>git-submodule</h1><p>当克隆一个含有子模块的 git 仓库时，有 2 种方法可以连同它的子模块一起克隆下来。</p>
+<a id="more"></a>
+<p>第一种方法是在克隆时，直接指示 git 将所有子模块都克隆下来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone --recurse-submodules</span><br></pre></td></tr></table></figure>
+<p>第二种方法是在克隆后，使用 <code>git submodule</code> 子命令再将所有子模块初始化，克隆下来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br></pre></td></tr></table></figure>
+<p>上面命令可以合并为一个命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update --init</span><br></pre></td></tr></table></figure>
+<h2 id="与子模块相关的-git-配置文件和目录"><a href="#与子模块相关的-git-配置文件和目录" class="headerlink" title="与子模块相关的 git 配置文件和目录"></a>与子模块相关的 git 配置文件和目录</h2><ul>
+<li><p><code>.gitmodules</code></p>
+<p>  记录了子模块的名字（路径）和 URL</p>
+</li>
+<li><p><code>.git/config</code></p>
+<p>  克隆子模块后，它的路径和 URL 会记录上这个文件中</p>
+</li>
+<li><p><code>.git/modules</code></p>
+<p>  克隆子模块后，它的 Index 会保存在这个目录</p>
+</li>
+</ul>
+<h2 id="克隆时出现未完全克隆的子模块"><a href="#克隆时出现未完全克隆的子模块" class="headerlink" title="克隆时出现未完全克隆的子模块"></a>克隆时出现未完全克隆的子模块</h2><p><code>git clone --recurse-submodules</code> 对于子模块的拉取分为 3 步</p>
+<ul>
+<li>register, 也就是初始化</li>
+<li>clone, 提取所有代码</li>
+<li>checkout, 检出上层项目中记录的合适提交</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line">➜  gh gcl git@github.com:KhronosGroup&#x2F;Vulkan-Samples.git</span><br><span class="line">Cloning into &#39;Vulkan-Samples&#39;...</span><br><span class="line">remote: Enumerating objects: 4855, done.</span><br><span class="line">remote: Counting objects: 100% (229&#x2F;229), done.</span><br><span class="line">remote: Compressing objects: 100% (173&#x2F;173), done.</span><br><span class="line">remote: Total 4855 (delta 80), reused 136 (delta 42), pack-reused 4626</span><br><span class="line">Receiving objects: 100% (4855&#x2F;4855), 40.22 MiB | 3.97 MiB&#x2F;s, done.</span><br><span class="line">Resolving deltas: 100% (3048&#x2F;3048), done.</span><br><span class="line">Submodule &#39;assets&#39; (https:&#x2F;&#x2F;github.com&#x2F;KhronosGroup&#x2F;Vulkan-Samples-Assets) registered for path &#39;assets&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;CTPL&#39; (https:&#x2F;&#x2F;github.com&#x2F;vit-vit&#x2F;CTPL) registered for path &#39;third_party&#x2F;CTPL&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;astc&#39; (https:&#x2F;&#x2F;github.com&#x2F;ARM-software&#x2F;astc-encoder) registered for path &#39;third_party&#x2F;astc&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;cli11&#39; (https:&#x2F;&#x2F;github.com&#x2F;CLIUtils&#x2F;CLI11.git) registered for path &#39;third_party&#x2F;cli11&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;glfw&#39; (https:&#x2F;&#x2F;github.com&#x2F;glfw&#x2F;glfw) registered for path &#39;third_party&#x2F;glfw&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;glm&#39; (https:&#x2F;&#x2F;github.com&#x2F;g-truc&#x2F;glm) registered for path &#39;third_party&#x2F;glm&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;glslang&#39; (https:&#x2F;&#x2F;github.com&#x2F;KhronosGroup&#x2F;glslang) registered for path &#39;third_party&#x2F;glslang&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;hwcpipe&#39; (https:&#x2F;&#x2F;github.com&#x2F;ARM-software&#x2F;HWCPipe) registered for path &#39;third_party&#x2F;hwcpipe&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;imgui&#39; (https:&#x2F;&#x2F;github.com&#x2F;ocornut&#x2F;imgui) registered for path &#39;third_party&#x2F;imgui&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;ktx&#39; (https:&#x2F;&#x2F;github.com&#x2F;KhronosGroup&#x2F;KTX-Software) registered for path &#39;third_party&#x2F;ktx&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;opencl&#39; (https:&#x2F;&#x2F;github.com&#x2F;KhronosGroup&#x2F;OpenCL-Headers.git) registered for path &#39;third_party&#x2F;opencl&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;spdlog&#39; (https:&#x2F;&#x2F;github.com&#x2F;gabime&#x2F;spdlog) registered for path &#39;third_party&#x2F;spdlog&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;spirv-cross&#39; (https:&#x2F;&#x2F;github.com&#x2F;KhronosGroup&#x2F;SPIRV-Cross) registered for path &#39;third_party&#x2F;spirv-cross&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;stb&#39; (https:&#x2F;&#x2F;github.com&#x2F;nothings&#x2F;stb) registered for path &#39;third_party&#x2F;stb&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;tinygltf&#39; (https:&#x2F;&#x2F;github.com&#x2F;syoyo&#x2F;tinygltf) registered for path &#39;third_party&#x2F;tinygltf&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;vma&#39; (https:&#x2F;&#x2F;github.com&#x2F;GPUOpen-LibrariesAndSDKs&#x2F;VulkanMemoryAllocator) registered for path &#39;third_party&#x2F;vma&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;volk&#39; (https:&#x2F;&#x2F;github.com&#x2F;zeux&#x2F;volk) registered for path &#39;third_party&#x2F;volk&#39;</span><br><span class="line">Submodule &#39;third_party&#x2F;vulkan&#39; (https:&#x2F;&#x2F;github.com&#x2F;KhronosGroup&#x2F;Vulkan-Headers) registered for path &#39;third_party&#x2F;vulkan&#39;</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;CTPL&#39;...</span><br><span class="line">fatal: unable to access &#39;https:&#x2F;&#x2F;github.com&#x2F;vit-vit&#x2F;CTPL&#x2F;&#39;: GnuTLS recv error (-110): The TLS connection was non-properly terminated.</span><br><span class="line">fatal: clone of &#39;https:&#x2F;&#x2F;github.com&#x2F;vit-vit&#x2F;CTPL&#39; into submodule path &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;CTPL&#39; failed</span><br><span class="line">Failed to clone &#39;third_party&#x2F;CTPL&#39;. Retry scheduled</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;astc&#39;...</span><br><span class="line">remote: Enumerating objects: 10565, done.</span><br><span class="line">remote: Counting objects: 100% (1165&#x2F;1165), done.</span><br><span class="line">remote: Compressing objects: 100% (498&#x2F;498), done.</span><br><span class="line">remote: Total 10565 (delta 829), reused 972 (delta 667), pack-reused 9400</span><br><span class="line">Receiving objects: 100% (10565&#x2F;10565), 48.43 MiB | 11.07 MiB&#x2F;s, done.</span><br><span class="line">Resolving deltas: 100% (8036&#x2F;8036), done.</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;cli11&#39;...</span><br><span class="line">remote: Enumerating objects: 8623, done.</span><br><span class="line">remote: Counting objects: 100% (1400&#x2F;1400), done.</span><br><span class="line">remote: Compressing objects: 100% (630&#x2F;630), done.</span><br><span class="line">remote: Total 8623 (delta 936), reused 1073 (delta 694), pack-reused 7223</span><br><span class="line">Receiving objects: 100% (8623&#x2F;8623), 4.56 MiB | 3.09 MiB&#x2F;s, done.</span><br><span class="line">Resolving deltas: 100% (5865&#x2F;5865), done.</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;glfw&#39;...</span><br><span class="line">remote: Enumerating objects: 30428, done.</span><br><span class="line">remote: Counting objects: 100% (49&#x2F;49), done.</span><br><span class="line">remote: Compressing objects: 100% (39&#x2F;39), done.</span><br><span class="line">remote: Total 30428 (delta 19), reused 28 (delta 8), pack-reused 30379</span><br><span class="line">Receiving objects: 100% (30428&#x2F;30428), 14.88 MiB | 5.22 MiB&#x2F;s, done.</span><br><span class="line">Resolving deltas: 100% (21562&#x2F;21562), done.</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;glm&#39;...</span><br><span class="line">remote: Enumerating objects: 56725, done.</span><br><span class="line">remote: Counting objects: 100% (435&#x2F;435), done.</span><br><span class="line">remote: Compressing objects: 100% (185&#x2F;185), done.</span><br><span class="line">remote: Total 56725 (delta 273), reused 323 (delta 250), pack-reused 56290</span><br><span class="line">Receiving objects: 100% (56725&#x2F;56725), 69.17 MiB | 2.08 MiB&#x2F;s, done.</span><br><span class="line">Resolving deltas: 100% (42792&#x2F;42792), done.</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;glslang&#39;...</span><br><span class="line">remote: Enumerating objects: 51510, done.</span><br><span class="line">remote: Counting objects: 100% (157&#x2F;157), done.</span><br><span class="line">remote: Compressing objects: 100% (95&#x2F;95), done.</span><br><span class="line">remote: Total 51510 (delta 76), reused 117 (delta 58), pack-reused 51353</span><br><span class="line">Receiving objects: 100% (51510&#x2F;51510), 65.58 MiB | 3.88 MiB&#x2F;s, done.</span><br><span class="line">Resolving deltas: 100% (43266&#x2F;43266), done.</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;hwcpipe&#39;...</span><br><span class="line">remote: Enumerating objects: 382, done.</span><br><span class="line">remote: Counting objects: 100% (102&#x2F;102), done.</span><br><span class="line">remote: Compressing objects: 100% (56&#x2F;56), done.</span><br><span class="line">remote: Total 382 (delta 50), reused 78 (delta 40), pack-reused 280</span><br><span class="line">Receiving objects: 100% (382&#x2F;382), 332.12 KiB | 57.00 KiB&#x2F;s, done.</span><br><span class="line">Resolving deltas: 100% (192&#x2F;192), done.</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;imgui&#39;...</span><br><span class="line">fatal: unable to access &#39;https:&#x2F;&#x2F;github.com&#x2F;ocornut&#x2F;imgui&#x2F;&#39;: GnuTLS recv error (-54): Error in the pull function.</span><br><span class="line">fatal: clone of &#39;https:&#x2F;&#x2F;github.com&#x2F;ocornut&#x2F;imgui&#39; into submodule path &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;imgui&#39; failed</span><br><span class="line">Failed to clone &#39;third_party&#x2F;imgui&#39;. Retry scheduled</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;ktx&#39;...</span><br><span class="line">fatal: unable to access &#39;https:&#x2F;&#x2F;github.com&#x2F;KhronosGroup&#x2F;KTX-Software&#x2F;&#39;: GnuTLS recv error (-110): The TLS connection was non-properly terminated.</span><br><span class="line">fatal: clone of &#39;https:&#x2F;&#x2F;github.com&#x2F;KhronosGroup&#x2F;KTX-Software&#39; into submodule path &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;ktx&#39; failed</span><br><span class="line">Failed to clone &#39;third_party&#x2F;ktx&#39;. Retry scheduled</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;opencl&#39;...</span><br><span class="line">fatal: unable to access &#39;https:&#x2F;&#x2F;github.com&#x2F;KhronosGroup&#x2F;OpenCL-Headers.git&#x2F;&#39;: GnuTLS recv error (-54): Error in the pull function.</span><br><span class="line">fatal: clone of &#39;https:&#x2F;&#x2F;github.com&#x2F;KhronosGroup&#x2F;OpenCL-Headers.git&#39; into submodule path &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;opencl&#39; failed</span><br><span class="line">Failed to clone &#39;third_party&#x2F;opencl&#39;. Retry scheduled</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;spdlog&#39;...</span><br><span class="line">fatal: unable to access &#39;https:&#x2F;&#x2F;github.com&#x2F;gabime&#x2F;spdlog&#x2F;&#39;: GnuTLS recv error (-54): Error in the pull function.</span><br><span class="line">fatal: clone of &#39;https:&#x2F;&#x2F;github.com&#x2F;gabime&#x2F;spdlog&#39; into submodule path &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;spdlog&#39; failed</span><br><span class="line">Failed to clone &#39;third_party&#x2F;spdlog&#39;. Retry scheduled</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;spirv-cross&#39;...</span><br><span class="line">remote: Enumerating objects: 31917, done.</span><br><span class="line">remote: Counting objects: 100% (838&#x2F;838), done.</span><br><span class="line">remote: Compressing objects: 100% (367&#x2F;367), done.</span><br><span class="line">remote: Total 31917 (delta 507), reused 758 (delta 466), pack-reused 31079</span><br><span class="line">Receiving objects: 100% (31917&#x2F;31917), 14.56 MiB | 1.34 MiB&#x2F;s, done.</span><br><span class="line">Resolving deltas: 100% (22523&#x2F;22523), done.</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;stb&#39;...</span><br><span class="line">remote: Enumerating objects: 7844, done.</span><br><span class="line">remote: Counting objects: 100% (573&#x2F;573), done.</span><br><span class="line">remote: Compressing objects: 100% (209&#x2F;209), done.</span><br><span class="line">remote: Total 7844 (delta 372), reused 544 (delta 364), pack-reused 7271</span><br><span class="line">Receiving objects: 100% (7844&#x2F;7844), 5.45 MiB | 3.33 MiB&#x2F;s, done.</span><br><span class="line">Resolving deltas: 100% (5217&#x2F;5217), done.</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;tinygltf&#39;...</span><br><span class="line">remote: Enumerating objects: 4676, done.</span><br><span class="line">remote: Counting objects: 100% (231&#x2F;231), done.</span><br><span class="line">remote: Compressing objects: 100% (128&#x2F;128), done.</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;volk&#39;...</span><br><span class="line">fatal: unable to access &#39;https:&#x2F;&#x2F;github.com&#x2F;zeux&#x2F;volk&#x2F;&#39;: GnuTLS recv error (-110): The TLS connection was non-properly terminated.</span><br><span class="line">fatal: clone of &#39;https:&#x2F;&#x2F;github.com&#x2F;zeux&#x2F;volk&#39; into submodule path &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;volk&#39; failed</span><br><span class="line">Failed to clone &#39;third_party&#x2F;volk&#39;. Retry scheduled</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;vulkan&#39;...</span><br><span class="line">remote: Enumerating objects: 2910, done.</span><br><span class="line">remote: Counting objects: 100% (1056&#x2F;1056), done.</span><br><span class="line">remote: Compressing objects: 100% (309&#x2F;309), done.</span><br><span class="line">remote: Total 2910 (delta 777), reused 942 (delta 733), pack-reused 1854</span><br><span class="line">Receiving objects: 100% (2910&#x2F;2910), 24.31 MiB | 1.83 MiB&#x2F;s, done.</span><br><span class="line">Resolving deltas: 100% (1862&#x2F;1862), done.</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;CTPL&#39;...</span><br><span class="line">remote: Enumerating objects: 82, done.</span><br><span class="line">remote: Counting objects: 100% (27&#x2F;27), done.</span><br><span class="line">remote: Compressing objects: 100% (4&#x2F;4), done.</span><br><span class="line">remote: Total 82 (delta 24), reused 23 (delta 23), pack-reused 55</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;imgui&#39;...</span><br><span class="line">remote: Enumerating objects: 45039, done.</span><br><span class="line">remote: Counting objects: 100% (191&#x2F;191), done.</span><br><span class="line">remote: Compressing objects: 100% (74&#x2F;74), done.</span><br><span class="line">remote: Total 45039 (delta 138), reused 169 (delta 117), pack-reused 44848</span><br><span class="line">Receiving objects: 100% (45039&#x2F;45039), 83.37 MiB | 3.75 MiB&#x2F;s, done.</span><br><span class="line">Resolving deltas: 100% (34322&#x2F;34322), done.</span><br><span class="line">Cloning into &#39;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;Vulkan-Samples&#x2F;third_party&#x2F;ktx&#39;...</span><br><span class="line">remote: Enumerating objects: 29538, done.</span><br><span class="line">remote: Counting objects: 100% (1183&#x2F;1183), done.</span><br><span class="line">remote: Compressing objects: 100% (208&#x2F;208), done.</span><br></pre></td></tr></table></figure>
+<p>有些子模块经过两次拉取，仍然没有成功，这时已经成功拉取的仓库也没有经过第 3 步检出，所以上层仓库变成 modified 状态</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/third_party/astc b/third_party/astc</span><br><span class="line">index 4861c3d..c1e1247 160000</span><br><span class="line"><span class="comment">--- a/third_party/astc</span></span><br><span class="line"><span class="comment">+++ b/third_party/astc</span></span><br><span class="line">@@ -1 +1 @@</span><br><span class="line"><span class="deletion">-Subproject commit 4861c3db1ca50eb5f5767d95d1cd1bacb98ac8a5</span></span><br><span class="line"><span class="addition">+Subproject commit c1e1247819efb268044db58e05fde400b3c6532f</span></span><br><span class="line">diff --git a/third_party/cli11 b/third_party/cli11</span><br><span class="line">index 4af78be..faea921 160000</span><br><span class="line"><span class="comment">--- a/third_party/cli11</span></span><br><span class="line"><span class="comment">+++ b/third_party/cli11</span></span><br><span class="line">@@ -1 +1 @@</span><br><span class="line"><span class="deletion">-Subproject commit 4af78beef777e313814b4daff70e2da9171a385a</span></span><br><span class="line"><span class="addition">+Subproject commit faea921e4004af91763b8fde905de3baf24d3945</span></span><br><span class="line">diff --git a/third_party/glfw b/third_party/glfw</span><br><span class="line">index 6876cf8..6b57e08 160000</span><br><span class="line"><span class="comment">--- a/third_party/glfw</span></span><br><span class="line"><span class="comment">+++ b/third_party/glfw</span></span><br><span class="line">@@ -1 +1 @@</span><br><span class="line"><span class="deletion">-Subproject commit 6876cf8d7e0e70dc3e4d7b0224d08312c9f78099</span></span><br><span class="line"><span class="addition">+Subproject commit 6b57e08bb0078c9834889eab871bac2368198c15</span></span><br><span class="line">diff --git a/third_party/glm b/third_party/glm</span><br><span class="line">index fce2abd..cc98465 160000</span><br><span class="line"><span class="comment">--- a/third_party/glm</span></span><br><span class="line"><span class="comment">+++ b/third_party/glm</span></span><br><span class="line">@@ -1 +1 @@</span><br><span class="line"><span class="deletion">-Subproject commit fce2abd01ce21063bd25ba67c9318be83bf48813</span></span><br><span class="line"><span class="addition">+Subproject commit cc98465e3508535ba8c7f6208df934c156a018dc</span></span><br><span class="line">diff --git a/third_party/glslang b/third_party/glslang</span><br><span class="line">index 6baa85f..10423ec 160000</span><br><span class="line"><span class="comment">--- a/third_party/glslang</span></span><br><span class="line"><span class="comment">+++ b/third_party/glslang</span></span><br><span class="line">@@ -1 +1 @@</span><br><span class="line"><span class="deletion">-Subproject commit 6baa85f6ceec5fddd2e13b43dd1edc944dd930af</span></span><br><span class="line"><span class="addition">+Subproject commit 10423ec659d301a0ff2daac8bbf38980abf27590</span></span><br></pre></td></tr></table></figure>
+<p>这时，我们进入上层仓库，再把没有拉取成功的仓库，重新 <code>git submodule update</code>, 此时不需要再加 <code>--init</code> 选项，因为所有子模块都已经注册成功，可以通过查看 <code>.git/config</code> 文件确认</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  Vulkan-Samples git:(master) ✗ git submodule update third_party/volk</span><br><span class="line">Cloning into <span class="string">'/home/luc/gh/Vulkan-Samples/third_party/volk'</span>...</span><br><span class="line">Submodule path <span class="string">'third_party/volk'</span>: checked out <span class="string">'b18f3192886981f28d17f8f41c26c5a53ac3b977'</span></span><br></pre></td></tr></table></figure>
+<p>把没有执行检出的子模块重新 <code>git submodule update</code>, 检出到上层仓库记录的合适提交</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜  Vulkan-Samples git:(master) ✗ git submodule update</span><br><span class="line">Submodule path <span class="string">'third_party/astc'</span>: checked out <span class="string">'4861c3db1ca50eb5f5767d95d1cd1bacb98ac8a5'</span></span><br><span class="line">Submodule path <span class="string">'third_party/cli11'</span>: checked out <span class="string">'4af78beef777e313814b4daff70e2da9171a385a'</span></span><br><span class="line">Submodule path <span class="string">'third_party/glfw'</span>: checked out <span class="string">'6876cf8d7e0e70dc3e4d7b0224d08312c9f78099'</span></span><br><span class="line">Submodule path <span class="string">'third_party/glm'</span>: checked out <span class="string">'fce2abd01ce21063bd25ba67c9318be83bf48813'</span></span><br><span class="line">Submodule path <span class="string">'third_party/glslang'</span>: checked out <span class="string">'6baa85f6ceec5fddd2e13b43dd1edc944dd930af'</span></span><br><span class="line">Submodule path <span class="string">'third_party/hwcpipe'</span>: checked out <span class="string">'5a0c3d0b527bea96154998f29177f3b449cebd3a'</span></span><br><span class="line">Submodule path <span class="string">'third_party/imgui'</span>: checked out <span class="string">'c23a19c26fa9cc778f755e76799f0cafdcb5a13b'</span></span><br><span class="line">Submodule path <span class="string">'third_party/ktx'</span>: checked out <span class="string">'6a38a0694b4d73d22c5d1e22f865d03545e808ea'</span></span><br><span class="line">Submodule path <span class="string">'third_party/opencl'</span>: checked out <span class="string">'1aa1139b58a515877a923cce6b254e09d1b2fb2c'</span></span><br><span class="line">Submodule path <span class="string">'third_party/spdlog'</span>: checked out <span class="string">'7bf8f148795d2571b4ae4aa9c6d2a8111fbb7077'</span></span><br><span class="line">Submodule path <span class="string">'third_party/spirv-cross'</span>: checked out <span class="string">'84f56d0b43e5a6874de45e11be2bff9dc336fd7e'</span></span><br><span class="line">Submodule path <span class="string">'third_party/stb'</span>: checked out <span class="string">'2c2908f50515dcd939f24be261c3ccbcd277bb49'</span></span><br><span class="line">Submodule path <span class="string">'third_party/tinygltf'</span>: checked out <span class="string">'c0d0251e2c7f2273a894aa1b125af9313a88eae4'</span></span><br><span class="line">Submodule path <span class="string">'third_party/vma'</span>: checked out <span class="string">'f9921aefddee2437cc2e3303d3175bd8ef23e22c'</span></span><br><span class="line">Submodule path <span class="string">'third_party/vulkan'</span>: checked out <span class="string">'76f00ef6cbb1886eb1162d1fa39bee8b51e22ee8'</span></span><br></pre></td></tr></table></figure>
+<h1 id="git-apply-vs-git-am"><a href="#git-apply-vs-git-am" class="headerlink" title="git-apply vs. git-am"></a>git-apply vs. git-am</h1><p>git-apply 只把 patch 应用到 index, 不会创建 commit</p>
+<p>git-am 应用的 patch 必须是 git-format-patch 生成的带有 commit, author 等信息的 patch, git-am 后 patch 的 commit 就存在在你的 git tree 了。</p>
+<p>git-am 可以直接应用到从 <a href="https://patchwork.freedesktop.org/patch/544431/" target="_blank" rel="noopener">patchwork.freedesktop.org</a> 下载下来的 patch 文件</p>
+<p><img src="patchwork-download-mbox.png" alt="patchwork-download-mbox"></p>
+<h1 id="gitignore"><a href="#gitignore" class="headerlink" title="gitignore"></a>gitignore</h1><h2 id="记几个与gitignore相关的命令："><a href="#记几个与gitignore相关的命令：" class="headerlink" title="记几个与gitignore相关的命令："></a>记几个与gitignore相关的命令：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git check-ignore -v file # 输出file是写在哪个.gitignore文件中</span><br><span class="line">git status -s --ignored # 查看所有被ignored的文件</span><br><span class="line">git ls-tree -r --name-only master # 查看所有被tracked的文件</span><br><span class="line">git rm --cached file # 永久撤销对file文件的跟踪</span><br></pre></td></tr></table></figure>
+<h2 id="记几个与gitignore相关的要点："><a href="#记几个与gitignore相关的要点：" class="headerlink" title="记几个与gitignore相关的要点："></a>记几个与gitignore相关的要点：</h2><ul>
+<li>git支持嵌套的<code>.gitignore</code>文件，就是说可以在repo下的某个子目录里写一个<code>.gitignore</code>文件，但是这个<code>.gitignore</code>只能影响这个目录下的内容</li>
+<li><code>.gitignore</code>文件里的记录<em>只影响untracked</em>的文件，就是说如果想ignore一个之前已经跟踪了的文件，就必须先对这个文件执行<code>git rm --cached</code>，否则即使把这个文件写到<code>.gitignore</code>中也不生效。而且会产生疑惑，明明已经把某个文件加到<code>.gitignore</code>中了，为什么仍然被跟踪? 这时最好使用<code>git ls-tree -r --name-only master</code>命令确认那个文件是否还在被跟踪。</li>
+</ul>
+
+      </div>
+      
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/git/">git</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/gfx/mesa-glx/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Mesa 的 GLX 实现</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/utils/hexo/">
+        <span class="next-text nav-default">Blog using Hexo</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:onion0709@gmail.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");    
+    }
+  </script><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2024<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Luc</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
