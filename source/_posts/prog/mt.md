@@ -138,15 +138,44 @@ D20:   return TRUE                      # Queue was not empty, pop succeeded
 ```
 
 ### C++实现
+
 ```c
 private:
     std::atomic< tagged_node_handle > head_;
     std::atomic< tagged_node_handle > tail_;
 ```
 
+- [std::memory_order](https://en.cppreference.com/w/cpp/atomic/memory_order)
+    ```c
+    typedef enum memory_order {
+        memory_order_relaxed,
+        memory_order_consume,
+        memory_order_acquire,
+        memory_order_release,
+        memory_order_acq_rel,
+        memory_order_seq_cst, // Sequentially-consistent ordering
+    } memory_order;
+    ```
+
+    这个memory_order的顺序，由上到下对原子操作和读写顺序的要求应该是越来越强的。
+
+    - `memory_order_relaxed`只保证原子操作，不保证指令顺序。
+    - `memory_order_acquire`
+        - 用于 `atomic<T>::load()`
+        - 对于使用memory_order_acquire的指令，该指令后面的所有读写操作**不能重排在该指令之前**
+        - 当前线程执行的memory_order_acquire指令能够保证读到其他线程memory_order_release指令之前的所有内存写入操作
+    - `memory_order_release`
+        - 用于 `atomic<T>::store()`
+        - 对于使用memory_order_release的指令，该指令之前的所有读写操作**不能重排在该指令之后**
+        - 当前线程memory_order_release指令之前的所有内存写操作对于其他线程的memory_order_acquire指令都可见。
+
 - `std::atomic<T>::load(std::memory_order order = std::memory_order_seq_cst)`
 
-- `std::atomic<T>::compare_exchange_strong(T& expected, T desired, std::memory_order success, std::memory_order failure)`
+- [std::atomic<T>::compare_exchange_*()](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
+
+   C++ std::atomic<T> 的 cas 有8个不同的声明，主要区分在 weak/strong, 参数和是否有 volatile. 而boost::lockfree::queue 里使用的是下面两个版本:
+    - `std::atomic<T>::compare_exchange_strong(T& expected, T desired, std::memory_order    order = std::memory_order_seq_cst)`
+    - `std::atomic<T>::compare_exchange_weak(T& expected, T desired, std::memory_order order = std::memory_order_seq_cst)`
 
     - 为什么 `expected` 参数是一个引用类型，而`desired`参数是一个值传递？
 
