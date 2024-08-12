@@ -162,17 +162,32 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
 它展开后是`$<0:DEBUG_MODE>`或`$<1:DEBUG_MODE>`,所以整个表达式最终值是`DEBUG_MODE`或空。
 
 
-## `find_package()` vs `pkg_check_modules()`
-
-### `find_package()`
+## `find_package()`
 
 如果cmake可以成功执行 `find_package(PACKAGE)`，那么说明你的系统上一定存在一个 `FindPACKAGE.cmake`的文件
 
 - `find_package(Threads REQUIRED)`: FindThreads.cmake 文件确定一个系统上的 thread 库，如果在Linux 下，如果找到的话就是 `libpthread.so` (C++ std::thread 依赖 `libpthread.so`)
 
-### `pkg_check_modules()`
+## `pkg_check_modules()`
 
-`pkg_check_modules(XCB xcb REQUIRED)`
+使用 `pkg_check_modules()` 前需要先(因为pkg_check_modules() 底层是依靠 pkg-config)
+
+- `find_package(PkgConfig)`
+
+例如找到系统上的 libdrm.so (因为cmake和libdrm本身没有提供 FindLibDRM.cmake), 就需要
+
+- `pkg_check_modules(LIBDRM REQUIRED libdrm)`
+
+这里 `LIBDRM` 是自定义的，但要与后面使用的变量名对齐，如果libdrm.so 被找到，则以下变量会被置成相应的路径或值(基本上就是pkg-config 能查到的所有信息)
+
+- LIBDRM_FOUND
+- LIBDRM_LIBRARIES
+- LIBDRM_LIBRARY_DIRS
+- LIBDRM_LDFLAGS
+- LIBDRM_LDFLAGS_OTHER
+- LIBDRM_INCLUDE_DIRS
+- LIBDRM_CFLAGS
+- LIBDRM_CFLAGS_OTHER
 
 # Ninja cheatsheet
 
@@ -181,3 +196,12 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
 - `time ninja -C build | while read line; do echo $(date +%s.%N) ${line}; done`
   profiling ninja build
 
+# NOTES
+
+## -fPIC
+
+- -fPIC 是一个编译器选项，而不是链接器选项。
+- 当你正在构建的一个动态库(如libPAL.so)依赖另一个静态库(如libADT.a), 这时必须在 `add_library(ADT STATIC ...)` 之后增加编译选项 `-fPIC`, 这时需要使用
+    - `target_compile_options(ADT PRIVATE "-fPIC")`
+  而不是
+    - `target_link_options(ADT PUBLIC "-fPIC")`
