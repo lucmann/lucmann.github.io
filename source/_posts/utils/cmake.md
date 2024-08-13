@@ -1,5 +1,5 @@
 ---
-title: CMake Cheatsheet
+title: CMake 不是一个构建系统
 date: 2021-01-10 07:42:04
 tags: [cmake]
 categories: utilities
@@ -216,5 +216,5 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
 
 ## _GNU_SOURCE
 
-编译器报莫名其妙的undeclared错误，如 `O_CLOEXEC` 未声明，即使已经包含了它的头文件 `fcntl.h` 也还报，这可能是需要定义一下`_GNU_SOURCE`:
+编译器莫名其妙地报undeclared错误，如 `O_CLOEXEC` 未声明，即使已经包含了它的头文件 `fcntl.h` 也还报，这可能需要定义一下`_GNU_SOURCE`:
 - `target_compile_definitions(target PUBLIC _GNU_SOURCE)`

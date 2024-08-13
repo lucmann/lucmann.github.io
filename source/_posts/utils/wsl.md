@@ -1,5 +1,6 @@
 ---
 title: Windows Subsystem for Linux
+date: 2024-08-13 09:20:28+08:00
 tags: [WSL]
 categories: utilities
 ---
