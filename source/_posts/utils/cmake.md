@@ -189,6 +189,14 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
 - LIBDRM_CFLAGS
 - LIBDRM_CFLAGS_OTHER
 
+## CTest
+
+打开CTest, 后续可以直接通过 `make [-C builddir] test` 运行测试用例
+- `enable_testing()`
+
+增加测试用例
+- `add_test(NAME PALBench.test_cpu_read_vram COMMAND test_cpu_access_vram -size 1048576 -access read)`
+
 # Ninja cheatsheet
 
 - `ninja -C build clean`
@@ -205,3 +213,8 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
     - `target_compile_options(ADT PRIVATE "-fPIC")`
   而不是
     - `target_link_options(ADT PUBLIC "-fPIC")`
+
+## _GNU_SOURCE
+
+编译器报莫名其妙的undeclared错误，如 `O_CLOEXEC` 未声明，即使已经包含了它的头文件 `fcntl.h` 也还报，这可能是需要定义一下`_GNU_SOURCE`:
+- `target_compile_definitions(target PUBLIC _GNU_SOURCE)`
