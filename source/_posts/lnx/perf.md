@@ -1,7 +1,7 @@
 ---
-title: Linux perf初探
+title: perf 和火焰图
 date: 2021-06-25 07:57:06
-tags: performance
+tags: perf
 categories: linux
 ---
 
@@ -55,8 +55,14 @@ root@sie-luc:~# cat /sys/kernel/debug/tracing/events/dma_fence/dma_fence_enable_
 0
 ```
 
-# 动态跟踪
+# 常用命令
 
-## `perf top`
+- `perf top`
 
 {% asset_img perf_top-cycles.png "perf top -e cycles" %}
+
+- `perf record -F 999 -p PID -g`
+    上面输出的结果默认是 perf.data, 如果要生成火焰图还要进行以下几步:
+    - `perf script | /path/to/FlameGraph/stackcollapse-perf.pl | /path/to/FlameGraph/framegraph.pl > result.svg`
+
+# [FlameGraph](https://github.com/brendangregg/FlameGraph)
