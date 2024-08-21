@@ -1,7 +1,8 @@
 ---
 title: dri3_alloc_render_buffer
-tags: DRI
 date: 2024-08-13 08:55:45+08:00
+updated: 2024-08-21 10:02:29+08:00
+tags: DRI
 categories: graphics
 ---
 
