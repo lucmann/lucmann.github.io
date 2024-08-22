@@ -23,13 +23,13 @@ SPIRV-Tools 包含的比较常用的工具:
 
 # [Vulkan-Samples](https://github.com/KhronosGroup/Vulkan-Samples)
 
-# lavapipe
+# [LAVApipe](https://gitlab.freedesktop.org/mesa/mesa/-/tree/main/src/gallium/frontends/lavapipe)
 
-Vulkan 的软实现，不依赖任何 GPU。是 Mesa 的一部分，构建它依赖
+Vulkan 的软实现，不依赖任何 GPU。是 Mesa 的一部分，构建它依赖:
 
 - LLVM
 - [SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator)
-    - (SPIRV-LLVM-Translator 的版本似乎与 LLVM 的版本有严格的耦合，亲测 `BASE_LLVM_VERSION=20.0.0`, 实现安装的 LLVM 如果是 16.0.0 是编译失败的)
+    - (SPIRV-LLVM-Translator 的版本似乎与 LLVM 的版本有严格的耦合，亲测如果 `BASE_LLVM_VERSION=20.0.0`, 实际安装的 LLVM 是 16.0.0 编译失败)
 
 # [Zink](https://docs.mesa3d.org/drivers/zink.html)
 
