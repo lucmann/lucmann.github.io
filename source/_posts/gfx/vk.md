@@ -11,6 +11,20 @@ Vulkan 是一个低开销、跨平台的二维和三维图形与计算的应用�
 
 <!--more-->
 
+# [vulkan-sdk](https://vulkan.lunarg.com/)
+
+Vulkan SDK 为开发者提供了开发和调试 Vulkan 应用程序的关键工具，主要包括:
+
+- Vulkan-Headers
+- Vulkan-Tools
+- SPIRV-Tools
+- glslang
+- VulkanMemoryAllocator (vma)
+- Vulkan-Utilities-Library (vul)
+
+这些基本都是 C++ 编写的工具或库
+
+# [Vulkan-Headers](https://github.com/KhronosGroup/Vulkan-Headers)
 
 # [SPIRV-Tools](https://github.com/KhronosGroup/SPIRV-Tools)
 
