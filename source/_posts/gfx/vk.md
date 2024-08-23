@@ -22,7 +22,17 @@ Vulkan SDK 为开发者提供了开发和调试 Vulkan 应用程序的关键工�
 - VulkanMemoryAllocator (vma)
 - Vulkan-Utilities-Library (vul)
 
-这些基本都是 C++ 编写的工具或库
+这些基本都是 C++ 编写的工具或库。
+
+LunarG 官方的 vulkan-sdk 同时会提供 Binary 和一个 vulkansdk 脚本，以及一个环境变量配置脚本。通常解压 (`tar -xvJf`) 后只需要
+
+`source setup-env.sh`
+
+SDK 中包含的所有库，应用程序及 cmake 文件都会在当前终端生效。另外，vulkansdk 允许用户方便地有选择地安装 SDK 包含的工具，例如单独下载安装 Vulkan-Headers:
+
+`./vulkansdk --skip-deps vulkan-headers`
+
+(注意 vulkansdk 默认都会将指定安装的目标安装在当前路径下的 `arch` 目录下，这个安装路径在编译 Vulkan-Tools 时需要被设置为 `-DVULKAN_HEADERS_INSTALL_DIR=/home/luc/gh/1.3.290.0/x86_64` 原因是 Vulkan-Tools 需要用到这个路径下的 Python 模块)
 
 # [Vulkan-Headers](https://github.com/KhronosGroup/Vulkan-Headers)
 
