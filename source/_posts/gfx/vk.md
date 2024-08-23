@@ -32,7 +32,7 @@ SDK 中包含的所有库，应用程序及 cmake 文件都会在当前终端生
 
 `./vulkansdk --skip-deps vulkan-headers`
 
-(注意 vulkansdk 默认都会将指定安装的目标安装在当前路径下的 `arch` 目录下，这个安装路径在编译 Vulkan-Tools 时需要被设置为 `-DVULKAN_HEADERS_INSTALL_DIR=/home/luc/gh/1.3.290.0/x86_64` 原因是 Vulkan-Tools 需要用到这个路径下的 Python 模块)
+(注意 vulkansdk 默认都会将指定安装的项目安装在当前路径下的 `$(arch)` 目录下，这个安装路径在编译 Vulkan-Tools 时需要被设置到 Vulkan-Tools 的 cmake 变量 `-DVULKAN_HEADERS_INSTALL_DIR=/home/luc/gh/1.3.290.0/x86_64` 原因是 Vulkan-Tools 需要用到这个路径下的 Python 模块)
 
 # [Vulkan-Headers](https://github.com/KhronosGroup/Vulkan-Headers)
 
