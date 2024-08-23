@@ -26,13 +26,55 @@ Vulkan SDK 为开发者提供了开发和调试 Vulkan 应用程序的关键工�
 
 # [Vulkan-Headers](https://github.com/KhronosGroup/Vulkan-Headers)
 
+Vulkan-Headers 主要包含 Vulkan API 的头文件和一些用于(根据 Khronos XML 文件)自动生成头文件的Python 脚本。Vulkan-Headers 的版本变更和 vulkan-sdk 是同步的，基本上所有 Vulkan 的相关的工具或库都依赖它。
+
+例如 Vulkan-Tools 中的 vulkaninfo, 当需要构建它时，就需要指定 `-DVULKAN_HEADERS_INSTALL_DIR`, 而且必须将 Vulkan-Tools 仓库的 tag 检出到和 Vulkan-Headers 仓库的一样才能编译成功。
+
+# [Vulkan-Tools](https://github.com/KhronosGroup/Vulkan-Tools)
+
+- vulkaninfo
+    - `vulkaninfo --summary`
+    ```
+    Devices:
+    ========
+    GPU0:
+            apiVersion         = 1.3.255
+            driverVersion      = 0.0.1
+            vendorID           = 0x10005
+            deviceID           = 0x0000
+            deviceType         = PHYSICAL_DEVICE_TYPE_CPU
+            deviceName         = llvmpipe (LLVM 15.0.7, 256 bits)
+            driverID           = DRIVER_ID_MESA_LLVMPIPE
+            driverName         = llvmpipe
+            driverInfo         = Mesa 23.2.1-1ubuntu3.1~22.04.2 (LLVM 15.0.7)
+            conformanceVersion = 1.3.1.1
+            deviceUUID         = 6d657361-3233-2e32-2e31-2d3175627500
+            driverUUID         = 6c6c766d-7069-7065-5555-494400000000
+    GPU1:
+            apiVersion         = 1.3.292
+            driverVersion      = 0.0.1
+            vendorID           = 0x10005
+            deviceID           = 0x0000
+            deviceType         = PHYSICAL_DEVICE_TYPE_CPU
+            deviceName         = llvmpipe (LLVM 16.0.0, 256 bits)
+            driverID           = DRIVER_ID_MESA_LLVMPIPE
+            driverName         = llvmpipe
+            driverInfo         = Mesa 24.3.0-devel (git-d58f7a24d1) (LLVM 16.0.0)
+            conformanceVersion = 1.3.1.1
+            deviceUUID         = 6d657361-3234-2e33-2e30-2d6465766500
+            driverUUID         = 6c6c766d-7069-7065-5555-494400000000
+    ```
+- vkcube/vkcubepp
+    - `vkcube --gpu_number 1 --width 800 --height 600`
+    ![vkcube](vkcube.gif)
+
 # [SPIRV-Tools](https://github.com/KhronosGroup/SPIRV-Tools)
 
 SPIRV-Tools 主要收集了与 shader 相关的一整套工具链，包括编译，链接，优化，反汇编等等。它依赖 [SPIRV-Headers](https://github.com/KhronosGroup/SPIRV-Headers)
 
 SPIRV-Tools 包含的比较常用的工具:
 
-- vulkaninfo
+- spirv-dis
 - spirv-opt
 
 # [Vulkan-Samples](https://github.com/KhronosGroup/Vulkan-Samples)
