@@ -110,6 +110,32 @@ export __GLX_VENDOR_LIBRARY_NAME=`driver_name`
 
 `driver_name` 就是 OpenGL 驱动库文件 libGLX_`driver_name`.so 的一部分, 这种方式更依赖于动态链接库 *dl.so* 
 
+# Vulkan WSI
+
+Vulkan WSI (Window System Integration) 是Vulkan API 的一个重要组成部分，用于将渲染结果显示在不同平台的窗口系统上。WSI 通过一系列可选的 Vulkan 扩展来实现，这些扩展抽象了每个平台的窗口机制，使得 Vulkan API 可以在各种平台上使用。
+
+- VK_KHR_surface (object/handle `VkSurfaceKHR`)
+    - VK_KHR_win32_surface
+    - VK_KHR_android_surface
+    - VK_KHR_wayland_surface
+    - VK_KHR_xcb_surface, VK_KHR_xlib_surface
+    - VK_MVK_macos_surface
+    - VK_MVK_ios_surface
+- VK_KHR_swapchain (object/handle `VkSwapchainKHR`)
+
+*注意: `VkSurfaceKHR` 和 `VkSwapchainKHR` 本质上都是一个指向结构体的指针类型，即 `struct VkSurfaceKHR_T *` (详见 [vulkan_core.h](https://github.com/KhronosGroup/Vulkan-Headers/blob/main/include/vulkan/vulkan_core.h#L57))*
+
+- Vulkan SDK 自带的 vulkaninfo 在 Ubuntu 20.04/22.04 (llvmpipe Vulkan 驱动)段错误
+    - Vulkan SDK 自带的 vulkaninfo 在编译时应该没有关闭 `-DBUILD_WSI_WAYLAND_SUPPORT`
+    - Ubuntu 20.04/22.04 的 Mesa 实现中 `vkIcdWsiPlatform` 不支持 wayland 平台
+        - mesa 中的 `struct wsi_device` 定义了一个 `struct wsi_interface *` 的一个数组 `wsi[VK_ICD_WSI_PLATFORM_MAX]`, 在 Ubuntu 20.04/22.04 上该表 `VK_ICD_WSI_PLATFORM_WAYLAND` 对应的 wsi_interface 是空的
+            ```
+            (gdb) p wsi_device->wsi
+            $2 = {0x0, 0x0, 0x0, 0x555555744e00, 0x555555744e00, 0x0, 0x0, 0x0, 0x555555702560, 0x555555753330}
+            (gdb) ptype surface->platform
+type = enum {VK_ICD_WSI_PLATFORM_MIR, VK_ICD_WSI_PLATFORM_WAYLAND, VK_ICD_WSI_PLATFORM_WIN32, VK_ICD_WSI_PLATFORM_XCB, VK_ICD_WSI_PLATFORM_XLIB, VK_ICD_WSI_PLATFORM_ANDROID, VK_ICD_WSI_PLATFORM_MACOS, VK_ICD_WSI_PLATFORM_IOS, VK_ICD_WSI_PLATFORM_DISPLAY, VK_ICD_WSI_PLATFORM_HEADLESS, VK_ICD_WSI_PLATFORM_METAL, VK_ICD_WSI_PLATFORM_DIRECTFB, VK_ICD_WSI_PLATFORM_VI, VK_ICD_WSI_PLATFORM_GGP, VK_ICD_WSI_PLATFORM_SCREEN, VK_ICD_WSI_PLATFORM_FUCHSIA}
+            ```
+
 # [LAVApipe](https://gitlab.freedesktop.org/mesa/mesa/-/tree/main/src/gallium/frontends/lavapipe)
 
 Vulkan 的软实现，不依赖任何 GPU, 但它和 llvmpipe 一样，依赖 LLVM。构建它依赖:
