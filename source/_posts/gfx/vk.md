@@ -95,6 +95,29 @@ Vulkan-Hpp 旨在为 Vulkan C API 提供仅头文件(header only)的 C++ 绑定,
 
 # [VulkanExamples](https://github.com/jherico/VulkanExamples)
 
+VulkanExamples 是将大部分 [Sascha Willems 的 Vulkan examples](https://github.com/SaschaWillems/Vulkan) 移植到 Vulkan-Hpp, 但当我试着在 Ubuntu 20.04.3 上编译并在 LAVApipe 是运行时，发现一个问题，大多数 Demo 会 assert:
+
+```
+gears: ../src/vulkan/runtime/vk_render_pass.c:2347: vk_common_CmdBeginRenderPass2: Assertion `image_view->format == pass_att->format' failed.
+```
+
+原因是 VulkanExamples 的 `ExampleBase::colorformat` 默认是 `vk::Format::eB8G8R8A8Unorm`, 而驱动侧 wsi 从窗口系统(Ubuntu 20.04.3是 X11) 获取的 visual 格式会在下面的 format 数据里顺序匹配:
+
+```
+static const VkFormat formats[] = {
+   VK_FORMAT_R5G6B5_UNORM_PACK16,
+   VK_FORMAT_B8G8R8A8_SRGB,
+   VK_FORMAT_B8G8R8A8_UNORM,
+   VK_FORMAT_A2R10G10B10_UNORM_PACK32,
+};
+```
+
+而 VulkanExamples base 只会从 `physicalDevice.getSurfaceFormatsKHR()` 返回的列表里取第一个格式，而它取回的是 `vk::Format::eB8G8R8A8Srgb`, 所以才会导致驱动 `vk_common_CmdBeginRenderPass2()` 的断言失败。mesa 的 wsi common 层之所以会将 `VK_FORMAT_B8G8R8A8_SRGB` 放到 `VK_FORMAT_B8G8R8A8_UNORM` 前面，应该是考虑到在应用程序中可能 sRGB 颜色空间使用更为广泛吧(doge)。
+
+将 `ExampleBase::colorformat` 改为 sRGB 后的对比效果(哪个是 sRGB 呢?)
+![gears-srgb](gears-srgb.gif)
+![gears-rgb](gears-rgb.gif)
+
 # Vulkan ICD
 
 Vulkan ICD (Installable Client Driver) 可安装客户端驱动程序是 Vulkan 生成系统中的关键组件。它在 Vulkan 应用程序和系统上安装的各种 Vulkan 驱动程序之间充当桥梁。每个 Vulkan 驱动程序有带有一个 ICD Json 文件，它里面描述了驱动动态库文件的路径，以便 Vulkan-Loader 可以枚举系统安装的每个 Vulkan 驱动。ICD Json 文件的路径和命名都是规范的:
