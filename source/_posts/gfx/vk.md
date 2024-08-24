@@ -34,13 +34,13 @@ SDK 中包含的所有库，应用程序及 cmake 文件都会在当前终端生
 
 (注意 vulkansdk 默认都会将指定安装的项目安装在当前路径下的 `$(arch)` 目录下，这个安装路径在编译 Vulkan-Tools 时需要被设置到 Vulkan-Tools 的 cmake 变量 `-DVULKAN_HEADERS_INSTALL_DIR=/home/luc/gh/1.3.290.0/x86_64` 原因是 Vulkan-Tools 需要用到这个路径下的 Python 模块)
 
-# [Vulkan-Headers](https://github.com/KhronosGroup/Vulkan-Headers)
+## [Vulkan-Headers](https://github.com/KhronosGroup/Vulkan-Headers)
 
 Vulkan-Headers 主要包含 Vulkan API 的头文件和一些用于(根据 Khronos XML 文件)自动生成头文件的Python 脚本。Vulkan-Headers 的版本变更和 vulkan-sdk 是同步的，基本上所有 Vulkan 的相关的工具或库都依赖它。
 
 例如 Vulkan-Tools 中的 vulkaninfo, 当需要构建它时，就需要指定 `-DVULKAN_HEADERS_INSTALL_DIR`, 而且必须将 Vulkan-Tools 仓库的 tag 检出到和 Vulkan-Headers 仓库的一样才能编译成功。
 
-# [Vulkan-Tools](https://github.com/KhronosGroup/Vulkan-Tools)
+## [Vulkan-Tools](https://github.com/KhronosGroup/Vulkan-Tools)
 
 - vulkaninfo
     - `vulkaninfo --summary`
@@ -78,7 +78,7 @@ Vulkan-Headers 主要包含 Vulkan API 的头文件和一些用于(根据 Khrono
     - `vkcube --gpu_number 1 --width 800 --height 600`
     ![vkcube](vkcube.gif)
 
-# [SPIRV-Tools](https://github.com/KhronosGroup/SPIRV-Tools)
+## [SPIRV-Tools](https://github.com/KhronosGroup/SPIRV-Tools)
 
 SPIRV-Tools 主要收集了与 shader 相关的一整套工具链，包括编译，链接，优化，反汇编等等。它依赖 [SPIRV-Headers](https://github.com/KhronosGroup/SPIRV-Headers)
 
@@ -87,11 +87,32 @@ SPIRV-Tools 包含的比较常用的工具:
 - spirv-dis
 - spirv-opt
 
+# [Vulkan-Hpp](https://github.com/KhronosGroup/Vulkan-Hpp)
+
+Vulkan-Hpp 旨在为 Vulkan C API 提供仅头文件(header only)的 C++ 绑定, 以此来简化 Vulkan 应用的开发过程同时不引入额外的 CPU 运行时开销。
+
 # [Vulkan-Samples](https://github.com/KhronosGroup/Vulkan-Samples)
+
+# [VulkanExamples](https://github.com/jherico/VulkanExamples)
+
+# Vulkan ICD
+
+Vulkan ICD (Installable Client Driver) 可安装客户端驱动程序是 Vulkan 生成系统中的关键组件。它在 Vulkan 应用程序和系统上安装的各种 Vulkan 驱动程序之间充当桥梁。每个 Vulkan 驱动程序有带有一个 ICD Json 文件，它里面描述了驱动动态库文件的路径，以便 Vulkan-Loader 可以枚举系统安装的每个 Vulkan 驱动。ICD Json 文件的路径和命名都是规范的:
+
+- 命名规范
+    - `driver_name`_icd.`$arch`.json
+- 路径规范
+    - `${CMAKE_INSTALL_PREFIX}`/`${CMAKE_INSTALL_DATADIR}`/vulkan/icd.d/ 
+
+Vulkan ICD 可以类比 OpenGL 世界的 [GLVND (GL Vendor-Neutral Dispatch library)](https://gitlab.freedesktop.org/glvnd/libglvnd), GLVND 的目的同样也是在同一系统上允许多个 OpenGL 驱动程序共存，并在运行时决定将每个 API 调用分派给哪个供应商的驱动程序。只不过 GLVND 没有使用 Json 文件，而是依靠环境变量:
+
+export __GLX_VENDOR_LIBRARY_NAME=`driver_name`
+
+`driver_name` 就是 OpenGL 驱动库文件 libGLX_`driver_name`.so 的一部分, 这种方式更依赖于动态链接库 *dl.so* 
 
 # [LAVApipe](https://gitlab.freedesktop.org/mesa/mesa/-/tree/main/src/gallium/frontends/lavapipe)
 
-Vulkan 的软实现，不依赖任何 GPU。是 Mesa 的一部分，构建它依赖:
+Vulkan 的软实现，不依赖任何 GPU, 但它和 llvmpipe 一样，依赖 LLVM。构建它依赖:
 
 - LLVM
 - [SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator)
