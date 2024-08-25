@@ -120,18 +120,25 @@ static const VkFormat formats[] = {
 
 # Vulkan ICD
 
-Vulkan ICD (Installable Client Driver) 可安装客户端驱动程序是 Vulkan 生成系统中的关键组件。它在 Vulkan 应用程序和系统上安装的各种 Vulkan 驱动程序之间充当桥梁。每个 Vulkan 驱动程序有带有一个 ICD Json 文件，它里面描述了驱动动态库文件的路径，以便 Vulkan-Loader 可以枚举系统安装的每个 Vulkan 驱动。ICD Json 文件的路径和命名都是规范的:
+Vulkan ICD (Installable Client Driver) 可安装客户端驱动程序是 Vulkan 生成系统中的关键组件。它在 Vulkan 应用程序和系统上安装的各种 Vulkan 驱动程序之间充当桥梁。每个 Vulkan 驱动程序有带有一个 ICD JSON 文件，它里面描述了驱动动态库文件的路径，以便 Vulkan-Loader 可以枚举系统安装的每个 Vulkan 驱动。ICD Json 文件的路径和命名都是规范的:
 
 - 命名规范
     - `driver_name`_icd.`$arch`.json
 - 路径规范
     - `${CMAKE_INSTALL_PREFIX}`/`${CMAKE_INSTALL_DATADIR}`/vulkan/icd.d/ 
 
-Vulkan ICD 可以类比 OpenGL 世界的 [GLVND (GL Vendor-Neutral Dispatch library)](https://gitlab.freedesktop.org/glvnd/libglvnd), GLVND 的目的同样也是在同一系统上允许多个 OpenGL 驱动程序共存，并在运行时决定将每个 API 调用分派给哪个供应商的驱动程序。只不过 GLVND 没有使用 Json 文件，而是依靠环境变量:
+Vulkan ICD 可以类比 OpenGL 世界的 [GLVND (GL Vendor-Neutral Dispatch library)](https://gitlab.freedesktop.org/glvnd/libglvnd), GLVND 的目的同样是在同一系统上允许多个 OpenGL 驱动库共存，并在运行时决定将每个 API 调用分派给哪个供应商的驱动。只不过 GLVND 的 GLX 没有使用 JSON 文件，而是依靠环境变量:
 
 export __GLX_VENDOR_LIBRARY_NAME=`driver_name`
 
 `driver_name` 就是 OpenGL 驱动库文件 libGLX_`driver_name`.so 的一部分, 这种方式更依赖于动态链接库 *dl.so* 
+
+而 GLVND 的 EGL 实现基本上与 Vulkan ICD 是一样的(可能Vulkan ICD 就是来源于 GLVND EGL ICD)。GLVND EGL ICD 的 JSON 文件命名规范和安装路径规范:
+
+- 命名规范
+    - 10_`myvendor`.`$arch`.json
+- 路径规范
+    - `${CMAKE_INSTALL_PREFIX}`/`${CMAKE_INSTALL_DATADIR}`/glvnd/egl_vendor.d/
 
 # Vulkan WSI
 
