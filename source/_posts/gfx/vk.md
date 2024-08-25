@@ -176,6 +176,24 @@ Vulkan 的软实现，不依赖任何 GPU, 但它和 llvmpipe 一样，依赖 LL
 
 # [Zink](https://docs.mesa3d.org/drivers/zink.html)
 
-Zink 不是某个具体 GPU 的驱动，而是一个将OpenGL API 调用翻译成 Vulkan API, 以在只有Vulkan 驱动的平台上提供完整OpenGL支持。
+Zink 不是某个具体 GPU 的驱动，而是一个将OpenGL API 调用翻译成 Vulkan API, 以在只有Vulkan 驱动的平台上提供完整OpenGL支持。例如，同时编译安装 Mesa 的 Zink (-Dgallium-drivers=zink)和 LAVApipe (-Dvulkan-drivers=swrast) 驱动，你就不仅可以跑 vkcube 也可以跑 glxgears。
 
+```
+  User defined options
+    buildtype                    : debug
+    prefix                       : /usr
+    cpp_rtti                     : false
+    gallium-drivers              : zink
+    glx                          : dri
+    llvm                         : enabled
+    platforms                    : x11
+    vulkan-drivers               : swrast
+```
 
+但是在软渲染上跑需要提供一些环境变量 `MESA_LOADER_DRIVER_OVERRIDE=zink LIBGL_KOPPER_DRI2=true LIBGL_ALWAYS_SOFTWARE=true ZINK_DEBUG=nir glxgears`
+
+- `LIBGL_KOPPER_DRI2=true` 是因为我们环境上没有 DRI3, Zink 在没有 DRI3 支持, 且用户没有要求使用 DRI2 的情况下是不被使能的。
+- `LIBGL_ALWAYS_SOFTWARE=true` 是因为 zink 的实现要求 [`/* allow software rendering only if forced by the user */`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/drivers/zink/zink_screen.c#L1763)
+- `ZINK_DEBUG=nir` 为了能直观地看到驱动使用的是 Zink 而非 LLVMpipe 的OpenGL实现，特意加了 Zink 调试环境变量，将 shader 的 NIR 打印出来
+    - glxgears on Zink
+    ![glxgears on Zink](glxgears-on-zink.gif)
