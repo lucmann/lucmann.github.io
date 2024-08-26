@@ -197,3 +197,5 @@ Zink 不是某个具体 GPU 的驱动，而是一个将OpenGL API 调用翻译�
 - `ZINK_DEBUG=nir` 为了能直观地看到驱动使用的是 Zink 而非 LLVMpipe 的OpenGL实现，特意加了 Zink 调试环境变量，将 shader 的 NIR 打印出来
     - glxgears on Zink
     ![glxgears on Zink](glxgears-on-zink.gif)
+    - glmark2 on Zink
+    ![glmark2 on Zink](glmark2-on-zink.gif)
