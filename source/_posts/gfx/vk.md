@@ -93,6 +93,9 @@ Vulkan-Hpp 旨在为 Vulkan C API 提供仅头文件(header only)的 C++ 绑定,
 
 # [Vulkan-Samples](https://github.com/KhronosGroup/Vulkan-Samples)
 
+`./build/app/bin/Debug/x86_64/vulkan_samples sample surface_rotation`
+![surface_rotation](surface_rotation.png)
+
 # [VulkanExamples](https://github.com/jherico/VulkanExamples)
 
 VulkanExamples 是将大部分 [Sascha Willems 的 Vulkan examples](https://github.com/SaschaWillems/Vulkan) 移植到 Vulkan-Hpp, 但当我试着在 Ubuntu 20.04.3 上编译并在 LAVApipe 是运行时，发现一个问题，大多数 Demo 会 assert:
@@ -113,6 +116,8 @@ static const VkFormat formats[] = {
 ```
 
 而 VulkanExamples base 只会从 `physicalDevice.getSurfaceFormatsKHR()` 返回的列表里取第一个格式，而它取回的是 `vk::Format::eB8G8R8A8Srgb`, 所以才会导致驱动 `vk_common_CmdBeginRenderPass2()` 的断言失败。mesa 的 wsi common 层之所以会将 `VK_FORMAT_B8G8R8A8_SRGB` 放到 `VK_FORMAT_B8G8R8A8_UNORM` 前面，应该是考虑到在应用程序中可能 sRGB 颜色空间使用更为广泛吧(doge)。
+
+而且 [KhronosGroup/Vulkan-Samples](https://github.com/KhronosGroup/Vulkan-Samples) 自从 [38d628b032a8](https://github.com/KhronosGroup/Vulkan-Samples/commit/38d628b032a88cf032e88877c1b75aa470333c32) 就已经首选 `vk::Format::eR8G8B8A8Srgb` 作为 swapchain image 的格式了。
 
 将 `ExampleBase::colorformat` 改为 sRGB 后的对比效果(哪个是 sRGB 呢?)
 ![gears-srgb](gears-srgb.gif)
