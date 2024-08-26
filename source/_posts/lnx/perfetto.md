@@ -33,7 +33,7 @@ Perfetto 是一个用于 Linux 和 Android 系统上进行系统级和应用级�
 - `ninja -C out/linux_clang_release`
     - 如果顺利的话，perfetto 就构建完成了
 - `CONFIG=../../src/tool/pps/cfg/system.cfg OUT=out/linux_clang_release ./tools/tmux -n `
-    - 配置文件可以通过 CONFIG 环境变量指定, 这里的我使用的是 Mesa 自带的 system.cfg。这里的 tmux 是一个 shell 脚本，它会启一个 tmux 会话，你在另外一个终端启动你的应用程序后，切回这个会话 Enter, perfetto 就开始记录数据了，一般有一个默认时长，当记录结果会，你只需 `Ctrl-B D` 关闭这个会话，记录的数据会自动保存在 `/tmp/trace.perfetto-trace` 文件中。
+    - 配置文件可以通过 CONFIG 环境变量指定, 这里的我用 Mesa 自带的 system.cfg。这里的 tmux 是一个 shell 脚本，它会启一个 tmux 会话，你在另外一个终端启动你的应用程序后，切回这个会话 Enter, perfetto 就开始记录数据了，一般有一个默认时长，当记录结束后，你只需 `Ctrl-B D` 关闭这个会话，记录的数据会自动保存在 `/tmp/trace.perfetto-trace` 文件中。
 
 从第一次使用 perfetto 的情况，感觉它比较依赖 KMD 的实现，像 GPU 的性能计数器，只有内核驱动实现了，才能通过 perfetto 收集到，不过 perfetto 提供的库和 UI 确实简化了性能数据采集的过程和分析的难度。
 
