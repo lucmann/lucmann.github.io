@@ -7,12 +7,12 @@ categories: hardware
 
 # Hantro VPU
 
-[Hantro Products OY](https://www.nexitventures.com/cases/hantro-products-oy/) 是一家专注于视频编解码 IP 技术的芬兰公司，它的视频编码器 IP (Hantro H1) 和解码器(Hantro G1) 被集成在瑞芯微 RK3288 SoC 上。其开源驱动在 [drivers/media/platform/verisilicon](https://elixir.bootlin.com/linux/v6.10.6/source/drivers/media/platform/verisilicon)
+[Hantro Products OY](https://www.nexitventures.com/cases/hantro-products-oy/) 是一家专注于视频编解码技术的芬兰公司，它的视频编码 IP (Hantro H1) 和解码 IP(Hantro G1) 被集成在瑞芯微 RK3288 SoC 上。其开源驱动在 [drivers/media/platform/verisilicon](https://elixir.bootlin.com/linux/v6.10.6/source/drivers/media/platform/verisilicon)
 
 <!--more-->
 
 - OOC
-    - 不过有点奇怪 Hantro 的 IP 为什么会出现在芯原的[货架](https://www.verisilicon.com/cn/IPPortfolio/HantroVPUIP)上
+    - Hantro 的 IP 为什么会在芯原的[货架](https://www.verisilicon.com/cn/IPPortfolio/HantroVPUIP)上
     - Hantro 的名字好像来自芬兰的一部动画角色，有点像 Python
     ![Hantro](hantro.jpeg)
 
