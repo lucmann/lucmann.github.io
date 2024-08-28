@@ -23,7 +23,12 @@ categories: utilities
 
 # Copy & Paste
 
-## X11 selections
+## Copy to clipboard
+
+- Normal 模式
+    - `"+y`
+
+## Paste from clipboard
 
 X11 window system 有 3 个 selections:
 
@@ -33,18 +38,19 @@ X11 window system 有 3 个 selections:
 
 Vim 有两个专门的寄存器分别与 PRIMARY selection 和 CLIPBOARD selection 对应
 
-- **"\*** (quotestar) PRIMARY
-- **"+** (quoteplus) CLIPBOARD
+- `"*` (quotestar) PRIMARY
+- `"+` (quoteplus) CLIPBOARD
 
 如果要在 Vim 内部剪贴，复制/粘贴就使用 **quotestar**, 如果要将内容剪贴，复制/粘贴到系统剪贴板，就使用 **quoteplus**
 
-举个例子，在 WSL Ubuntu 里如果想粘贴 Windows 剪贴板里的内容到 vim (最好是 neovim, 因为 vim 可能 -clipboard)
+举个例子，在 WSL Ubuntu 里如果想粘贴 Windows 剪贴板里的内容到 vim (最好是 neovim, 因为 vim 可能未使能 clipboard)
 
 ```
 echo "Hello, world!" | clip.exe
 ```
 
-然后在 Normal 模式下， `"+p`.
+- Normal 模式
+    - `"+p`
 
 如果想粘贴 Ubuntu 剪贴板里的内容
 
@@ -52,7 +58,8 @@ echo "Hello, world!" | clip.exe
 echo "Hello, world!" | xclip
 ```
 
-此时就需要使用 PRIMARY selection, `"*p`.
+- Normal 模式
+    - `"*p`
 
 ## Copy from above or below
 
