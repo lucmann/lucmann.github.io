@@ -8,16 +8,10 @@ categories: utilities
 # Visual Block Selection
 
 - 选择 `{}`(curly braces) 之间的行(包括 `{}`)
-
-    ```
-    v%
-    ```
+    - `v%`
 
 - 选择 `{}`(curly braces) 之间的行(不包括 `{}`)
-
-    ```
-    vi{
-    ```
+    - `vi{`
 
 注意：光标必须放在 `{` 或者 `}`
 
