@@ -59,8 +59,8 @@ llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 
     lrwxrwxrwx 1   23 Oct 20  2021 /usr/bin/ld.bfd -> x86_64-linux-gnu-ld.bfd
     lrwxrwxrwx 1   24 Oct 20  2021 /usr/bin/ld.gold -> x86_64-linux-gnu-ld.gold
     ```
-    - `-DLLVM_USE_LINKER=bfd`
-    ![ld-liblto_plugin.so](ld-liblto_plugin.so.gif)
+    - `-DLLVM_USE_LINKER=gold`
+    ![/usr/bin/ld.gold](gold.gif)
 
 安装后，我们需要将 `bin` 目录加入 `PATH`, 并创建 `/etc/ld.so.conf.d/llvm.conf` 包含下面一行
 
