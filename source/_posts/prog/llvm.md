@@ -28,6 +28,8 @@ llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 
     - 安装后可通过 `llvm-config --ldflags` 获取
 - `-DBUILD_SHARED_LIBS=ON`
     - `BUILD_SHARED_LIBS` 是一个 CMake 选项，当它开启时，那些没有指明 STATIC, SHARED, MODULE 的构建目标都会被构建成 SHARED 库。这个一般要开启，否则会导致在链接生成 llvm-lto2 时(因为链接的都是静态库) 内存压力巨大，很容易被 OOM-Killed 
+- `-DLLVM_LIBDIR_SUFFIX=64`
+    - 如果是 64 位系统，安装路径会由原来 `${CMAKE_INSTALL_PREFIX}/lib` 变成 `${CMAKE_INSTALL_PREFIX}/lib64`
 - `-DLLVM_BUILD_LLVM_DYLIB=OFF`
     - 如果 ON，将所有 LLVM 组件生成一个单一的共享库 libLLVM, 适用于将 LLVM 嵌入到其它工具中的情况
 - `-DLLVM_ENABLE_PROJECTS="clang;lld"`
@@ -39,6 +41,16 @@ llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 
     - 安装后可通过 `llvm-config --targets-built` 获取
 - `-DLLVM_PARALLEL_COMPILE_JOBS=1 -DLLVM_PARALLEL_LINK_JOBS=1`
     - 在编译机配置不高的时候，减小 `cc1plus` 和 `ld` 被 OOM-Killed 的风险
+    - 当配置 `-DCMAKE_BUILD_TYPE=Debug` 时，即使将上面两个选项都配置为 1，仍然很大可能会被 OOM-Killed (问题不是 CPU 线程多少，而是内存需求过大)。这时最极解决方法是增大 swap 分区:
+        - `sudo fallocate -l 4G /swapfile`
+            - 比 `dd if=/dev/zero of=/swapfile bs=1 count=0 seek=4G` 快一点
+        - `sudo chmod 600 /swapfile`
+        - `sudo mkswap /swapfile`
+            - 格式化成 swap 分区
+        - `sudo swapon /swapfile`
+            - 激活 swap 分区
+        - 增大 swap 分区后的效果
+        ![](mkswap-4G.gif)
 - `-DLLVM_USE_LINKER=gold`
     - 将默认链接器 `ld` 换成 `gold`(可能会链接得快一点)
     - 实际上一般 Linux 系统 (e.g. Ubuntu 20.04), 默认安装有两个链接器
