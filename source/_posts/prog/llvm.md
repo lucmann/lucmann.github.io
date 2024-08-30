@@ -52,13 +52,11 @@ llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 
         - 增大 swap 分区后的效果
         ![](mkswap-4G.gif)
 - `-DLLVM_USE_LINKER=gold`
-    - 将默认链接器 `ld` 换成 `gold`(可能会链接得快一点)
-    - 实际上一般 Linux 系统 (e.g. Ubuntu 20.04), 默认安装有两个链接器
-    ```
-    lrwxrwxrwx 1   19 Oct 20  2021 /usr/bin/ld -> x86_64-linux-gnu-ld
-    lrwxrwxrwx 1   23 Oct 20  2021 /usr/bin/ld.bfd -> x86_64-linux-gnu-ld.bfd
-    lrwxrwxrwx 1   24 Oct 20  2021 /usr/bin/ld.gold -> x86_64-linux-gnu-ld.gold
-    ```
+    - 将默认链接器 `bfd` 换成 `gold` (可能会链接得快一点)
+    - 一般 Linux 系统上默认安装有两个链接器
+        - /usr/bin/ld -> x86_64-linux-gnu-ld
+        - /usr/bin/ld.bfd -> x86_64-linux-gnu-ld.bfd
+        - /usr/bin/ld.gold -> x86_64-linux-gnu-ld.gold
     - `-DLLVM_USE_LINKER=gold`
     ![/usr/bin/ld.gold](gold.gif)
 
