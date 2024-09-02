@@ -24,9 +24,9 @@ AMDVLK 的 README 有一张[架构图](https://github.com/GPUOpen-Drivers/AMDVLK
 AMDVLK 驱动由 5 个代码仓库构建:
 
 - [LLVM](https://github.com/GPUOpen-Drivers/llvm-project)
-- [XGL](https://github.com/GPUOpen-Drivers/xgl)
-- [LLPC](https://github.com/GPUOpen-Drivers/llpc)
-- [GPURT](https://github.com/GPUOpen-Drivers/gpurt)
-- [PAL](https://github.com/GPUOpen-Drivers/pal)
+- [XGL](https://github.com/GPUOpen-Drivers/xgl) Vulkan API Translator
+- [LLPC](https://github.com/GPUOpen-Drivers/llpc) LLVM-based Pipeline Compiler
+- [GPURT](https://github.com/GPUOpen-Drivers/gpurt) GPU Ray Tracing Library
+- [PAL](https://github.com/GPUOpen-Drivers/pal) Platform Abstraction Library
 
-其中 XGL, LLPC, GPURT 都与 PAL (Platform Abstraction Library) 有关联。
+其中 XGL, LLPC, GPURT 都与 **PAL** 有关联。
