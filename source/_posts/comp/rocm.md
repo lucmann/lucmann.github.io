@@ -29,6 +29,12 @@ OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力�
 
   ROCR 主要向用户提供 HSA 内核实现 (KFD) 的用户态封装和抽象。它的 libhsakmt 通过 KFD 提供的 IOCTL 直接访问 HSA 硬件，而 libhsa-runtime64 主要实现 HSA 标准的 Core Profile 和各厂家的扩展 (extension)。
 
+# CLR
+
+所谓 Common Language Runtimes, 就是指 HIP 和 OpenCL 的运行时, 无论两者哪个，它们都要调到编译器的组件，在 CLR 的实现里支持两个：
+- HSAIL (HSA Intermediate Language, 基本废弃)
+- [COMGR](https://github.com/ROCm/llvm-project/tree/amd-staging/amd/comgr) (Code Object Manager) 目前在 `ROCm/llvm-project/amd/comgr/` 下维护
+
 # 参考
 - [What's ROCm](https://rocm.docs.amd.com/en/latest/what-is-rocm.html)
 - [Heterogeneous System Architecture standards](https://hsafoundation.com/standards/)
