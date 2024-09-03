@@ -28,3 +28,7 @@ OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力�
     - ROCr libhsa-runtime64 
 
   ROCR 主要向用户提供 HSA 内核实现 (KFD) 的用户态封装和抽象。它的 libhsakmt 通过 KFD 提供的 IOCTL 直接访问 HSA 硬件，而 libhsa-runtime64 主要实现 HSA 标准的 Core Profile 和各厂家的扩展 (extension)。
+
+# 参考
+- [What's ROCm](https://rocm.docs.amd.com/en/latest/what-is-rocm.html)
+- [Heterogeneous System Architecture standards](https://hsafoundation.com/standards/)
