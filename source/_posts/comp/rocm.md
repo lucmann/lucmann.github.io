@@ -31,10 +31,30 @@ OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力�
 
 # CLR
 
-所谓 Common Language Runtimes, 就是指 HIP 和 OpenCL 的运行时, 无论两者哪个，它们都要调到编译器的组件，在 CLR 的实现里支持两个：
-- HSAIL (HSA Intermediate Language, 基本废弃)
-- [COMGR](https://github.com/ROCm/llvm-project/tree/amd-staging/amd/comgr) (Code Object Manager) 目前在 `ROCm/llvm-project/amd/comgr/` 下维护
+所谓 Common Language Runtimes, 就是指 HIP 和 OpenCL 的运行时, 无论两者哪个，它们都要调到编译器后端，在 CLR 的实现里支持两个编译后端：
+- `ROCCLR_ENABLE_HSAIL` HSAIL (HSA Intermediate Language, 基本废弃)
+    - CLR 的源码中是通过宏 `WITH_COMPILER_LIB` guard
+- `ROCCLR_ENABLE_LC`    [COMGR](https://github.com/ROCm/llvm-project/tree/amd-staging/amd/comgr) (Code Object Manager) 目前在 `ROCm/llvm-project/amd/comgr/` 下维护
+    - CLR 的源码中是通过宏 `USE_COMGR_LIBRARY` guard
+
+CLR 也支持两个 Runtime：
+- `ROCCLR_ENABLE_HSA`
+    - 如果使用 HSA runtime, 那么 CLR 需要调用 ROCr (libhsa-runtime64)
+    ```
+    find_package(hsa-runtime64 1.11 REQUIRED CONFIG
+      PATHS
+        /opt/rocm/
+        ${ROCM_INSTALL_PATH}
+      PATH_SUFFIXES
+        cmake/hsa-runtime64
+        lib/cmake/hsa-runtime64
+        lib64/cmake/hsa-runtime64)
+    target_link_libraries(rocclr PUBLIC hsa-runtime64::hsa-runtime64)
+    ```
+- `ROCCLR_ENABLE_PAL` [PAL](https://github.com/GPUOpen-Drivers/pal) (Platform Abstraction Library)
+    - 如果使用 PAL runtime, 那么 CLR 不需要调用 ROCr/ROCt
 
 # 参考
 - [What's ROCm](https://rocm.docs.amd.com/en/latest/what-is-rocm.html)
 - [Heterogeneous System Architecture standards](https://hsafoundation.com/standards/)
+- [HSA Programmer's Reference Manual: HSAIL Virtual ISA](https://www.hsafoundation.com/wp-content/uploads/2021/02/HSA-PRM-1.1.1.pdf)
