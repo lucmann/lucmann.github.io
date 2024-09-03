@@ -24,8 +24,11 @@ OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力�
     - 这个仓库以前主要提供一个 compiler driver utility `hipcc` 脚本，目前 hipcc 已经被移到 AMD 自己 forked [llvm-project/amd/hipcc](https://github.com/ROCm/llvm-project/tree/amd-staging/amd/hipcc)
     - hipcc 之于 HIP-Clang 就像 gcc 之于 GCC
 - [ROCR](https://github.com/ROCm/ROCR-Runtime)
-    - ROCt libhsakmt HSA Kernel Mode Trunk 用户态库
+    - ROCt libhsakmt-staticdrm HSA Kernel Mode Trunk 用户态库
+        - libhsakmt 总是被构建成静态库 .a
+        - libhsakmt 通过 DRM 设备节点与 KFD 交互
     - ROCr libhsa-runtime64 
+        - 用户可以通过 CMAKE 变量 `BUILD_SHARED_LIBS` 选择构建 libhsa-runtime64 为静态库或动态库
 
   ROCR 主要向用户提供 HSA 内核实现 (KFD) 的用户态封装和抽象。它的 libhsakmt 通过 KFD 提供的 IOCTL 直接访问 HSA 硬件，而 libhsa-runtime64 主要实现 HSA 标准的 Core Profile 和各厂家的扩展 (extension)。
 
