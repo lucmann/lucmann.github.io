@@ -64,6 +64,19 @@ option(ROCCLR_ENABLE_PAL   "Enable support for PAL runtime"    OFF)
 - `ROCCLR_ENABLE_LC`    [COMGR](https://github.com/ROCm/llvm-project/tree/amd-staging/amd/comgr) (Code Object Manager) 目前在 `ROCm/llvm-project/amd/comgr/` 下维护
     - CLR 的源码中是通过宏 `USE_COMGR_LIBRARY` guard
 
+```
+bool Program::compileImpl(const std::string& sourceCode,
+                          const std::vector<const std::string*>& headers,
+                          const char** headerIncludeNames, amd::option::Options* options,
+                          const std::vector<std::string>& preCompiledHeaders) {
+  if (isLC()) {
+    return compileImplLC(sourceCode, headers, headerIncludeNames, options, preCompiledHeaders);
+  } else {
+    return compileImplHSAIL(sourceCode, headers, headerIncludeNames, options);
+  }
+}
+```
+
 CLR 也支持两个运行时后端：
 - `ROCCLR_ENABLE_HSA`
     - 如果使用 HSA runtime, 那么 CLR 需要调用 ROCR (libhsa-runtime64)
