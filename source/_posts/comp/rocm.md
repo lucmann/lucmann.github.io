@@ -39,7 +39,17 @@ OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力�
 
 # [CLR](https://github.com/ROCm/clr)
 
-所谓 Common Language Runtimes, 就是指 HIP 和 OpenCL 两种编程语言的运行时, 类似 C/C++ 的 libc.so 和 libstdc++.so。无论 HIP 还是 OpenCL ，它们都要调到编译器后端，在 CLR 的实现里支持两个编译后端：
+所谓 Common Language Runtimes, 就是指 HIP 和 OpenCL 两种编程语言的运行时, 类似 C/C++ 的 libc.so 和 libstdc++.so。
+- libamdhip64.so
+- libamdocl64.so.2.1.nnn
+
+这两个动态库各自都需要链接 rocclr
+
+```
+target_link_libraries(amdocl PUBLIC rocclr)
+```
+
+因为无论 amdhip64 还是 amdocl ，它们也都要调到编译器后端，在 CLR 的实现里支持两个编译后端：
 - `ROCCLR_ENABLE_HSAIL` HSAIL (HSA Intermediate Language, 基本废弃)
     - CLR 的源码中是通过宏 `WITH_COMPILER_LIB` guard
 - `ROCCLR_ENABLE_LC`    [COMGR](https://github.com/ROCm/llvm-project/tree/amd-staging/amd/comgr) (Code Object Manager) 目前在 `ROCm/llvm-project/amd/comgr/` 下维护
