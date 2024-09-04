@@ -30,7 +30,7 @@ OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力�
     - ROCr libhsa-runtime64 
         - 用户可以通过 CMAKE 变量 `BUILD_SHARED_LIBS` 选择构建 libhsa-runtime64 为静态库或动态库
 
-    - ROCR 主要向用户提供 AMD GPU 内核驱动 (包括 KFD 和 XDNA) 的用户态封装和抽象, 类似 amdgpu.ko 与 libdrm_amdgpu 的关系。它的 libhsakmt 通过 KFD 提供的 IOCTL 直接访问 HSA 硬件，而 libhsa-runtime64 主要实现 HSA 标准的 Core Profile 和各厂家的扩展 (extension)。
+    - ROCR 主要向用户提供 AMD GPU/NPU/HSA 设备内核驱动 (包括 KFD 和 [XDNA](https://patchwork.freedesktop.org/series/136294/)) 的用户态封装和抽象, 类似 amdgpu.ko 与 libdrm_amdgpu 的关系。它的 libhsakmt 通过 KFD 提供的 IOCTL 直接访问 HSA 硬件，而 libhsa-runtime64 主要实现 HSA 标准的 Core Profile 和各厂家的扩展 (extension)。
 
 可以说，ROCm 的整个运行时环境分的 3 大块，分别负责打通
 - CLR   向上，面向编程语言
@@ -65,6 +65,31 @@ CLR 也支持两个 Runtime：
 # ROCR
 
 计算世界的 libdrm
+
+ROCR 提供底层设备驱动用户态封装，它将驱动本身进行抽象，很方便扩展到对新设备驱动的支持，例如，在最近 ROCR 就增加了对 [AMD NPU 驱动 XDNA](https://patchwork.freedesktop.org/series/136294/) 的支持
+
+```
+hsa_status_t XdnaDriver::DiscoverDriver() {
+  const int max_minor_num(64);
+  const std::string devnode_prefix("/dev/accel/accel");
+
+  for (int i = 0; i < max_minor_num; ++i) {
+    std::unique_ptr<Driver> xdna_drv(
+        new XdnaDriver(devnode_prefix + std::to_string(i)));
+    if (xdna_drv->Open() == HSA_STATUS_SUCCESS) {
+      if (xdna_drv->QueryKernelModeDriver(
+              core::DriverQuery::GET_DRIVER_VERSION) == HSA_STATUS_SUCCESS) {
+        core::Runtime::runtime_singleton_->RegisterDriver(xdna_drv);
+        return HSA_STATUS_SUCCESS;
+      } else {
+        xdna_drv->Close();
+      }
+    }
+  }
+
+  return HSA_STATUS_ERROR;
+}
+```
 
 # 参考
 - [What's ROCm](https://rocm.docs.amd.com/en/latest/what-is-rocm.html)
