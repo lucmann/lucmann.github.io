@@ -35,9 +35,9 @@ OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力�
 可以说，ROCm 的整个运行时环境分的 3 大块，分别负责打通
 - CLR   向上，面向编程语言
 - ROCR  向下，面向内核驱动
-- HIP   面向编译系统(已并入 ROCm/llvm-project)
+- HIP   面向编译系统(HIP 原来提供的 hipcc 已并入 ROCm/llvm-project)
 
-# CLR
+# [CLR](https://github.com/ROCm/clr)
 
 所谓 Common Language Runtimes, 就是指 HIP 和 OpenCL 两种编程语言的运行时, 类似 C/C++ 的 libc.so 和 libstdc++.so。无论 HIP 还是 OpenCL ，它们都要调到编译器后端，在 CLR 的实现里支持两个编译后端：
 - `ROCCLR_ENABLE_HSAIL` HSAIL (HSA Intermediate Language, 基本废弃)
@@ -62,7 +62,7 @@ CLR 也支持两个 Runtime：
 - `ROCCLR_ENABLE_PAL` [PAL](https://github.com/GPUOpen-Drivers/pal) (Platform Abstraction Library)
     - 如果使用 PAL runtime, 那么 CLR 不需要调用 ROCr/ROCt
 
-# ROCR
+# [ROCR](https://github.com/ROCm/ROCR-Runtime)
 
 计算世界的 libdrm
 
