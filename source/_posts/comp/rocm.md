@@ -30,11 +30,16 @@ OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力�
     - ROCr libhsa-runtime64 
         - 用户可以通过 CMAKE 变量 `BUILD_SHARED_LIBS` 选择构建 libhsa-runtime64 为静态库或动态库
 
-  ROCR 主要向用户提供 HSA 内核实现 (KFD) 的用户态封装和抽象。它的 libhsakmt 通过 KFD 提供的 IOCTL 直接访问 HSA 硬件，而 libhsa-runtime64 主要实现 HSA 标准的 Core Profile 和各厂家的扩展 (extension)。
+    - ROCR 主要向用户提供 AMD GPU 内核驱动 (包括 KFD 和 XDNA) 的用户态封装和抽象, 类似 amdgpu.ko 与 libdrm_amdgpu 的关系。它的 libhsakmt 通过 KFD 提供的 IOCTL 直接访问 HSA 硬件，而 libhsa-runtime64 主要实现 HSA 标准的 Core Profile 和各厂家的扩展 (extension)。
+
+可以说，ROCm 的整个运行时环境分的 3 大块，分别负责打通
+- CLR   向上，面向编程语言
+- ROCR  向下，面向内核驱动
+- HIP   面向编译系统(已并入 ROCm/llvm-project)
 
 # CLR
 
-所谓 Common Language Runtimes, 就是指 HIP 和 OpenCL 的运行时, 无论两者哪个，它们都要调到编译器后端，在 CLR 的实现里支持两个编译后端：
+所谓 Common Language Runtimes, 就是指 HIP 和 OpenCL 两种编程语言的运行时, 类似 C/C++ 的 libc.so 和 libstdc++.so。无论 HIP 还是 OpenCL ，它们都要调到编译器后端，在 CLR 的实现里支持两个编译后端：
 - `ROCCLR_ENABLE_HSAIL` HSAIL (HSA Intermediate Language, 基本废弃)
     - CLR 的源码中是通过宏 `WITH_COMPILER_LIB` guard
 - `ROCCLR_ENABLE_LC`    [COMGR](https://github.com/ROCm/llvm-project/tree/amd-staging/amd/comgr) (Code Object Manager) 目前在 `ROCm/llvm-project/amd/comgr/` 下维护
@@ -42,7 +47,7 @@ OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力�
 
 CLR 也支持两个 Runtime：
 - `ROCCLR_ENABLE_HSA`
-    - 如果使用 HSA runtime, 那么 CLR 需要调用 ROCr (libhsa-runtime64)
+    - 如果使用 HSA runtime, 那么 CLR 需要调用 ROCR (libhsa-runtime64)
     ```
     find_package(hsa-runtime64 1.11 REQUIRED CONFIG
       PATHS
@@ -56,6 +61,10 @@ CLR 也支持两个 Runtime：
     ```
 - `ROCCLR_ENABLE_PAL` [PAL](https://github.com/GPUOpen-Drivers/pal) (Platform Abstraction Library)
     - 如果使用 PAL runtime, 那么 CLR 不需要调用 ROCr/ROCt
+
+# ROCR
+
+计算世界的 libdrm
 
 # 参考
 - [What's ROCm](https://rocm.docs.amd.com/en/latest/what-is-rocm.html)
