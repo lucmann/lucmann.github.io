@@ -103,7 +103,9 @@ CLR 也支持两个运行时后端：
 
 计算世界的 libdrm
 
-ROCR 提供底层设备驱动用户态封装，它将驱动本身进行抽象，很方便扩展到对新设备驱动的支持，例如，在最近 ROCR 就增加了对 [AMD NPU 驱动 XDNA](https://patchwork.freedesktop.org/series/136294/) 的支持
+ROCR 提供底层设备驱动用户态封装，它将驱动本身进行抽象，很方便扩展到对新设备驱动的支持，例如，在最近 ROCR 就增加了对 [AMD NPU 驱动 XDNA](https://patchwork.freedesktop.org/series/136294/) 的支持。
+
+OOC: libhsa-runtime64.so 打开的是 `/dev/kfd`
 
 ```
 hsa_status_t XdnaDriver::DiscoverDriver() {
@@ -132,11 +134,17 @@ hsa_status_t XdnaDriver::DiscoverDriver() {
 
 计算世界的 AMDGPU
 
-AMDKFD 是 AMD Kernel Fusion Driver, 它基本上是 AMD HSA 在内核中的实现，所以 ROCm/OpenCL 都需要它。[AMDKFD 现在已经是内核 AMDGPU 驱动的一部分](https://lists.freedesktop.org/archives/amd-gfx/2018-July/023673.html), 就像 DAL 一样。
+AMDKFD 是 AMD Kernel Fusion Driver, 它基本上是 AMD HSA 在内核中的实现，所以 ROCm/OpenCL 都需要它。[AMDKFD 在 2014 年合入 Linux kernel 3.19 的](https://lists.freedesktop.org/archives/amd-gfx/2018-July/023673.html)。
 
 OOC: AMD "Fusion" 是 AMD 在 2011 年推出的一系列处理器，旨在将 CPU 和 GPU 集成到一个芯片上，称为 APU (加速处理单元)。这些处理器的目标是提供更高的性能和能效，特别是在图形和并行计算任务方面。
+
+AMDKFD 有 3 个内核配置选项:
+- HSA_AMD     基本上在 X86_64, ARM64 和 PPC64 系统上是默认打开的
+- HSA_AMD_SVM 基于 HMM 的共享虚拟内存管理器
+- HSA_AMD_P2P 基于 PCI_P2PDMA 的多 GPU 间数据传输功能
 
 # 参考
 - [What's ROCm](https://rocm.docs.amd.com/en/latest/what-is-rocm.html)
 - [Heterogeneous System Architecture standards](https://hsafoundation.com/standards/)
 - [HSA Programmer's Reference Manual: HSAIL Virtual ISA](https://www.hsafoundation.com/wp-content/uploads/2021/02/HSA-PRM-1.1.1.pdf)
+- [AMDKFD Kernel Driver](https://lwn.net/Articles/619581/)
