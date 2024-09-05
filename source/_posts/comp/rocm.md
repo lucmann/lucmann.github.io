@@ -128,6 +128,14 @@ hsa_status_t XdnaDriver::DiscoverDriver() {
 }
 ```
 
+# [AMDKFD](https://github.com/ROCm/ROCK-Kernel-Driver)
+
+计算世界的 AMDGPU
+
+AMDKFD 是 AMD Kernel Fusion Driver, 它基本上是 AMD HSA 在内核中的实现，所以 ROCm/OpenCL 都需要它。[AMDKFD 现在已经是内核 AMDGPU 驱动的一部分](https://lists.freedesktop.org/archives/amd-gfx/2018-July/023673.html), 就像 DAL 一样。
+
+OOC: AMD "Fusion" 是 AMD 在 2011 年推出的一系列处理器，旨在将 CPU 和 GPU 集成到一个芯片上，称为 APU (加速处理单元)。这些处理器的目标是提供更高的性能和能效，特别是在图形和并行计算任务方面。
+
 # 参考
 - [What's ROCm](https://rocm.docs.amd.com/en/latest/what-is-rocm.html)
 - [Heterogeneous System Architecture standards](https://hsafoundation.com/standards/)
