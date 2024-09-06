@@ -9,6 +9,8 @@ AMD 的通用计算平台 ROCm (Radeon Open Compute) 是在通用计算领域与
 
 OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力学和热力学领域著名物理学家路德维希·玻尔兹曼，他的工作对理解物质的微观行为和能量分布有着深远的影响。AMD 选取这个名字，可能是为了强调该平台在高性能计算领域的强大计算力和科学计算的应用前景。
 
+<!--more-->
+
 - [AMD Compute Common Language Runtimes](https://github.com/ROCm/clr)
     - [HIP runtime](https://github.com/ROCm/HIP) (C++ Heterogeneous-Compute Interface for Portability)
         - 可以算是一种 C++ 方言
@@ -17,9 +19,6 @@ OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力�
         - 由 Khronos Group 发布的开放异构系统并行编程语言
         - 语言风格更接近 C
     - [rocclr](https://github.com/ROCm/clr/tree/amd-staging/rocclr) HIP 和 OpenCL 共用的 runtime
-
-<!--more-->
-
 - [HIP](https://github.com/ROCm/HIP)
     - 这个仓库以前主要提供一个 compiler driver utility `hipcc` 脚本，目前 hipcc 已经被移到 AMD 自己 forked [llvm-project/amd/hipcc](https://github.com/ROCm/llvm-project/tree/amd-staging/amd/hipcc)
     - hipcc 之于 HIP-Clang 就像 gcc 之于 GCC
