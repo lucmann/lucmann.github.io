@@ -74,6 +74,6 @@ endif
 
 目前 accel 下已经有 3 个 AI 加速芯片的驱动:
 
-- Intel 旗下的哈瓦那 (Habana) AI 处理器 (AIP)
-- Intel Neural Proccessing Unit (NPU) (之间叫 Versatile Proccessing Unit)
-- Qualcomm Cloud AI 加速器
+- **habanalabs.ko** - Intel 旗下的哈瓦那 (Habana) AI 处理器 (AIP)
+- **intel_vpu.ko** - Intel Neural Proccessing Unit (NPU) (之间叫 Versatile Proccessing Unit)
+- **qaic.ko** - Qualcomm Cloud AI 加速器
