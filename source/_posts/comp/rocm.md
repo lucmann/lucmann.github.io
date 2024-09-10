@@ -5,6 +5,10 @@ tags: [ROCm]
 categories: computing
 ---
 
+> 高端硅片可以构建市场，但最终，软件支持往往决定了赢家和输家
+>
+>>             Jack Huyhh, AMD 高级副总裁兼计算和图形业务集团总经理
+
 AMD 的通用计算平台 ROCm (Radeon Open Compute) 是在通用计算领域与 NVIDIA 的 CUDA （Compute Unified Device Architecture) 相抗衡的软件基础设施。ROCm 实现的其实是由 AMD 发起的 HSA (Heterogeneous System Architecture) 标准，所以它的运行时主要由 3 个部分组成:
 
 OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力学和热力学领域著名物理学家路德维希·玻尔兹曼，他的工作对理解物质的微观行为和能量分布有着深远的影响。AMD 选取这个名字，可能是为了强调该平台在高性能计算领域的强大计算力和科学计算的应用前景。
@@ -165,6 +169,10 @@ AMDKFD 有 3 个内核配置选项:
 - HSA_AMD     基本上在 X86_64, ARM64 和 PPC64 系统上是默认打开的
 - HSA_AMD_SVM 基于 HMM 的共享虚拟内存管理器
 - HSA_AMD_P2P 基于 PCI_P2PDMA 的多 GPU 间数据传输功能
+
+# UDNA
+
+在未来， AMD 计划将 RDNA 和 CDNA 架构统一为 UDNA 架构，并为该架构引入张量计算单元，以更好地支持 AI 计算，统一的 UDNA 架构对开发者来说将更友好，可以让开发者利用相同的底层微架构来实现 AI, HPC 和游戏。
 
 # 参考
 - [What's ROCm](https://rocm.docs.amd.com/en/latest/what-is-rocm.html)
