@@ -129,6 +129,30 @@ hsa_status_t XdnaDriver::DiscoverDriver() {
 }
 ```
 
+# [ROCm/llvm-project](https://github.com/ROCm/llvm-project)
+
+
+[ROCm/llvm-project](https://github.com/ROCm/llvm-project) 是 AMD 专为 ROCm fork 出来的 LLVM 仓库，它里面包含所有 [llvm-project](https://github.com/llvm/llvm-project) 上游变更，再加上 AMD 特有的 **amd** 子目录。 在 amd 目录下存在 3 个组件:
+
+- amd_comgr
+- device-libs
+- hipcc
+
+这 3 个组件可以有两种构建方式:
+- 因为每个子目录下都有自己的 CMakeLists.txt, 所以可以通过 cmake 的 `-S` 选项分别逐个构建
+  - 虽然这 3 个组件是可以独立构建的，但 amd_comgr 依赖 device-libs
+- 也可以通过 llvm 构建选项 `LLVM_EXTERNAL_PROJECTS`, `LLVM_EXTERNAL_DEVICELIBS_SOURCE_DIR`, `LLVM_EXTERNAL_COMGR_SOURCE_DIR` 与 llvm 一起构建
+  - 这种方式好像需要运行 `amd/utils/omnibus.sh`, 试了一下没有成功，还是第一种方式相对简单些
+
+构建顺序应该是：
+
+- `-S llvm -B build`
+  - `cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_INSTALL_PREFIX=~/.local/llvm/Release -DLLVM_ENABLE_PROJECTS="clang;lld;llvm" -DLLVM_TARGETS_TO_BUILD="BPF;AMDGPU;host" -DLLVM_LIBDIR_SUFFIX=64 -DLLVM_BUILD_LLVM_DYLIB=OFF -DBUILD_SHARED_LIBS=On -DLLVM_USE_LINKER=gold`
+- `-S amd/device-libs -B build-rocm`
+  - `cmake -S amd/device-libs -B build-rocm -G "Ninja" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_MODULE_PATH=~/.local/llvm/Release -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0 -DLLVM_DIR=~/.local/llvm/Release/lib64/cmake/llvm`
+  - 注意 `LLVM_DIR` 要设置的是包含 `LLVMConfig.cmake` 的路径, 而不是 `llvm-config --prefix` 输出的路径
+- `-S amd/comgr -B build-rocm`
+
 # [AMDKFD](https://github.com/ROCm/ROCK-Kernel-Driver)
 
 计算世界的 AMDGPU
