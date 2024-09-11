@@ -24,15 +24,17 @@ categories: utilities
 
 # Examples
 
-## 只在当前目录搜索（不递归）不以 f 或 g 或 h 开头的目录
-- `find . -maxdepth 1 -name '[^fgh]*' -type d`
+- 只在当前目录搜索（不递归）不以 f 或 g 或 h 开头的目录
+    - `find . -maxdepth 1 -name '[^fgh]*' -type d`
 
-## 排除/proc 和 /tmp 这两个目录
-- `find / -path '/proc' -prune -o -path '/tmp' -prune -o -name 'README.md'`
+- 排除/proc 和 /tmp 这两个目录
+    - `find / -path '/proc' -prune -o -path '/tmp' -prune -o -name 'README.md'`
+- 只在当前目录查找除了指定及隐藏目录以外的所有目录，打印并删除
+    - `find -maxdepth 1 \( -path ./gh -o -path ./aaa -o -path ./mesa-install -o -path ./1.3.290.0 -o -path ./1.3.280.1 \) -prune -o -type d ! -name ".*" -print -exec rm -rf {} \;`
 
-## 查找 ~/gh 目录下只有文件属主(u)有执行权限(x)的文件 (精确匹配文件的 permission bits)
-- `find ~/gh -perm u=x -type f`
+- 查找 ~/gh 目录下只有文件属主(u)有执行权限(x)的文件 (精确匹配文件的 permission bits)
+    - `find ~/gh -perm u=x -type f`
 
-## 查找 ~/gh 目录下文件属主(u)有执行权限(x) 的文件（组用户(g)或其它用户(o)可能有或没有执行权限）
-- `find ~/gh -perm -u=x -type f`
+- 查找 ~/gh 目录下文件属主(u)有执行权限(x) 的文件（组用户(g)或其它用户(o)可能有或没有执行权限）
+    - `find ~/gh -perm -u=x -type f`
 
