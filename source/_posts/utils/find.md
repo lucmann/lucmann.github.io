@@ -28,9 +28,11 @@ categories: utilities
     - `find . -maxdepth 1 -name '[^fgh]*' -type d`
 
 - 排除/proc 和 /tmp 这两个目录
-    - `find / -path '/proc' -prune -o -path '/tmp' -prune -o -name 'README.md'`
+    - `find / -path /proc -prune -o -path /tmp -prune -o -name "README.md"`
+        - `-prune` 告诉 find 跳过前面的目录，也可以用 `\( -o \)` 将多个 `-path` 合并，只保留一个 `-prune` 
 - 只在当前目录查找除了指定及隐藏目录以外的所有目录，打印并删除
     - `find -maxdepth 1 \( -path ./gh -o -path ./aaa -o -path ./mesa-install -o -path ./1.3.290.0 -o -path ./1.3.280.1 \) -prune -o -type d ! -name ".*" -print -exec rm -rf {} \;`
+        - 注意匹配隐藏目录时用 `.*`, `.` 在 shell 里不是通配符
 
 - 查找 ~/gh 目录下只有文件属主(u)有执行权限(x)的文件 (精确匹配文件的 permission bits)
     - `find ~/gh -perm u=x -type f`
