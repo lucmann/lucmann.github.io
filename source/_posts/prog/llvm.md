@@ -45,6 +45,7 @@ llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 
         - `sudo fallocate -l 4G /swapfile`
             - 比 `dd if=/dev/zero of=/swapfile bs=1 count=0 seek=4G` 快一点
             - 当 `-DBUILD_SHARED_LIBS=OFF` (构建 LLVM 为静态库) 时，最好 10G
+            ![how horrible static linking is](static-link.png)
         - `sudo chmod 600 /swapfile`
         - `sudo mkswap /swapfile`
             - 格式化成 swap 分区
