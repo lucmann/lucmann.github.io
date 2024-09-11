@@ -7,7 +7,7 @@ categories: computing
 
 > 高端硅片可以构建市场，但最终，软件支持往往决定了赢家和输家
 >
->             -- Jack Huyhh, AMD 高级副总裁兼计算和图形业务集团总经理
+>             -- Jack Huynh, AMD 高级副总裁兼计算和图形业务集团总经理
 
 AMD 的通用计算平台 ROCm (Radeon Open Compute) 是在通用计算领域与 NVIDIA 的 CUDA （Compute Unified Device Architecture) 相抗衡的软件基础设施。ROCm 实现的其实是由 AMD 发起的 HSA (Heterogeneous System Architecture) 标准，所以它的运行时主要由 3 个部分组成:
 
