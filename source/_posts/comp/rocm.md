@@ -150,10 +150,9 @@ hsa_status_t XdnaDriver::DiscoverDriver() {
 
 构建顺序应该是：
 
-- `-S llvm -B build`
-  - `cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_INSTALL_PREFIX=~/.local/llvm/Release -DLLVM_ENABLE_PROJECTS="clang;lld;llvm" -DLLVM_TARGETS_TO_BUILD="BPF;AMDGPU;host" -DLLVM_LIBDIR_SUFFIX=64 -DLLVM_BUILD_LLVM_DYLIB=OFF -DBUILD_SHARED_LIBS=On -DLLVM_USE_LINKER=gold`
-- `-S amd/device-libs -B build-rocm`
-  - `cmake -S amd/device-libs -B build-rocm -G "Ninja" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_MODULE_PATH=~/.local/llvm/Release -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0 -DLLVM_DIR=~/.local/llvm/Release/lib64/cmake/llvm`
+- `cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0/llvm -DLLVM_ENABLE_PROJECTS="clang;lld;llvm" -DLLVM_TARGETS_TO_BUILD="BPF;AMDGPU;host" -DLLVM_LIBDIR_SUFFIX=64 -DLLVM_BUILD_LLVM_DYLIB=OFF -DBUILD_SHARED_LIBS=OFF -DLLVM_USE_LINKER=gold`
+  - 注意构建 comgr 不支持 shared libraries LLVM,  所以必须将 LLVM 编译成静态库 (`-DBUILD_SHARED_LIBS=OFF`)
+- `cmake -S amd/device-libs -B build-rocm -G "Ninja" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_MODULE_PATH=~/.local/llvm/Release -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0 -DLLVM_DIR=~/.local/llvm/Release/lib64/cmake/llvm`
   - 注意 `LLVM_DIR` 要设置的是包含 `LLVMConfig.cmake` 的路径, 而不是 `llvm-config --prefix` 输出的路径
 - `-S amd/comgr -B build-rocm`
 
