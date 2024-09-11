@@ -27,7 +27,7 @@ llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 
     - 自定义安装路径，默认是 /usr/local
     - 安装路径在安装之后也可以通过 `llvm-config --prefix --ldflags` 查到
 - `-DBUILD_SHARED_LIBS=ON`
-    - `BUILD_SHARED_LIBS` 是一个 CMake 选项，当它开启时，那些没有指明 STATIC, SHARED, MODULE 的构建目标都会被构建成 SHARED 库。这个一般要开启，否则会导致在链接器进程因 OOM 被 Killed (因为静态库们被拼成一个大文件, 内存不够用)
+    - `BUILD_SHARED_LIBS` 是一个 CMake 选项，当它开启时，那些没有指明 STATIC, SHARED, MODULE 的构建目标都会被构建成 SHARED 库。这个一般要开启，否则会导致在链接器进程因 OOM 被 Killed (因为可执行程序由静态库们组装而成, 内存不够用)
 - `-DLLVM_LIBDIR_SUFFIX=64`
     - 如果是 64 位系统，安装路径会由原来 `${CMAKE_INSTALL_PREFIX}/lib` 变成 `${CMAKE_INSTALL_PREFIX}/lib64`
 - `-DLLVM_BUILD_LLVM_DYLIB=OFF`
