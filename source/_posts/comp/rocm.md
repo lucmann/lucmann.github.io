@@ -173,6 +173,9 @@ AMDKFD 有 3 个内核配置选项:
 
 在未来， AMD 计划将 RDNA 和 CDNA 架构统一为 UDNA 架构，并为该架构引入张量计算单元，以更好地支持 AI 计算，统一的 UDNA 架构对开发者来说将更友好，可以让开发者利用相同的底层微架构来实现 AI, HPC 和游戏。
 
+# [HSA](https://hsafoundation.com/) vs [UXL](https://uxlfoundation.org/)
+  HSA 标准是 ROCm 的基石之一，它让用户在通用计算领域除了 CUDA 之外能有另外一个选择。而 UXL (Unified Acceleration) Foundation 旨在为不同架构不同厂商的加速器构建统一的软件生态系统，从而也成为另一个能与 nVIDIA 的 GPU 和 CUDA 相抗衡的计算平台。 
+
 # 参考
 - [What's ROCm](https://rocm.docs.amd.com/en/latest/what-is-rocm.html)
 - [Heterogeneous System Architecture standards](https://hsafoundation.com/standards/)

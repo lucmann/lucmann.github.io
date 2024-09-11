@@ -27,7 +27,7 @@ llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 
     - 自定义安装路径，默认是 /usr/local
     - 安装路径在安装之后也可以通过 `llvm-config --prefix --ldflags` 查到
 - `-DBUILD_SHARED_LIBS=ON`
-    - `BUILD_SHARED_LIBS` 是一个 CMake 选项，当它开启时，那些没有指明 STATIC, SHARED, MODULE 的构建目标都会被构建成 SHARED 库。这个一般要开启，否则会导致在链接生成 llvm-lto2 时(因为链接的都是静态库) 内存压力巨大，很容易被 OOM-Killed 
+    - `BUILD_SHARED_LIBS` 是一个 CMake 选项，当它开启时，那些没有指明 STATIC, SHARED, MODULE 的构建目标都会被构建成 SHARED 库。这个一般要开启，否则会导致在链接器进程因 OOM 被 Killed (因为静态库们被拼成一个大文件, 内存不够用)
 - `-DLLVM_LIBDIR_SUFFIX=64`
     - 如果是 64 位系统，安装路径会由原来 `${CMAKE_INSTALL_PREFIX}/lib` 变成 `${CMAKE_INSTALL_PREFIX}/lib64`
 - `-DLLVM_BUILD_LLVM_DYLIB=OFF`
@@ -44,6 +44,7 @@ llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 
     - 当配置 `-DCMAKE_BUILD_TYPE=Debug` 时，即使将上面两个选项都配置为 1，仍然很大可能会被 OOM-Killed (问题不是 CPU 线程多少，而是内存需求过大)。这时最极解决方法是增大 swap 分区:
         - `sudo fallocate -l 4G /swapfile`
             - 比 `dd if=/dev/zero of=/swapfile bs=1 count=0 seek=4G` 快一点
+            - 当 `-DBUILD_SHARED_LIBS=OFF` (构建 LLVM 为静态库) 时，最好 10G
         - `sudo chmod 600 /swapfile`
         - `sudo mkswap /swapfile`
             - 格式化成 swap 分区
