@@ -170,7 +170,7 @@ AMDKFD 有 3 个内核配置选项:
 - HSA_AMD_SVM 基于 HMM 的共享虚拟内存管理器
 - HSA_AMD_P2P 基于 PCI_P2PDMA 的多 GPU 间数据传输功能
 
-# UDNA
+# [UDNA](https://winbuzzer.com/2024/09/10/amd-combines-rdna-and-cdna-into-udna-to-rival-nvidia-cuda-xcxwbn/)
 
 在未来， AMD 计划将 RDNA 和 CDNA 架构统一为 UDNA 架构，并为该架构引入张量计算单元，以更好地支持 AI 计算，统一的 UDNA 架构对开发者来说将更友好，可以让开发者利用相同的底层微架构来实现 AI, HPC 和游戏。
 
