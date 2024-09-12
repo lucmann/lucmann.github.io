@@ -6,23 +6,25 @@ categories: utilities
 ---
 
 # git am
-- git am foo.patch
+- `git am foo.patch`
     - 应用补丁 foo.patch (注意与 `git apply` 的区别，`git am` 同时会将commit log 也应用上去)
 
 <!--more-->
 
 # git clone
-- git clone --recurse-submodules
+- `git clone --recurse-submodules`
     - 克隆仓库时连同子仓库一同克隆
 
 # git describe
-- git describe --all <commit>
+- `git describe --all <commit>`
     - 找到离给定 `<commit>` 最近的 tag
 
 # git log
-- git log -G"bla-bla-bla" /path/to/file
-    - 查找到涉及修改文件 `file` 的内容匹配字符串 `bla-bla-bla` 的 commit(s)
-- git log --diff-filter=D --summary --oneline
+- `git log -S<regex> --pickaxe-regex /path/to/a/file`
+    - 查找匹配的字串在这个文件中出现的次数发生变化的 commit
+- `git log -G<regex> /path/to/a/file`
+    - 查找到涉及修改文件 `file` 的内容匹配正则表达式 <regex> 的 commit
+- `git log --diff-filter=D --summary --oneline`
     - 找出有文件删除记录的 commit, 并显示出哪些文件被删除
     - filters 有:
         - A: Added
@@ -33,13 +35,13 @@ categories: utilities
     - 当 filters 使用小写时，表示**不包含**这些变更类型
 
 # git remote
-- git remote prune <remote>
+- `git remote prune <remote>`
     - 将给定的 `<remote>` 远端不存在的**本地分支**全部删除(注意: rm -rf 警告，最好先 `git remote prune --dry-run <remote>`)
 
 # git submodule
-- git submodule init
+- `git submodule init`
     - 在主仓库初始化一个子仓库
-- git submodule update
+- `git submodule update`
     - 更新所有子仓库
 
 
