@@ -22,6 +22,15 @@ categories: utilities
 # git log
 - git log -G"bla-bla-bla" /path/to/file
     - 查找到涉及修改文件 `file` 的内容匹配字符串 `bla-bla-bla` 的 commit(s)
+- git log --diff-filter=D --summary --oneline
+    - 找出有文件删除记录的 commit, 并显示出哪些文件被删除
+    - filters 有:
+        - A: Added
+        - C: Copied
+        - D: Deleted
+        - M: Modified
+        - R: Renamed
+    - 当 filters 使用小写时，表示**不包含**这些变更类型
 
 # git remote
 - git remote prune <remote>
