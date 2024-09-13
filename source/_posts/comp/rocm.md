@@ -148,13 +148,14 @@ hsa_status_t XdnaDriver::DiscoverDriver() {
 - 也可以通过 llvm 构建选项 `LLVM_EXTERNAL_PROJECTS`, `LLVM_EXTERNAL_DEVICELIBS_SOURCE_DIR`, `LLVM_EXTERNAL_COMGR_SOURCE_DIR` 与 llvm 一起构建
   - 这种方式好像需要运行 `amd/utils/omnibus.sh`, 试了一下没有成功，还是第一种方式相对简单些
 
-构建顺序应该是：
+构建顺序应该只能是：
 
-- `cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0/llvm -DLLVM_ENABLE_PROJECTS="clang;lld;llvm" -DLLVM_TARGETS_TO_BUILD="BPF;AMDGPU;host" -DLLVM_LIBDIR_SUFFIX=64 -DLLVM_BUILD_LLVM_DYLIB=OFF -DBUILD_SHARED_LIBS=OFF -DLLVM_USE_LINKER=gold`
-  - 注意构建 comgr 不支持 shared libraries LLVM,  所以必须将 LLVM 编译成静态库 (`-DBUILD_SHARED_LIBS=OFF`)
-- `cmake -S amd/device-libs -B build-rocm -G "Ninja" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_MODULE_PATH=~/.local/llvm/Release -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0 -DLLVM_DIR=~/.local/llvm/Release/lib64/cmake/llvm`
-  - 注意 `LLVM_DIR` 要设置的是包含 `LLVMConfig.cmake` 的路径, 而不是 `llvm-config --prefix` 输出的路径
-- `-S amd/comgr -B build-rocm`
+- `cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0/llvm -DLLVM_ENABLE_PROJECTS="clang;lld;llvm" -DLLVM_TARGETS_TO_BUILD="BPF;AMDGPU;host" -DLLVM_LIBDIR_SUFFIX=64 -DLLVM_BUILD_LLVM_DYLIB=OFF -DBUILD_SHARED_LIBS=OFF -DLLVM_USE_LINKER=gold`
+  - 构建 comgr 不支持 shared libraries LLVM,  所以必须将 LLVM 编译成静态库 (`-DBUILD_SHARED_LIBS=OFF`)
+  - [`CMAKE_BUILD_TYPE` 不要选 Debug 或 RelWithDebInfo, 除非你有足够的硬盘空间](https://github.com/ROCm/llvm-project/issues/37)
+- ` cmake -S amd/device-libs -B build-rocm -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0 -DLLVM_DIR=~/.local/rocm/6.2.0/llvm/lib64/cmake/llvm`
+  - `LLVM_DIR` 要设置的是包含 `LLVMConfig.cmake` 的路径, 而不是 `llvm-config --prefix` 输出的路径
+- `cmake -S amd/comgr -B build-rocm -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0 -DLLVM_DIR=~/.local/rocm/6.2.0/llvm/lib64/cmake/llvm -DCMAKE_MODULE_PATH=~/local/rocm/6.2.0/lib/cmake/AMDDeviceLibs`
 
 # [AMDKFD](https://github.com/ROCm/ROCK-Kernel-Driver)
 
