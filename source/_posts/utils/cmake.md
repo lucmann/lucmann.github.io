@@ -30,55 +30,29 @@ categories: utilities
 - Package
 
 ## Build
-Build的工作主要包括解决依赖关系，构建目标(库,应用,测试用例)。`cmake`命令有很多选项可以帮助我们灵活有效地构建目标， 例如：
+- cmake -B build
+  - Build的工作主要包括解决依赖关系，构建目标(库,应用,测试用例)。`cmake`命令有很多选项可以帮助我们灵活有效地构建目标， 例如：Out-of-source构建，意思是不污染源代码目录，在指定的单独的目录下生成构建系统, 如果build不存在，cmake会创建它
 
-Out-of-source构建，意思是不污染源代码目录，在指定的单独的目录下生成构建系统, 如果build不存在，cmake会创建它
+- cmake -B build --graphviz=file.dot
+  - 将构建目标间的依赖关系输出Graphivz dot, 生成的`file.dot`可以用dot命令生成图片`dot -Tpng -o file.png file.dot`
 
-```
-cmake -B build
-```
+- cmake --build build
+  - 开始构建, 通过`-B`, `--build`选项可以省去`mkdir build && cd build && cmake .. && make`繁琐的操作
 
-将构建目标间的依赖关系输出Graphivz dot, 生成的`file.dot`可以用dot命令生成图片`dot -Tpng -o file.png file.dot`
+- cmake --build build --clean-first
+  - 全量构建, 如果是 `-G "Ninja"`, 则 `ninja -C build clean`, 然后再重新 `ninja -C build`
 
-```
-cmake -B build --graphviz=file.dot
-```
+- cmake --build build --target lib1
+  - 只构建指定的目标`lib1`, 如果`lib1`依赖其它目标，被依赖的目标也会被构建
 
-开始构建, 通过`-B`, `--build`选项可以省去`mkdir build && cd build && cmake .. && make`繁琐的操作
+- cmake --install build
+  - 安装
 
-```
-cmake --build build
-```
+- cmake -L build
+  - 查询CMAKE变量配置值，包括内置变量和自定义变量
 
-全量构建
-
-```
-cmake --build build --clean-first
-```
-
-只构建指定的目标`lib1`, 如果`lib1`依赖其它目标，被依赖的目标也会被构建
-
-```
-cmake --build build --target lib1
-```
-
-安装, 一般需要root权限
-
-```
-cmake --install build
-```
-
-查询CMAKE变量配置值，包括内置变量和自定义变量
-
-```
-cmake -L build
-```
-
-列出生成的Makefile里有效的`target`
-
-```
-cmake --build build --target help
-```
+- cmake --build build --target help
+  - 列出生成的Makefile里有效的`target`
 
 ## CMake 的内置变量
 
@@ -104,13 +78,13 @@ cmake --build build --target help
 - Don't make any assumption about the platform and compiler.
 - Make sure that all your projects can be built both standalone and as a subproject of another project.
 - Always add namespaced aliases for libraries.
-    ```cmake
-    add_library(foo STATIC
-      foo1.cpp
-      foo2.cpp
-      )
-    add_library(my::foo ALIAS foo)
-    ```
+  ```
+  add_library(foo STATIC
+    foo1.cpp
+    foo2.cpp
+    )
+  add_library(my::foo ALIAS foo)
+  ```
 - Don't make libraries STATIC/SHARED unless they cannot be built otherwise.
 - Leave the control of BUILD_SHARED_LIBS to your clients.
 - Create macros to wrap commands that have output parameters. Otherwise, creat a function.
@@ -155,9 +129,9 @@ target_compile_definitions(foo PRIVATE
 
 注意`0`和`1`是两个basic logical expressions,所有其它logical expressions的最终值都是`0`或`1`,所以下面的表达式是有效的
 
-```
+
 $<$<CONFIG:Debug>:DEBUG_MODE>
-```
+
 
 它展开后是`$<0:DEBUG_MODE>`或`$<1:DEBUG_MODE>`,所以整个表达式最终值是`DEBUG_MODE`或空。
 
@@ -191,21 +165,13 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
 
 ## CTest
 
-打开CTest, 后续可以直接通过 `make [-C builddir] test` 运行测试用例
-- `enable_testing()`
+- 打开CTest, 后续可以直接通过 `make [-C builddir] test` 运行测试用例
+  - `enable_testing()`
 
-增加测试用例
-- `add_test(NAME PALBench.test_cpu_read_vram COMMAND test_cpu_access_vram -size 1048576 -access read)`
-
-# Ninja cheatsheet
-
-- `ninja -C build clean`
-  equivalent `cmake --build build --first-clean` but requires `ninja -C build reconfigure`
-- `time ninja -C build | while read line; do echo $(date +%s.%N) ${line}; done`
-  profiling ninja build
+- 增加测试用例
+  - `add_test(NAME PALBench.test_cpu_read_vram COMMAND test_cpu_access_vram -size 1048576 -access read)`
 
 # NOTES
-
 ## -fPIC
 
 - -fPIC 是一个编译器选项，而不是链接器选项。
@@ -216,5 +182,10 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
 
 ## _GNU_SOURCE
 
-编译器莫名其妙地报undeclared错误，如 `O_CLOEXEC` 未声明，即使已经包含了它的头文件 `fcntl.h` 也还报，这可能需要定义一下`_GNU_SOURCE`:
-- `target_compile_definitions(target PUBLIC _GNU_SOURCE)`
+- 编译器莫名其妙地报undeclared错误，如 `O_CLOEXEC` 未声明，即使已经包含了它的头文件 `fcntl.h` 也还报，这可能需要定义一下`_GNU_SOURCE`:
+  - `target_compile_definitions(target PUBLIC _GNU_SOURCE)`
+
+# 小贴士
+
+- `time ninja -C build | while read line; do echo $(date +%s.%N) ${line}; done`
+  - 输出编译时间
