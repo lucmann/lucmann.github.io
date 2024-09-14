@@ -41,7 +41,7 @@ categories: graphics
 - 它是 mesa 内部的 libGL 与 libgallium_dri 之间的约定
 - 它是 mesa 与外部 X.org 服务器家族的约定
 
-# LIBGL_DRIVERS_PATH gone
+# ~~LIBGL_DRIVERS_PATH~~
 
 ```
        14  armada-drm_dri.so -> libdril_dri.so
