@@ -51,3 +51,16 @@ gl_Position = vec4(outUV.st * 2.0f - 1.0f, 0.0f, 1.0f);
 | 2              | (0, 2, 0)                 | (-1,  3, 0, 1)           |
 | 3              | (2, 2, 0)                 | ( 3,  3, 0, 1)           |
 
+# 函数
+## texelFetch
+
+- `vec4 texelFetch(sampler2D sampler, ivec2 P, int lod);`
+
+与普通的 `texture` 函数不同，`texelFetch` 使用的是未归一化的坐标直接访问纹理中的纹素，有点 `gl_FragCoord` 的意思
+
+## textureSize
+
+- `ivec2 textureSize(sampler2D sampler, int lod);`
+
+获取纹理的尺寸，常用来将归一化的纹理坐标转换为像素坐标
+
