@@ -14,6 +14,9 @@ Vulkan 是一个低开销、跨平台的二维和三维图形与计算的应用�
 # Call Stack
 
 ```
+libvulkan_lvp.so!llvmpipe_create_screen(struct sw_winsys * winsys) (\home\luc\gh\forked\src\gallium\drivers\llvmpipe\lp_screen.c:1149)
+libvulkan_lvp.so!sw_screen_create_named(struct sw_winsys * winsys, const struct pipe_screen_config * config, const char * driver) (\home\luc\gh\forked\src\gallium\auxiliary\target-helpers\sw_helper.h:43)
+libvulkan_lvp.so!sw_screen_create_vk(struct sw_winsys * winsys, const struct pipe_screen_config * config, _Bool sw_vk) (\home\luc\gh\forked\src\gallium\auxiliary\target-helpers\sw_helper.h:90)
 libvulkan_lvp.so!pipe_loader_sw_create_screen(struct pipe_loader_device * dev, const struct pipe_screen_config * config, _Bool sw_vk) (\home\luc\gh\forked\src\gallium\auxiliary\pipe-loader\pipe_loader_sw.c:427)
 libvulkan_lvp.so!pipe_loader_create_screen_vk(struct pipe_loader_device * dev, _Bool sw_vk, _Bool driver_name_is_inferred) (\home\luc\gh\forked\src\gallium\auxiliary\pipe-loader\pipe_loader.c:181)
 libvulkan_lvp.so!lvp_physical_device_init(struct lvp_physical_device * device, struct lvp_instance * instance, struct pipe_loader_device * pld) (\home\luc\gh\forked\src\gallium\frontends\lavapipe\lvp_device.c:1240)
@@ -30,4 +33,41 @@ vks::Context::createDevice(vks::Context * const this, const vk::SurfaceKHR & sur
 vkx::ExampleBase::initVulkan(vkx::ExampleBase * const this) (\home\luc\gh\VulkanExamples\base\vulkanExampleBase.cpp:123)
 vkx::ExampleBase::run(vkx::ExampleBase * const this) (\home\luc\gh\VulkanExamples\base\vulkanExampleBase.cpp:75)
 main(const int argc, const char ** argv) (\home\luc\gh\VulkanExamples\examples\deferredmultisampling\deferredmultisampling.cpp:684)
+```
+
+# Debug Options
+
+就像其它 Gallium 驱动一样，llvmpipe 也提供了很多调试和性能测试的选项, 这此选项通过环境变量 `LP_DEBUG` 和 `LP_PERF` 来设置
+
+```
+debug_parse_flags_option: help for LP_DEBUG:
+|        pipe [0x0000000000000001]
+|        tgsi [0x0000000000000002]
+|         tex [0x0000000000000004]
+|       setup [0x0000000000000010]
+|        rast [0x0000000000000020]
+|       query [0x0000000000000040]
+|      screen [0x0000000000000080]
+|    counters [0x0000000000000800]
+|       scene [0x0000000000001000]
+|       fence [0x0000000000002000]
+| no_fastpath [0x0000000000080000]
+|      linear [0x0000000000100000]
+|     linear2 [0x0000000000200000]
+|         mem [0x0000000000004000]
+|          fs [0x0000000000008000]
+|          cs [0x0000000000010000]
+| accurate_a0 [0x0000000000800000]
+|        mesh [0x0000000001000000]
+debug_parse_flags_option: help for LP_PERF:
+|         texmem [0x0000000000000001]
+|      no_mipmap [0x0000000000000004]
+|      no_linear [0x0000000000000008]
+|  no_mip_linear [0x0000000000000002]
+|         no_tex [0x0000000000000010]
+|       no_blend [0x0000000000000020]
+|       no_depth [0x0000000000000040]
+|   no_alphatest [0x0000000000000080]
+| no_rast_linear [0x0000000000000100]
+|       no_shade [0x0000000000000200]
 ```
