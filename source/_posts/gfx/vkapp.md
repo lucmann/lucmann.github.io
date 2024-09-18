@@ -11,6 +11,26 @@ Vulkan 是一个低开销、跨平台的二维和三维图形与计算的应用�
 
 <!--more-->
 
+# VK_ICD_FILENAMES
+
+Vulkan 驱动的探测和加载是通过 ICD (Installable Client Driver) 机制实现的。当环境上同时存在多个 Vulkan 驱动时，使用环境变量 `VK_ICD_FILENAMES` 来选择指定的 vulkan 驱动
+
+```
+{
+    "name": "VK_ICD_FILENAMES",
+    "value": "/home/luc/mesa-install/share/vulkan/icd.d/lvp_icd.x86_64.json"
+}
+```
+
+# MESA_VK_WSI_PRESENT_MODE
+
+Vulkan 程序的送显由 WSI (Window System Interface) 层实现，支持以下模式
+
+- fifo
+- relaxed
+- mailbox
+- immediate
+
 # Call Stack
 
 ```
