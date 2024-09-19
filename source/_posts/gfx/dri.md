@@ -39,6 +39,15 @@ sequenceDiagram
     App-->>Mesa: eglBindTexImage()
     Mesa->>Mesa: dri_st_framebuffer_validate()
     Mesa->>Mesa: dri2_allocate_textures()
+    Mesa->>Mesa: dri3_get_pixmap_buffer()
+    Mesa-->>X11: xcb_dri3_buffers_from_pixmap()
+    X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply()
+    Mesa->>Mesa: loader_dri3_create_image_from_buffers()
+    Mesa->>Mesa: dri2_from_dma_bufs2()
+    Mesa->>Mesa: dri2_create_image_from_fd()
+    Mesa->>Mesa: dri2_create_image_from_winsys()
+    Mesa->>Mesa: xxx_resource_from_handle()
+    Mesa->>Mesa: xxx_bo_import()
 ```
 
 该过程通过 X client 和 server 进程间的 buffer 共享实现了 render buffer 的零拷贝。
