@@ -29,7 +29,6 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 
 ```mermaid
 sequenceDiagram
-    autonumber
     participant App
     participant Mesa
     participant X11
