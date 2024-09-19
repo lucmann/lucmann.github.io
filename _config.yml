@@ -117,4 +117,5 @@ deploy:
 # Mermaid Chart
 mermaid:
   enable: true
+  theme: neutral
 

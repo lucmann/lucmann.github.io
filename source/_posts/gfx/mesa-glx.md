@@ -17,17 +17,17 @@ Mesa的 GLX 实现自从 [Delete Mesa Classic](https://gitlab.freedesktop.org/me
 - xlib
 
 ```mermaid
-graph TD
-    A[xlib or gallium-xlib]
-    A --> x11
-    A --> xext
-    A --> xcb
-    B[dri]
-    B --> x11
-    B --> xext
-    B --> xfixes
-    B --> xcb-glx
-    B --> xcb-shm
+graph TD;
+    A[xlib or gallium-xlib];
+    A --> x11;
+    A --> xext;
+    A --> xcb;
+    B[dri];
+    B --> x11;
+    B --> xext;
+    B --> xfixes;
+    B --> xcb-glx;
+    B --> xcb-shm;
 ```
 
 如果是xlib, 它的源码位于
