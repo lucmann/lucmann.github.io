@@ -33,6 +33,8 @@ categories: utilities
         - M: Modified
         - R: Renamed
     - 当 filters 使用小写时，表示**不包含**这些变更类型
+- `git log --oneline --grep "fix:"`
+    - tig 类似的参数是 `--grep="fix:"`
 
 # git remote
 - `git remote prune <remote>`
