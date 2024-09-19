@@ -36,6 +36,10 @@ categories: utilities
 - `git log --oneline --grep "fix:"`
     - tig 类似的参数是 `--grep="fix:"`
 
+# git shortlog
+- `git shortlog -sne --author="Name Surname"
+    - 统计某个贡献者的提交，像这样：`17  Luc Ma <luc@sietium.com>`
+
 # git remote
 - `git remote prune <remote>`
     - 将给定的 `<remote>` 远端不存在的**本地分支**全部删除(注意: rm -rf 警告，最好先 `git remote prune --dry-run <remote>`)
