@@ -23,6 +23,25 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 
 在DRI3扩展下, render buffer (BO作为GPU 的render target) 是一开始由X client (例如一个 3D App)创建的(可能不止一个), render buffer 创建好后随即会通过 __DRIimageExtension 的 `queryImage()` 查询到该buffer 的 FD (drmPrimeHandleToFD, 后面会将该 FD 传送给 X server), 而在 X 的 compositor, 拿到 GPU 的渲染结果实际上就是通过该 FD (drmPrimeFDToHandle) 将 render buffer `gbm_bo_import()` 到 X server 进程, 并创建X 的 Pixmap (Pixmap 的Backing BO就是当初App进程创建的)后读取渲染结果进行合成。
 
+- `eglCreateWindowSurface()` 和 `eglCreatePbufferSurface()` 略有不同
+
+虽然两者的任务都是将 X11 Window/Pixmap (XID, 实际上是一个 handle) 与客户端的 Image (实际上就是 render buffer, 一个 BO) 进行绑定, 主要的不同是在 `eglCreateWindowSurface()` 被调用之前，应用程序必须自己调用 `XCreateWindow()` 来获取 X11 的 XID。而这个 XID 在 `eglCreatePbufferSurface()` 中是由 Mesa 调用 `xcb_create_pixmap()` 来获取的。
+
+```mermaid
+sequenceDiagram;
+    autonumber;
+    participant App;
+    participant Mesa;
+    participant X11;
+
+    App-->>Mesa: eglCreatePbufferSurface()
+    Mesa-->>X11: xcb_create_pixmap()
+    X11-->>Mesa: Pixmap (XID)
+    App-->>Mesa: eglBindTexImage()
+    Mesa->>Mesa: dri_st_framebuffer_validate()
+    Mesa->>Mesa: dri2_allocate_textures()
+```
+
 该过程通过 X client 和 server 进程间的 buffer 共享实现了 render buffer 的零拷贝。
 而同步问题也在这个过程中产生，当 render buffer 被 server 进程导入后用于合成时，渲染结果什么时候被读取完毕(render buffer IDLE 状态)，需要告知client 进程(client不能在上一帧数据未读取完毕前同时再渲染到同一个render buffer)。同样client 也须在 server 读取当前帧之前告知server 渲染是否已经完成。
 
