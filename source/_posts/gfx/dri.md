@@ -2,7 +2,7 @@
 title: dri3_alloc_render_buffer
 date: 2024-08-13 08:55:45+08:00
 updated: 2024-08-21 10:02:29+08:00
-tags: DRI
+tags: mesa
 categories: graphics
 ---
 
@@ -28,11 +28,11 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 虽然两者的任务都是将 X11 Window/Pixmap (XID, 实际上是一个 handle) 与客户端的 Image (实际上就是 render buffer, 一个 BO) 进行绑定, 主要的不同是在 `eglCreateWindowSurface()` 被调用之前，应用程序必须自己调用 `XCreateWindow()` 来获取 X11 的 XID。而这个 XID 在 `eglCreatePbufferSurface()` 中是由 Mesa 调用 `xcb_create_pixmap()` 来获取的。
 
 ```mermaid
-sequenceDiagram;
-    autonumber;
-    participant App;
-    participant Mesa;
-    participant X11;
+sequenceDiagram
+    autonumber
+    participant App
+    participant Mesa
+    participant X11
 
     App-->>Mesa: eglCreatePbufferSurface()
     Mesa-->>X11: xcb_create_pixmap()
