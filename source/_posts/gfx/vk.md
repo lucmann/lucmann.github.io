@@ -42,38 +42,81 @@ Vulkan-Headers 主要包含 Vulkan API 的头文件和一些用于(根据 Khrono
 
 ## [Vulkan-Tools](https://github.com/KhronosGroup/Vulkan-Tools)
 
-- vulkaninfo
-    - `vulkaninfo --summary`
-    ```
-    Devices:
-    ========
-    GPU0:
-            apiVersion         = 1.3.255
-            driverVersion      = 0.0.1
-            vendorID           = 0x10005
-            deviceID           = 0x0000
-            deviceType         = PHYSICAL_DEVICE_TYPE_CPU
-            deviceName         = llvmpipe (LLVM 15.0.7, 256 bits)
-            driverID           = DRIVER_ID_MESA_LLVMPIPE
-            driverName         = llvmpipe
-            driverInfo         = Mesa 23.2.1-1ubuntu3.1~22.04.2 (LLVM 15.0.7)
-            conformanceVersion = 1.3.1.1
-            deviceUUID         = 6d657361-3233-2e32-2e31-2d3175627500
-            driverUUID         = 6c6c766d-7069-7065-5555-494400000000
-    GPU1:
-            apiVersion         = 1.3.292
-            driverVersion      = 0.0.1
-            vendorID           = 0x10005
-            deviceID           = 0x0000
-            deviceType         = PHYSICAL_DEVICE_TYPE_CPU
-            deviceName         = llvmpipe (LLVM 16.0.0, 256 bits)
-            driverID           = DRIVER_ID_MESA_LLVMPIPE
-            driverName         = llvmpipe
-            driverInfo         = Mesa 24.3.0-devel (git-d58f7a24d1) (LLVM 16.0.0)
-            conformanceVersion = 1.3.1.1
-            deviceUUID         = 6d657361-3234-2e33-2e30-2d6465766500
-            driverUUID         = 6c6c766d-7069-7065-5555-494400000000
-    ```
+- `vulkaninfo --summary`
+
+```
+VULKANINFO
+==========
+
+Vulkan Instance Version: 1.3.261
+
+
+Instance Extensions: count = 17
+-------------------------------
+VK_EXT_debug_report                    : extension revision 10
+VK_EXT_debug_utils                     : extension revision 2
+VK_EXT_headless_surface                : extension revision 1
+VK_EXT_surface_maintenance1            : extension revision 1
+VK_EXT_swapchain_colorspace            : extension revision 5
+VK_KHR_device_group_creation           : extension revision 1
+VK_KHR_external_fence_capabilities     : extension revision 1
+VK_KHR_external_memory_capabilities    : extension revision 1
+VK_KHR_external_semaphore_capabilities : extension revision 1
+VK_KHR_get_physical_device_properties2 : extension revision 2
+VK_KHR_get_surface_capabilities2       : extension revision 1
+VK_KHR_portability_enumeration         : extension revision 1
+VK_KHR_surface                         : extension revision 25
+VK_KHR_surface_protected_capabilities  : extension revision 1
+VK_KHR_xcb_surface                     : extension revision 6
+VK_KHR_xlib_surface                    : extension revision 6
+VK_LUNARG_direct_driver_loading        : extension revision 1
+
+Instance Layers: count = 13
+---------------------------
+VK_LAYER_FROG_gamescope_wsi       Gamescope WSI (XWayland Bypass) Layer (x86_64) 1.3.221  version 1
+VK_LAYER_INTEL_nullhw             INTEL NULL HW                                  1.1.73   version 1
+VK_LAYER_KHRONOS_profiles         Khronos Profiles layer                         1.3.280  version 1
+VK_LAYER_KHRONOS_shader_object    Khronos Shader object layer                    1.3.280  version 1
+VK_LAYER_KHRONOS_synchronization2 Khronos Synchronization2 layer                 1.3.280  version 1
+VK_LAYER_KHRONOS_validation       Khronos Validation Layer                       1.3.280  version 1
+VK_LAYER_LUNARG_api_dump          LunarG API dump layer                          1.3.280  version 2
+VK_LAYER_LUNARG_gfxreconstruct    GFXReconstruct Capture Layer Version 1.0.3     1.3.280  version 4194307
+VK_LAYER_LUNARG_monitor           Execution Monitoring Layer                     1.3.280  version 1
+VK_LAYER_LUNARG_screenshot        LunarG image capture layer                     1.3.280  version 1
+VK_LAYER_MANGOHUD_overlay_x86_64  Vulkan Hud Overlay                             1.3.0    version 1
+VK_LAYER_MESA_device_select       Linux device selection layer                   1.3.211  version 1
+VK_LAYER_MESA_overlay             Mesa Overlay layer                             1.3.211  version 1
+
+Devices:
+========
+GPU0:
+        apiVersion         = 1.3.255
+        driverVersion      = 0.0.1
+        vendorID           = 0x10005
+        deviceID           = 0x0000
+        deviceType         = PHYSICAL_DEVICE_TYPE_CPU
+        deviceName         = llvmpipe (LLVM 15.0.7, 256 bits)
+        driverID           = DRIVER_ID_MESA_LLVMPIPE
+        driverName         = llvmpipe
+        driverInfo         = Mesa 23.2.1-1ubuntu3.1~22.04.2 (LLVM 15.0.7)
+        conformanceVersion = 1.3.1.1
+        deviceUUID         = 6d657361-3233-2e32-2e31-2d3175627500
+        driverUUID         = 6c6c766d-7069-7065-5555-494400000000
+GPU1:
+        apiVersion         = 1.3.292
+        driverVersion      = 0.0.1
+        vendorID           = 0x10005
+        deviceID           = 0x0000
+        deviceType         = PHYSICAL_DEVICE_TYPE_CPU
+        deviceName         = llvmpipe (LLVM 16.0.0, 256 bits)
+        driverID           = DRIVER_ID_MESA_LLVMPIPE
+        driverName         = llvmpipe
+        driverInfo         = Mesa 24.3.0-devel (git-d58f7a24d1) (LLVM 16.0.0)
+        conformanceVersion = 1.3.1.1
+        deviceUUID         = 6d657361-3234-2e33-2e30-2d6465766500
+        driverUUID         = 6c6c766d-7069-7065-5555-494400000000
+```
+
 - vkcube/vkcubepp
     - `vkcube --gpu_number 1 --width 800 --height 600`
     ![vkcube](vkcube.gif)
