@@ -69,24 +69,29 @@ sequenceDiagram
     participant X11
 
     App-->>Mesa: eglCreatePbufferSurface()
+    rect rgb(191, 223, 255)
+    Mesa->>Mesa: dri3_create_surface(type=EGL_PBUFFER_BIT)
+    Mesa-->>X11: xcb_generate_id()
+    X11-->>Mesa: drawable ID (uint32_t)
     Mesa-->>X11: xcb_create_pixmap()
-    X11-->>Mesa: Pixmap (XID)
     App-->>Mesa: eglBindTexImage()
     Mesa->>Mesa: dri_st_framebuffer_validate()
     Mesa->>Mesa: dri2_allocate_textures()
     Mesa->>Mesa: loader_dri3_get_buffers()
+    rect rgb(200, 150, 255)
+    note right of Mesa: 与 eglCreateWindowSurface 不同<br/>这里是从 X11 导入 buffer
     Mesa->>Mesa: dri3_get_pixmap_buffer()
     Mesa-->>X11: xcb_dri3_buffers_from_pixmap()
     X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply()
     Mesa-->>X11: loader_dri3_create_image_from_buffers()
     X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply_fds()
-    X11-->>Mesa: xcb_dri3_buffers_from_pixmap_strides()
-    X11-->>Mesa: xcb_dri3_buffers_from_pixmap_offsets()
     Mesa->>Mesa: dri2_from_dma_bufs2()
     Mesa->>Mesa: dri2_create_image_from_fd()
     Mesa->>Mesa: dri2_create_image_from_winsys()
     Mesa->>Mesa: xxx_resource_from_handle()
     Mesa->>Mesa: xxx_bo_import()
+    end
+    end
 ```
 
 该过程通过 X client 和 server 进程间的 buffer 共享实现了 render buffer 的零拷贝。
