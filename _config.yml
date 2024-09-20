@@ -117,7 +117,8 @@ deploy:
 # Mermaid Chart
 mermaid:
   enable: true
-  version: "7.1.2"
+  version: "8.13.8"
+  theme: forest
   options:
     startOnload: true
 
