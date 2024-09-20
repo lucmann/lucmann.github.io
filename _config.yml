@@ -118,4 +118,6 @@ deploy:
 mermaid:
   enable: true
   theme: neutral
+  options:
+    startOnload: false
 
