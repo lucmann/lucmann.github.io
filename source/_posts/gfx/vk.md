@@ -45,12 +45,12 @@ Vulkan-Headers 主要包含 Vulkan API 的头文件和一些用于(根据 Khrono
 Vulkan-Hpp 旨在为 Vulkan C API 提供头文件(header only)形式的 C++ 绑定, 以此来简化 Vulkan 应用的开发过程同时不引入额外的 CPU 运行时开销。 Vulkan-Hpp 依赖 Vulkan-Headers, 而且它俩同时是 vulkan-sdk 的一部分, 它们三者的版本号应该都要一致 (定义在 `${CMAKE_INSTALL_PREFIX}/include/vulkan/vulkan_core.h` 的 `VK_HEADER_VERSION`)。 实际上， Vulkan-Hpp 里包含一个 `VulkanHppGenerator` 程序，它会自动重新生成 vulkan 的一些头文件。
 
 ```mermaid
-flowchart LR;
-    A["Vulkan Registry XML"];
-    B["Vulkan **.h/.hpp** headers"];
-    C["Vulkan **.hpp** headers"];
-    A-->|Vulkan-Headers .py|B;
-    B-->|VulkanHppGenerator|C;
+flowchart LR
+    A["Vulkan Registry XML"]
+    B["Vulkan .h/.hpp headers"]
+    C["Vulkan .hpp headers"]
+    A-->|Vulkan-Headers .py|B
+    B-->|VulkanHppGenerator|C
 ```
 
 ## [Vulkan-Tools](https://github.com/KhronosGroup/Vulkan-Tools)
