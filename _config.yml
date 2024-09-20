@@ -118,7 +118,6 @@ deploy:
 mermaid:
   enable: true
   version: "7.1.2"
-  theme: neutral
   options:
-    startOnload: false
+    startOnload: true
 
