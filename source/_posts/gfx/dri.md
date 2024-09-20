@@ -42,6 +42,7 @@ sequenceDiagram
     Mesa->>Mesa: dri2_allocate_textures()
     Mesa->>Mesa: loader_dri3_get_buffers()
     Note left of Mesa: 返回所有需要的 buffers, 必要时申请新的
+    Mesa->>Mesa: dri3_get_pixmap_buffer()
     Mesa-->>X11: xcb_dri3_buffers_from_pixmap()
     X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply()
     Mesa-->>X11: loader_dri3_create_image_from_buffers()
