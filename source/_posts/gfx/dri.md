@@ -29,6 +29,7 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 
 ```mermaid
 sequenceDiagram
+    autonumber
     participant App
     participant Mesa
     participant X11
@@ -39,7 +40,7 @@ sequenceDiagram
     App-->>Mesa: eglBindTexImage()
     Mesa->>Mesa: dri_st_framebuffer_validate()
     Mesa->>Mesa: dri2_allocate_textures()
-    Mesa->>Mesa: dri3_get_pixmap_buffer()
+    Mesa->>Mesa: loader_dri3_get_buffers()
     Mesa-->>X11: xcb_dri3_buffers_from_pixmap()
     X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply()
     Mesa-->>X11: loader_dri3_create_image_from_buffers()
