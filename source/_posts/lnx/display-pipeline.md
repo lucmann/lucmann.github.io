@@ -1,7 +1,7 @@
 ---
 title: Display Pipeline in Linux
 date: 2023-09-12 08:30:15
-tags: drm
+tags: [kms]
 categories: linux
 ---
 

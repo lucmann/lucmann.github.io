@@ -1,7 +1,7 @@
 ---
 title: 了解 Linux DRM 子系统
 date: 2021-04-12 17:07:27
-tags: drm
+tags: [drm]
 categories: linux
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Atomic Mode Setting 设计概要 第一部分 （译）
 date: 2021-09-15 18:30:15
-tags: drm
+tags: [kms]
 categories: linux
 ---
 

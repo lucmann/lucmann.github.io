@@ -1,7 +1,7 @@
 ---
 title: GPU Scheduler in Linux Kernel
 date: 2021-09-17 11:38:43
-tags: drm
+tags: [drm]
 categories: linux
 ---
 
