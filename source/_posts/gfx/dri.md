@@ -23,6 +23,40 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 
 在DRI3扩展下, render buffer (BO作为GPU 的render target) 是一开始由X client (例如一个 3D App)创建的(可能不止一个), render buffer 创建好后随即会通过 __DRIimageExtension 的 `queryImage()` 查询到该buffer 的 FD (drmPrimeHandleToFD, 后面会将该 FD 传送给 X server), 而在 X 的 compositor, 拿到 GPU 的渲染结果实际上就是通过该 FD (drmPrimeFDToHandle) 将 render buffer `gbm_bo_import()` 到 X server 进程, 并创建X 的 Pixmap (Pixmap 的Backing BO就是当初App进程创建的)后读取渲染结果进行合成。
 
+```mermaid
+sequenceDiagram
+    autonumber
+    participant App
+    participant Mesa
+    participant X11
+
+    App-->>Mesa: eglMakeCurrent()
+    Mesa->>Mesa: dri_st_framebuffer_validate()
+    Mesa->>Mesa: dri2_allocate_textures()
+    Mesa->>Mesa: loader_dri3_get_buffers()
+    note left of Mesa: Return all necessary buffers<br/>Allocating as needed
+    Mesa->>Mesa: dri3_get_buffer()
+    rect rgb(191, 223, 255)
+    Mesa->>Mesa: dri3_alloc_render_buffer()
+    Mesa-->>X11: xcb_dri3_get_supported_modifiers()
+    X11-->>Mesa: xcb_dri3_get_supported_modifiers_reply()
+    Mesa->>Mesa: loader_dri_create_image()
+    Mesa->>Mesa: dri2_create_image()
+    Mesa->>Mesa: xxx_resource_create()
+    rect rgb(200, 150, 255)
+    note left of Mesa: DMABUF Import/Export
+    Mesa-->>X11: xcb_dri3_pixmap_from_buffers()
+    X11->>X11: glamor_gbm_bo_from_pixmap()
+    X11->>X11: gbm_bo_import()
+    X11-->>Mesa: gbm_bo_get_fd()
+    Mesa->>Mesa: dri2_query_image_by_resource_handle(__DRIimage)
+    Mesa->>Mesa: xxx_resource_get_handle()
+    Mesa->>Mesa: xxx_bo_export()
+    note right of Mesa: Return a FD
+    end
+    end
+```
+
 - `eglCreateWindowSurface()` 和 `eglCreatePbufferSurface()` 略有不同
 
 虽然两者的任务都是将 X11 Window/Pixmap (XID, 实际上是一个 handle) 与客户端的 Image (实际上就是 render buffer, 一个 BO) 进行绑定, 主要的不同是在 `eglCreateWindowSurface()` 被调用之前，应用程序必须自己调用 `XCreateWindow()` 来获取 X11 的 XID。而这个 XID 在 `eglCreatePbufferSurface()` 中是由 Mesa 调用 `xcb_create_pixmap()` 来获取的。
@@ -41,7 +75,6 @@ sequenceDiagram
     Mesa->>Mesa: dri_st_framebuffer_validate()
     Mesa->>Mesa: dri2_allocate_textures()
     Mesa->>Mesa: loader_dri3_get_buffers()
-    Note left of Mesa: 返回所有需要的 buffers, 必要时申请新的
     Mesa->>Mesa: dri3_get_pixmap_buffer()
     Mesa-->>X11: xcb_dri3_buffers_from_pixmap()
     X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply()
