@@ -44,15 +44,19 @@ sequenceDiagram
     Mesa->>Mesa: dri2_create_image()
     Mesa->>Mesa: xxx_resource_create()
     rect rgb(200, 150, 255)
-    note left of Mesa: DMABUF Import/Export
-    Mesa-->>X11: xcb_dri3_pixmap_from_buffers()
-    X11->>X11: glamor_gbm_bo_from_pixmap()
-    X11->>X11: gbm_bo_import()
-    X11-->>Mesa: gbm_bo_get_fd()
     Mesa->>Mesa: dri2_query_image_by_resource_handle(__DRIimage)
     Mesa->>Mesa: xxx_resource_get_handle()
     Mesa->>Mesa: xxx_bo_export()
-    note right of Mesa: Return a FD
+    note right of Mesa: Mesa 导出 FD
+    Mesa-->>X11: xcb_dri3_pixmap_from_buffers(buffer_fds)
+    end
+    rect rgb(200, 150, 255)
+    note left of X11: X11 导入 FD
+    X11->>X11: proc_dri3_pixmap_from_buffers()
+    X11->>X11: dri3_pixmap_from_fds()
+    X11->>X11: glamor_pixmap_from_fds()
+    X11->>X11: gbm_bo_import()
+    note left of X11: GBM_BO_IMPORT_FD_MODIFIER<br/>或 GBM_BO_IMPORT_FD
     end
     end
 ```
