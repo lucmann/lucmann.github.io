@@ -1,7 +1,7 @@
 ---
 title: Build X Server (Xorg) from Source
 date: 2020-10-19 17:47:39
-tags: [2D]
+tags: [X11]
 categories: graphics
 ---
 

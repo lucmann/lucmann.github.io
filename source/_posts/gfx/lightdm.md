@@ -1,7 +1,7 @@
 ---
 title: Light Display Manager
 date: 2023-2-3
-tags: [2D]
+tags: [X11]
 categories: graphics
 ---
 

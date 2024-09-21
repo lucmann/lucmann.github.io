@@ -1,7 +1,7 @@
 ---
 title: Pixmap in X
 date: 2020-09-27 22:13:07
-tags: [2D]
+tags: [X11]
 categories: graphics
 ---
 

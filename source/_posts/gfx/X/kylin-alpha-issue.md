@@ -1,7 +1,7 @@
 ---
 title: Kylin V10 窗口透明问题
 date: 2020-12-20 11:58:43
-tags: [2D]
+tags: [X11]
 categories: graphics
 ---
 

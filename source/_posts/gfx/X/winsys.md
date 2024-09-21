@@ -1,7 +1,7 @@
 ---
 title: mesa中的winsys层
 date: 2021-09-12 11:10:57
-tags: [2D]
+tags: [X11]
 categories: graphics
 ---
 
