@@ -37,14 +37,13 @@ sequenceDiagram
     X11-->>Mesa: uint32_t pid (pixmap id)
     Mesa-->>X11: xcb_create_pixmap()
     X11->>X11: ProcCreatePixmap()
-    note left of X11: CreatePixmapProcPtr 接口，有各种实现<br/>glamor, dri2, xwayland, xnest
+    note left of X11: CreatePixmapProcPtr 接口，有各种实现<br/>glamor, dri2, xwayland, xnest<br/>当初的 pixmap id 会<br/>记录在创建好的 Pixmap 的 drawable->id
     X11->>X11: glamor_create_pixmap(usage=0)
     X11->>X11: glamor_create_fbo()
     rect rgb(191, 223, 255)
     X11->>X11: _glamor_create_tex()
-    X11->>Mesa: glGenTextures()
+    X11-->>Mesa: glGenTextures()
     end
-    note left of X11: 当初的 pixmap id 会<br/>记录在创建好的 Pixmap 的 drawable->id
     Mesa-->>X11: xcb_dri3_buffers_from_pixmap(pid)
 ```
 ## xcb_dri3_buffers_from_pixmap
