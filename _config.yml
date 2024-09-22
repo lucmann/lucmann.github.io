@@ -118,6 +118,7 @@ deploy:
 mermaid:
   enable: true
   version: "11.2.1"
+  cdn: //cdn.jsdelivr.net/npm/mermaid@11.2.1/dist/mermaid.min.js
   theme: forest
   options:
     startOnload: true
