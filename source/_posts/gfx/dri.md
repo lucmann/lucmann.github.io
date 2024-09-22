@@ -23,81 +23,6 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 
 在DRI3扩展下, render buffer (BO作为GPU 的render target) 是一开始由X client (例如一个 3D App)创建的(可能不止一个), render buffer 创建好后随即会通过 __DRIimageExtension 的 `queryImage()` 查询到该buffer 的 FD (drmPrimeHandleToFD, 后面会将该 FD 传送给 X server), 而在 X 的 compositor, 拿到 GPU 的渲染结果实际上就是通过该 FD (drmPrimeFDToHandle) 将 render buffer `gbm_bo_import()` 到 X server 进程, 并创建X 的 Pixmap (Pixmap 的Backing BO就是当初App进程创建的)后读取渲染结果进行合成。
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant App
-    participant Mesa
-    participant X11
-
-    App-->>Mesa: eglMakeCurrent()
-    Mesa->>Mesa: dri_st_framebuffer_validate()
-    Mesa->>Mesa: dri2_allocate_textures()
-    Mesa->>Mesa: loader_dri3_get_buffers()
-    note left of Mesa: Return all necessary buffers<br/>Allocating as needed
-    Mesa->>Mesa: dri3_get_buffer()
-    rect rgb(191, 223, 255)
-    Mesa->>Mesa: dri3_alloc_render_buffer()
-    Mesa-->>X11: xcb_dri3_get_supported_modifiers()
-    X11-->>Mesa: xcb_dri3_get_supported_modifiers_reply()
-    Mesa->>Mesa: loader_dri_create_image()
-    Mesa->>Mesa: dri2_create_image()
-    Mesa->>Mesa: xxx_resource_create()
-    rect rgb(200, 150, 255)
-    Mesa->>Mesa: dri2_query_image_by_resource_handle(__DRIimage)
-    Mesa->>Mesa: xxx_resource_get_handle()
-    Mesa->>Mesa: xxx_bo_export()
-    note right of Mesa: Mesa 导出 FD
-    Mesa-->>X11: xcb_dri3_pixmap_from_buffers(buffer_fds)
-    end
-    rect rgb(200, 150, 255)
-    note left of X11: X11 导入 FD
-    X11->>X11: proc_dri3_pixmap_from_buffers()
-    X11->>X11: dri3_pixmap_from_fds()
-    X11->>X11: glamor_pixmap_from_fds()
-    X11->>X11: gbm_bo_import()
-    note left of X11: GBM_BO_IMPORT_FD_MODIFIER<br/>或 GBM_BO_IMPORT_FD
-    end
-    end
-```
-
-- `eglCreateWindowSurface()` 和 `eglCreatePbufferSurface()` 略有不同
-
-虽然两者的任务都是将 X11 Window/Pixmap (XID, 实际上是一个 handle) 与客户端的 Image (实际上就是 render buffer, 一个 BO) 进行绑定, 主要的不同是在 `eglCreateWindowSurface()` 被调用之前，应用程序必须自己调用 `XCreateWindow()` 来获取 X11 的 XID。而这个 XID 在 `eglCreatePbufferSurface()` 中是由 Mesa 调用 `xcb_create_pixmap()` 来获取的。
-
-```mermaid
-sequenceDiagram
-    autonumber
-    participant App
-    participant Mesa
-    participant X11
-
-    App-->>Mesa: eglCreatePbufferSurface()
-    rect rgb(191, 223, 255)
-    Mesa->>Mesa: dri3_create_surface(type=EGL_PBUFFER_BIT)
-    Mesa-->>X11: xcb_generate_id()
-    X11-->>Mesa: drawable ID (uint32_t)
-    Mesa-->>X11: xcb_create_pixmap()
-    App-->>Mesa: eglBindTexImage()
-    Mesa->>Mesa: dri_st_framebuffer_validate()
-    Mesa->>Mesa: dri2_allocate_textures()
-    Mesa->>Mesa: loader_dri3_get_buffers()
-    rect rgb(200, 150, 255)
-    note right of Mesa: 与 eglCreateWindowSurface 不同<br/>这里是从 X11 导入 buffer
-    Mesa->>Mesa: dri3_get_pixmap_buffer()
-    Mesa-->>X11: xcb_dri3_buffers_from_pixmap()
-    X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply()
-    Mesa-->>X11: loader_dri3_create_image_from_buffers()
-    X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply_fds()
-    Mesa->>Mesa: dri2_from_dma_bufs2()
-    Mesa->>Mesa: dri2_create_image_from_fd()
-    Mesa->>Mesa: dri2_create_image_from_winsys()
-    Mesa->>Mesa: xxx_resource_from_handle()
-    Mesa->>Mesa: xxx_bo_import()
-    end
-    end
-```
-
 该过程通过 X client 和 server 进程间的 buffer 共享实现了 render buffer 的零拷贝。
 而同步问题也在这个过程中产生，当 render buffer 被 server 进程导入后用于合成时，渲染结果什么时候被读取完毕(render buffer IDLE 状态)，需要告知client 进程(client不能在上一帧数据未读取完毕前同时再渲染到同一个render buffer)。同样client 也须在 server 读取当前帧之前告知server 渲染是否已经完成。
 
@@ -151,6 +76,85 @@ render buffer 的导入/导出操作是Linux 下[Buffer 共享和同步](https:/
                     - [`image->createImageFromDmaBufs()` (libgbm.so)](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gbm/backends/dri/gbm_dri.c#L801)
 
     (不难看出如果驱动支持DRI3, 则有以下依赖关系 **Xserver->Glamor->GBM**)
+
+- mesa dri3 render buffer的导入导出
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant App
+    participant Mesa
+    participant X11
+
+    App-->>Mesa: eglMakeCurrent()
+    Mesa->>Mesa: dri_st_framebuffer_validate()
+    Mesa->>Mesa: dri2_allocate_textures()
+    Mesa->>Mesa: loader_dri3_get_buffers()
+    note left of Mesa: Return all necessary buffers<br/>Allocating as needed
+    Mesa->>Mesa: dri3_get_buffer()
+    rect rgb(191, 223, 255)
+    Mesa->>Mesa: dri3_alloc_render_buffer()
+    Mesa-->>X11: xcb_dri3_get_supported_modifiers()
+    X11-->>Mesa: xcb_dri3_get_supported_modifiers_reply()
+    Mesa->>Mesa: loader_dri_create_image()
+    Mesa->>Mesa: dri2_create_image()
+    Mesa->>Mesa: xxx_resource_create()
+    rect rgb(200, 150, 255)
+    Mesa->>Mesa: dri2_query_image_by_resource_handle(__DRIimage)
+    Mesa->>Mesa: xxx_resource_get_handle()
+    Mesa->>Mesa: xxx_bo_export()
+    note right of Mesa: Mesa 导出 FD
+    Mesa-->>X11: xcb_dri3_pixmap_from_buffers(buffer_fds)
+    end
+    rect rgb(200, 150, 255)
+    note left of X11: X11 导入 FD
+    X11->>X11: proc_dri3_pixmap_from_buffers()
+    X11->>X11: dri3_pixmap_from_fds()
+    X11->>X11: glamor_pixmap_from_fds()
+    X11->>X11: gbm_bo_import()
+    note left of X11: GBM_BO_IMPORT_FD_MODIFIER<br/>或 GBM_BO_IMPORT_FD
+    end
+    end
+```
+
+- 所有情况都是 **Mesa 创建导出，X11 导入**吗? 
+
+`eglCreatePbufferSurface()` 是个例外，实际上 PBuffer 是离屏渲染使用的，它是由 X11 创建 buffer, X11 导出 FD, Mesa (应用进程) 导入作为伪前缓冲 (fake front buffer) 使用。
+
+通常 `eglCreate***Surface()` 需要 App 先调用 `XCreateWindow()` 让 X11 创建 Pixmap, 但是 `eglCreatePbufferSurface()` 不用，它由 Mesa 调用 `xcb_create_pixmap()` 让 X11 创建 Pixmap, 之后 Mesa 再调用 `xcb_dri3_buffers_from_pixmap()` 让 X11 导出 Pixmap(gbm_bo) 关联的 FD, 由 Mesa 导入。
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant App
+    participant Mesa
+    participant X11
+
+    App-->>Mesa: eglCreatePbufferSurface()
+    rect rgb(191, 223, 255)
+    Mesa->>Mesa: dri3_create_surface(type=EGL_PBUFFER_BIT)
+    Mesa-->>X11: xcb_generate_id()
+    X11-->>Mesa: drawable ID (uint32_t)
+    Mesa-->>X11: xcb_create_pixmap()
+    App-->>Mesa: eglBindTexImage()
+    Mesa->>Mesa: dri_st_framebuffer_validate()
+    Mesa->>Mesa: dri2_allocate_textures()
+    Mesa->>Mesa: loader_dri3_get_buffers()
+    rect rgb(200, 150, 255)
+    note right of Mesa: 与 eglCreateWindowSurface 不同<br/>这里是从 X11 导入 buffer
+    Mesa->>Mesa: dri3_get_pixmap_buffer()
+    Mesa-->>X11: xcb_dri3_buffers_from_pixmap()
+    X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply()
+    Mesa-->>X11: loader_dri3_create_image_from_buffers()
+    X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply_fds()
+    Mesa->>Mesa: dri2_from_dma_bufs2()
+    Mesa->>Mesa: dri2_create_image_from_fd()
+    Mesa->>Mesa: dri2_create_image_from_winsys()
+    Mesa->>Mesa: xxx_resource_from_handle()
+    Mesa->>Mesa: xxx_bo_import()
+    end
+    end
+```
 
 # 送显
 
