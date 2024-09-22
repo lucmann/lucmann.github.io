@@ -76,7 +76,7 @@ sequenceDiagram
     Mesa->>Mesa: dri2_from_dma_bufs2()
     Mesa->>Mesa: dri2_create_image_from_fd()
     Mesa->>Mesa: dri2_create_image_from_winsys(winsys_handle)
-    loop Every handle
+    loop Every FD
         Mesa->>Mesa: xxx_resource_from_handle()
         Mesa->>Mesa: xxx_bo_import()
         note right of Mesa: resource_from_handle() 返回的<br/>pipe_resource 给 __DRIimage.texture
