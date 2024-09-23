@@ -19,7 +19,7 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 
 # Drawable 和 Buffer
 
-`struct loader_dri3_drawable` 和 `struct loader_dri3_buffer` 这两个结构体，一个作为 `dri3_alloc_render_buffer()` 的主要参数，一个作为它的返回值类型，可谓是了解 DRI3 扩展下的数据流的“重中之重”
+`struct loader_dri3_drawable` 和 `struct loader_dri3_buffer` 这两个结构体，一个作为 `dri3_alloc_render_buffer()` 的主要参数，一个作为它的返回值类型，可谓是了解 DRI3 扩展下的数据流的关键。
 
 ```mermaid
 classDiagram
@@ -28,8 +28,8 @@ classDiagram
         +xcb_connection_t * conn
         +xcb_screen_t * screen
         +__DRIdrawable *dri_drawable
-        +xcb_drawable_t drawable (uint32_t)
-        +xcb_window_t window (uint32_t)
+        +xcb_drawable_t drawable
+        +xcb_window_t window
         +int width
         +int height
         +int depth
