@@ -23,6 +23,7 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 
 ```mermaid
 classDiagram
+    direction RL
     loader_dri3_drawable o-- loader_dri3_buffer : LOADER_DRI3_NUM_BUFFERS
     class loader_dri3_drawable{
         +xcb_connection_t * conn
