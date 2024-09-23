@@ -17,6 +17,59 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
                          int width, int height, int depth);
 ```
 
+# Drawable 和 Buffer
+
+`struct loader_dri3_drawable` 和 `struct loader_dri3_buffer` 这两个结构体，一个作为 `dri3_alloc_render_buffer()` 的主要参数，一个作为它的返回值类型，可谓是了解 DRI3 扩展下的数据流的“重中之重”
+
+```mermaid
+classDiagram
+    loader_dri3_drawable o-- loader_dri3_buffer : LOADER_DRI3_NUM_BUFFERS
+    class loader_dri3_drawable{
+        +xcb_connection_t * conn
+        +xcb_screen_t * screen
+        +__DRIdrawable *dri_drawable
+        +xcb_drawable_t drawable (uint32_t)
+        +xcb_window_t window (uint32_t)
+        +int width
+        +int height
+        +int depth
+        +uint8_t have_back
+        +uint8_t have_fake_front
+        +uint64_t send_sbc
+        +uint64_t recv_sbc
+        +uint64_t ust
+        +uint64_t msc
+        +uint64_t notify_ust
+        +uint64_t notify_msc
+        +loader_dri3_buffer ** buffers
+        +int cur_back
+        +int cur_num_back
+        +int max_num_back
+        +int cur_blit_source
+        +uint32_t *stamp
+    }
+    class loader_dri3_buffer{
+        +__DRIimage * image
+        +uint32_t pixmap
+        +__DRIimage * linear_buffer
+        +uint32_t fence
+        +xshmfence * shm_fence
+        +bool busy
+        +bool own_pixmap
+        +bool reallocate
+        +uint32_t num_planes
+        +uint32_t size
+        +int strides[4]
+        +int offsets[4]
+        +uint64_t modifier
+        +uint32_t cpp
+        +uint32_t flags
+        +uint32_t width
+        +uint32_t height
+        +uint64_t last_swap
+    }
+```
+
 # 同步
 
 - 当我们谈论 X client 和 server 之间的 Buffer 同步时是在说什么？
