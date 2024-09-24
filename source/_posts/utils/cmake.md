@@ -5,23 +5,11 @@ tags: [cmake]
 categories: utilities
 ---
 
-# CMake cheatsheet
-
-- `-DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold"`
-    将 linker 由默认的 bfd 换成 gold
-- `-DCMAKE_EXPORT_COMPILE_COMMANDS=on`
-    生成 compile_commands.json
-- `-DCMAKE_CXX_FLAGS="-Wno-error=missing-field-initializers"`
-    将 `missing-field-initializers` 由 error 转为 warning
-- `-DCMAKE_EXE_LINKER_FLAGS="-nostartfiles"`
-    解决 "Scrt1.o: undefined reference to `main`"
+最近看了一些关于Modern CMake(since 3.0.0)的教程，这里记录一下.
 
 <!--more-->
 
-最近看了一些关于Modern CMake(since 3.0.0)的教程，这里记录一下.
-
-
-## What Modern CMake Provides?
+# Modern CMake
 作为一个*Build System Generator*, 现代CMake可以帮助我们做哪些事情呢？
 
 - Build
@@ -29,7 +17,7 @@ categories: utilities
 - Test
 - Package
 
-## Build
+# Command Options
 - cmake -B build
   - Build的工作主要包括解决依赖关系，构建目标(库,应用,测试用例)。`cmake`命令有很多选项可以帮助我们灵活有效地构建目标， 例如：Out-of-source构建，意思是不污染源代码目录，在指定的单独的目录下生成构建系统, 如果build不存在，cmake会创建它
 
@@ -54,20 +42,40 @@ categories: utilities
 - cmake --build build --target help
   - 列出生成的Makefile里有效的`target`
 
-## CMake 的内置变量
+# Built-in Variables
 
-| 变量                          |  作用                                                                  |
-|:------------------------------|:-----------------------------------------------------------------------|
-| CMAKE_SOURCE_DIR              | 指所在工程顶层目录绝对路径，一般源码git-clone下来后就确定了            |
-| CMAKE_CURRENT_SOURCE_DIR      | 指CMakeLists.txt所在目录的绝对路径，随着CMakeLists.txt位置变化         |
-| CMAKE_EXPORT_COMPILE_COMMANDS | 生成 compile_commands.json, 用来在代码跳转时使用                       |
-| CMAKE_VERBOSE_MAKEFILE        | 产生非常详细的编译过程日志，包括目录改变，编译器选项和链接器选项       |
-| CMAKE_INSTALL_PREFIX          | 自定义安装路径                                                         |
-| CMAKE_CXX_STANDARD            | C++ 版本号, 如 11, 14                                                  | 
-| CMAKE_CXX_COMPILER_ID         | 如 GNU, Clang, Intel, MSVC                                             |
-| CMAKE_CXX_FLAGS               | 编译器选项， 如 -std=c++11                                             |
-| CMAKE_CXX_FLAGS_DEBUG         | 如定义编译宏 -DDEBUG=0                                                 |
-| CMAKE_EXE_LINKER_FLAGS        | 链接器选项, 如 -fuse-ld=gold, -nostartfiles                            |
+- `-DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold"`
+  - 将 linker 由默认的 bfd 换成 gold, CMake 3.29+ 使用 `-DCMAKE_LINKER=gold`
+
+- `-DCMAKE_EXPORT_COMPILE_COMMANDS=on`
+  - 生成 compile_commands.json
+
+- `-DCMAKE_CXX_FLAGS="-Wno-error=missing-field-initializers"`
+  - 将 `missing-field-initializers` 由 error 转为 warning
+
+- `-DCMAKE_EXE_LINKER_FLAGS="-nostartfiles"`
+  - 解决 "Scrt1.o: undefined reference to `main`"
+
+- CMAKE_SOURCE_DIR
+  - 指所在工程顶层目录绝对路径，一般源码git-clone下来后就确定了
+
+- CMAKE_CURRENT_SOURCE_DIR
+  - 指CMakeLists.txt所在目录的绝对路径，随着CMakeLists.txt位置变化
+
+- `-DCMAKE_VERBOSE_MAKEFILE=ON`
+  - 产生非常详细的编译过程日志，包括目录改变，编译器选项和链接器选项
+
+- CMAKE_INSTALL_PREFIX
+  - 自定义安装路径, 默认 /usr/local
+
+- `-DCMAKE_CXX_STANDARD=14
+  - C++ 版本号, 如 11, 14
+
+- `-DCMAKE_CXX_COMPILER_ID=GNU`
+  - 如 GNU, Clang, Intel, MSVC, 作用和 `CC=gcc CXX=g++` 一样
+
+- `-DCMAKE_CXX_FLAGS="-std=c++11"`
+  - C++ 编译器选项， 如 -std=c++11
 
 ## Guideline
 
