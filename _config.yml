@@ -117,8 +117,8 @@ deploy:
 # Mermaid Chart
 mermaid:
   enable: true
-  version: "11.2.1"
-  cdn: //cdn.jsdelivr.net/npm/mermaid@11.2.1/dist/mermaid.min.js
+  version: "10.9.1"
+  cdn: //cdn.bootcdn.net/ajax/libs/mermaid/10.9.1/mermaid.min.js
   theme: forest
   options:
     startOnload: true
