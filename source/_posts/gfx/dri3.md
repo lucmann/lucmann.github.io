@@ -131,7 +131,7 @@ render buffer 的导入/导出操作是Linux 下[Buffer 共享和同步](https:/
 
     (不难看出如果驱动支持DRI3, 则有以下依赖关系 **Xserver->Glamor->GBM**)
 
-- mesa dri3 render buffer的导入导出
+- mesa dri3 render buffer (DMABUF) Sharing
 
 ```mermaid
 sequenceDiagram
@@ -158,15 +158,20 @@ sequenceDiagram
     Mesa->>Mesa: xxx_resource_get_handle()
     Mesa->>Mesa: xxx_bo_export()
     note right of Mesa: Mesa 导出 FD
-    Mesa-->>X11: xcb_dri3_pixmap_from_buffers(buffer_fds)
+    opt xcb_send_requests_with_fds()
+        Mesa-->>X11: xcb_dri3_pixmap_from_buffers(buffer_fds)
+    end
     end
     rect rgb(200, 150, 255)
     note left of X11: X11 导入 FD
     X11->>X11: proc_dri3_pixmap_from_buffers()
     X11->>X11: dri3_pixmap_from_fds()
     X11->>X11: glamor_pixmap_from_fds()
-    X11->>X11: gbm_bo_import()
-    note left of X11: GBM_BO_IMPORT_FD_MODIFIER<br/>或 GBM_BO_IMPORT_FD
+    alt GBM_BO_WITH_MODIFIERS
+        X11->>X11: gbm_bo_import(type=GBM_BO_IMPORT_FD_MODIFIER)
+    else
+        X11->>X11: gbm_bo_import(type=GBM_BO_IMPORT_FD)
+    end
     end
     end
 ```
