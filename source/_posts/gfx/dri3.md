@@ -158,12 +158,12 @@ sequenceDiagram
     Mesa->>Mesa: xxx_resource_get_handle()
     Mesa->>Mesa: xxx_bo_export()
     note right of Mesa: Mesa 导出 FD
-    opt xcb_send_requests_with_fds()
-        Mesa-->>X11: xcb_dri3_pixmap_from_buffers(buffer_fds)
+    opt xcb_dri3_pixmap_from_buffers(buffer_fds)
+        Mesa-->>X11: xcb_send_requests_with_fds(buffer_fds)
     end
     end
     rect rgb(200, 150, 255)
-    note left of X11: X11 导入 FD
+    note left of X11: X11 导入 Buffer
     X11->>X11: proc_dri3_pixmap_from_buffers()
     X11->>X11: dri3_pixmap_from_fds()
     X11->>X11: glamor_pixmap_from_fds()
@@ -199,13 +199,16 @@ sequenceDiagram
     Mesa->>Mesa: dri_st_framebuffer_validate()
     Mesa->>Mesa: dri2_allocate_textures()
     Mesa->>Mesa: loader_dri3_get_buffers()
-    rect rgb(200, 150, 255)
-    note right of Mesa: 与 eglCreateWindowSurface 不同<br/>这里是从 X11 导入 buffer
     Mesa->>Mesa: dri3_get_pixmap_buffer()
+    rect rgb(200, 150, 255)
+    note left of X11: X11 导出 FD</br>(调用 gbm_bo_get_fd(gbm_bo*))
     Mesa-->>X11: xcb_dri3_buffers_from_pixmap()
     X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply()
     Mesa-->>X11: loader_dri3_create_image_from_buffers()
     X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply_fds()
+    end
+    rect rgb(200, 150, 255)
+    note left of Mesa: Mesa 导入 Buffer
     Mesa->>Mesa: dri2_from_dma_bufs2()
     Mesa->>Mesa: dri2_create_image_from_fd()
     Mesa->>Mesa: dri2_create_image_from_winsys()
