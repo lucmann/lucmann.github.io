@@ -1,7 +1,7 @@
 ---
 title: PRIME
 date: 2023-09-21 18:30:15
-tags: [drm]
+tags: [DRM]
 categories: linux
 ---
 

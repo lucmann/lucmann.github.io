@@ -1,7 +1,7 @@
 ---
 title: AMDGPU 驱动(KMD + UMD)中的一些缩写词解释
 date: 2023-08-19 18:30:15
-tags: [drm]
+tags: [DRM]
 categories: linux
 ---
 
