@@ -53,6 +53,7 @@ classDiagram
         +int cur_blit_source
         +uint32_t *stamp
     }
+    note for loader_dri3_buffer "bool busy;\nSet on swap\nCleared on IdleNotify"
     class loader_dri3_buffer{
         +__DRIimage * image
         +uint32_t pixmap
@@ -230,7 +231,7 @@ dri3_find_back(struct loader_dri3_drawable *draw,
                bool prefer_a_different);
 ```
 
-承上启下，`dri3_find_back()` 的任务是查找 `buffers[]` 中空闲 buffer 的 slot, 如果存在，返回其 index, 否则调用 `dri3_alloc_render_buffer()` 申请新 buffer。
+承上启下，`dri3_find_back()` 的任务是查找 `buffers[]` 中空闲 buffer 的 slot, 如果存在，返回其 index, 否则等待 (`dri3_wait_for_event_locked()`)
 
 ## 送显
 
