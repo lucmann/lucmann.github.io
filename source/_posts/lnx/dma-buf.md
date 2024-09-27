@@ -109,86 +109,8 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 
 可以打个比方，你去银行要办两种业务，两种业务分别排号，假如你要办的A业务排到7号，B业务也刚好排到7号（注意:号码相同，但是两个号），但是很有可能是同一个业务员为你办理这两种业务，这里的业务就是设备驱动，而那个业务员就是dma-buf(或者它封装的那块显存)。
 
-# dma_fence
+## dma_fence
 
-<style>
-div pre {
-    line-height: 120%;
-    font-size: 10pt;
-}
-
-row {
-    display: flex;
-}
-
-column {
-    flex: 50%;
-}
-</style>
-
-<div class="row">
-  <div class="column">
-    <pre>
-      <code>
-signed long
-dma_fence_default_wait(struct dma_fence *fence,
-                       bool intr,
-                       signed long timeout)
-{
-	struct default_wait_cb cb;
-	unsigned long flags;
-	signed long ret = timeout ? timeout : 1;
-
-	spin_lock_irqsave(fence->lock, flags);
-
-	if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT,
-        &fence->flags))
-		goto out;
-
-	if (intr && signal_pending(current)) {
-		ret = -ERESTARTSYS;
-		goto out;
-	}
-
-	if (!timeout) {
-		ret = 0;
-		goto out;
-	}
-
-	cb.base.func = dma_fence_default_wait_cb;
-	cb.task = current;
-	list_add(&cb.base.node, &fence->cb_list);
-
-	while (!test_bit(DMA_FENCE_FLAG_SIGNALED_BIT,
-           &fence->flags) && ret > 0) {
-		if (intr)
-			__set_current_state(TASK_INTERRUPTIBLE);
-		else
-			__set_current_state(TASK_UNINTERRUPTIBLE);
-		spin_unlock_irqrestore(fence->lock, flags);
-
-		ret = schedule_timeout(ret);
-
-		spin_lock_irqsave(fence->lock, flags);
-		if (ret > 0 && intr && signal_pending(current))
-			ret = -ERESTARTSYS;
-	}
-
-	if (!list_empty(&cb.base.node))
-		list_del(&cb.base.node);
-	__set_current_state(TASK_RUNNING);
-
-out:
-	spin_unlock_irqrestore(fence->lock, flags);
-	return ret;
-}
-      </code>
-    </pre>
-  </div>
-  <div class="column">
-    fence->ops->wait();
-  </div>
-</div>
 
 `dma_fence_default_wait` 是 dma-fence 默认的 wait 操作。该函数会让当前进程(task) 进入睡眠状态 (可中断睡眠或不可中断睡眠，取决于调用者传入的参数 `intr`）, 直到 dma-fence 被 signaled 或者设置的超时时间到。
 
@@ -200,8 +122,27 @@ out:
 
 ## dma_resv
 
-## dma_buf, dma_fence, dma_resv, 还有drm_gem_object, 这4者有什么关系？
+```mermaid
+classDiagram
+	dma_resv o-- dma_fence : max_fences
+	class dma_resv{
+		+ww_mutex lock
+		+dma_resv_list *fences
+	}
+	class dma_fence{
+		+spinlock_t *lock
+		+dma_fence_ops *ops
+	}
+```
+
+- dma_buf, dma_fence, dma_resv, 还有drm_gem_object, 这4者有什么关系？
 
 {% asset_img dma-buf.drawio.png %}
 
 在这里面dma_fence是用来实现drm_gem_object间的共享和同步的，而dma_resv就是所谓的“胶水”，将这两者联系在一起。
+
+# Synchronization
+
+## Implicit Synchronization
+
+## Explicit Synchronization
