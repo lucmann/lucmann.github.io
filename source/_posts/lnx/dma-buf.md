@@ -124,22 +124,44 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 
 ```mermaid
 classDiagram
-	dma_resv o-- dma_fence : max_fences
+	dma_resv  -- dma_resv_list : *fences
+    dma_fence -- dma_fence_ops : *ops
+    dma_resv_list o-- dma_fence: max_fences
 	class dma_resv{
 		+ww_mutex lock
 		+dma_resv_list *fences
 	}
+    class dma_resv_list{
+        -rcu_head rcu
+        -u32 num_fences
+        -u32 max_fences
+        -dma_fence *table[]
+    }
 	class dma_fence{
 		+spinlock_t *lock
 		+dma_fence_ops *ops
+        +list_head cb_list
+        +ktime_t timestamp
+        +rcu_head rcu
+        +u64 context
+        +u64 seqno
+        +unsigned long flags
+        +kref refcount
+        +int error
 	}
+    class dma_fence_ops{
+        +use_64bit_seqno
+        +get_driver_name(fence) char *
+        +get_timeline_name(fence) char *
+        +enable_signaling(fence) bool
+        +signaled(fence) bool
+        +wait(fence, intr, timeout) signed long
+        +release(fence) void
+        +fence_value_str(fence, char *, size) void
+        +timeline_value_str(fence, char *, size) void
+        +set_deadline(fence, deadline) void
+    }
 ```
-
-- dma_buf, dma_fence, dma_resv, 还有drm_gem_object, 这4者有什么关系？
-
-{% asset_img dma-buf.drawio.png %}
-
-在这里面dma_fence是用来实现drm_gem_object间的共享和同步的，而dma_resv就是所谓的“胶水”，将这两者联系在一起。
 
 # Synchronization
 
