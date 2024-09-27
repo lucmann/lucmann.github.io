@@ -1,7 +1,7 @@
 ---
-title: Cache 及一致性
+title: Cache 一致性
 date: 2023-06-27 15:42:45
-tags: drm
+tags: [perf]
 categories: linux
 ---
 
