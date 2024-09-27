@@ -113,3 +113,13 @@ deploy:
   type: git
   repository: git@github.com:lucmann/lucmann.github.io.git
   branch: master
+
+# Mermaid Chart
+mermaid:
+  enable: true
+  version: "10.9.1"
+  cdn: //cdn.bootcdn.net/ajax/libs/mermaid/10.9.1/mermaid.min.js
+  theme: forest
+  options:
+    startOnload: true
+
