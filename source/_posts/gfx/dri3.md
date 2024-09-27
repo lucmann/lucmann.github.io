@@ -10,6 +10,8 @@ categories: graphics
 
 <!--more-->
 
+# dri3_alloc_render_buffer
+
 ```c
 static struct loader_dri3_buffer *
 dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
@@ -17,7 +19,9 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
                          int width, int height, int depth);
 ```
 
-# Drawable 和 Buffer
+`dri3_alloc_render_buffer()` 的任务是创建渲染 buffer (包括 front 或 back), 并向 X11 导出它们的 fd。驱动当然不是一下子把 `buffers[]` 数组填满， 它是"按需创建"， `buffers[]` 像是提供这么多 buffer slot, 当 slot 后面是一个空闲的 buffer, 那就将它返回，否则才真正创建。
+
+## Drawable 和 Buffer
 
 `struct loader_dri3_drawable` 和 `struct loader_dri3_buffer` 这两个结构体，一个作为 `dri3_alloc_render_buffer()` 的主要参数，一个作为它的返回值类型，可谓是了解 DRI3 扩展下的数据流的关键。
 
@@ -42,7 +46,7 @@ classDiagram
         +uint64_t msc
         +uint64_t notify_ust
         +uint64_t notify_msc
-        +loader_dri3_buffer ** buffers
+        +loader_dri3_buffer *buffers[5]
         +int cur_back
         +int cur_num_back
         +int max_num_back
@@ -71,7 +75,7 @@ classDiagram
     }
 ```
 
-# 同步
+## 同步
 
 - 当我们谈论 X client 和 server 之间的 Buffer 同步时是在说什么？
 
@@ -93,7 +97,7 @@ classDiagram
 
 由于client 创建的render buffer 是与 X server 共享的，所以这个 render buffer 被两个进程读写时须要同步，Mesa3D 中是使用 xshmfence 来完成这个需求的。xshmfence 顾名思义它是基于共享内存的，采用它实现进程间对 render buffer 操作的同步，好处就是只需要将 xshmfence 映射到一个 X server SyncFence, 通过一个简单的函数调用([xshmfence_await(struct xshmfence *f)](https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_futex.c?ref_type=heads#L60))就可将调用进程(client process)阻塞直到 X server 完成对 render buffer的操作再被操作系统唤醒，而无需通过接收网络事件(socket event)来确定X server 是否已经完成对 render buffer 的使用。
 
-# 导入/导出
+## 导入/导出
 
 render buffer 的导入/导出操作是Linux 下[Buffer 共享和同步](https://www.kernel.org/doc/html/latest/driver-api/dma-buf.html)的一个标准流程，不仅仅是在 DRM 子系统使用，在Linux的其它子系统也广泛使用，如Video4Linux, Networking。这里仅仅将 mesa 中的实现与DMABUF 机制中的角色对应一下，作为一个DMABUF的应用案例分析。
 
@@ -218,7 +222,17 @@ sequenceDiagram
     end
 ```
 
-# 送显
+# dri3_find_back
+
+```c
+static int
+dri3_find_back(struct loader_dri3_drawable *draw,
+               bool prefer_a_different);
+```
+
+承上启下，`dri3_find_back()` 的任务是查找 `buffers[]` 中空闲 buffer 的 slot, 如果存在，返回其 index, 否则调用 `dri3_alloc_render_buffer()` 申请新 buffer。
+
+## 送显
 
 如果平台的窗口系统(Winsys)是X11, 则送显主要是通过 Present 扩展完成的。这个与Xserver 的交互过程是通过 [`present_event`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/present/present_priv.h#L226) 完成的
 
