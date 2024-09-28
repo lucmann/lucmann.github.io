@@ -235,7 +235,7 @@ dri3_find_back(struct loader_dri3_drawable *draw,
                bool prefer_a_different);
 ```
 
-承上启下，`dri3_find_back()` 的任务是查找 `buffers[]` 中空闲 buffer 的 slot (array index), 如果存在，返回其 index, 否则等待 (`dri3_wait_for_event_locked()`)
+`dri3_find_back()` 的任务是查找 `buffers[]` 中空闲 buffer 的 slot (array index), 如果存在，返回其 index, 否则等待 (`dri3_wait_for_event_locked()`)
 
 如何知道 buffer 是否空闲呢？ `buffer->busy`, 这个标志在 SwapBuffers 时会置为 true, mesa 收到 IdleNotify 事件后置为 false
 
@@ -255,7 +255,7 @@ sequenceDiagram
             X11-->>Mesa: xcb_present_generic_event_t
         end
         Mesa->>Mesa: dri3_handle_present_event()
-    else perfer a different buffer
+    else perfer_a_different==true
         Mesa-->>X11: xcb_flush()
         loop dri3_wait_for_event_locked()
             X11-->>Mesa: xcb_present_generic_event_t
