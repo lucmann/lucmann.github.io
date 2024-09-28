@@ -226,12 +226,45 @@ sequenceDiagram
 # dri3_find_back
 
 ```c
+/**
+ * Find an idle back buffer. If there isn't one, then
+ * wait for a present IdleNotify event from the X server
+ */
 static int
 dri3_find_back(struct loader_dri3_drawable *draw,
                bool prefer_a_different);
 ```
 
-承上启下，`dri3_find_back()` 的任务是查找 `buffers[]` 中空闲 buffer 的 slot, 如果存在，返回其 index, 否则等待 (`dri3_wait_for_event_locked()`)
+承上启下，`dri3_find_back()` 的任务是查找 `buffers[]` 中空闲 buffer 的 slot (array index), 如果存在，返回其 index, 否则等待 (`dri3_wait_for_event_locked()`)
+
+如何知道 buffer 是否空闲呢？ `buffer->busy`, 这个标志在 SwapBuffers 时会置为 true, mesa 收到 IdleNotify 事件后置为 false
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Mesa
+    participant X11
+
+    Mesa->>Mesa: dri3_find_back
+    note right of Mesa: 选取一个合适的空闲 slot id</br>buffers[id]有可能是空</br>这时需要调</br>dri3_alloc_render_buffer()
+    rect rgb(200, 150, 255)
+    note right of Mesa: mtx_lock()
+    alt pefer_a_different==false
+        Mesa-->>X11: dri3_flush_present_events()
+        loop xcb_poll_for_special_event
+            X11-->>Mesa: xcb_present_generic_event_t
+        end
+        Mesa->>Mesa: dri3_handle_present_event()
+    else perfer a different buffer
+        Mesa-->>X11: xcb_flush()
+        loop dri3_wait_for_event_locked()
+            X11-->>Mesa: xcb_present_generic_event_t
+            Mesa->>Mesa: dri3_handle_present_event()
+        end
+    end
+    note right of Mesa: mtx_unlock()
+    end
+```
 
 # loader_dri3_swap_buffers_msc
 
@@ -319,7 +352,6 @@ typedef struct present_event {
             - [`xcb_wait_for_special_event(draw->conn, draw->special_event)`](https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_in.c#L806)
             - [`dri3_handle_present_event(draw, ge)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L483): 处理一个 X generic event
 
-    (MSC(graphics Media Stream Counter, 实际上就是CRTC 的Vblank中断次数), SBC(Swap Buffer Counter, 就是Swapbuffer 的次数)，详细请参考[GLX_OML_sync_control](https://registry.khronos.org/OpenGL/extensions/OML/GLX_OML_sync_control.txt), [GLX_EXT_swap_control](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_swap_control.txt))
 
 以上无论是 `loader_dri3_wait_for_msc()` 还是 `loader_dri3_wait_for_sbc()`, 当所等待的条件满足后，都会更新(`dri3_handle_present_event()`)当前client 的状态(UST, MSC, SBC), 整个过程是一种同步，也是一种协商。
 
@@ -366,3 +398,7 @@ __DRIimage *
                 - [`get_drawable_modifiers(DrawablePtr draw, uint32_t format, uint32_t *num_modifiers, uint64_t **modifiers)`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/hw/xfree86/drivers/modesetting/drmmode_display.c#L230)
 - [`xcb_dri3_get_supported_modifiers_window_modifiers(mod_reply)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L558)
     - [`xcb_dri3_get_supported_modifiers_screen_modifiers(mod_reply)`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L580): 如果获取window_modifiers 失败则fallback 到screen_modifiers
+
+# 参考
+- MSC: Graphics Media Stream Counter, 实际上就是CRTC 的Vblank中断次数 [(GLX_OML_sync_control)](https://registry.khronos.org/OpenGL/extensions/OML/GLX_OML_sync_control.txt)
+- SBC: Swap Buffer Counter, 就是Swapbuffer 的次数 [(GLX_EXT_swap_control)](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_swap_control.txt)
