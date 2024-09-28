@@ -254,12 +254,12 @@ flowchart TD
     C[dri3_swap_buffers_with_damage]
     D[glXSwapBuffers]
     E[dri3_swap_buffers]
-    F[loader_dri3_swap_buffers_msc(rects=NULL, n_rects=0)]
+    F[loader_dri3_swap_buffers_msc]
     A -->|platform_x11_dri3.c| B
     B --> C
-    C -->|rects=NULL</br>n_rects=0| F
+    C -->|rects=NULL,n_rects=0| F
     D -->|dri3_glx.c| E
-    E -->|rects=NULL</br>n_rects=0| F
+    E -->|rects=NULL,n_rects=0| F
 ```
 
 ## 送显
