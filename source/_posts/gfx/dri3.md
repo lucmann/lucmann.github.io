@@ -259,8 +259,8 @@ sequenceDiagram
         Mesa-->>X11: xcb_flush()
         loop dri3_wait_for_event_locked()
             X11-->>Mesa: xcb_present_generic_event_t
-            Mesa->>Mesa: dri3_handle_present_event()
         end
+        Mesa->>Mesa: dri3_handle_present_event()
     end
     note right of Mesa: mtx_unlock()
     end
