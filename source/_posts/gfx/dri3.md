@@ -258,8 +258,8 @@ flowchart TD
     A -->|platform_x11_dri3.c| B
     B --> C
     C -->|rects=NULL,n_rects=0| F
-    D ---->|dri3_glx.c| E
-    E -->|rects=NULL,n_rects=0| F
+    D -->|dri3_glx.c| E
+    E --->|rects=NULL,n_rects=0| F
 ```
 
 ## 送显
