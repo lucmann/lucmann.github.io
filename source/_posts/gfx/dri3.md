@@ -233,6 +233,35 @@ dri3_find_back(struct loader_dri3_drawable *draw,
 
 承上启下，`dri3_find_back()` 的任务是查找 `buffers[]` 中空闲 buffer 的 slot, 如果存在，返回其 index, 否则等待 (`dri3_wait_for_event_locked()`)
 
+# loader_dri3_swap_buffers_msc
+
+```c
+/**
+ * Make the current back buffer visible using the present extension
+ */
+int64_t
+loader_dri3_swap_buffers_msc(struct loader_dri3_drawable *draw,
+                             int64_t target_msc, int64_t divisor, int64_t remainder,
+                             unsigned flush_flags,
+                             const int *rects, int n_rects,
+                             bool force_copy);
+```
+
+```mermaid
+flowchart TD
+    A[eglSwapBuffers]
+    B[dri3_swap_buffers]
+    C[dri3_swap_buffers_with_damage]
+    D[glXSwapBuffers]
+    E[dri3_swap_buffers]
+    F[loader_dri3_swap_buffers_msc(rects=NULL, n_rects=0)]
+    A -->|platform_x11_dri3.c| B
+    B --> C
+    C -->|rects=NULL</br>n_rects=0| F
+    D -->|dri3_glx.c| E
+    E -->|rects=NULL</br>n_rects=0| F
+```
+
 ## 送显
 
 如果平台的窗口系统(Winsys)是X11, 则送显主要是通过 Present 扩展完成的。这个与Xserver 的交互过程是通过 [`present_event`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/present/present_priv.h#L226) 完成的
