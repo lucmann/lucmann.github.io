@@ -98,4 +98,4 @@ sequenceDiagram
 
 步骤 300 暗藏 bug, 因为 `CopyArea()` 会调用 `glamor_copy_fbo_fbo_draw()` 将原 Pixmap 作为纹理采样到新的 Pixmap `exported`, 也就是会调入 `_mesa_DrawArrays()`, 进而导致这个即将被导出的 BO, 被重新设置成 drawcall 的 render target buffer。 但是 `glamor_copy_fbo_fbo_draw()` 在调用 `_mesa_DrawArrays()` 进行"拷贝"后，并**不会 `glFlush()`**, 只能等到 X11 定时触发 `Screen->BlockHandler()` 时 `glFlush()`。
 
-另外一个进程导入 BO 后，同样会设置它为 render target buffer, 这就造成 X11 进程和 App 进程同时往同一个 render target buffer 里提交渲染命令，导致结果变得不确定。
+另外一个进程导入 BO 后，同样会设置它为 render target buffer, 这就造成 X11 进程和 App 进程为同一个 render target buffer 都创建了 CommandBuffer, 而提交给 GPU 的先后顺序却变得不确定了(有可能 X11 后提交，取决于 `BlockHandler()` 触发点)。
