@@ -96,4 +96,4 @@ sequenceDiagram
 - 400 `glamor_egl_exchange_buffers(pixmap, exported)`, 将 `exported` 里的 tex/gbm_bo/EGLImage 换到原来的 Pixmap 结构体中
 - 500 销毁 `exported` Pixmap
 
-步骤 300 暗藏 bug, 因为 `CopyArea()` 会触发 OpenGL 绘制，也就是会调入 `_mesa_DrawArrays()`, 进而导致这个即将导出的 BO, 被重新设置到 drawcall 的 render target buffer。 另外一个进程导入后，同样会设置这个 BO 为它的 render target buffer, 这就造成 X11 进程和 App 进程同时往同一个 render target buffer 里提交渲染命令，导致结果变得不确定。
+步骤 300 暗藏 bug, 因为 `CopyArea()` 会触发 OpenGL 绘制，也就是会调入 `_mesa_DrawArrays()`, 进而导致这个即将被导出的 BO, 被重新设置成 drawcall 的 render target buffer。 另外一个进程导入 BO 后，同样会设置它为 render target buffer, 这就造成 X11 进程和 App 进程同时往同一个 render target buffer 里提交渲染命令，导致结果变得不确定。
