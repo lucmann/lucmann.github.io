@@ -1,5 +1,5 @@
 ---
-title: Geometry Shader
+title: GL_ARB_geometry_shader4
 date: 2021-12-28 11:45:52
 tags: OpenGL
 categories: graphics
