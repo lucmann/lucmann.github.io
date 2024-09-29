@@ -64,6 +64,7 @@ sequenceDiagram
     rect rgb(200, 150, 255)
     note left of X11: X11 导出 FD
     X11->>X11: glamor_egl_fds_from_pixmap()
+    X11->>X11: glamor_make_pixmap_exportable()
     X11->>X11: glamor_gbm_bo_from_pixmap_internal()
     note left of X11: 通过 PixmapPtr 获取 gbm_bo
     X11-->>Mesa: gbm_bo_get_fd()
@@ -84,3 +85,15 @@ sequenceDiagram
     end
     end
 ```
+
+## glamor_make_pixmap_exportable
+
+函数功能:
+
+- 100 创建一个新的 Pixmap `exported` 用来 export
+- 200 同时创建一个 gbm_bo, 将 `exported` 的 header 设置成刚创建的 gbm_bo
+- 300 将原来的 Pixmap 的内容 `CopyArea()` 到 `exported`
+- 400 `glamor_egl_exchange_buffers(pixmap, exported)`, 将 `exported` 里的 tex/gbm_bo/EGLImage 换到原来的 Pixmap 结构体中
+- 500 销毁 `exported` Pixmap
+
+步骤 300 暗藏 bug, 因为 `CopyArea()` 会触发 OpenGL 绘制，也就是会调入 `_mesa_DrawArrays()`, 进而导致这个即将导出的 BO, 被重新设置到 drawcall 的 render target buffer。 另外一个进程导入后，同样会设置这个 BO 为它的 render target buffer, 这就造成 X11 进程和 App 进程同时往同一个 render target buffer 里提交渲染命令，导致结果变得不确定。
