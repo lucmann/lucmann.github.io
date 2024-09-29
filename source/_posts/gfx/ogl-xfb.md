@@ -1,10 +1,8 @@
 ---
-title: OpenGL Transform Feedback
+title: GL_ARB_transform_feedback
 date: 2021-05-08 09:04:30
-author: luc@sietium.com
 tags: [OpenGL]
 categories: graphics
-toc-depth: 1
 ---
 
 # [Transform Feedback](https://www.khronos.org/opengl/wiki/Transform_Feedback) 引入
