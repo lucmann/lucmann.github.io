@@ -77,6 +77,8 @@ categories: programming
 - 有哪些链接器?
 - 如何查看一个可执行文件链接哪些动态库?
 - 链接器从哪里找到动态库?
+- GCC 编译器不支持 `CXX_SUPPORTS_CUSTOM_LINKER`
+  - 所以安装 mold 后，如果想在编译 LLVM 时使用 `-DLLVM_USE_LINKER=mold`, 就得把 `CC=clang CXX=clang++` 先设置了
 
 # `pkg-config` vs `ldconfig`
 
