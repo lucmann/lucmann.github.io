@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="多线程中的同步" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="multi-threads, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/prog/mt/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>多线程中的同步 - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      多线程中的同步
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2024-08-08
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/programming/">programming</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#同步原语"><span class="toc-number">1.</span> <span class="toc-text">同步原语</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#xshmfence"><span class="toc-number">1.1.</span> <span class="toc-text">xshmfence</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#POSIX-Threads-实现-lpthread"><span class="toc-number">2.</span> <span class="toc-text">POSIX Threads 实现 - -lpthread</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spinlock"><span class="toc-number">2.1.</span> <span class="toc-text">Spinlock</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#POSIX-interfaces"><span class="toc-number">2.1.1.</span> <span class="toc-text">POSIX interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Initializing-a-Spinlock"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">Initializing a Spinlock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Acquiring-a-Spinlock"><span class="toc-number">2.1.1.2.</span> <span class="toc-text">Acquiring a Spinlock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Acquiring-a-Non-Blocking-Spinlock"><span class="toc-number">2.1.1.3.</span> <span class="toc-text">Acquiring a Non-Blocking Spinlock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Unlocking-a-Spinlock"><span class="toc-number">2.1.1.4.</span> <span class="toc-text">Unlocking a Spinlock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Destroying-a-Spinlock"><span class="toc-number">2.1.1.5.</span> <span class="toc-text">Destroying a Spinlock</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#无锁队列"><span class="toc-number">3.</span> <span class="toc-text">无锁队列</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ABA-问题"><span class="toc-number">3.1.</span> <span class="toc-text">ABA 问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#boost-lockfree-queue-源码分析"><span class="toc-number">3.2.</span> <span class="toc-text">boost::lockfree::queue 源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算法"><span class="toc-number">3.2.1.</span> <span class="toc-text">算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-实现"><span class="toc-number">3.2.2.</span> <span class="toc-text">C++实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h1 id="同步原语"><a href="#同步原语" class="headerlink" title="同步原语"></a>同步原语</h1><p>同步原语(Synchronization Primitive)的<a href="https://www.cs.columbia.edu/~hgs/os/sync.html" target="_blank" rel="noopener">确切定义没有一个官方的</a>。但大体来说同步原语可能有以下几种:</p>
+<ul>
+<li>semaphores</li>
+<li>mutex</li>
+<li>locks</li>
+<li>condition variables</li>
+<li>test-and-set machine instructions</li>
+</ul>
+<a id="more"></a>
+
+<p>但这些同步原语是如何实现多线程同步的呢？</p>
+<ul>
+<li>当我们谈论线程同步时，我们在说什么？</li>
+</ul>
+<p>当我们谈论线程同步时，所谓同步，就是必须保证多个线程对同一数据的预期访问次序，也就是”临界区”的保护。之所以多个线程对同一数据的访问可能会产生不预期的结果，是因为内存(这块全局可见存储)中的数据可能会因为CPU读写顺序的差异导致其与各个CPU(核心)本地缓存中的数据不一致。所以线程同步，实质上就是需要保证如果一个CPU核心要读内存之前，另一个CPU已经将新值写入那个地址的内存，如果没有写入，就要让所有准备执行读操作的CPU核心停下来。这个过程中我们不难发现有两个关键点: CPU所执行指令(读写操作)的原子性和内存数据的可见性(本地缓存是否更新到内存)。</p>
+<ul>
+<li>原子操作</li>
+<li>内存屏障</li>
+</ul>
+<h2 id="xshmfence"><a href="#xshmfence" class="headerlink" title="xshmfence"></a>xshmfence</h2><ul>
+<li>基于 futex 和原子操作实现  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span></span><br><span class="line">xshmfence_await(struct xshmfence *f)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span> (__sync_val_compare_and_swap(&amp;f-&gt;v, <span class="number">0</span>, <span class="number">-1</span>) != <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (futex_wait(&amp;f-&gt;v, <span class="number">-1</span>)) &#123; <span class="comment">// blocking the caller process until f-&gt;v reaches to 0</span></span><br><span class="line">            <span class="keyword">if</span> (errno != EWOULDBLOCK)</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>基于 pthread 条件变量实现</li>
+</ul>
+<h1 id="POSIX-Threads-实现-lpthread"><a href="#POSIX-Threads-实现-lpthread" class="headerlink" title="POSIX Threads 实现 - -lpthread"></a>POSIX Threads 实现 - <code>-lpthread</code></h1><h2 id="Spinlock"><a href="#Spinlock" class="headerlink" title="Spinlock"></a>Spinlock</h2><p>自旋锁是解决多处理器共享内存使用的一种底层同步机制。当一个线程试图获取一个已经被另一个线程占有的自旋锁时，这个线程将以循环检查自旋锁是否被释放的方式(自旋)阻塞。一个线程不应该长时间占有一个自旋锁，因为被阻塞的线程仍然消耗CPU资源 (CPU cycles)</p>
+<h3 id="POSIX-interfaces"><a href="#POSIX-interfaces" class="headerlink" title="POSIX interfaces"></a>POSIX interfaces</h3><h4 id="Initializing-a-Spinlock"><a href="#Initializing-a-Spinlock" class="headerlink" title="Initializing a Spinlock"></a>Initializing a Spinlock</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_init</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock, <span class="keyword">int</span> pshared)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>pshared</code>属性可以取以下值的其中之一:</p>
+<p>PTHREAD_PROCESS_SHARED - 这个自旋锁可以被任何线程操作，即使这些线程属于不同的进程，只要申请这个自旋锁的内存是被这些进程共享的。</p>
+<p>PTHREAD_PROCESS_PRIVATE - 这个自旋锁只能被那些与初始化它的线程同属一个进程的线程操作。</p>
+<h4 id="Acquiring-a-Spinlock"><a href="#Acquiring-a-Spinlock" class="headerlink" title="Acquiring a Spinlock"></a>Acquiring a Spinlock</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_lock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果被请求的自旋锁没有被其它线程占有，则请求它的线程成功获取这个锁，否则这个线程不从<code>pthread_spin_lock</code>中返回(阻塞)，直到这个锁被释放。一个线程尝试获取被它自己占有的自旋锁是未定义的行为。</p>
+<h4 id="Acquiring-a-Non-Blocking-Spinlock"><a href="#Acquiring-a-Non-Blocking-Spinlock" class="headerlink" title="Acquiring a Non-Blocking Spinlock"></a>Acquiring a Non-Blocking Spinlock</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_trylock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>尝试获取一个自旋锁，与<code>pthread_spin_lock</code>不同的是，如果所请求的锁被另一个线程占有，不阻塞，而是立即返回失败(Non-Blocking).</p>
+<h4 id="Unlocking-a-Spinlock"><a href="#Unlocking-a-Spinlock" class="headerlink" title="Unlocking a Spinlock"></a>Unlocking a Spinlock</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_unlock</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>释放被锁的自旋锁。成功返回0，否则返回以下错误码之一:</p>
+<p>EPERM - 调用线程不持有这个锁</p>
+<p>EINVAL - lock指向的不是一个已初始化的自旋锁对象</p>
+<h4 id="Destroying-a-Spinlock"><a href="#Destroying-a-Spinlock" class="headerlink" title="Destroying a Spinlock"></a>Destroying a Spinlock</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_destroy</span><span class="params">(<span class="keyword">pthread_spinlock_t</span> *lock)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h1 id="无锁队列"><a href="#无锁队列" class="headerlink" title="无锁队列"></a>无锁队列</h1><p>无锁队列的实现依靠的是CPU提供的原子操作指令(atomic) 和比较和交换指令 (cas). 其中cas 指令还有一种 double-width cas (dwcas), 就是能在 64位机器上原子地进行 128位(dword)值的cas (在 aarch64 cas 和 dwcas 是同一条指令)，CPU是否支持dwcas, 影响实现无锁队列时的一个策略，即队列容量是否固定。</p>
+<h2 id="ABA-问题"><a href="#ABA-问题" class="headerlink" title="ABA 问题"></a>ABA 问题</h2><p>无锁数据结构通常采用的是一种简单的“重试”策略，它的思想是线程0 获取一个ptr, 访问它指向的数据，然后尝试更新这个 ptr的值(通过 cas), 如果发现这个 ptr 已经变了(cas 比较测试失败), 那就重新获取有新值的ptr, 再访问新ptr 指向的数据。</p>
+<p>ABA 问题出现的场景是，在线程0，前后两次读到ptr 的值的中间，有可能线程1，已经修改过 ptr 的值由A 到 B，而后又在线程0 cas 操作前，线程1又<strong>恰巧</strong>在地址A申请到一个元素遂将ptr 的值又改回A, 结果就是线程1对ptr 的修改(A-&gt;B-&gt;A)对线程0不可见，而实际上A指向的内容可能已经发生变化，对线程0来说可能导致未预期的结果。</p>
+<p>这种场景的ABA问题可以通过将原来单独的一个ptr (64位系统上sizeof(ptr) = 8), 替换成一对(ptr, counter)来解决。每次ptr 被修改，counter就+1, 这样即使最后ptr 是相等的(A-&gt;B-&gt;A), 但counter 也不相等，这样只要同时对(ptr, counter) 做 cas 比较就可以准确判定ptr 是否被修改过(如果修改过，即使现在的值和之前的值相等，仍然要重新获取这个值，再次访问它指向的内容)。但现在要比较的数据由原来的8字节变成16字节，所以就需要 dwcas 指令。</p>
+<p>由上面ABA问题的分析可以看到，之所以对线程0来说，A指向的内容可能会发生变化，原因是中间存在申请内存的操作。所以只要保证在整个队列操作中，不会动态申请元素(没有了线程1恰巧又重新分配的A这个地址的可能)，这种场景的ABA问题也就不存在了。这就是为什么 CPU 如果不支持 dwcas, 则无锁队列的容量必须是固定大小的。</p>
+<h2 id="boost-lockfree-queue-源码分析"><a href="#boost-lockfree-queue-源码分析" class="headerlink" title="boost::lockfree::queue 源码分析"></a>boost::lockfree::queue 源码分析</h2><h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><ul>
+<li>出队<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">pop(Q: pointer to <span class="built_in">queue</span>, ret: pointer to data type): <span class="keyword">boolean</span></span><br><span class="line">D1:    loop                             # Keep trying until pop is done</span><br><span class="line">D2:      head = Q-&gt;Head                 # Read Head</span><br><span class="line">D3:      tail = Q-&gt;Tail                 # Read Tail</span><br><span class="line">D4:      next = head-&gt;next              # Read Head.ptr-&gt;next</span><br><span class="line">D5:      <span class="keyword">if</span> head == Q-&gt;Head             # Are head, tail, <span class="keyword">and</span> next consistent?</span><br><span class="line">D6:        <span class="keyword">if</span> head.ptr == tail.ptr      # Is <span class="built_in">queue</span> empty <span class="keyword">or</span> Tail falling bebind?</span><br><span class="line">D7:          <span class="keyword">if</span> next.ptr == <span class="literal">NULL</span>        # Is <span class="built_in">queue</span> empty?</span><br><span class="line">D8:            <span class="keyword">return</span> FALSE             # Queue is empty, couldn<span class="number">'</span>t pop</span><br><span class="line">D9:          endif</span><br><span class="line">             # Tail is falling behind. Try to advance it</span><br><span class="line">D10:         CAS(&amp;Q-&gt;Tail, tail, &lt;next.ptr, tail.count+<span class="number">1</span>&gt;)</span><br><span class="line">D11:       <span class="keyword">else</span>                         # No need to deal with Tail</span><br><span class="line">             # Read value before CAS, otherwise another pop might <span class="built_in">free</span> the next node</span><br><span class="line">D12:         *ret = next.ptr-&gt;value</span><br><span class="line">             # Try to swing Head to the next node</span><br><span class="line">D13:         <span class="keyword">if</span> CAS(&amp;Q-&gt;Head, head, &lt;next.ptr, head.count+<span class="number">1</span>&gt;)</span><br><span class="line">D14:           <span class="keyword">break</span>                    # Pop is done, Exit loop</span><br><span class="line">D15:         endif</span><br><span class="line">D16:       endif</span><br><span class="line">D17:     endif</span><br><span class="line">D18:   endloop</span><br><span class="line">D19:   <span class="built_in">free</span>(head.ptr)                   # It is safe now to <span class="built_in">free</span> the old dummy node</span><br><span class="line">D20:   <span class="keyword">return</span> TRUE                      # Queue was <span class="keyword">not</span> empty, pop succeeded</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="C-实现"><a href="#C-实现" class="headerlink" title="C++实现"></a>C++实现</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::atomic&lt; tagged_node_handle &gt; head_;</span><br><span class="line">    <span class="built_in">std</span>::atomic&lt; tagged_node_handle &gt; tail_;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><a href="https://en.cppreference.com/w/cpp/atomic/memory_order" target="_blank" rel="noopener">std::memory_order</a></p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">enum</span> memory_order &#123;</span><br><span class="line">    memory_order_relaxed,</span><br><span class="line">    memory_order_consume,</span><br><span class="line">    memory_order_acquire,</span><br><span class="line">    memory_order_release,</span><br><span class="line">    memory_order_acq_rel,</span><br><span class="line">    memory_order_seq_cst, <span class="comment">// Sequentially-consistent ordering</span></span><br><span class="line">&#125; memory_order;</span><br></pre></td></tr></table></figure>
+
+<p>  这个memory_order的顺序，由上到下对原子变量的操作和读写顺序的保证应该是越来越严格的(没有读写顺序保证-&gt;单个原子变量读写顺序保证-&gt;全局读写顺序一致)。</p>
+<ul>
+<li><p><code>memory_order_relaxed</code>只保证原子操作，不保证指令顺序。</p>
+</li>
+<li><p><code>memory_order_acquire</code></p>
+<ul>
+<li>用于 <code>atomic&lt;T&gt;::load()</code></li>
+<li>对于使用memory_order_acquire的指令，该指令后面的所有读写操作<strong>不能重排在该指令之前</strong></li>
+<li>当前线程执行的memory_order_acquire指令能够保证读到其他线程memory_order_release指令之前的所有内存写入操作</li>
+</ul>
+</li>
+<li><p><code>memory_order_release</code></p>
+<ul>
+<li>用于 <code>atomic&lt;T&gt;::store()</code></li>
+<li>对于使用memory_order_release的指令，该指令之前的所有读写操作<strong>不能重排在该指令之后</strong></li>
+<li>当前线程memory_order_release指令之前的所有内存写操作对于其他线程的memory_order_acquire指令都可见。</li>
+</ul>
+</li>
+<li><p><code>memory_order_acq_rel</code></p>
+<ul>
+<li>用于 <code>atomic&lt;T&gt;::fetch_add()</code>, <code>atomic&lt;T&gt;::compare_exchange_weak()</code> 这类 read-modify-write 操作。如果用在普通的 <code>atomic&lt;T&gt;::load()</code>，效果与用memory_order_acquire 无异。</li>
+<li>把 memory_order_acquire 和 memory_order_release 结合起来，它可以保证单个原子变量的读写顺序，下面的例子就是不适用 memory_order_acq_rel 的</li>
+</ul>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;atomic&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cassert&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::atomic&lt;<span class="keyword">bool</span>&gt; x = &#123;<span class="literal">false</span>&#125;;</span><br><span class="line"><span class="built_in">std</span>::atomic&lt;<span class="keyword">bool</span>&gt; y = &#123;<span class="literal">false</span>&#125;;</span><br><span class="line"><span class="built_in">std</span>::atomic&lt;<span class="keyword">int</span>&gt; z = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">write_x</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    x.store(<span class="literal">true</span>, <span class="built_in">std</span>::memory_order_acq_rel);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">write_y</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    y.store(<span class="literal">true</span>, <span class="built_in">std</span>::memory_order_acq_rel);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">read_x_then_y</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (!x.load(<span class="built_in">std</span>::memory_order_acq_rel))</span><br><span class="line">        ;</span><br><span class="line">    <span class="keyword">if</span> (y.load(<span class="built_in">std</span>::memory_order_acq_rel))</span><br><span class="line">        ++z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">read_y_then_x</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (!y.load(<span class="built_in">std</span>::memory_order_acq_rel))</span><br><span class="line">        ;</span><br><span class="line">    <span class="keyword">if</span> (x.load(<span class="built_in">std</span>::memory_order_acq_rel))</span><br><span class="line">        ++z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function"><span class="built_in">std</span>::thread <span class="title">a</span><span class="params">(write_x)</span></span>;</span><br><span class="line">    <span class="function"><span class="built_in">std</span>::thread <span class="title">b</span><span class="params">(write_y)</span></span>;</span><br><span class="line">    <span class="function"><span class="built_in">std</span>::thread <span class="title">c</span><span class="params">(read_x_then_y)</span></span>;</span><br><span class="line">    <span class="function"><span class="built_in">std</span>::thread <span class="title">d</span><span class="params">(read_y_then_x)</span></span>;</span><br><span class="line">    a.join(); b.join(); c.join(); d.join();</span><br><span class="line">    assert(z.load() != <span class="number">0</span>); <span class="comment">// will never happen</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  上面的例子修改自 <a href="https://en.cppreference.com/w/cpp/atomic/memory_order" target="_blank" rel="noopener">cppreference.com/atomic/memory_order Sequentially-consistent ordering</a> 部分。理论上这个例子应该能够说明 memory_order_acq_rel 与 memory_order_seq_cst 的区别，当把原例中的 seq_cst 换成 acq_rel，应该是有可能触发 <code>z.load() == 0</code>的情况的(至少在 aarch64 上，因为x86的存储器模型本身就是按序一致性模型)。但实际上却没有触发，其原因在 <a href="https://stackoverflow.com/questions/67397460/does-stlrb-provide-sequential-consistency-on-arm64" target="_blank" rel="noopener">stackoverflow 上有解释</a>。 通过在 <a href="https://godbolt.org/z/8KbxMEY6s" target="_blank" rel="noopener">godbolt.org</a> 上查看这个程序的汇编代码，确实 <code>y.load(std::memory_order_acq_rel)</code>和<code>y.store(true, std::memory_order_acq_rel)</code>是被分别翻译成了 <code>ldarb</code> 和 <code>stlrb</code>。</p>
+</li>
+<li><p><code>memory_order_seq_cst</code></p>
+<ul>
+<li>提供最严格的全局读写顺序一致性保证，上面的例子就只能使用 memory_order_seq_cst</li>
+<li>对于使用memory_order_seq_cst 的 <code>atomic&lt;T&gt;::store()</code> 指令来说，它强制flush 每个CPU核心的store buffer, 所以这个store 操作后面的 load (读操作)将被延迟直到store 操作完成所有 store buffer 的刷新(即对全局可见)。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><code>std::atomic&lt;T&gt;::load(std::memory_order order = std::memory_order_seq_cst)</code></p>
+</li>
+<li><p><a href="https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange" target="_blank" rel="noopener"><code>std::atomic&lt;T&gt;::compare_exchange_*()</code></a></p>
+<p> C++ std::atomic<T> 的 cas 有8个不同的声明，主要区分在 weak/strong, 参数和是否有 volatile. 而boost::lockfree::queue 里使用的是下面两个版本:</p>
+<ul>
+<li><p><code>std::atomic&lt;T&gt;::compare_exchange_strong(T&amp; expected, T desired, std::memory_order    order = std::memory_order_seq_cst)</code></p>
+</li>
+<li><p><code>std::atomic&lt;T&gt;::compare_exchange_weak(T&amp; expected, T desired, std::memory_order order = std::memory_order_seq_cst)</code></p>
+</li>
+<li><p>为什么 <code>expected</code> 参数是一个引用类型，而<code>desired</code>参数是一个值传递？</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://www.cs.rochester.edu/u/scott/papers/1996_PODC_queues.pdf" target="_blank" rel="noopener">Simple, Fast, and Practical Non-Blocking and Blocking Concurrent Queue Algorithms</a></li>
+<li><a href="https://github.com/boostorg/lockfree/blob/develop/include/boost/lockfree/detail/tagged_ptr_dcas.hpp#L120" target="_blank" rel="noopener">boost::lockfree::queue</a></li>
+<li><a href="https://github.com/fangcun010/inline_asm_lockfree_queue" target="_blank" rel="noopener">inline_asm_lockfree_queue</a></li>
+<li><a href="https://blog.lse.epita.fr//2013/02/27/implementing-generic-double-word-compare-and-swap.html" target="_blank" rel="noopener">Implementing generic double-word compare and swap for x86/64</a></li>
+<li><a href="https://www.openeuler.org/zh/blog/wangshuo/Linux_Futex_Principle_Analysis/Linux_Futex_Principle_Analysis.html" target="_blank" rel="noopener">linux - futex 原理分析</a></li>
+</ul>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/multi-threads/">multi-threads</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/prog/std/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">C++ 标准库</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/misc/first-game-2ji/">  
+        <span class="next-text nav-default">升2级后的第一盘</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>

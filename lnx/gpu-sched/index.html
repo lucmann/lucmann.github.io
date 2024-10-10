@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="GPU Scheduler in Linux Kernel" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="DRM, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/lnx/gpu-sched/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>GPU Scheduler in Linux Kernel - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      GPU Scheduler in Linux Kernel
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-09-17
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/linux/">linux</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#缩略词"><span class="toc-number">1.</span> <span class="toc-text">缩略词</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#drm-sched-main"><span class="toc-number">2.</span> <span class="toc-text">drm_sched_main</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#drm-scheduler-的一些问题"><span class="toc-number">3.</span> <span class="toc-text">drm_scheduler 的一些问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如果在-run-job-path-存在内存申请，就有可能导致内核死锁"><span class="toc-number">3.1.</span> <span class="toc-text">如果在 run_job() path 存在内存申请，就有可能导致内核死锁</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h1 id="缩略词"><a href="#缩略词" class="headerlink" title="缩略词"></a>缩略词</h1><table>
+<thead>
+<tr>
+<th align="left">缩略词</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">rq</td>
+<td align="left">run queue</td>
+</tr>
+<tr>
+<td align="left">SPSC</td>
+<td align="left">Single Producer Single Consumer</td>
+</tr>
+</tbody></table>
+<a id="more"></a>
+
+<ul>
+<li><code>drm_gpu_scheduler</code></li>
+<li><code>drm_sched_backend_ops</code></li>
+<li><code>drm_sched_rq</code></li>
+<li><code>drm_sched_entity</code></li>
+<li><code>drm_sched_job</code></li>
+<li><code>drm_sched_fence</code></li>
+</ul>
+<p>Linux内核的GPU scheduler是负责向GPU硬件提交作业的，它被编译到内核模块<code>gpu-sched</code>. 它本身是一个内核线程<code>kthread</code>, 这个线程的入口函数是<code>drm_sched_main</code>, 它的启动是在<code>drm_sched_init</code>. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * drm_sched_init - Init a gpu scheduler instance</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @sched: scheduler instance</span></span><br><span class="line"><span class="comment"> * @ops: backend operations for this scheduler</span></span><br><span class="line"><span class="comment"> * @hw_submission: number of hw submissions that can be in flight</span></span><br><span class="line"><span class="comment"> * @hang_limit: number of times to allow a job to hang before dropping it</span></span><br><span class="line"><span class="comment"> * @timeout: timeout value in jiffies for the scheduler</span></span><br><span class="line"><span class="comment"> * @timeout_wq: workqueue to use for timeout work. If NULL, the system_wq is</span></span><br><span class="line"><span class="comment"> *		used</span></span><br><span class="line"><span class="comment"> * @score: optional score atomic shared with other schedulers</span></span><br><span class="line"><span class="comment"> * @name: name used for debugging</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Return 0 on success, otherwise error code.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">drm_sched_init</span><span class="params">(struct drm_gpu_scheduler *sched,</span></span></span><br><span class="line"><span class="function"><span class="params">		   <span class="keyword">const</span> struct drm_sched_backend_ops *ops,</span></span></span><br><span class="line"><span class="function"><span class="params">		   <span class="keyword">unsigned</span> hw_submission, <span class="keyword">unsigned</span> hang_limit,</span></span></span><br><span class="line"><span class="function"><span class="params">		   <span class="keyword">long</span> timeout, struct workqueue_struct *timeout_wq,</span></span></span><br><span class="line"><span class="function"><span class="params">		   <span class="keyword">atomic_t</span> *score, <span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span></span><br></pre></td></tr></table></figure>
+
+<h1 id="drm-sched-main"><a href="#drm-sched-main" class="headerlink" title="drm_sched_main"></a>drm_sched_main</h1><p>这个函数根据<code>dma_fence</code>的状态(signaled or unsignaled)反复进行睡眠和唤醒, 让下面这4个callbacks有条不紊地在CPU上执行。<code>drm_sched_init</code>中有一个<code>drm_sched_backend_ops</code>需要驱动去实现:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">drm_sched_backend_ops</span> <span class="title">xxx_sched_ops</span> = &#123;</span></span><br><span class="line">	.dependency = xxx_job_dependency,</span><br><span class="line">	.run_job = xxx_job_run,</span><br><span class="line">	.timedout_job = xxx_job_timedout,</span><br><span class="line">	.free_job = xxx_job_free</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><code>dma_fence</code>就像一个“令牌”一样，在这4个函数之间流转，gpu scheduler不单单用一个<code>dma_fence</code>, 它使用了一组<code>dma_fence</code>(2个， scheduled和finished), 这组<code>dma_fence</code>被封装在<code>drm_sched_fence</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * struct drm_sched_fence - fences corresponding to the scheduling of a job.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">drm_sched_fence</span> &#123;</span></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * @scheduled: this fence is what will be signaled by the scheduler</span></span><br><span class="line"><span class="comment">         * when the job is scheduled.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">dma_fence</span>		<span class="title">scheduled</span>;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * @finished: this fence is what will be signaled by the scheduler</span></span><br><span class="line"><span class="comment">         * when the job is completed.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * When setting up an out fence for the job, you should use</span></span><br><span class="line"><span class="comment">         * this, since it's available immediately upon</span></span><br><span class="line"><span class="comment">         * drm_sched_job_init(), and the fence returned by the driver</span></span><br><span class="line"><span class="comment">         * from run_job() won't be created until the dependencies have</span></span><br><span class="line"><span class="comment">         * resolved.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">dma_fence</span>		<span class="title">finished</span>;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * @parent: the fence returned by &amp;drm_sched_backend_ops.run_job</span></span><br><span class="line"><span class="comment">         * when scheduling the job on hardware. We signal the</span></span><br><span class="line"><span class="comment">         * &amp;drm_sched_fence.finished fence once parent is signalled.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">dma_fence</span>		*<span class="title">parent</span>;</span></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * @sched: the scheduler instance to which the job having this struct</span></span><br><span class="line"><span class="comment">         * belongs to.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">drm_gpu_scheduler</span>	*<span class="title">sched</span>;</span></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * @lock: the lock used by the scheduled and the finished fences.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">	<span class="keyword">spinlock_t</span>			lock;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * @owner: job owner for debugging</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">	<span class="keyword">void</span>				*owner;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="drm-scheduler-的一些问题"><a href="#drm-scheduler-的一些问题" class="headerlink" title="drm_scheduler 的一些问题"></a>drm_scheduler 的一些问题</h1><h2 id="如果在-run-job-path-存在内存申请，就有可能导致内核死锁"><a href="#如果在-run-job-path-存在内存申请，就有可能导致内核死锁" class="headerlink" title="如果在 run_job() path 存在内存申请，就有可能导致内核死锁"></a>如果在 <code>run_job()</code> path 存在内存申请，就有可能导致内核死锁</h2><p>我们试着从 <a href="https://oftc.irclog.whitequark.org/dri-devel/2023-03-10#31964051;" target="_blank" rel="noopener">dri-devel IRC 频道</a> 上的一段讨论来理解这个问题。</p>
+<blockquote>
+<p>16:51 <gfxstrand> The dma_fence design itself is fine. It’s designed that way for very good reasons. There are problems we need to solve but they’re more around how things have become tangled up inside drm than they are about dma_fence.<br>16:54 <bbrezillon> DemiMarie: if you have a way to swapout some memory accessed by in-flight jobs, you might be able to unblock the situation, but I’m sure this ‘no allocation in the scheduler path’ rule is here to address the problem where a job takes too long to finish and the shrinker decides to reclaim memory anyway.<br>16:56 <bbrezillon> I think the problem is that drm_sched exposes a fence to the outside world, and it needs a guarantee that this fence will be signaled, otherwise other parties (the shrinker) might wait for an event that’s never going to happen<br>16:56 <gfxstrand> Yup<br>16:57 <bbrezillon> that comes from the fact it’s not the driver fence that’s exposed to the outside world, but an intermediate object, which is indirectly signaled by the driver fence, that’s created later on when the scheduler calls -&gt;run_job()<br>16:58 <gfxstrand> Once a fence has been exposed, even internally within the kernel, it MUST signal in finite time.<br>16:59 <gfxstrand> If you allocate memory, that could kick off reclaim which can then have to wait on the GPU and you’re stuck.<br>17:00 <bbrezillon> so the issue most drivers have, is that they allocate this driver fence in the -&gt;run_job() path with GFP_KERNEL (waitable allocation), which might kick the GPU driver shrinker, which in turn will wait on the fence exposed by the drm_sched, which will never be signaled because the driver is waiting for memory to allocate its driver fence :-)</p>
+</blockquote>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/DRM/">DRM</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/misc/1percent/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">观“老石谈芯”视频记</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/lnx/kms/">  
+        <span class="next-text nav-default">Atomic Mode Setting 设计概要 第一部分 （译）</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>

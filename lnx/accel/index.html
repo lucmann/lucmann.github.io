@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="Linux accel 子系统" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="accel, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/lnx/accel/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>Linux accel 子系统 - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      Linux accel 子系统
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2024-09-06
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/linux/">linux</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+
+  <div class="post-content">
+    
+    <p>Linux 计算加速器子系统旨在以通用的方式向用户空间开放计算加速器的接口。这些计算加速器可以是独立的 ASIC, 也可以是 SoC/GPU 内的 IP 块。通常计算加速器包括以下几种类型:</p>
+<ul>
+<li>边缘 AI - 在边缘设备上进行推理计算</li>
+<li>推理数据中心 - 大型服务器中的单用户/多用户设备</li>
+<li>训练数据中心 - 类似于推理数据中心卡，但通常具有更强的计算能力和更高的存储带宽 </li>
+</ul>
+<a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">if DRM</span><br><span class="line"></span><br><span class="line">menuconfig DRM_ACCEL</span><br><span class="line">	bool &quot;Compute Acceleration Framework&quot;</span><br><span class="line">	help</span><br><span class="line">	  Framework for device drivers of compute acceleration devices, such</span><br><span class="line">	  as, but not limited to, Machine-Learning and Deep-Learning</span><br><span class="line">	  acceleration devices.</span><br><span class="line">	  If you say Y here, you need to select the module that&#39;s right for</span><br><span class="line">	  your acceleration device from the list below.</span><br><span class="line">	  This framework is integrated with the DRM subsystem as compute</span><br><span class="line">	  accelerators and GPUs share a lot in common and can use almost the</span><br><span class="line">	  same infrastructure code.</span><br><span class="line">	  Having said that, acceleration devices will have a different</span><br><span class="line">	  major number than GPUs, and will be exposed to user-space using</span><br><span class="line">	  different device files, called accel&#x2F;accel* (in &#x2F;dev, sysfs</span><br><span class="line">	  and debugfs).</span><br><span class="line"></span><br><span class="line">source &quot;drivers&#x2F;accel&#x2F;habanalabs&#x2F;Kconfig&quot;</span><br><span class="line">source &quot;drivers&#x2F;accel&#x2F;ivpu&#x2F;Kconfig&quot;</span><br><span class="line">source &quot;drivers&#x2F;accel&#x2F;qaic&#x2F;Kconfig&quot;</span><br><span class="line"></span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
+
+<p>下面是 accel 子系统被合入主线时的 commit message</p>
+<blockquote>
+<p>drivers/accel: define kconfig and register a new major</p>
+<p>Add a new Kconfig for the accel subsystem. The Kconfig currently<br>contains only the basic CONFIG_DRM_ACCEL option that will be used to<br>decide whether to compile the accel registration code. Therefore, the<br>kconfig option is defined as bool.</p>
+<p>The accel code will be compiled as part of drm.ko and will be called<br>directly from the DRM core code. The reason we compile it as part of<br>drm.ko and not as a separate module is because of cyclic dependency<br>between drm.ko and the separate module (if it would have existed).<br>This is due to the fact that DRM core code calls accel functions and<br>vice-versa.</p>
+<p>The accelerator devices will be exposed to the user space with a new,<br>dedicated major number - 261.</p>
+<p>The accel init function registers the new major number as a char device<br>and create corresponding sysfs and debugfs root entries, similar to<br>what is done in DRM init function.</p>
+<p>I added a new header called drm_accel.h to include/drm/, that will hold<br>the prototypes of the drm_accel.c functions. In case CONFIG_DRM_ACCEL<br>is set to ‘N’, that header will contain empty inline implementations of<br>those functions, to allow DRM core code to compile successfully<br>without dependency on CONFIG_DRM_ACCEL.</p>
+<p>I Updated the MAINTAINERS file accordingly with the newly added folder<br>and I have taken the liberty to appropriate the dri-devel mailing list<br>and the dri-devel IRC channel for the accel subsystem.</p>
+</blockquote>
+<p>目前 accel 下已经有 3 个 AI 加速芯片的驱动:</p>
+<ul>
+<li><strong>habanalabs.ko</strong> - Intel 旗下的哈瓦那 (Habana) AI 处理器 (AIP)</li>
+<li><strong>intel_vpu.ko</strong> - Intel Neural Proccessing Unit (NPU) (之前叫 VPU Versatile Proccessing Unit)</li>
+<li><strong>qaic.ko</strong> - Qualcomm Cloud AI 加速器</li>
+</ul>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/accel/">accel</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/gfx/dril/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">DRI Legacy</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/comp/rocm/">  
+        <span class="next-text nav-default">ROCm</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>
