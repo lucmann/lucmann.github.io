@@ -53,6 +53,9 @@ categories: utilities
 - `-DCMAKE_CXX_FLAGS="-Wno-error=missing-field-initializers"`
   - 将 `missing-field-initializers` 由 error 转为 warning
 
+- `-DCMAKE_CXX_FLAGS="-stdlib=libc++ -fexperimental-library"`
+  - 当你使用 LLVM 的 c++ runtimes 时， 需要额外指定这两个编译选项，否则编译器仍然会使用 `libstdc++.so.1`
+
 - `-DCMAKE_EXE_LINKER_FLAGS="-nostartfiles"`
   - 解决 "Scrt1.o: undefined reference to `main`"
 
