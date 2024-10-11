@@ -108,7 +108,7 @@ Options customization:
 
 # texlive-full
 
-在使用 xelatex, pdflatex 等 latex 程序时，可以常常遇到
+在使用 xelatex, pdflatex 等 latex 程序时，可以常常遇到类似
 
 `! LaTeX Error: File 'fontawesome.sty' not found`
 
