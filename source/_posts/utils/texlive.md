@@ -106,3 +106,12 @@ Options customization:
 
 最好勾选此选项，避免使用 TexLive 时各种 `Not Found`, 原因是 TexLive 默认安装路径并不是标准 Linux 可执行程序的路径(如 `/usr/bin`), 而是 `/usr/local/texlive`, 如在 x86_64 安装 `texlive2022.iso`, 则可执行程序被安装在 `/usr/local/texlive/2022/bin/x86_64-linux`. 假如不想因为该路径没有在 `PATH` 里，最好就是在安装时直接在 `/usr/bin` 下创建相应符号链接。
 
+# texlive-full
+
+在使用 xelatex, pdflatex 等 latex 程序时，可以常常遇到
+
+`! LaTeX Error: File 'fontawesome.sty' not found`
+
+xxx.sty 这样的报错，一般是缺少某个 texlive 包，但 texlive 的包太多了，如果懒得一个一个安装，可以
+
+`sudo apt install texlive-full`
