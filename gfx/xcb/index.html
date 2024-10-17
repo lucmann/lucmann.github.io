@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="X C Bindings" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="X11, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/gfx/xcb/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>X C Bindings - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      X C Bindings
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2024-09-21
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/graphics/">graphics</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Build"><span class="toc-number">1.</span> <span class="toc-text">Build</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bindings"><span class="toc-number">2.</span> <span class="toc-text">Bindings</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#xcb-create-pixmap"><span class="toc-number">2.1.</span> <span class="toc-text">xcb_create_pixmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xcb-dri3-buffers-from-pixmap"><span class="toc-number">2.2.</span> <span class="toc-text">xcb_dri3_buffers_from_pixmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#glamor-make-pixmap-exportable"><span class="toc-number">2.3.</span> <span class="toc-text">glamor_make_pixmap_exportable</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <p>XCB 是应用与 X 服务器交互使用的 C 绑定函数集，它里面的一些 C 函数是通过 python3-xcbgen 工具生成的，不经过编译在它的<a href="https://gitlab.freedesktop.org/xorg/lib/libxcb" target="_blank" rel="noopener">源码库</a>是找不到的。而且 XCB 古老到仍然使用 autotools 那套构建系统，想要看到某些函数的“真容”，你还得“千呼万唤”。</p>
+<a id="more"></a>
+<h1 id="Build"><a href="#Build" class="headerlink" title="Build"></a>Build</h1><ul>
+<li><p>安装工具</p>
+<ul>
+<li><code>sudo apt install python3-xcbgen autoconf automake libtool xutils-dev xcb-proto</code></li>
+<li><strong>xutils-dev</strong> 里包含 xorg-macros</li>
+<li><strong>libxcb</strong> 的版本与 <strong>*xcb-proto</strong> 软件包的版本有依赖关系，如果你安装的 xcb-proto 版本是 1.14-2, 那么最好将 libxcb 的 tag 也检出到 libxcb-1.14</li>
+</ul>
+</li>
+<li><p>构建</p>
+<ul>
+<li><code>./autogen.sh</code></li>
+<li><code>make</code></li>
+</ul>
+</li>
+<li>千呼万唤始出来<ul>
+<li>在构建完之后，为了保存“成果”，需要使用一点 git 小技巧, 在 <code>src/.gitignore</code> 最后加上<ul>
+<li><code>!*.c</code></li>
+</ul>
+</li>
+<li>现在可以好好看看 <code>xcb_dri3_pixmap_from_buffers()</code> 的实现了<ul>
+<li><a href="https://gitlab.freedesktop.org/lucmann/libxcb/-/tree/v1.14-where-you-will-find-xcb_dri3_pixmap_from_buffers" target="_blank" rel="noopener">https://gitlab.freedesktop.org/lucmann/libxcb/-/tree/v1.14-where-you-will-find-xcb_dri3_pixmap_from_buffers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="Bindings"><a href="#Bindings" class="headerlink" title="Bindings"></a>Bindings</h1><h2 id="xcb-create-pixmap"><a href="#xcb-create-pixmap" class="headerlink" title="xcb_create_pixmap"></a>xcb_create_pixmap</h2><pre class="mermaid">sequenceDiagram
+    autonumber
+    participant Mesa
+    participant X11
+
+    Mesa-->>X11: xcb_generate_id()
+    X11-->>Mesa: uint32_t pid (pixmap id)
+    Mesa-->>X11: xcb_create_pixmap()
+    X11->>X11: ProcCreatePixmap()
+    note left of X11: CreatePixmapProcPtr 接口，有各种实现<br/>glamor, dri2, xwayland, xnest<br/>当初的 pixmap id 会<br/>记录在创建好的 Pixmap 的 drawable->id
+    X11->>X11: glamor_create_pixmap(usage=0)
+    X11->>X11: glamor_create_fbo()
+    rect rgb(191, 223, 255)
+    X11->>X11: _glamor_create_tex()
+    X11-->>Mesa: glGenTextures()
+    end
+    Mesa-->>X11: xcb_dri3_buffers_from_pixmap(pid)</pre>
+
+<h2 id="xcb-dri3-buffers-from-pixmap"><a href="#xcb-dri3-buffers-from-pixmap" class="headerlink" title="xcb_dri3_buffers_from_pixmap"></a>xcb_dri3_buffers_from_pixmap</h2><pre class="mermaid">sequenceDiagram
+    autonumber
+    participant Mesa
+    participant X11
+
+    Mesa-->>X11: xcb_dri3_buffers_from_pixmap(pid)
+    rect rgb(191, 223, 255)
+    X11->>X11: proc_dri3_buffers_from_pixmap()
+    X11->>X11: dixLookupResourceByType(pid)
+    note left of X11: 通过 pid 找到当初的 PixmapPtr
+    X11->>X11: dri3_fds_from_pixmap(PixmapPtr)
+    rect rgb(200, 150, 255)
+    note left of X11: X11 导出 FD
+    X11->>X11: glamor_egl_fds_from_pixmap()
+    X11->>X11: glamor_make_pixmap_exportable()
+    X11->>X11: glamor_gbm_bo_from_pixmap_internal()
+    note left of X11: 通过 PixmapPtr 获取 gbm_bo
+    X11-->>Mesa: gbm_bo_get_fd()
+    Mesa-->>X11: xcb_dri3_buffers_from_pixmap_reply()
+    Mesa-->>X11: xcb_dri3_buffers_from_pixmap_reply_fds()
+    note right of Mesa: 拿到导出的 FD 需要两步<br/> reply_fds() 才是真正拿到 FD
+    end
+    rect rgb(200, 150, 255)
+    note right of Mesa: Mesa 导入 FD
+    Mesa->>Mesa: dri2_from_dma_bufs2()
+    Mesa->>Mesa: dri2_create_image_from_fd()
+    Mesa->>Mesa: dri2_create_image_from_winsys(winsys_handle)
+    loop Every FD
+        Mesa->>Mesa: xxx_resource_from_handle()
+        Mesa->>Mesa: xxx_bo_import()
+        note right of Mesa: resource_from_handle() 返回的<br/>pipe_resource 给 __DRIimage.texture
+    end
+    end
+    end</pre>
+
+<h2 id="glamor-make-pixmap-exportable"><a href="#glamor-make-pixmap-exportable" class="headerlink" title="glamor_make_pixmap_exportable"></a>glamor_make_pixmap_exportable</h2><p>函数功能:</p>
+<ul>
+<li>100 创建一个新的 Pixmap <code>exported</code> 用来 export</li>
+<li>200 同时创建一个 gbm_bo, 将 <code>exported</code> 的 header 设置成刚创建的 gbm_bo</li>
+<li>300 将原来的 Pixmap 的内容 <code>CopyArea()</code> 到 <code>exported</code></li>
+<li>400 <code>glamor_egl_exchange_buffers(pixmap, exported)</code>, 将 <code>exported</code> 里的 tex/gbm_bo/EGLImage 换到原来的 Pixmap 结构体中</li>
+<li>500 销毁 <code>exported</code> Pixmap</li>
+</ul>
+<p>步骤 300 暗藏 bug, 因为 <code>CopyArea()</code> 会调用 <code>glamor_copy_fbo_fbo_draw()</code> 将原 Pixmap 作为纹理采样到新的 Pixmap <code>exported</code>, 也就是会调入 <code>_mesa_DrawArrays()</code>, 进而导致这个即将被导出的 BO, 被重新设置成 drawcall 的 render target buffer。 但是 <code>glamor_copy_fbo_fbo_draw()</code> 在调用 <code>_mesa_DrawArrays()</code> 进行”拷贝”后，并<strong>不会 <code>glFlush()</code></strong>, 只能等到 X11 定时触发 <code>Screen-&gt;BlockHandler()</code> 时 <code>glFlush()</code>。</p>
+<p>另外一个进程导入 BO 后，同样会设置它为 render target buffer, 这就造成 X11 进程和 App 进程为同一个 render target buffer 都创建了 CommandBuffer, 而提交给 GPU 的先后顺序却变得不确定了(有可能 X11 后提交，取决于 <code>BlockHandler()</code> 触发点)。</p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/X11/">X11</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      
+      <a class="next" href="/gfx/vkapp/">  
+        <span class="next-text nav-default">Vulkan Application</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>

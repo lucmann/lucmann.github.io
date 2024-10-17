@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="dri3_alloc_render_buffer" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="mesa, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/gfx/dri3/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>dri3_alloc_render_buffer - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      dri3_alloc_render_buffer
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2024-08-13
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/graphics/">graphics</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#dri3-alloc-render-buffer"><span class="toc-number">1.</span> <span class="toc-text">dri3_alloc_render_buffer</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Drawable-和-Buffer"><span class="toc-number">1.1.</span> <span class="toc-text">Drawable 和 Buffer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同步"><span class="toc-number">1.2.</span> <span class="toc-text">同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#导入-导出"><span class="toc-number">1.3.</span> <span class="toc-text">导入&#x2F;导出</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dri3-find-back"><span class="toc-number">2.</span> <span class="toc-text">dri3_find_back</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#loader-dri3-swap-buffers-msc"><span class="toc-number">3.</span> <span class="toc-text">loader_dri3_swap_buffers_msc</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#送显"><span class="toc-number">3.1.</span> <span class="toc-text">送显</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Modifiers"><span class="toc-number">4.</span> <span class="toc-text">Modifiers</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <p><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L1435" target="_blank" rel="noopener"><code>mesa/src/loader/loader_dri3_helper.c::dri3_alloc_render_buffer()</code></a>, 这个函数不长，但却涉及到了DRI框架的许多重要概念，buffer共享(DMABUF), GPU offload (PRIME), buffer同步(X client和server)，送显(present), modifiers等等，所以非常值得深入分析。</p>
+<a id="more"></a>
+<h1 id="dri3-alloc-render-buffer"><a href="#dri3-alloc-render-buffer" class="headerlink" title="dri3_alloc_render_buffer"></a>dri3_alloc_render_buffer</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">loader_dri3_buffer</span> *</span></span><br><span class="line"><span class="class"><span class="title">dri3_alloc_render_buffer</span>(<span class="title">struct</span> <span class="title">loader_dri3_drawable</span> *<span class="title">draw</span>,</span></span><br><span class="line"><span class="class">                         <span class="title">unsigned</span> <span class="title">int</span> <span class="title">fourcc</span>,</span></span><br><span class="line"><span class="class">                         <span class="title">int</span> <span class="title">width</span>, <span class="title">int</span> <span class="title">height</span>, <span class="title">int</span> <span class="title">depth</span>);</span></span><br></pre></td></tr></table></figure>
+<p><code>dri3_alloc_render_buffer()</code> 的任务是创建渲染 buffer (包括 front 或 back), 并向 X11 导出它们的 fd。驱动当然不是一下子把 <code>buffers[]</code> 数组填满， 它是”按需创建”， <code>buffers[]</code> 像是提供这么多 buffer slot, 当 slot 后面是一个空闲的 buffer, 那就将它返回，否则才真正创建。</p>
+<h2 id="Drawable-和-Buffer"><a href="#Drawable-和-Buffer" class="headerlink" title="Drawable 和 Buffer"></a>Drawable 和 Buffer</h2><p><code>struct loader_dri3_drawable</code> 和 <code>struct loader_dri3_buffer</code> 这两个结构体，一个作为 <code>dri3_alloc_render_buffer()</code> 的主要参数，一个作为它的返回值类型，可谓是了解 DRI3 扩展下的数据流的关键。</p>
+<pre class="mermaid">classDiagram
+    direction RL
+    loader_dri3_drawable o-- loader_dri3_buffer : LOADER_DRI3_NUM_BUFFERS
+    class loader_dri3_drawable{
+        +xcb_connection_t * conn
+        +xcb_screen_t * screen
+        +__DRIdrawable *dri_drawable
+        +xcb_drawable_t drawable
+        +xcb_window_t window
+        +int width
+        +int height
+        +int depth
+        +uint8_t have_back
+        +uint8_t have_fake_front
+        +uint64_t send_sbc
+        +uint64_t recv_sbc
+        +uint64_t ust
+        +uint64_t msc
+        +uint64_t notify_ust
+        +uint64_t notify_msc
+        +loader_dri3_buffer *buffers[5]
+        +int cur_back
+        +int cur_num_back
+        +int max_num_back
+        +int cur_blit_source
+        +uint32_t *stamp
+    }
+    note for loader_dri3_buffer "bool busy;\nSet on swap\nCleared on IdleNotify"
+    class loader_dri3_buffer{
+        +__DRIimage * image
+        +uint32_t pixmap
+        +__DRIimage * linear_buffer
+        +uint32_t fence
+        +xshmfence * shm_fence
+        +bool busy
+        +bool own_pixmap
+        +bool reallocate
+        +uint32_t num_planes
+        +uint32_t size
+        +int strides[4]
+        +int offsets[4]
+        +uint64_t modifier
+        +uint32_t cpp
+        +uint32_t flags
+        +uint32_t width
+        +uint32_t height
+        +uint64_t last_swap
+    }</pre>
+
+<h2 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h2><ul>
+<li>当我们谈论 X client 和 server 之间的 Buffer 同步时是在说什么？</li>
+</ul>
+<p>在DRI3扩展下, render buffer (BO作为GPU 的render target) 是一开始由X client (例如一个 3D App)创建的(可能不止一个), render buffer 创建好后随即会通过 __DRIimageExtension 的 <code>queryImage()</code> 查询到该buffer 的 FD (drmPrimeHandleToFD, 后面会将该 FD 传送给 X server), 而在 X 的 compositor, 拿到 GPU 的渲染结果实际上就是通过该 FD (drmPrimeFDToHandle) 将 render buffer <code>gbm_bo_import()</code> 到 X server 进程, 并创建X 的 Pixmap (Pixmap 的Backing BO就是当初App进程创建的)后读取渲染结果进行合成。</p>
+<p>该过程通过 X client 和 server 进程间的 buffer 共享实现了 render buffer 的零拷贝。<br>而同步问题也在这个过程中产生，当 render buffer 被 server 进程导入后用于合成时，渲染结果什么时候被读取完毕(render buffer IDLE 状态)，需要告知client 进程(client不能在上一帧数据未读取完毕前同时再渲染到同一个render buffer)。同样client 也须在 server 读取当前帧之前告知server 渲染是否已经完成。</p>
+<p>这样 X client 和 server 之间的buffer 同步问题就产生了。</p>
+<ul>
+<li><a href="https://gitlab.freedesktop.org/xorg/lib/libxshmfence" target="_blank" rel="noopener">xshmfence mapping to X SyncFence</a><ul>
+<li><a href="https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_alloc.c?ref_type=heads#L69" target="_blank" rel="noopener"><code>xshmfence_alloc_shm()</code></a> 通过<code>memfd_create()/shm_open()/open()</code> 之一系统调用返回一个共享内存文件描述符(fence_fd)</li>
+<li><a href="https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_alloc.c?ref_type=heads#L128" target="_blank" rel="noopener"><code>xshmfence_map_shm(fence_fd)</code></a> 通过 <code>mmap()</code> fence_fd 返回一个指向 struct xshmfence 的地址</li>
+<li><a href="https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L377" target="_blank" rel="noopener"><code>xcb_dri3_fence_from_fd()</code></a> 将这个 xshmfence 的 fence_fd 发送给 X server, 让其知道这个xshmfence 的存在</li>
+</ul>
+</li>
+</ul>
+<p>以上3步实际上是利用4个字节(<code>sizeof(struct xshmfence)</code>)大小的共享内存在X server 和 client 进程间通过原子操作和 futex 系统调用达到两个进程对 render buffer 的同步访问。</p>
+<p>(以上4个字节共享内存的结论是基于futex和原子操作实现的 xshmfence 的版本)</p>
+<p>由于client 创建的render buffer 是与 X server 共享的，所以这个 render buffer 被两个进程读写时须要同步，Mesa3D 中是使用 xshmfence 来完成这个需求的。xshmfence 顾名思义它是基于共享内存的，采用它实现进程间对 render buffer 操作的同步，好处就是只需要将 xshmfence 映射到一个 X server SyncFence, 通过一个简单的函数调用(<a href="https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/blob/master/src/xshmfence_futex.c?ref_type=heads#L60" target="_blank" rel="noopener">xshmfence_await(struct xshmfence *f)</a>)就可将调用进程(client process)阻塞直到 X server 完成对 render buffer的操作再被操作系统唤醒，而无需通过接收网络事件(socket event)来确定X server 是否已经完成对 render buffer 的使用。</p>
+<h2 id="导入-导出"><a href="#导入-导出" class="headerlink" title="导入/导出"></a>导入/导出</h2><p>render buffer 的导入/导出操作是Linux 下<a href="https://www.kernel.org/doc/html/latest/driver-api/dma-buf.html" target="_blank" rel="noopener">Buffer 共享和同步</a>的一个标准流程，不仅仅是在 DRM 子系统使用，在Linux的其它子系统也广泛使用，如Video4Linux, Networking。这里仅仅将 mesa 中的实现与DMABUF 机制中的角色对应一下，作为一个DMABUF的应用案例分析。</p>
+<ul>
+<li><p>导出(exporter·mesa)</p>
+<ul>
+<li><p><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L1602" target="_blank" rel="noopener"><code>image-&gt;queryImage(image, __DRI_IMAGE_ATTRIB_FD, &amp;buffer_fds[i])</code></a></p>
+<ul>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/frontends/dri/dri2.c#L1476" target="_blank" rel="noopener"><code>dri2_query_image(image, attrib, *value)</code></a><ul>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/frontends/dri/dri2.c#L1350" target="_blank" rel="noopener"><code>dri2_query_image_by_resource_handle(image, attrib, *value)</code></a><ul>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/drivers/r600/r600_texture.c#L556" target="_blank" rel="noopener"><code>pipe_screen-&gt;resource_get_handle(pscreen, NULL, image-&gt;texture, &amp;whandle, usage)</code></a><ul>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/winsys/radeon/drm/radeon_drm_bo.c#L1331" target="_blank" rel="noopener"><code>radeon_winsys_bo_get_handle(rws, buffer, *whandle)</code></a><ul>
+<li>drmPrimeHandleToFD()</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>(以上调到pipe_screen后以AMD Radeon驱动为例)</p>
+</li>
+</ul>
+</li>
+<li><p>传送(FD transfer·xcb)</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">xcb_protocol_request_t</span> xcb_req = &#123;</span><br><span class="line">    .count = <span class="number">2</span>,</span><br><span class="line">    .ext = &amp;xcb_dri3_id,</span><br><span class="line">    .opcode = XCB_DRI3_PIXMAP_FROM_BUFFERS,</span><br><span class="line">    .isvoid = <span class="number">1</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L676" target="_blank" rel="noopener"><code>xcb_dri3_pixmap_from_buffers()</code></a><ul>
+<li><a href="https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_out.c#L225" target="_blank" rel="noopener"><code>xcb_send_request_with_fds()</code></a><ul>
+<li><a href="https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_out.c#L190" target="_blank" rel="noopener"><code>send_fds(xcb_connection_t *, fds, num_fds)</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>导入(importer·xserver)</p>
+<ul>
+<li><p><a href="https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3_request.c#L490" target="_blank" rel="noopener"><code>proc_dri3_pixmap_from_buffers(ClientPtr client)</code></a></p>
+<ul>
+<li><a href="https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3_screen.c#L63" target="_blank" rel="noopener"><code>dri3_pixmap_from_fds()</code></a><ul>
+<li><a href="https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/glamor/glamor_egl.c#L612" target="_blank" rel="noopener"><code>glamor_pixmap_from_fds()</code></a><ul>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gbm/main/gbm.c#L583" target="_blank" rel="noopener"><code>gbm_bo_import(gbm_device *, GBM_BO_IMPORT_FD_MODIFIER, &amp;import_data, 0)</code> (libgbm.so)</a><ul>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gbm/backends/dri/gbm_dri.c#L801" target="_blank" rel="noopener"><code>image-&gt;createImageFromDmaBufs()</code> (libgbm.so)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>(不难看出如果驱动支持DRI3, 则有以下依赖关系 <strong>Xserver-&gt;Glamor-&gt;GBM</strong>)</p>
+</li>
+</ul>
+</li>
+<li><p>mesa dri3 render buffer (DMABUF) Sharing</p>
+</li>
+</ul>
+<pre class="mermaid">sequenceDiagram
+    autonumber
+    participant App
+    participant Mesa
+    participant X11
+
+    App-->>Mesa: eglMakeCurrent()
+    Mesa->>Mesa: dri_st_framebuffer_validate()
+    Mesa->>Mesa: dri2_allocate_textures()
+    Mesa->>Mesa: loader_dri3_get_buffers()
+    note left of Mesa: Return all necessary buffers<br/>Allocating as needed
+    Mesa->>Mesa: dri3_get_buffer()
+    rect rgb(191, 223, 255)
+    Mesa->>Mesa: dri3_alloc_render_buffer()
+    Mesa-->>X11: xcb_dri3_get_supported_modifiers()
+    X11-->>Mesa: xcb_dri3_get_supported_modifiers_reply()
+    Mesa->>Mesa: loader_dri_create_image()
+    Mesa->>Mesa: dri2_create_image()
+    Mesa->>Mesa: xxx_resource_create()
+    rect rgb(200, 150, 255)
+    Mesa->>Mesa: dri2_query_image_by_resource_handle(__DRIimage)
+    Mesa->>Mesa: xxx_resource_get_handle()
+    Mesa->>Mesa: xxx_bo_export()
+    note right of Mesa: Mesa 导出 FD
+    opt xcb_dri3_pixmap_from_buffers(buffer_fds)
+        Mesa-->>X11: xcb_send_requests_with_fds(buffer_fds)
+    end
+    end
+    rect rgb(200, 150, 255)
+    note left of X11: X11 导入 Buffer
+    X11->>X11: proc_dri3_pixmap_from_buffers()
+    X11->>X11: dri3_pixmap_from_fds()
+    X11->>X11: glamor_pixmap_from_fds()
+    alt GBM_BO_WITH_MODIFIERS
+        X11->>X11: gbm_bo_import(type=GBM_BO_IMPORT_FD_MODIFIER)
+    else
+        X11->>X11: gbm_bo_import(type=GBM_BO_IMPORT_FD)
+    end
+    end
+    end</pre>
+
+<ul>
+<li>所有情况都是 <strong>Mesa 创建导出，X11 导入</strong>吗? </li>
+</ul>
+<p><code>eglCreatePbufferSurface()</code> 是个例外，实际上 PBuffer 是离屏渲染使用的，它是由 X11 创建 buffer, X11 导出 FD, Mesa (应用进程) 导入作为伪前缓冲 (fake front buffer) 使用。</p>
+<p>通常 <code>eglCreate***Surface()</code> 需要 App 先调用 <code>XCreateWindow()</code> 让 X11 创建 Pixmap, 但是 <code>eglCreatePbufferSurface()</code> 不用，它由 Mesa 调用 <code>xcb_create_pixmap()</code> 让 X11 创建 Pixmap, 之后 Mesa 再调用 <code>xcb_dri3_buffers_from_pixmap()</code> 让 X11 导出 Pixmap(gbm_bo) 关联的 FD, 由 Mesa 导入。</p>
+<pre class="mermaid">sequenceDiagram
+    autonumber
+    participant App
+    participant Mesa
+    participant X11
+
+    App-->>Mesa: eglCreatePbufferSurface()
+    rect rgb(191, 223, 255)
+    Mesa->>Mesa: dri3_create_surface(type=EGL_PBUFFER_BIT)
+    Mesa-->>X11: xcb_generate_id()
+    X11-->>Mesa: drawable ID (uint32_t)
+    Mesa-->>X11: xcb_create_pixmap()
+    App-->>Mesa: eglBindTexImage()
+    Mesa->>Mesa: dri_st_framebuffer_validate()
+    Mesa->>Mesa: dri2_allocate_textures()
+    Mesa->>Mesa: loader_dri3_get_buffers()
+    Mesa->>Mesa: dri3_get_pixmap_buffer()
+    rect rgb(200, 150, 255)
+    note left of X11: X11 导出 FD</br>(调用 gbm_bo_get_fd(gbm_bo*))
+    Mesa-->>X11: xcb_dri3_buffers_from_pixmap()
+    X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply()
+    Mesa-->>X11: loader_dri3_create_image_from_buffers()
+    X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply_fds()
+    end
+    rect rgb(200, 150, 255)
+    note left of Mesa: Mesa 导入 Buffer
+    Mesa->>Mesa: dri2_from_dma_bufs2()
+    Mesa->>Mesa: dri2_create_image_from_fd()
+    Mesa->>Mesa: dri2_create_image_from_winsys()
+    Mesa->>Mesa: xxx_resource_from_handle()
+    Mesa->>Mesa: xxx_bo_import()
+    end
+    end</pre>
+
+<h1 id="dri3-find-back"><a href="#dri3-find-back" class="headerlink" title="dri3_find_back"></a>dri3_find_back</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Find an idle back buffer. If there isn't one, then</span></span><br><span class="line"><span class="comment"> * wait for a present IdleNotify event from the X server</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span></span><br><span class="line">dri3_find_back(struct loader_dri3_drawable *draw,</span><br><span class="line">               <span class="keyword">bool</span> prefer_a_different);</span><br></pre></td></tr></table></figure>
+<p><code>dri3_find_back()</code> 的任务是查找 <code>buffers[]</code> 中空闲 buffer 的 slot (array index), 如果存在，返回其 index, 否则等待 (<code>dri3_wait_for_event_locked()</code>)</p>
+<p>如何知道 buffer 是否空闲呢？ <code>buffer-&gt;busy</code>, 这个标志在 SwapBuffers 时会置为 true, mesa 收到 IdleNotify 事件后置为 false</p>
+<pre class="mermaid">sequenceDiagram
+    autonumber
+    participant Mesa
+    participant X11
+
+    Mesa->>Mesa: dri3_find_back
+    note right of Mesa: 选取一个合适的空闲 slot id</br>buffers[id]有可能是空</br>这时需要调</br>dri3_alloc_render_buffer()
+    rect rgb(200, 150, 255)
+    note right of Mesa: mtx_lock()
+    alt pefer_a_different==false
+        Mesa-->>X11: dri3_flush_present_events()
+        loop xcb_poll_for_special_event
+            X11-->>Mesa: xcb_present_generic_event_t
+        end
+        Mesa->>Mesa: dri3_handle_present_event()
+    else perfer_a_different==true
+        Mesa-->>X11: xcb_flush()
+        loop dri3_wait_for_event_locked()
+            X11-->>Mesa: xcb_present_generic_event_t
+        end
+        Mesa->>Mesa: dri3_handle_present_event()
+    end
+    note right of Mesa: mtx_unlock()
+    end</pre>
+
+<h1 id="loader-dri3-swap-buffers-msc"><a href="#loader-dri3-swap-buffers-msc" class="headerlink" title="loader_dri3_swap_buffers_msc"></a>loader_dri3_swap_buffers_msc</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Make the current back buffer visible using the present extension</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">int64_t</span></span><br><span class="line">loader_dri3_swap_buffers_msc(struct loader_dri3_drawable *draw,</span><br><span class="line">                             <span class="keyword">int64_t</span> target_msc, <span class="keyword">int64_t</span> divisor, <span class="keyword">int64_t</span> remainder,</span><br><span class="line">                             <span class="keyword">unsigned</span> flush_flags,</span><br><span class="line">                             <span class="keyword">const</span> <span class="keyword">int</span> *rects, <span class="keyword">int</span> n_rects,</span><br><span class="line">                             <span class="keyword">bool</span> force_copy);</span><br></pre></td></tr></table></figure>
+<pre class="mermaid">flowchart TD
+    A[eglSwapBuffers]
+    B[dri3_swap_buffers]
+    C[dri3_swap_buffers_with_damage]
+    D[glXSwapBuffers]
+    E[dri3_swap_buffers]
+    F[loader_dri3_swap_buffers_msc]
+    A -->|platform_x11_dri3.c| B
+    B --> C
+    C -->|rects=NULL,n_rects=0| F
+    D -->|dri3_glx.c| E
+    E --->|rects=NULL,n_rects=0| F</pre>
+
+<h2 id="送显"><a href="#送显" class="headerlink" title="送显"></a>送显</h2><p>如果平台的窗口系统(Winsys)是X11, 则送显主要是通过 Present 扩展完成的。这个与Xserver 的交互过程是通过 <a href="https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/present/present_priv.h#L226" target="_blank" rel="noopener"><code>present_event</code></a> 完成的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">present_event</span> &#123;</span></span><br><span class="line">    present_event_ptr next;</span><br><span class="line">    ClientPtr client;</span><br><span class="line">    WindowPtr window;</span><br><span class="line">    XID id;</span><br><span class="line">    <span class="keyword">int</span> mask;</span><br><span class="line">&#125; present_event_rec;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>注册事件</p>
+<ul>
+<li><p><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L1709" target="_blank" rel="noopener"><code>dri3_setup_present_event(struct loader_dri3_drawable *draw)</code></a></p>
+<ul>
+<li><p><a href="https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-present-c-L398" target="_blank" rel="noopener"><code>xcb_present_select_input()</code></a>: 告诉Xserver，client 正在监听这几个事件:</p>
+<ul>
+<li>XCB_PRESENT_EVENT_CONFIGURE_NOTIFY</li>
+<li>XCB_PRESENT_EVENT_COMPLETE_NOTIFY</li>
+<li>XCB_PRESENT_EVENT_IDLE_NOTIFY</li>
+</ul>
+<p>(注册时实际上是使用对应事件的 MASK 注册的，因为在向 Xserver 发送的注册消息中，注册的所有消息的MASK ORing 在一个 uint32_t <a href="https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-present-c-L416" target="_blank" rel="noopener"><code>event_mask</code></a>发送过去的)</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>接收事件</p>
+<ul>
+<li><p><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L1699" target="_blank" rel="noopener"><code>dri3_setup_present_event(struct loader_dri3_drawable *draw)</code></a></p>
+<ul>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L1779" target="_blank" rel="noopener"><code>xcb_register_for_special_xge()</code></a>: 创建一个接收Present XGE 事件的队列，实质上是初始化了一个 pthread_cond_t。（这里 special 就special在它是一个带了条件变量的 generic events 的队列)  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">xcb_special_event</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">xcb_special_event</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="keyword">uint8_t</span>     extension;</span><br><span class="line">    <span class="keyword">uint32_t</span>    eid;</span><br><span class="line">    <span class="keyword">uint32_t</span>    *stamp;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">event_list</span> *<span class="title">events</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">event_list</span> **<span class="title">events_tail</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">pthread_cond_t</span> special_event_cond;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>(XGE指 <a href="https://www.x.org/wiki/Development/Documentation/XGE/" target="_blank" rel="noopener">X Generic Event extension</a>)</p>
+</li>
+</ul>
+</li>
+<li><p>处理事件</p>
+<ul>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L987" target="_blank" rel="noopener"><code>dri3_flush_present_events(struct loader_dri3_drawable *draw)</code></a><ul>
+<li><a href="https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_in.c#L787" target="_blank" rel="noopener"><code>xcb_poll_for_special_event()</code></a></li>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L483" target="_blank" rel="noopener"><code>dri3_handle_present_event(draw, ge)</code></a>: 处理一个 X generic event</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>等待事件 (阻塞式)</p>
+<ul>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L611" target="_blank" rel="noopener"><code>loader_dri3_wait_for_msc()</code></a>: (阻塞)等待X Server 管理的 MSC 大于等于当前应用的 MSC (target_msc)<ul>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L572" target="_blank" rel="noopener"><code>dri3_wait_for_event_locked(draw, &amp;full_sequence)</code></a><ul>
+<li><a href="https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_in.c#L806" target="_blank" rel="noopener"><code>xcb_wait_for_special_event(draw-&gt;conn, draw-&gt;special_event)</code></a></li>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L483" target="_blank" rel="noopener"><code>dri3_handle_present_event(draw, ge)</code></a>: 处理一个 X generic event</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L649" target="_blank" rel="noopener"><code>loader_dri3_wait_for_sbc()</code></a>: (阻塞)等待SBC 大于等于当前应用的 SBC (target_sbc)<ul>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L572" target="_blank" rel="noopener"><code>dri3_wait_for_event_locked(draw, NULL)</code></a><ul>
+<li><a href="https://gitlab.freedesktop.org/xorg/lib/libxcb/-/blob/master/src/xcb_in.c#L806" target="_blank" rel="noopener"><code>xcb_wait_for_special_event(draw-&gt;conn, draw-&gt;special_event)</code></a></li>
+<li><a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L483" target="_blank" rel="noopener"><code>dri3_handle_present_event(draw, ge)</code></a>: 处理一个 X generic event</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>以上无论是 <code>loader_dri3_wait_for_msc()</code> 还是 <code>loader_dri3_wait_for_sbc()</code>, 当所等待的条件满足后，都会更新(<code>dri3_handle_present_event()</code>)当前client 的状态(UST, MSC, SBC), 整个过程是一种同步，也是一种协商。</p>
+<h1 id="Modifiers"><a href="#Modifiers" class="headerlink" title="Modifiers"></a>Modifiers</h1><p>向 X server 查询并获取显示/渲染设备所支持的 modifiers 是执行 <a href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/include/mesa_interface.h#L1570" target="_blank" rel="noopener"><code>__DRIimageExtension::createImage()</code></a> 的一个准备工作。但 <code>createImage()</code> 允许modifiers 为空，此情况下让驱动来选一个合适的纹理图像内存布局。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">__DRIimage *</span><br><span class="line">(*createImage)(__DRIscreen *screen,</span><br><span class="line">               <span class="keyword">int</span> <span class="built_in">width</span>, <span class="keyword">int</span> <span class="built_in">height</span>, <span class="keyword">int</span> format,</span><br><span class="line">               <span class="keyword">const</span> <span class="keyword">uint64_t</span> *modifiers, <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> modifier_count,</span><br><span class="line">               <span class="keyword">unsigned</span> <span class="keyword">int</span> use,</span><br><span class="line">               <span class="keyword">void</span> *loaderPrivate);</span><br></pre></td></tr></table></figure>
+<p>与 X server 交互的过程包括 3 步:</p>
+<ul>
+<li><a href="https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L496" target="_blank" rel="noopener"><code>xcb_dri3_get_supported_modifiers(draw-&gt;conn, draw-&gt;window, depth, buffer-&gt;cpp*8)</code></a>: 返回一个 cookie</li>
+<li><p><a href="https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L604" target="_blank" rel="noopener"><code>xcb_dri3_get_supported_modifiers_reply(draw-&gt;conn, mod_cookie, &amp;error)</code></a>: 返回一个 reply 包含实际的modifiers内容</p>
+<ul>
+<li><code>xcb_dri3_get_supported_modifiers_reply_t</code><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">xcb_dri3_get_supported_modifiers_reply_t</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint8_t</span> response_type;</span><br><span class="line">    <span class="keyword">uint8_t</span> pad0;</span><br><span class="line">    <span class="keyword">uint16_t</span> sequence;</span><br><span class="line">    <span class="keyword">uint32_t</span> length;</span><br><span class="line">    <span class="keyword">uint32_t</span> num_window_modifiers;</span><br><span class="line">    <span class="keyword">uint32_t</span> num_screen_modifiers;</span><br><span class="line">    <span class="keyword">uint8_t</span> pad1[<span class="number">16</span>];</span><br><span class="line">&#125; <span class="keyword">xcb_dri3_get_supported_modifiers_reply_t</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p><a href="https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3_request.c#L394" target="_blank" rel="noopener"><code>proc_dri3_get_supported_modifiers(ClientPtr client)</code></a></p>
+<ul>
+<li><p><a href="https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3_screen.c#L236" target="_blank" rel="noopener"><code>dri3_get_supported_modifiers()</code></a>: 通过 <code>drm_format_for_depth(depth, bpp)</code> 获得一个 <code>DRM_FORMAT_*</code>, 实际上<a href="https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dri3/dri3.c#L117" target="_blank" rel="noopener"><code>drm_format_for_depth()</code></a> 返回的 <code>format</code> 也只会是以下4种之一:</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DRM_FORMAT_RGB565       <span class="comment">// bpp = 16</span></span><br><span class="line">DRM_FORMAT_XRGB8888     <span class="comment">// bpp = 24</span></span><br><span class="line">DRM_FORMAT_XRGB2101010  <span class="comment">// bpp = 30</span></span><br><span class="line">DRM_FORMAT_ARGB8888     <span class="comment">// bpp = 32</span></span><br></pre></td></tr></table></figure>
+<p>  无论是获取 screen_modifiers 还是 window_modifiers, 实际上都依据 format 获取相应的 modifiers.</p>
+<ul>
+<li><a href="https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/glamor/glamor.c#L1003" target="_blank" rel="noopener"><code>glamor_get_drawable_modifiers(DrawablePtr draw, uint32_t format, uint32_t *num_modifiers, uint64_t **modifiers)</code></a>: 回调由具体的DDX(如modesetting)提供的 <code>get_drawable_modifiers()</code> 函数<ul>
+<li><a href="https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/hw/xfree86/drivers/modesetting/drmmode_display.c#L230" target="_blank" rel="noopener"><code>get_drawable_modifiers(DrawablePtr draw, uint32_t format, uint32_t *num_modifiers, uint64_t **modifiers)</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L558" target="_blank" rel="noopener"><code>xcb_dri3_get_supported_modifiers_window_modifiers(mod_reply)</code></a><ul>
+<li><a href="https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-dri3-c-L580" target="_blank" rel="noopener"><code>xcb_dri3_get_supported_modifiers_screen_modifiers(mod_reply)</code></a>: 如果获取window_modifiers 失败则fallback 到screen_modifiers</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li>MSC: Graphics Media Stream Counter, 实际上就是CRTC 的Vblank中断次数 <a href="https://registry.khronos.org/OpenGL/extensions/OML/GLX_OML_sync_control.txt" target="_blank" rel="noopener">(GLX_OML_sync_control)</a></li>
+<li>SBC: Swap Buffer Counter, 就是Swapbuffer 的次数 <a href="https://registry.khronos.org/OpenGL/extensions/EXT/EXT_swap_control.txt" target="_blank" rel="noopener">(GLX_EXT_swap_control)</a></li>
+</ul>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/mesa/">mesa</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/utils/wsl/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">Windows Subsystem for Linux</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/prog/std/">  
+        <span class="next-text nav-default">C++ 标准库</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>

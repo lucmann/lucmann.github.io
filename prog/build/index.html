@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="Build your program from source code on Linux" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="build, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/prog/build/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>Build your program from source code on Linux - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      Build your program from source code on Linux
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2022-09-18
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/programming/">programming</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#编译器"><span class="toc-number">1.</span> <span class="toc-text">编译器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#gcc-的优化级别"><span class="toc-number">1.1.</span> <span class="toc-text">gcc 的优化级别</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#链接器"><span class="toc-number">2.</span> <span class="toc-text">链接器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pkg-config-vs-ldconfig"><span class="toc-number">3.</span> <span class="toc-text">pkg-config vs ldconfig</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#pkg-config"><span class="toc-number">3.1.</span> <span class="toc-text">pkg-config</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#lib-dev-与-lib-的区别"><span class="toc-number">4.</span> <span class="toc-text">lib*-dev 与 lib* 的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#usr-sbin-ldconfig"><span class="toc-number">4.1.</span> <span class="toc-text">&#x2F;usr&#x2F;sbin&#x2F;ldconfig</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#build-system"><span class="toc-number">5.</span> <span class="toc-text">build system</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#autotools"><span class="toc-number">5.1.</span> <span class="toc-text">autotools</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#autotools-包含什么"><span class="toc-number">5.1.1.</span> <span class="toc-text">autotools 包含什么</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#meson"><span class="toc-number">5.2.</span> <span class="toc-text">meson</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#D-buildtype"><span class="toc-number">5.2.1.</span> <span class="toc-text">-D buildtype</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#use-gold"><span class="toc-number">5.2.2.</span> <span class="toc-text">use gold</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cmake"><span class="toc-number">5.3.</span> <span class="toc-text">cmake</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#use-gold-1"><span class="toc-number">5.3.1.</span> <span class="toc-text">use gold</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#编译-mold"><span class="toc-number">6.</span> <span class="toc-text">编译 mold</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#编译-mesa"><span class="toc-number">7.</span> <span class="toc-text">编译 mesa</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#编译-LLVM"><span class="toc-number">8.</span> <span class="toc-text">编译 LLVM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#主要的配置"><span class="toc-number">8.1.</span> <span class="toc-text">主要的配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OOM-问题"><span class="toc-number">8.2.</span> <span class="toc-text">OOM 问题</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h1 id="编译器"><a href="#编译器" class="headerlink" title="编译器"></a>编译器</h1><ul>
+<li>gcc </li>
+<li>g++ (GNU, latest version 12 ~ 13)</li>
+<li>clang</li>
+<li>clang++ (LLVM, latest version 16 ~ 17)</li>
+</ul>
+<a id="more"></a>
+<h2 id="gcc-的优化级别"><a href="#gcc-的优化级别" class="headerlink" title="gcc 的优化级别"></a>gcc 的优化级别</h2><p>-O 和 -O1 是等价的。 -O 会对目标文件大小和执行时间进行优化，但不会进行非常耗时的优化，以下是 -O 打开的优化: (其中红色的是 -Og 关闭的)</p>
+<ul>
+<li>-fauto-inc-dec</li>
+<li><span style="color:red">-fbranch-count-reg</span></li>
+<li>-fcombine-stack-adjustments</li>
+<li>-fcompare-elim</li>
+<li>-fcprop-registers</li>
+<li>-fdce</li>
+<li>-fdefer-pop</li>
+<li><span style="color:red">-fdelayed-branch</span></li>
+<li><span style="color:red">-fdse</span></li>
+<li>-fforward-propagate</li>
+<li>-fguess-branch-probability</li>
+<li><span style="color:red">-fif-conversion</span></li>
+<li><span style="color:red">-fif-conversion2</span></li>
+<li><span style="color:red">-finline-functions-called-once</span></li>
+<li>-fipa-modref</li>
+<li>-fipa-profile</li>
+<li>-fipa-reference</li>
+<li>-fipa-reference-addressable</li>
+<li>-fmerge-constants</li>
+<li><span style="color:red">-fmove-loop-invariants</span></li>
+<li><span style="color:red">-fmove-loop-stores</span></li>
+<li>-fomit-frame-pointer</li>
+<li>-freorder-blocks</li>
+<li>-fshrink-wrap</li>
+<li>-fshrink-wrap-separate</li>
+<li>-fsplit-wide-types</li>
+<li>-fssa-backprop</li>
+<li><span style="color:red">-fssa-phiopt</span></li>
+<li><span style="color:red">-ftree-bit-ccp</span></li>
+<li>-ftree-ccp</li>
+<li>-ftree-ch</li>
+<li>-ftree-coalesce-vars</li>
+<li>-ftree-copy-prop</li>
+<li>-ftree-dce</li>
+<li>-ftree-dominator-opts</li>
+<li><span style="color:red">-ftree-dse</span></li>
+<li>-ftree-forwprop</li>
+<li>-ftree-fre</li>
+<li>-ftree-phiprop</li>
+<li><span style="color:red">-ftree-pta</span></li>
+<li>-ftree-scev-cprop</li>
+<li>-ftree-sink</li>
+<li>-ftree-slsr</li>
+<li><span style="color:red">-ftree-sra</span></li>
+<li>-ftree-ter</li>
+<li>-funit-at-a-time</li>
+</ul>
+<h1 id="链接器"><a href="#链接器" class="headerlink" title="链接器"></a>链接器</h1><ul>
+<li>bfd (使用 Binary File Descriptor 库构建的 Linker)</li>
+<li>gold (Google linker, faster than bfd, but fewer features)</li>
+<li>mold (<a href="https://github.com/rui314/mold" target="_blank" rel="noopener">A modern linker</a>)</li>
+</ul>
+<p>动态链接库 (shared library) 无处不在。使用动态链接库基本上是通过链接器 (linker, generally a program suffixing with “ld”)。本文主要回答以下问题:</p>
+<ul>
+<li>有哪些链接器?</li>
+<li>如何查看一个可执行文件链接哪些动态库?</li>
+<li>链接器从哪里找到动态库?</li>
+<li>GCC 编译器不支持 <code>CXX_SUPPORTS_CUSTOM_LINKER</code><ul>
+<li>所以安装 mold 后，如果想在编译 LLVM 时使用 <code>-DLLVM_USE_LINKER=mold</code>, 就得把 <code>CC=clang CXX=clang++</code> 先设置了</li>
+</ul>
+</li>
+</ul>
+<h1 id="pkg-config-vs-ldconfig"><a href="#pkg-config-vs-ldconfig" class="headerlink" title="pkg-config vs ldconfig"></a><code>pkg-config</code> vs <code>ldconfig</code></h1><h2 id="pkg-config"><a href="#pkg-config" class="headerlink" title="pkg-config"></a>pkg-config</h2><p><code>pkg-config</code> 是二进制可执行程序 <code>/usr/bin/pkgconf</code> 的一个符号链接文件，它是 CMake, meson 等构建系统主要使用的系统动态库检测的工具。<code>pkg-config</code> 本质上是在解析 <code>*.pc</code> 文件。下面是常见的 Mesa OpenGL Library 的 .pc 文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">➜  piglit git:(main) ✗ find &#x2F;usr -name &#39;gl.pc&#39; -ls</span><br><span class="line">    78674      4 -rw-r--r--   1 root     root          205 Jan  3  2023 &#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;pkgconfig&#x2F;gl.pc</span><br><span class="line">    72985      4 -rw-r--r--   1 root     root          362 Jun  7 18:16 &#x2F;usr&#x2F;local&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;pkgconfig&#x2F;gl.pc</span><br><span class="line">➜  piglit git:(main) ✗ bat &#x2F;usr&#x2F;local&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;pkgconfig&#x2F;gl.pc</span><br><span class="line">───────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br><span class="line">       │ File: &#x2F;usr&#x2F;local&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;pkgconfig&#x2F;gl.pc</span><br><span class="line">───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br><span class="line">   1   │ prefix&#x3D;&#x2F;usr&#x2F;local</span><br><span class="line">   2   │ includedir&#x3D;$&#123;prefix&#125;&#x2F;include</span><br><span class="line">   3   │ libdir&#x3D;$&#123;prefix&#125;&#x2F;lib&#x2F;x86_64-linux-gnu</span><br><span class="line">   4   │</span><br><span class="line">   5   │ glx_tls&#x3D;yes</span><br><span class="line">   6   │</span><br><span class="line">   7   │ Name: gl</span><br><span class="line">   8   │ Description: Mesa OpenGL Library</span><br><span class="line">   9   │ Version: 24.2.0-devel</span><br><span class="line">  10   │ Requires.private: x11, xext, xfixes, x11-xcb, xcb, xcb-glx &gt;&#x3D;  1.8.1, xcb-dri2 &gt;&#x3D;  1.8, xxf86vm, libdrm &gt;&#x3D;  2.4.75</span><br><span class="line">  11   │ Libs: -L$&#123;libdir&#125; -lGL</span><br><span class="line">  12   │ Libs.private: -lpthread -pthread -lm</span><br><span class="line">  13   │ Cflags: -I$&#123;includedir&#125;</span><br><span class="line">───────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br><span class="line">➜  piglit git:(main) ✗ bat &#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;pkgconfig&#x2F;gl.pc</span><br><span class="line">───────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br><span class="line">       │ File: &#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;pkgconfig&#x2F;gl.pc</span><br><span class="line">───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br><span class="line">   1   │ prefix&#x3D;&#x2F;usr</span><br><span class="line">   2   │ includedir&#x3D;$&#123;prefix&#125;&#x2F;include</span><br><span class="line">   3   │ libdir&#x3D;$&#123;prefix&#125;&#x2F;lib&#x2F;x86_64-linux-gnu</span><br><span class="line">   4   │</span><br><span class="line">   5   │ Name: GL</span><br><span class="line">   6   │ Description: Legacy OpenGL and GLX library and headers.</span><br><span class="line">   7   │ Version: 1.2</span><br><span class="line">   8   │ Libs: -L$&#123;libdir&#125; -lGL</span><br><span class="line">   9   │ Cflags: -I$&#123;includedir&#125;</span><br><span class="line">───────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br></pre></td></tr></table></figure>
+<h1 id="lib-dev-与-lib-的区别"><a href="#lib-dev-与-lib-的区别" class="headerlink" title="lib*-dev 与 lib* 的区别"></a><code>lib*-dev</code> 与 <code>lib*</code> 的区别</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ dpkg -L libxcb1</span><br><span class="line">&#x2F;.</span><br><span class="line">&#x2F;usr</span><br><span class="line">&#x2F;usr&#x2F;lib</span><br><span class="line">&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu</span><br><span class="line">&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libxcb.so.1.1.0</span><br><span class="line">&#x2F;usr&#x2F;share</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;doc</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;doc&#x2F;libxcb1</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;doc&#x2F;libxcb1&#x2F;changelog.Debian.gz</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;doc&#x2F;libxcb1&#x2F;copyright</span><br><span class="line">&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libxcb.so.1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ dpkg -L libxcb1-dev</span><br><span class="line">&#x2F;.</span><br><span class="line">&#x2F;usr</span><br><span class="line">&#x2F;usr&#x2F;include</span><br><span class="line">&#x2F;usr&#x2F;include&#x2F;xcb</span><br><span class="line">&#x2F;usr&#x2F;include&#x2F;xcb&#x2F;bigreq.h</span><br><span class="line">&#x2F;usr&#x2F;include&#x2F;xcb&#x2F;xc_misc.h</span><br><span class="line">&#x2F;usr&#x2F;include&#x2F;xcb&#x2F;xcb.h</span><br><span class="line">&#x2F;usr&#x2F;include&#x2F;xcb&#x2F;xcbext.h</span><br><span class="line">&#x2F;usr&#x2F;include&#x2F;xcb&#x2F;xproto.h</span><br><span class="line">&#x2F;usr&#x2F;lib</span><br><span class="line">&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu</span><br><span class="line">&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libxcb.a</span><br><span class="line">&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;pkgconfig</span><br><span class="line">&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;pkgconfig&#x2F;xcb.pc</span><br><span class="line">&#x2F;usr&#x2F;share</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;doc</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;doc&#x2F;libxcb1-dev</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;doc&#x2F;libxcb1-dev&#x2F;copyright</span><br><span class="line">&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libxcb.so</span><br><span class="line">&#x2F;usr&#x2F;share&#x2F;doc&#x2F;libxcb1-dev&#x2F;changelog.Debian.gz</span><br></pre></td></tr></table></figure>
+<h2 id="usr-sbin-ldconfig"><a href="#usr-sbin-ldconfig" class="headerlink" title="/usr/sbin/ldconfig"></a><code>/usr/sbin/ldconfig</code></h2><p>Configure Dynamic Linker Run Time Bindings</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>  <span class="built_in">test</span> <span class="variable">$#</span> = 0							\</span><br><span class="line">    &amp;&amp; <span class="built_in">test</span> x<span class="string">"<span class="variable">$LDCONFIG_NOTRIGGER</span>"</span> = x				\</span><br><span class="line"> &amp;&amp; <span class="built_in">test</span> x<span class="string">"<span class="variable">$DPKG_MAINTSCRIPT_PACKAGE</span>"</span> != x			\</span><br><span class="line"> &amp;&amp; dpkg-trigger --check-supported 2&gt;/dev/null</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">	<span class="keyword">if</span> dpkg-trigger --no-await ldconfig; <span class="keyword">then</span></span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">test</span> x<span class="string">"<span class="variable">$LDCONFIG_TRIGGER_DEBUG</span>"</span> != x; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">echo</span> <span class="string">"ldconfig: wrapper deferring update (trigger activated)"</span></span><br><span class="line">		<span class="keyword">fi</span></span><br><span class="line">		<span class="built_in">exit</span> 0</span><br><span class="line">	<span class="keyword">fi</span>	</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">exec</span> /sbin/ldconfig.real <span class="string">"<span class="variable">$@</span>"</span></span><br></pre></td></tr></table></figure>
+<h1 id="build-system"><a href="#build-system" class="headerlink" title="build system"></a>build system</h1><h2 id="autotools"><a href="#autotools" class="headerlink" title="autotools"></a>autotools</h2><p>最近在 Ubuntu 上构建一个软件时遇到以下问题:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pkg-config --cflags egl</span><br><span class="line"><span class="comment"># Nothing</span></span><br></pre></td></tr></table></figure>
+<!--more-->
+<p>打开 <code>pkg-config</code> 的调试模式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">pkg-config --cflags egl --debug</span><br><span class="line">  line&gt;prefix=/usr</span><br><span class="line"> Variable declaration, <span class="string">'prefix'</span> has value <span class="string">'/usr'</span></span><br><span class="line">  line&gt;libdir=<span class="variable">$&#123;prefix&#125;</span>/lib/x86_64-linux-gnu</span><br><span class="line"> Variable declaration, <span class="string">'libdir'</span> has value <span class="string">'/usr/lib/x86_64-linux-gnu'</span></span><br><span class="line">  line&gt;includedir=<span class="variable">$&#123;prefix&#125;</span>/include</span><br><span class="line"> Variable declaration, <span class="string">'includedir'</span> has value <span class="string">'/usr/include'</span></span><br><span class="line">  line&gt;</span><br><span class="line">  line&gt;Name: EGL</span><br><span class="line">  line&gt;Description: EGL library and headers</span><br><span class="line">  line&gt;Version: 1.5</span><br><span class="line">  line&gt;Libs: -L<span class="variable">$&#123;libdir&#125;</span> -lEGL</span><br><span class="line">  line&gt;Cflags: -I<span class="variable">$&#123;includedir&#125;</span></span><br><span class="line">Path position of <span class="string">'egl'</span> is 4</span><br><span class="line">Adding <span class="string">'egl'</span> to list of known packages</span><br><span class="line">Package egl has -I/usr/include <span class="keyword">in</span> Cflags</span><br><span class="line">Removing -I/usr/include from cflags <span class="keyword">for</span> egl</span><br><span class="line">Package egl has -L /usr/lib/x86_64-linux-gnu <span class="keyword">in</span> Libs</span><br><span class="line">Removing -L /usr/lib/x86_64-linux-gnu from libs <span class="keyword">for</span> egl</span><br><span class="line">  pre-remove: egl</span><br><span class="line"> post-remove: egl</span><br><span class="line">adding CFLAGS_OTHER string <span class="string">""</span></span><br><span class="line">  pre-remove: egl</span><br><span class="line"> post-remove: egl</span><br><span class="line"> original: egl</span><br><span class="line">   sorted: egl</span><br><span class="line">adding CFLAGS_I string <span class="string">""</span></span><br><span class="line">returning flags string <span class="string">""</span></span><br></pre></td></tr></table></figure>
+<p>其中的 <code>Package egl has ...</code> 和 <code>Removing ... from cflags for ...</code> 让我十分纳闷。所以想从 <a href="https://gitlab.freedesktop.org/pkg-config/pkg-config" target="_blank" rel="noopener"><code>pkg-config</code> 的源码</a>一探究竟。当我打开它时，发现它的构建系统还是“古老的” AutoTools.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  pg-config git:(master) ✗ .&#x2F;autogen.sh</span><br><span class="line">+ PROJECT&#x3D;pkg-config</span><br><span class="line">+ dirname .&#x2F;autogen.sh</span><br><span class="line">+ srcdir&#x3D;.</span><br><span class="line">+ test -z .</span><br><span class="line">+ pwd</span><br><span class="line">+ ORIGDIR&#x3D;&#x2F;home&#x2F;luc&#x2F;gh&#x2F;pkg-config</span><br><span class="line">+ cd .</span><br><span class="line">+ autoreconf -iv</span><br><span class="line">.&#x2F;autogen.sh: 13: autoreconf: not found</span><br><span class="line">+ exit 127</span><br></pre></td></tr></table></figure>
+<h3 id="autotools-包含什么"><a href="#autotools-包含什么" class="headerlink" title="autotools 包含什么"></a>autotools 包含什么</h3><ul>
+<li>autoconf</li>
+<li>automake</li>
+<li>libtool</li>
+<li>gettext</li>
+</ul>
+<h2 id="meson"><a href="#meson" class="headerlink" title="meson"></a>meson</h2><h3 id="D-buildtype"><a href="#D-buildtype" class="headerlink" title="-D buildtype"></a><a href="https://mesonbuild.com/Builtin-options.html#details-for-buildtype" target="_blank" rel="noopener">-D buildtype</a></h3><p>meson 的 buildtype 是用来设定编译优化级别 (optimization levels: -O0, -O1, -O2, -O3, -Os) 和是否有调试信息 (debug: -g)。 实际上，meson 提供两个分开的选项分别控制编译优化级别和调试信息</p>
+<ul>
+<li>-Doptimization (plain|0|2|3|s, plain 指不设置任何 optimization flags)</li>
+<li>-Ddebug (true|false)</li>
+</ul>
+<h3 id="use-gold"><a href="#use-gold" class="headerlink" title="use gold"></a>use <code>gold</code></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">meson build --prefix=/usr -D&#123;c,cpp&#125;_args=-fuse-ld=gold -Dflavors=x11-gl,x11-glesv2</span><br></pre></td></tr></table></figure>
+<h2 id="cmake"><a href="#cmake" class="headerlink" title="cmake"></a>cmake</h2><h3 id="use-gold-1"><a href="#use-gold-1" class="headerlink" title="use gold"></a>use <code>gold</code></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold</span><br></pre></td></tr></table></figure>
+<h1 id="编译-mold"><a href="#编译-mold" class="headerlink" title="编译 mold"></a>编译 mold</h1><figure class="highlight plain"><figcaption><span>WSL2 Ubuntu 20.04 hosted Windows 11 Dell OptiPlex 3090</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ cmake -B build -DCMAKE_BUILD_TYPE&#x3D;Debug -DCMAKE_INSTALL_PREFIX&#x3D;&#x2F;usr -DCMAKE_EXPORT_COMPILE_COMMANDS&#x3D;On</span><br><span class="line">$ time cmake --build build -j 8</span><br><span class="line">...</span><br><span class="line">[100%] Linking CXX executable mold</span><br><span class="line">[100%] Built target mold</span><br><span class="line">cmake --build build -j 8  844.42s user 94.17s system 674% cpu 2:19.20 total</span><br></pre></td></tr></table></figure>
+<h1 id="编译-mesa"><a href="#编译-mesa" class="headerlink" title="编译 mesa"></a>编译 mesa</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜  forked git:(23.1.3) meson build -Dprefix&#x3D;&#x2F;usr&#x2F;local -Dbuildtype&#x3D;debug -Dplatforms&#x3D;x11 -Dvulkan-drivers&#x3D;swrast -Dgallium-drivers&#x3D;swrast,radeonsi,panfrost -Dglx&#x3D;dri -Dllvm&#x3D;enabled -Dcpp_rtti&#x3D;false</span><br><span class="line">➜  forked git:(23.1.3) time ninja -C build</span><br><span class="line">ninja: Entering directory &#96;build&#39;</span><br><span class="line">[1559&#x2F;1559] Generating src&#x2F;gallium&#x2F;targets&#x2F;dri&#x2F;devenv_panfrost_dri.so with a custom command</span><br><span class="line">ninja -C build  1214.38s user 240.13s system 710% cpu 3:24.62 total</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜  forked git:(23.1.3) ✗ CC&#x3D;clang CC_LD&#x3D;mold meson build -Dprefix&#x3D;&#x2F;usr&#x2F;local -Dbuildtype&#x3D;debug -Dplatforms&#x3D;x11 -Dvulkan-drivers&#x3D;swrast -Dgallium-drivers&#x3D;swrast,radeonsi,panfrost -Dglx&#x3D;dri -Dllvm&#x3D;enabled -Dcpp_rtti&#x3D;false</span><br><span class="line">➜  forked git:(23.1.3) ✗ time ninja -C build</span><br><span class="line">2 warnings generated.</span><br><span class="line">[1559&#x2F;1559] Generating src&#x2F;gallium&#x2F;targets&#x2F;dri&#x2F;devenv_mcde_dri.so with a custom command</span><br><span class="line">ninja -C build  12971.24s user 158.32s system 1146% cpu 19:04.81 total</span><br></pre></td></tr></table></figure>
+<h1 id="编译-LLVM"><a href="#编译-LLVM" class="headerlink" title="编译 LLVM"></a>编译 LLVM</h1><h2 id="主要的配置"><a href="#主要的配置" class="headerlink" title="主要的配置"></a>主要的配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cmake -S llvm -B build -G Ninja                                     \</span><br><span class="line">  -DCMAKE_C_COMPILER&#x3D;gcc-10                                         \</span><br><span class="line">  -DCMAKE_CXX_COMPILER&#x3D;g++-10                                       \</span><br><span class="line">  -DCMAKE_BUILD_TYPE&#x3D;Release                                        \</span><br><span class="line">  -DCMAKE_INSTALL_PREFIX&#x3D;&quot;$INSTALL_DIR&quot;                             \</span><br><span class="line">  -DLLVM_LIBDIR_SUFFIX&#x3D;&quot;64&quot;                                         \</span><br><span class="line">  -DLLVM_TARGETS_TO_BUILD&#x3D;&quot;host;AMDGPU&quot;                             \</span><br><span class="line">  -DLLVM_BUILD_LLVM_DYLIB&#x3D;&quot;ON&quot;                                      \</span><br><span class="line">  -DBUILD_SHARED_LIBS&#x3D;&quot;ON&quot;                                          \</span><br><span class="line">  -DLLVM_USE_LINKER&#x3D;&quot;gold&quot;                                          \</span><br><span class="line">  -DLLVM_ENABLE_PROJECTS&#x3D;&quot;clang;clang-tools-extra;lld&quot;              \</span><br><span class="line">  -DLLVM_ENABLE_RUNTIMES&#x3D;&quot;libcxx;libcxxabi;libunwind&quot;               \</span><br><span class="line">  -DLLVM_PARALLEL_COMPILE_JOBS&#x3D;&quot;1&quot;                                  \</span><br><span class="line">  -DLLVM_PARALLEL_LINK_JOBS&#x3D;&quot;1&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="OOM-问题"><a href="#OOM-问题" class="headerlink" title="OOM 问题"></a>OOM 问题</h2><p>如果机器内存不够在编译 LLVM 的时候可能会触发 OOM Killer (我在 WSL2 下就100%触发). 可以通过临时添加 swap 分区的方法避免这个问题 （<a href="https://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/" target="_blank" rel="noopener">Linux Add a Swap File Tutorial</a>）</p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/build/">build</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/prog/syscall/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">FAQs about System Programming</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/misc/xiangshan/">  
+        <span class="next-text nav-default">观“老石谈芯”视频笔记 (二)</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>

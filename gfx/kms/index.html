@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="Knowledge from &#34;[RFC] Plane color pipeline KMS uAPI&#34;" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="kms, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/gfx/kms/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>Knowledge from &#34;[RFC] Plane color pipeline KMS uAPI&#34; - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      Knowledge from &#34;[RFC] Plane color pipeline KMS uAPI&#34;
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2023-05-11
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/graphics/">graphics</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Gamma-LUT-property"><span class="toc-number">1.</span> <span class="toc-text">Gamma LUT property</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CSC-property"><span class="toc-number">2.</span> <span class="toc-text">CSC property</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#scRGB"><span class="toc-number">3.</span> <span class="toc-text">scRGB</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#what’s-the-difference-between-sRGB-and-scRGB"><span class="toc-number">3.1.</span> <span class="toc-text">what’s the difference between sRGB and scRGB</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Degamma"><span class="toc-number">4.</span> <span class="toc-text">Degamma</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#PQ"><span class="toc-number">5.</span> <span class="toc-text">PQ</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Android-HWC"><span class="toc-number">6.</span> <span class="toc-text">Android HWC</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Why-does-HWC-represent-hardware-composer-rather-than-hardware-compositor"><span class="toc-number">6.1.</span> <span class="toc-text">Why does HWC represent hardware composer rather than hardware compositor</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h1 id="Gamma-LUT-property"><a href="#Gamma-LUT-property" class="headerlink" title="Gamma LUT property"></a>Gamma LUT property</h1><p>Gamma LUT (Look-Up Table) is a property that is used to correct the color and brightness of an image or video. Gamma LUT is basically a table of values that is used to map input values to output values, for example, it may map low input values to higher output values to brighten the image.</p>
+<p>Gamma LUT is used to adjust the gamma curve of an image or video, which means it can be used to correct the brightness and contrast of an image. This property is commonly used in image and video processing applications, such as photo editing software, video editing software, and color grading tools.</p>
+<p>Gamma LUT can also be used to correct color shifts caused by different lighting conditions or camera settings. By adjusting the gamma curve of an image or video, it is possible to create a more natural and accurate representation of the original scene.</p>
+<a id="more"></a>
+<h1 id="CSC-property"><a href="#CSC-property" class="headerlink" title="CSC property"></a>CSC property</h1><p>CSC is an acronym for <strong>Color Space Conversion</strong>, which is a property used in digital image and video processing. CSC is used to convert the color space of an image or video from one format to another.</p>
+<p>Color spaces are a way to represent colors using numerical values. Different devices and software applications use different color spaces, which can cause issues when trying to display or process images or videos across different platforms. For example, an image captured by a camera may use one color space, while a monitor may use another color space.</p>
+<p>CSC property can be used to convert the color space of an image or video from one format to another. This can be useful for ensuring that images or videos are displayed correctly on different devices or platforms. For example, a video may need to be converted from the color space used by a camera to the color space used by a television or monitor.</p>
+<p>CSC can also be used for color correction, where the colors of an image or video are adjusted to make them more accurate or aesthetically pleasing. Overall, the CSC property is an important tool in digital image and video processing, allowing for the correct and accurate representation of colors across different platforms.</p>
+<h1 id="scRGB"><a href="#scRGB" class="headerlink" title="scRGB"></a>scRGB</h1><p>scRGB (standardized RGB) is a color space that defines an alternative method for representing colors in digital images or videos. It is a wide-gamut (广色域) color space that can represent a larger range of colors than the traditional sRGB color space used in most computer displays.</p>
+<p>scRGB was developed by Microsoft and is defined by the International Electrotechnical Commission (IEC) standard IEC 61966-2-2. It is designed to be a device-independent color space, meaning that it can be used to represent colors accurately on a wide range of devices, including computer monitors, printers, and projectors.</p>
+<p>The scRGB color space is based on a linear color system, which means that the difference between two colors is proportional to the difference in their numerical values. This makes it easier to perform accurate color calculations and color corrections in digital image and video processing.</p>
+<p>scRGB is commonly used in professional video and film production, as well as in high-end graphics applications. It is also used as a reference color space for other color spaces, such as Adobe RGB and DCI-P3.</p>
+<h2 id="what’s-the-difference-between-sRGB-and-scRGB"><a href="#what’s-the-difference-between-sRGB-and-scRGB" class="headerlink" title="what’s the difference between sRGB and scRGB"></a>what’s the difference between sRGB and scRGB</h2><p>The main difference between scRGB and sRGB is the range of colors that they can represent. scRGB is a wide-gamut color space that can represent a larger range of colors than sRGB. sRGB is a standard color space that is commonly used in computer displays, but it has a smaller gamut than scRGB.</p>
+<p>sRGB defines a color space that can represent approximately 16.8 million colors, while scRGB can represent over a billion colors. This means that scRGB can represent a wider range of colors than sRGB, including more vibrant and saturated colors. However, not all devices or applications can display or process scRGB colors correctly, so it is not always practical to use scRGB in all situations.</p>
+<p>Another difference between scRGB and sRGB is their color encoding. scRGB uses a linear color encoding, which means that the difference between two colors is proportional to the difference in their numerical values. sRGB, on the other hand, uses a non-linear encoding, which means that the difference between two colors is not proportional to their numerical values. This makes it easier to display sRGB colors on typical computer monitors and other devices.</p>
+<p>Overall, scRGB is a more advanced and flexible color space than sRGB, but it requires more processing power and is not as widely supported. sRGB, on the other hand, is a standard color space that is widely supported by most devices and applications.</p>
+<h1 id="Degamma"><a href="#Degamma" class="headerlink" title="Degamma"></a>Degamma</h1><p>Degamma is a process used in digital image and video processing to reverse the gamma correction that is applied to images or videos during encoding. Gamma correction is a non-linear operation that is used to compensate for the non-linear response of human vision to changes in brightness.</p>
+<p>Degamma is the process of undoing this non-linear operation to restore the original linear image or video data. This is done to enable further processing or analysis of the image or video data in a linear color space.</p>
+<p>During encoding, gamma correction is applied to the image or video data in order to make it easier to display on devices with non-linear displays, such as computer monitors, televisions, and projectors. However, this gamma correction can make it more difficult to perform accurate color grading or other image processing tasks.</p>
+<p>Degamma is typically performed by applying an inverse gamma curve to the encoded image or video data. This inverse curve is used to undo the effects of the gamma correction and restore the original linear data. Once the data has been degammaed, it can be processed or analyzed in a linear color space, enabling more accurate color grading and other image processing operations.</p>
+<h1 id="PQ"><a href="#PQ" class="headerlink" title="PQ"></a>PQ</h1><p>PQ stands for Perceptual Quantizer (感知量化), which is a type of electro-optical transfer function (电光转换函数) used in high dynamic range (HDR) displays. HDR displays are capable of displaying a wider range of brightness and color than standard dynamic range (SDR) displays, and the PQ transfer function is designed to enable this increased range.</p>
+<p>The PQ transfer function is based on human perception of brightness, and it is designed to be more perceptually uniform than traditional gamma curves used in SDR displays. This means that the PQ curve better matches the way that humans perceive changes in brightness, making it easier to display HDR content that looks natural and realistic.</p>
+<p>The PQ curve is defined by the International Electrotechnical Commission (IEC) standard IEC 2100-1, and it is used in several HDR standards, including Dolby Vision and HDR10+. The PQ curve maps a range of input values to a range of output values, allowing HDR displays to accurately represent a wide range of brightness and color.</p>
+<p>Overall, the PQ transfer function enables HDR displays to deliver a more immersive and realistic viewing experience, with brighter highlights, deeper shadows, and more vibrant colors than SDR displays.</p>
+<h1 id="Android-HWC"><a href="#Android-HWC" class="headerlink" title="Android HWC"></a>Android HWC</h1><p>HWC stands for Hardware Composer. It is a component of the Android operating system that manages the rendering of graphical elements on the screen. It is responsible for taking the output of the various graphical layers in the system, such as the user interface, apps, and games, and compositing them into a single image to be displayed on the screen. The HWC works in conjunction with the graphics hardware on the device to ensure efficient and seamless rendering of the graphical elements. It plays a crucial role in providing a smooth and responsive user experience on Android devices.</p>
+<h2 id="Why-does-HWC-represent-hardware-composer-rather-than-hardware-compositor"><a href="#Why-does-HWC-represent-hardware-composer-rather-than-hardware-compositor" class="headerlink" title="Why does HWC represent hardware composer rather than hardware compositor"></a>Why does HWC represent hardware composer rather than hardware compositor</h2><p>The term “composer” is used in reference to HWC because it is responsible for composing, or combining, the various graphical layers into a single image that can be displayed on the screen. The term “compositor” could also be used to describe this function, but “composer” is the term that has been traditionally used in the field of computer graphics to describe this type of operation. Additionally, the term “composer” may be seen as more descriptive of the creative process of combining visual elements, while “compositor” may be seen as more technical in nature. Ultimately, the choice of terminology is a matter of convention and personal preference.</p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/kms/">kms</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/lnx/debug/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">Linux Kernel Debugging</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/lnx/patch-submit/">  
+        <span class="next-text nav-default">Submitting My First Linux Kernel Patch</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>

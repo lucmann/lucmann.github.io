@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="Sogou IM on Ubuntu Jammy Jellyfish" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="ubuntu, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/misc/upgrade-ubuntu/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>Sogou IM on Ubuntu Jammy Jellyfish - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      Sogou IM on Ubuntu Jammy Jellyfish
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2022-07-31
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/misc/">misc</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Reminiscence"><span class="toc-number">1.</span> <span class="toc-text">Reminiscence</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Display-Drivers-for-NVIDIA-GT-520M"><span class="toc-number">2.</span> <span class="toc-text">Display Drivers for NVIDIA GT 520M</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#What-Will-Be-Installed-By-This-Installer"><span class="toc-number">2.1.</span> <span class="toc-text">What Will Be Installed By This Installer?</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Sogou-IM"><span class="toc-number">3.</span> <span class="toc-text">Sogou IM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Alacritty"><span class="toc-number">4.</span> <span class="toc-text">Alacritty</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h1 id="Reminiscence"><a href="#Reminiscence" class="headerlink" title="Reminiscence"></a>Reminiscence</h1><a id="more"></a>
+<h1 id="Display-Drivers-for-NVIDIA-GT-520M"><a href="#Display-Drivers-for-NVIDIA-GT-520M" class="headerlink" title="Display Drivers for NVIDIA GT 520M"></a>Display Drivers for NVIDIA GT 520M</h1><p><img src="before-install-driver.png" alt="Before NVIDIA Display Driver Installed"></p>
+<h2 id="What-Will-Be-Installed-By-This-Installer"><a href="#What-Will-Be-Installed-By-This-Installer" class="headerlink" title="What Will Be Installed By This Installer?"></a>What Will Be Installed By This Installer?</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ find /usr/lib/modules -name <span class="string">'*nvidia*.ko'</span> -<span class="built_in">exec</span> ls -l --time-style=long-iso &#123;&#125; \;| awk <span class="string">'&#123;print $(NF-2), substr($NF, 43)&#125;'</span> | sort</span><br><span class="line"></span><br><span class="line">2022-07-12 drivers/i2c/busses/i2c-nvidia-gpu.ko</span><br><span class="line">2022-07-12 drivers/platform/x86/nvidia-wmi-ec-backlight.ko</span><br><span class="line">2022-07-12 drivers/usb/typec/altmodes/typec_nvidia.ko</span><br><span class="line">2022-07-12 drivers/video/fbdev/nvidia/nvidiafb.ko</span><br><span class="line">2022-10-13 drivers/i2c/busses/i2c-nvidia-gpu.ko</span><br><span class="line">2022-10-13 drivers/platform/x86/nvidia-wmi-ec-backlight.ko</span><br><span class="line">2022-10-13 drivers/usb/typec/altmodes/typec_nvidia.ko</span><br><span class="line">2022-10-13 drivers/video/fbdev/nvidia/nvidiafb.ko</span><br><span class="line">2022-11-11 drivers/video/nvidia-drm.ko</span><br><span class="line">2022-11-11 drivers/video/nvidia.ko</span><br><span class="line">2022-11-11 drivers/video/nvidia-modeset.ko</span><br><span class="line">2022-11-11 drivers/video/nvidia-uvm.ko</span><br></pre></td></tr></table></figure>
+<p>此外，Installer 允许你备份原来的 Xorg.conf, 使用新的 nvidia.conf</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ find /etc -newercc /usr/lib/modules/5.15.0-52-generic/kernel/drivers/video/nvidia.ko</span><br><span class="line"></span><br><span class="line">/etc/X11/xorg.conf</span><br><span class="line">/etc/X11/xorg.conf.nvidia-xconfig-original</span><br></pre></td></tr></table></figure>
+<h1 id="Sogou-IM"><a href="#Sogou-IM" class="headerlink" title="Sogou IM"></a>Sogou IM</h1><p>Sogou 输入法真心做得不错，支持主流的国产 Linux 操作系统。今天将系统升级到 Ubuntu 22.04.1 LTS 后之前安装的 Sogoupinyin 突然不工作了。刚开始没想到是缺少 <code>libqt5qml5</code> 这个依赖，一顿重装 fcitx, sogoupinyin 操作后，还是不行，google 后才发现原来 sogoupinyin 安装后，可执行程序都在</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;opt&#x2F;sogoupinyin&#x2F;files&#x2F;bin</span><br></pre></td></tr></table></figure>
+<p>通过运行这个目录下的 <code>sogoupinyin-service</code> 这个程序后才发现它无法加载 libqt5qml5.</p>
+<p>另外，<code>sogoupinyin-configtool</code> 也在上面这个目录，而且 sogoupinyin 也支持五笔</p>
+<p><img src="sogoupinyin-configtool.png" alt="sogoupinyin config interface"></p>
+<h1 id="Alacritty"><a href="#Alacritty" class="headerlink" title="Alacritty"></a>Alacritty</h1><p><a href="https://github.com/alacritty/alacritty" target="_blank" rel="noopener">Alacritty</a>是一个 GPU 加速的 Terminal Emulator.</p>
+<p>升级系统后，感觉系统默认的 <code>gnome-terminal</code> 的标题栏很碍眼，所以想换一个新的 Terminal Emulator 试试，就选择了之前在学习 Rust 时听说过的 Alacritty, 但目前 Jammy Jellyfish 的官方 PPA 里并没有它的安装包。下面这个 PPA 安装过程很丝滑, 而且它自动将安装好的 <code>/usr/bin/alacritty</code> 设置为默认的 <code>x-terminal-emulator</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:aslatter&#x2F;ppa</span><br></pre></td></tr></table></figure>
+<p>安装后，<code>Ctrl-Alt-T</code>，Good Looking</p>
+<p><img src="alacritty-first-sight.png" alt="Alacritty"></p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/ubuntu/">ubuntu</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/utils/clion/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">CLion 使用笔记</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/utils/regex/">  
+        <span class="next-text nav-default">Regular Expression</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>

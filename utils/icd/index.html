@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="Installable Client Driver" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="vulkan, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/utils/icd/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>Installable Client Driver - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      Installable Client Driver
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2023-04-23
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/utilities/">utilities</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#来自-ChatGPT-的解释"><span class="toc-number">1.</span> <span class="toc-text">来自 ChatGPT 的解释</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#What-is-Vulkan-ICD"><span class="toc-number">1.1.</span> <span class="toc-text">What is Vulkan ICD?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What-is-OpenCL-ICD"><span class="toc-number">1.2.</span> <span class="toc-text">What is OpenCL ICD?</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mesa-opencl-icd-与-intel-opencl-icd-的对比"><span class="toc-number">2.</span> <span class="toc-text">mesa-opencl-icd 与 intel-opencl-icd 的对比</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mesa-opencl-icd"><span class="toc-number">2.1.</span> <span class="toc-text">mesa-opencl-icd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#intel-opencl-icd"><span class="toc-number">2.2.</span> <span class="toc-text">intel-opencl-icd</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h1 id="来自-ChatGPT-的解释"><a href="#来自-ChatGPT-的解释" class="headerlink" title="来自 ChatGPT 的解释"></a>来自 <a href="https://openprompt.co/ChatGPT" target="_blank" rel="noopener">ChatGPT</a> 的解释</h1><h2 id="What-is-Vulkan-ICD"><a href="#What-is-Vulkan-ICD" class="headerlink" title="What is Vulkan ICD?"></a>What is Vulkan ICD?</h2><blockquote>
+<p>Vulkan ICD (Installable Client Driver) is a software component that enables the Vulkan API (Application Programming Interface) to interact with the hardware of a computer system. Vulkan is a low-level graphics API developed by the Khronos Group, which provides developers with more control over hardware resources, leading to improved performance and efficiency in graphics-intensive applications such as video games. The Vulkan ICD is responsible for managing the communication between the Vulkan API and the graphics hardware of a system. It is typically provided by the manufacturer of the graphics card as a driver for the system.</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="What-is-OpenCL-ICD"><a href="#What-is-OpenCL-ICD" class="headerlink" title="What is OpenCL ICD?"></a>What is OpenCL ICD?</h2><blockquote>
+<p>OpenCL ICD (Installable Client Driver) is a component of OpenCL (Open Computing Language) that enables a computer system to access the processing power of multiple devices, such as CPUs and GPUs, as a unified compute resource. OpenCL is a framework for programming heterogeneous systems, which means systems that consist of multiple processing units with different architectures. The OpenCL ICD manages the communication between the OpenCL API and the devices available on the system, allowing developers to write code that can run on a variety of devices. It provides flexibility to the developers in choosing the device based on the requirements of the application. The OpenCL ICD is typically provided by the manufacturer of the device as a driver for the system.</p>
+</blockquote>
+<h1 id="mesa-opencl-icd-与-intel-opencl-icd-的对比"><a href="#mesa-opencl-icd-与-intel-opencl-icd-的对比" class="headerlink" title="mesa-opencl-icd 与 intel-opencl-icd 的对比"></a><code>mesa-opencl-icd</code> 与 <code>intel-opencl-icd</code> 的对比</h1><h2 id="mesa-opencl-icd"><a href="#mesa-opencl-icd" class="headerlink" title="mesa-opencl-icd"></a><code>mesa-opencl-icd</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;etc&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;etc&#x2F;OpenCL&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;etc&#x2F;OpenCL&#x2F;vendors&#x2F;</span><br><span class="line">-rw-r--r-- root&#x2F;root        19 2022-03-09 00:37 .&#x2F;etc&#x2F;OpenCL&#x2F;vendors&#x2F;mesa.icd</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;gallium-pipe&#x2F;</span><br><span class="line">-rw-r--r-- root&#x2F;root  10555528 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;gallium-pipe&#x2F;pipe_iris.so</span><br><span class="line">-rw-r--r-- root&#x2F;root   7895008 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;gallium-pipe&#x2F;pipe_nouveau.so</span><br><span class="line">-rw-r--r-- root&#x2F;root   6214144 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;gallium-pipe&#x2F;pipe_r300.so</span><br><span class="line">-rw-r--r-- root&#x2F;root   7228928 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;gallium-pipe&#x2F;pipe_r600.so</span><br><span class="line">-rw-r--r-- root&#x2F;root   7677888 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;gallium-pipe&#x2F;pipe_radeonsi.so</span><br><span class="line">-rw-r--r-- root&#x2F;root   6449632 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;gallium-pipe&#x2F;pipe_swrast.so</span><br><span class="line">-rw-r--r-- root&#x2F;root   6217504 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;gallium-pipe&#x2F;pipe_vmwgfx.so</span><br><span class="line">-rw-r--r-- root&#x2F;root   1549288 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libMesaOpenCL.so.1.0.0</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;bug&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;bug&#x2F;mesa-opencl-icd&#x2F;</span><br><span class="line">-rw-r--r-- root&#x2F;root        44 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;bug&#x2F;mesa-opencl-icd&#x2F;control</span><br><span class="line">-rwxr-xr-x root&#x2F;root       448 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;bug&#x2F;mesa-opencl-icd&#x2F;script</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;doc&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;doc&#x2F;mesa-opencl-icd&#x2F;</span><br><span class="line">-rw-r--r-- root&#x2F;root       823 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;doc&#x2F;mesa-opencl-icd&#x2F;changelog.Debian.gz</span><br><span class="line">-rw-r--r-- root&#x2F;root     14241 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;doc&#x2F;mesa-opencl-icd&#x2F;copyright</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;lintian&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;lintian&#x2F;overrides&#x2F;</span><br><span class="line">-rw-r--r-- root&#x2F;root        49 2022-03-09 00:37 .&#x2F;usr&#x2F;share&#x2F;lintian&#x2F;overrides&#x2F;mesa-opencl-icd</span><br><span class="line">lrwxrwxrwx root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libMesaOpenCL.so -&gt; libMesaOpenCL.so.1</span><br><span class="line">lrwxrwxrwx root&#x2F;root         0 2022-03-09 00:37 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libMesaOpenCL.so.1 -&gt; libMesaOpenCL.so.1.0.0</span><br></pre></td></tr></table></figure>
+<h2 id="intel-opencl-icd"><a href="#intel-opencl-icd" class="headerlink" title="intel-opencl-icd"></a><code>intel-opencl-icd</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;etc&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;etc&#x2F;OpenCL&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;etc&#x2F;OpenCL&#x2F;vendors&#x2F;</span><br><span class="line">-rw-r--r-- root&#x2F;root        52 2020-04-09 03:55 .&#x2F;etc&#x2F;OpenCL&#x2F;vendors&#x2F;intel.icd</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;usr&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;usr&#x2F;bin&#x2F;</span><br><span class="line">-rwxr-xr-x root&#x2F;root    406064 2020-04-09 03:55 .&#x2F;usr&#x2F;bin&#x2F;ocloc</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;usr&#x2F;lib&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;intel-opencl&#x2F;</span><br><span class="line">-rw-r--r-- root&#x2F;root   5049688 2020-04-09 03:55 .&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;intel-opencl&#x2F;libigdrcl.so</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;usr&#x2F;share&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;usr&#x2F;share&#x2F;doc&#x2F;</span><br><span class="line">drwxr-xr-x root&#x2F;root         0 2020-04-09 03:55 .&#x2F;usr&#x2F;share&#x2F;doc&#x2F;intel-opencl-icd&#x2F;</span><br><span class="line">-rw-r--r-- root&#x2F;root       389 2020-04-09 03:55 .&#x2F;usr&#x2F;share&#x2F;doc&#x2F;intel-opencl-icd&#x2F;changelog.Debian.gz</span><br><span class="line">-rw-r--r-- root&#x2F;root      5085 2020-04-06 17:05 .&#x2F;usr&#x2F;share&#x2F;doc&#x2F;intel-opencl-icd&#x2F;copyright</span><br></pre></td></tr></table></figure>
+<p>安装 <code>*-opencl-icd</code> 软件包并不会安装 OpenCL 开发相关头文件：<code>&lt;CL/cl.h&gt;</code></p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/vulkan/">vulkan</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/misc/chatgpt/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">ChatGPT 告诉我的</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/gfx/lightdm/">  
+        <span class="next-text nav-default">Light Display Manager</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>

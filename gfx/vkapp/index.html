@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="Vulkan Application" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="vulkan, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/gfx/vkapp/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>Vulkan Application - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      Vulkan Application
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2024-09-18
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/graphics/">graphics</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#VK-ICD-FILENAMES"><span class="toc-number">1.</span> <span class="toc-text">VK_ICD_FILENAMES</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MESA-VK-WSI-PRESENT-MODE"><span class="toc-number">2.</span> <span class="toc-text">MESA_VK_WSI_PRESENT_MODE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Call-Stack"><span class="toc-number">3.</span> <span class="toc-text">Call Stack</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Debug-Options"><span class="toc-number">4.</span> <span class="toc-text">Debug Options</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Gears"><span class="toc-number">5.</span> <span class="toc-text">Gears</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <p>Vulkan 是一个低开销、跨平台的二维和三维图形与计算的应用程序接口，由 Khronos 在2015年在 GDC 上首次发布。它旨在提供高效能和更均衡的 CPU 和 GPU 占用，类似于 Direct3D 12 和 AMD Mantle。</p>
+<p>本文主要记录一下在 llvmpipe 软渲染 Vulkan 驱动下， 一个 vulkan 应用程序 (<a href="https://github.com/lucmann/VulkanExamples/tree/build-for-linux/examples/deferredmultisampling" target="_blank" rel="noopener">demo</a>) 的执行过程。</p>
+<a id="more"></a>
+<h1 id="VK-ICD-FILENAMES"><a href="#VK-ICD-FILENAMES" class="headerlink" title="VK_ICD_FILENAMES"></a>VK_ICD_FILENAMES</h1><p>Vulkan 驱动的探测和加载是通过 ICD (Installable Client Driver) 机制实现的。当环境上同时存在多个 Vulkan 驱动时，使用环境变量 <code>VK_ICD_FILENAMES</code> 来选择指定的 vulkan 驱动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;VK_ICD_FILENAMES&quot;,</span><br><span class="line">    &quot;value&quot;: &quot;&#x2F;home&#x2F;luc&#x2F;mesa-install&#x2F;share&#x2F;vulkan&#x2F;icd.d&#x2F;lvp_icd.x86_64.json&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="MESA-VK-WSI-PRESENT-MODE"><a href="#MESA-VK-WSI-PRESENT-MODE" class="headerlink" title="MESA_VK_WSI_PRESENT_MODE"></a>MESA_VK_WSI_PRESENT_MODE</h1><p>Vulkan 程序的送显由 WSI (Window System Interface) 层实现，支持以下模式</p>
+<ul>
+<li>fifo</li>
+<li>relaxed</li>
+<li>mailbox</li>
+<li>immediate</li>
+</ul>
+<h1 id="Call-Stack"><a href="#Call-Stack" class="headerlink" title="Call Stack"></a>Call Stack</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">libvulkan_lvp.so!llvmpipe_create_screen(struct sw_winsys * winsys) (\home\luc\gh\forked\src\gallium\drivers\llvmpipe\lp_screen.c:1149)</span><br><span class="line">libvulkan_lvp.so!sw_screen_create_named(struct sw_winsys * winsys, const struct pipe_screen_config * config, const char * driver) (\home\luc\gh\forked\src\gallium\auxiliary\target-helpers\sw_helper.h:43)</span><br><span class="line">libvulkan_lvp.so!sw_screen_create_vk(struct sw_winsys * winsys, const struct pipe_screen_config * config, _Bool sw_vk) (\home\luc\gh\forked\src\gallium\auxiliary\target-helpers\sw_helper.h:90)</span><br><span class="line">libvulkan_lvp.so!pipe_loader_sw_create_screen(struct pipe_loader_device * dev, const struct pipe_screen_config * config, _Bool sw_vk) (\home\luc\gh\forked\src\gallium\auxiliary\pipe-loader\pipe_loader_sw.c:427)</span><br><span class="line">libvulkan_lvp.so!pipe_loader_create_screen_vk(struct pipe_loader_device * dev, _Bool sw_vk, _Bool driver_name_is_inferred) (\home\luc\gh\forked\src\gallium\auxiliary\pipe-loader\pipe_loader.c:181)</span><br><span class="line">libvulkan_lvp.so!lvp_physical_device_init(struct lvp_physical_device * device, struct lvp_instance * instance, struct pipe_loader_device * pld) (\home\luc\gh\forked\src\gallium\frontends\lavapipe\lvp_device.c:1240)</span><br><span class="line">libvulkan_lvp.so!lvp_enumerate_physical_devices(struct vk_instance * vk_instance) (\home\luc\gh\forked\src\gallium\frontends\lavapipe\lvp_device.c:1416)</span><br><span class="line">libvulkan_lvp.so!enumerate_physical_devices_locked(struct vk_instance * instance) (\home\luc\gh\forked\src\vulkan\runtime\vk_instance.c:434)</span><br><span class="line">libvulkan_lvp.so!enumerate_physical_devices(struct vk_instance * instance) (\home\luc\gh\forked\src\vulkan\runtime\vk_instance.c:459)</span><br><span class="line">libvulkan_lvp.so!vk_common_EnumeratePhysicalDevices(VkInstance _instance, uint32_t * pPhysicalDeviceCount, VkPhysicalDevice * pPhysicalDevices) (\home\luc\gh\forked\src\vulkan\runtime\vk_instance.c:475)</span><br><span class="line">libvulkan.so.1![Unknown&#x2F;Just-In-Time compiled code] (Unknown Source:0)</span><br><span class="line">libvulkan.so.1!vkEnumeratePhysicalDevices (Unknown Source:0)</span><br><span class="line">vk::DispatchLoaderStatic::vkEnumeratePhysicalDevices(const vk::DispatchLoaderStatic * const this, VkInstance instance, uint32_t * pPhysicalDeviceCount, VkPhysicalDevice * pPhysicalDevices) (\usr\local\include\vulkan\vulkan.hpp:1047)</span><br><span class="line">vk::Instance::enumeratePhysicalDevices&lt;std::allocator&lt;vk::PhysicalDevice&gt;, vk::DispatchLoaderStatic&gt;(const vk::DispatchLoaderStatic &amp; d, const vk::Instance * const this) (\usr\local\include\vulkan\vulkan_funcs.hpp:120)</span><br><span class="line">vks::Context::pickDevice(vks::Context * const this, const vk::SurfaceKHR &amp; surface) (\home\luc\gh\VulkanExamples\base\vks\context.hpp:426)</span><br><span class="line">vks::Context::createDevice(vks::Context * const this, const vk::SurfaceKHR &amp; surface) (\home\luc\gh\VulkanExamples\base\vks\context.hpp:233)</span><br><span class="line">vkx::ExampleBase::initVulkan(vkx::ExampleBase * const this) (\home\luc\gh\VulkanExamples\base\vulkanExampleBase.cpp:123)</span><br><span class="line">vkx::ExampleBase::run(vkx::ExampleBase * const this) (\home\luc\gh\VulkanExamples\base\vulkanExampleBase.cpp:75)</span><br><span class="line">main(const int argc, const char ** argv) (\home\luc\gh\VulkanExamples\examples\deferredmultisampling\deferredmultisampling.cpp:684)</span><br></pre></td></tr></table></figure>
+<h1 id="Debug-Options"><a href="#Debug-Options" class="headerlink" title="Debug Options"></a>Debug Options</h1><p>就像其它 Gallium 驱动一样，llvmpipe 也提供了很多调试和性能测试的选项, 这此选项通过环境变量 <code>LP_DEBUG</code> 和 <code>LP_PERF</code> 来设置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">debug_parse_flags_option: help for LP_DEBUG:</span><br><span class="line">|        pipe [0x0000000000000001]</span><br><span class="line">|        tgsi [0x0000000000000002]</span><br><span class="line">|         tex [0x0000000000000004]</span><br><span class="line">|       setup [0x0000000000000010]</span><br><span class="line">|        rast [0x0000000000000020]</span><br><span class="line">|       query [0x0000000000000040]</span><br><span class="line">|      screen [0x0000000000000080]</span><br><span class="line">|    counters [0x0000000000000800]</span><br><span class="line">|       scene [0x0000000000001000]</span><br><span class="line">|       fence [0x0000000000002000]</span><br><span class="line">| no_fastpath [0x0000000000080000]</span><br><span class="line">|      linear [0x0000000000100000]</span><br><span class="line">|     linear2 [0x0000000000200000]</span><br><span class="line">|         mem [0x0000000000004000]</span><br><span class="line">|          fs [0x0000000000008000]</span><br><span class="line">|          cs [0x0000000000010000]</span><br><span class="line">| accurate_a0 [0x0000000000800000]</span><br><span class="line">|        mesh [0x0000000001000000]</span><br><span class="line">debug_parse_flags_option: help for LP_PERF:</span><br><span class="line">|         texmem [0x0000000000000001]</span><br><span class="line">|      no_mipmap [0x0000000000000004]</span><br><span class="line">|      no_linear [0x0000000000000008]</span><br><span class="line">|  no_mip_linear [0x0000000000000002]</span><br><span class="line">|         no_tex [0x0000000000000010]</span><br><span class="line">|       no_blend [0x0000000000000020]</span><br><span class="line">|       no_depth [0x0000000000000040]</span><br><span class="line">|   no_alphatest [0x0000000000000080]</span><br><span class="line">| no_rast_linear [0x0000000000000100]</span><br><span class="line">|       no_shade [0x0000000000000200]</span><br></pre></td></tr></table></figure>
+<h1 id="Gears"><a href="#Gears" class="headerlink" title="Gears"></a>Gears</h1><p>Vulkan 应用的“神奇”之处在于，场景在变，而它的 <code>draw()</code> 函数却不随着被反复调用</p>
+<p><img src="gears.gif" alt="VulkanExamples-gears"></p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/vulkan/">vulkan</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/gfx/xcb/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">X C Bindings</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/gfx/dril/">  
+        <span class="next-text nav-default">DRI Legacy</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>

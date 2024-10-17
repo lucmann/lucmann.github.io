@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="LLVM" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="LLVM, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/prog/llvm/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>LLVM - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      LLVM
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2022-09-09
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/programming/">programming</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#LLVM-amp-llvm-project"><span class="toc-number">1.</span> <span class="toc-text">LLVM &amp; llvm-project</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Build-LLVM"><span class="toc-number">2.</span> <span class="toc-text">Build LLVM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Building-llvmpipe"><span class="toc-number">3.</span> <span class="toc-text">Building llvmpipe</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h1 id="LLVM-amp-llvm-project"><a href="#LLVM-amp-llvm-project" class="headerlink" title="LLVM &amp; llvm-project"></a>LLVM &amp; llvm-project</h1><p>LLVM 是 Low-Level Virtual Machine 的简写，但事实上它与虚拟机关系不大。我们更熟悉它是一套工具链，包括 clang <code>/&#39;klæŋ/</code>, lld, lldb 等等。接触 LLVM 是因为 Mesa llvmpipe 使用 LLVM, 还有 AMDGPU 和 Radeon 的编译器后端都使用 LLVM IR，所以要编译 Mesa 的 <code>-Dgallium-drivers=llvmpipe,radeonsi</code> 都依赖于 LLVM 的诸多组件, 构建 Linux 内核的 <a href="https://massoudasadiblog.blogspot.com/2024/07/ebpf-on-wsl2-kernel-version-6x-ubuntu.html" target="_blank" rel="noopener">eBPF</a> 程序也依赖 LLVM, 构建 <a href="https://perfetto.dev/docs/quickstart/linux-tracing#building-from-source" target="_blank" rel="noopener">perfetto</a> 也依赖 LLVM。这里主要记录 LLVM 的构建和使用的一些问题。</p>
+<a id="more"></a>
+<p>llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 bug tracker 被移到了 <a href="https://github.com/llvm/llvm-project" target="_blank" rel="noopener">GitHub</a>. 一开始，LLVM 的社区交流和项目沟通主要方式是 Mailing Lists 和 <a href="https://lucmann.github.io/misc/english/">IRC</a>, 在 2019 年，LLVM 社区转向 <a href="https://www.discourse.org/" target="_blank" rel="noopener">Discourse</a> 这个开源社区交流平台。</p>
+<h1 id="Build-LLVM"><a href="#Build-LLVM" class="headerlink" title="Build LLVM"></a>Build LLVM</h1><ul>
+<li><code>cmake -S llvm -B build</code><ul>
+<li>llvm 是 llvm-project 根目录下的一个子目录，是我们的编译对象，像 lld, 还有 c++ 运行时库这里不需要构建</li>
+</ul>
+</li>
+<li><code>-G &quot;Ninja&quot;</code><ul>
+<li>使用 ninja 构建系统</li>
+</ul>
+</li>
+<li><code>-DCMAKE_BUILD_TYPE=Debug</code><ul>
+<li>默认是 <code>-DCMAKE_BUILD_TYPE=Release</code></li>
+</ul>
+</li>
+<li><code>-DCMAKE_EXPORT_COMPILE_COMMANDS=ON</code><ul>
+<li>生成 compile_commands.json 索引数据库(导入 IDE)</li>
+</ul>
+</li>
+<li><code>-DCMAKE_INSTALL_PREFIX=~/.local/llvm</code><ul>
+<li>自定义安装路径，默认是 /usr/local</li>
+<li>安装路径在安装之后也可以通过 <code>llvm-config --prefix --ldflags</code> 查到</li>
+</ul>
+</li>
+<li><code>-DBUILD_SHARED_LIBS=ON</code><ul>
+<li><code>BUILD_SHARED_LIBS</code> 是一个 CMake 选项，当它开启时，那些没有指明 STATIC, SHARED, MODULE 的构建目标都会被构建成 SHARED 库。这个一般要开启，否则会导致在链接器进程因 OOM 被 Killed (因为可执行程序由静态库们组装而成, 内存不够用)</li>
+</ul>
+</li>
+<li><code>-DLLVM_LIBDIR_SUFFIX=64</code><ul>
+<li>如果是 64 位系统，安装路径会由原来 <code>${CMAKE_INSTALL_PREFIX}/lib</code> 变成 <code>${CMAKE_INSTALL_PREFIX}/lib64</code></li>
+</ul>
+</li>
+<li><code>-DLLVM_BUILD_LLVM_DYLIB=OFF</code><ul>
+<li>如果 ON，将所有 LLVM 组件生成一个单一的共享库 libLLVM, 适用于将 LLVM 嵌入到其它工具中的情况</li>
+</ul>
+</li>
+<li><code>-DLLVM_ENABLE_PROJECTS=&quot;clang;lld&quot;</code><ul>
+<li>只构建 clang 和 lld (LLVM Linker) 子项目</li>
+</ul>
+</li>
+<li><code>-DLLVM_ENABLE_RUNTIMES=&quot;libcxx;libcxxabi&quot;</code><ul>
+<li>升级 <code>libc++.so.1</code>, 比如要将 clang++ 支持的 c++ 标准库升级到 c++2x (clang-16 以上支持 c++20)</li>
+</ul>
+</li>
+<li><code>-DLLVM_TARGETS_TO_BUILD=&quot;BPF;AMDGPU;host&quot;</code><ul>
+<li>指定支持哪些后端(ISA), 这里如果是为了编译 Mesa Radeon/AMDGPU, <code>AMDGPU</code> target 必须指定。<code>host</code>是指当前编译机器。另外指定的越多，编译越耗时</li>
+<li>安装后可通过 <code>llvm-config --targets-built</code> 获取</li>
+</ul>
+</li>
+<li><code>-DLLVM_PARALLEL_COMPILE_JOBS=1 -DLLVM_PARALLEL_LINK_JOBS=1</code><ul>
+<li>在编译机配置不高的时候，减小 <code>cc1plus</code> 和 <code>ld</code> 被 OOM-Killed 的风险</li>
+<li>当配置 <code>-DCMAKE_BUILD_TYPE=Debug</code> 时，即使将上面两个选项都配置为 1，仍然很大可能会被 OOM-Killed (问题不是 CPU 线程多少，而是内存需求过大)。这时最极解决方法是增大 swap 分区:<ul>
+<li><code>sudo fallocate -l 4G /swapfile</code><ul>
+<li>比 <code>dd if=/dev/zero of=/swapfile bs=1 count=0 seek=4G</code> 快一点</li>
+<li>当 <code>-DBUILD_SHARED_LIBS=OFF</code> (构建 LLVM 为静态库) 时，最好 10G<br><img src="static-link.png" alt="how horrible static linking is"></li>
+</ul>
+</li>
+<li><code>sudo chmod 600 /swapfile</code></li>
+<li><code>sudo mkswap /swapfile</code><ul>
+<li>格式化成 swap 分区</li>
+</ul>
+</li>
+<li><code>sudo swapon /swapfile</code><ul>
+<li>激活 swap 分区</li>
+</ul>
+</li>
+<li>增大 swap 分区后的效果<br><img src="mkswap-4G.gif" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>-DLLVM_USE_LINKER=gold</code><ul>
+<li>将默认链接器 <code>bfd</code> 换成 <code>gold</code> (可能会链接得快一点)</li>
+<li>一般 Linux 系统上默认安装有两个链接器<ul>
+<li>/usr/bin/ld -&gt; x86_64-linux-gnu-ld</li>
+<li>/usr/bin/ld.bfd -&gt; x86_64-linux-gnu-ld.bfd</li>
+<li>/usr/bin/ld.gold -&gt; x86_64-linux-gnu-ld.gold</li>
+</ul>
+</li>
+<li><code>-DLLVM_USE_LINKER=gold</code><br><img src="gold.gif" alt="/usr/bin/ld.gold"></li>
+</ul>
+</li>
+</ul>
+<p>安装后，我们需要将 <code>bin</code> 目录加入 <code>PATH</code>, 并创建 <code>/etc/ld.so.conf.d/llvm.conf</code> 包含下面一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;home&#x2F;luc&#x2F;.local&#x2F;llvm&#x2F;lib64</span><br></pre></td></tr></table></figure>
+<h1 id="Building-llvmpipe"><a href="#Building-llvmpipe" class="headerlink" title="Building llvmpipe"></a>Building llvmpipe</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">llvm-config found: YES (&#x2F;home&#x2F;luc&#x2F;.local&#x2F;llvm&#x2F;bin&#x2F;llvm-config) 15.0.0</span><br><span class="line">Run-time dependency LLVM (modules: bitwriter, core, engine, executionengine, instcombine, mcdisassembler, mcjit, native, scalaropts, transformutils, coroutines) found: YES 15.0.0</span><br><span class="line">Run-time dependency valgrind found: NO (tried pkgconfig)</span><br><span class="line">Program bison found: YES (&#x2F;usr&#x2F;bin&#x2F;bison)</span><br><span class="line">Program bison found: YES (&#x2F;usr&#x2F;bin&#x2F;bison)</span><br><span class="line">Program flex found: YES (&#x2F;usr&#x2F;bin&#x2F;flex)</span><br><span class="line">Run-time dependency libunwind found: NO (tried pkgconfig and cmake)</span><br><span class="line">Run-time dependency OpenMP found: YES 4.5</span><br><span class="line">Run-time dependency x11 found: YES 1.6.9</span><br><span class="line">Run-time dependency xext found: YES 1.3.4</span><br><span class="line">Run-time dependency xfixes found: YES 5.0.3</span><br><span class="line">Run-time dependency xcb-glx found: NO (tried pkgconfig and cmake)</span><br><span class="line">Message: Configuration summary:</span><br><span class="line"></span><br><span class="line">        prefix:          &#x2F;usr</span><br><span class="line">        libdir:          lib&#x2F;x86_64-linux-gnu</span><br><span class="line">        includedir:      include</span><br><span class="line"></span><br><span class="line">        OpenGL:          yes (ES1: yes ES2: yes)</span><br><span class="line">        OSMesa:          no</span><br><span class="line"></span><br><span class="line">        DRI platform:    drm</span><br><span class="line">        DRI drivers:     no</span><br><span class="line">        DRI driver dir:  &#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;dri</span><br><span class="line"></span><br><span class="line">        GLX:             DRI-based</span><br><span class="line"></span><br><span class="line">        EGL:             yes</span><br><span class="line">        EGL drivers:     builtin:egl_dri2 builtin:egl_dri3</span><br><span class="line">        EGL&#x2F;Vulkan&#x2F;VL platforms:   x11 surfaceless drm xcb</span><br><span class="line">        GBM:             yes</span><br><span class="line">        GBM backends path: &#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;gbm</span><br><span class="line"></span><br><span class="line">        Vulkan drivers:  swrast</span><br><span class="line">        Vulkan ICD dir:  share&#x2F;vulkan&#x2F;icd.d</span><br><span class="line"></span><br><span class="line">        llvm:            yes</span><br><span class="line">        llvm-version:    15.0.0</span><br><span class="line"></span><br><span class="line">        Gallium drivers: swrast</span><br><span class="line">        Gallium st:      mesa</span><br><span class="line">        HUD lmsensors:   no</span><br><span class="line"></span><br><span class="line">        Shared-glapi:    yes</span><br><span class="line"></span><br><span class="line">        Perfetto:        no</span><br><span class="line">        Perfetto ds:     auto</span><br><span class="line"></span><br><span class="line">Build targets in project: 174</span><br></pre></td></tr></table></figure>
+<p>当编译 Mesa 时，遇到的第一个编译错误是 <code>No such file or directory</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">..&#x2F;src&#x2F;gallium&#x2F;auxiliary&#x2F;gallivm&#x2F;lp_bld_init.c:52:10: fatal error: llvm-c&#x2F;Transforms&#x2F;Coroutines.h: No such file or directory                                                                                                                       52 | #include &lt;llvm-c&#x2F;Transforms&#x2F;Coroutines.h&gt;                                                                             |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                                                       compilation terminated.</span><br></pre></td></tr></table></figure>
+<p>这个问题似乎不好解决，我转向构建 LLVM 14.0.6</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  llvm-project git:(14.0.6) cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DLLVM_ENABLE_PROJECTS=<span class="string">"clang;lld"</span> -DLLVM_ENABLE_RUNTIMES=<span class="string">"libcxx;libcxxabi"</span> -DCMAKE_INSTALL_PREFIX=~/.<span class="built_in">local</span>/llvm-14 -DLLVM_LIBDIR_SUFFIX=<span class="string">"64"</span> -DLLVM_TARGETS_TO_BUILD=<span class="string">"host"</span> -DLLVM_BUILD_LLVM_DYLIB=On -DBUILD_SHARED_LIBS=On -DLLVM_PARALLEL_COMPILE_JOBS=1 -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_USE_LINKER=gold</span><br></pre></td></tr></table></figure>
+<p>但又遇到下面的错误</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMake Error at &#x2F;home&#x2F;luc&#x2F;gh&#x2F;llvm-project&#x2F;libcxx&#x2F;CMakeLists.txt:880 (message):                                             LIBCXX_ABI_NAMESPACE &#39;__1&#39; is reserved for use by libc++.                                                                                                                                                                                                                                                                                                             -- Configuring incomplete, errors occurred!</span><br></pre></td></tr></table></figure>
+<p>查看 <code>libcxx/CMakeLists.txt</code> 发现 <code>LIBCXX_ABI_NAMESPACE</code> 是一个 CMake 变量, 而且被缓存了，难怪第一次构建时没有报这个错误，所以在编译新的 LLVM 之前一次记得将原来的构建目录删除。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set(LIBCXX_ABI_NAMESPACE &quot;&quot; CACHE STRING &quot;The inline ABI namespace used by libc++. It defaults to __n where &#96;n&#96; is the  current ABI version.&quot;)</span><br></pre></td></tr></table></figure>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/LLVM/">LLVM</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/misc/xiangshan/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">观“老石谈芯”视频笔记 (二)</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/utils/clion/">  
+        <span class="next-text nav-default">CLion 使用笔记</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>

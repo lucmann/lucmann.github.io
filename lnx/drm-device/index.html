@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="DRM Device" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="DRM, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/lnx/drm-device/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>DRM Device - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      DRM Device
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-04-07
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/graphics/">graphics</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DRM-Introduction"><span class="toc-number">1.</span> <span class="toc-text">DRM Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DRM-Device-Nodes"><span class="toc-number">2.</span> <span class="toc-text">DRM Device Nodes</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Major-Number"><span class="toc-number">2.1.</span> <span class="toc-text">Major Number</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Minor-Number"><span class="toc-number">2.2.</span> <span class="toc-text">Minor Number</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Name-Convention"><span class="toc-number">2.3.</span> <span class="toc-text">Name Convention</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h1 id="DRM-Introduction"><a href="#DRM-Introduction" class="headerlink" title="DRM Introduction"></a>DRM Introduction</h1><p><a href="https://en.wikipedia.org/wiki/Direct_Rendering_Manager" target="_blank" rel="noopener">Direct Rendering Manager</a>是Linux kernel中负责与GPU接口的子系统，但它不仅仅用在Linux, 它也会用在像<a href="https://zh.wikipedia.org/zh-cn/OpenBSD" target="_blank" rel="noopener">OpenBSD</a>的其它一些类UNIX系统。</p>
+<a id="more"></a>
+<h1 id="DRM-Device-Nodes"><a href="#DRM-Device-Nodes" class="headerlink" title="DRM Device Nodes"></a>DRM Device Nodes</h1><p>DRM Device node 有 3 种</p>
+<ul>
+<li>primary (cardn), 如 <code>/dev/dri/card0</code></li>
+<li>renderDn, 如 <code>/dev/dri/renderD128</code></li>
+<li>controlDn, 如 <code>/dev/dri/controlD0</code></li>
+</ul>
+<p>在各种 UMD 和 Compositor 的实现中使用比较多的是 cardn 和 renderDn 节点， 两者的主要区别在于文件权限，访问 cardn 需要 root 权限，cardn 是 Linux DRM 历史遗留产物，在现代图形应用中， 一般推荐使用 renderDn 节点。 比如 Xorg 使用的就是 cardn 节点。</p>
+<p>关于 primary 节点，需要了解:</p>
+<ul>
+<li>每个 DRM 设备都有 primary 节点 <code>/dev/dri/card123</code>， 无论它是 render-only 设备，还是 display-only 设备，还是像 Intel/AMD/NVIDIA 那些桌面 GPU, 渲染和显示都可以的设备</li>
+<li>primary 节点和 render 节点底层可以是同一个物理设备，也可以是不同的物理设备，比如在一个使用 Mali GPU IP 和 MTK display controller IP 的 MTK SoC 上， MTK 设备只有显示能力 (<code>/dev/dri/card0</code>), 而 Mali 设备只有渲染能力，但它同时会有 primary 节点 (<code>/dev/dri/card1</code>) 和 render 节点 (<code>/dev/dri/renderD128</code>).</li>
+</ul>
+<h2 id="Major-Number"><a href="#Major-Number" class="headerlink" title="Major Number"></a>Major Number</h2><p>DRM设备的主设备号在不同的系统上不同。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">OS</th>
+<th style="text-align:left">Major Number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">DragonFlyBSD</td>
+<td style="text-align:left">145</td>
+</tr>
+<tr>
+<td style="text-align:left">NetBSD</td>
+<td style="text-align:left">34</td>
+</tr>
+<tr>
+<td style="text-align:left">OpenBSD</td>
+<td style="text-align:left">88/87</td>
+</tr>
+<tr>
+<td style="text-align:left">Linux</td>
+<td style="text-align:left">226</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="Minor-Number"><a href="#Minor-Number" class="headerlink" title="Minor Number"></a>Minor Number</h2><p>每种类型的DRM设备都有一个<strong>Base Minor</strong>, 每种类型允许的子设备号个数是<code>64</code> 个. 所以，Linux下最大的DRM Render Node设备文件名是<code>/dev/dri/renderD191</code>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">r = idr_alloc(&amp;drm_minors_idr,</span><br><span class="line">	<span class="literal">NULL</span>,</span><br><span class="line">	<span class="number">64</span> * type,</span><br><span class="line">	<span class="number">64</span> * (type + <span class="number">1</span>),</span><br><span class="line">	GFP_NOWAIT);</span><br></pre></td></tr></table></figure>
+<img src="/lnx/drm-device/drm-minor.png" class="">
+<h2 id="Name-Convention"><a href="#Name-Convention" class="headerlink" title="Name Convention"></a>Name Convention</h2><p>DRM设备在文件系统中的文件名规则在不同的系统上不同。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">OpenBSD</th>
+<th style="text-align:left">Linux</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">DIR_NAME</td>
+<td style="text-align:left"><code>/dev</code></td>
+<td style="text-align:left"><code>/dev/dri</code></td>
+</tr>
+<tr>
+<td style="text-align:left">PRIMARY_MINOR_NAME</td>
+<td style="text-align:left"><code>drm</code></td>
+<td style="text-align:left"><code>card</code></td>
+</tr>
+<tr>
+<td style="text-align:left">CONTROL_MINOR_NAME</td>
+<td style="text-align:left"><code>drmC</code></td>
+<td style="text-align:left"><code>controlD</code></td>
+</tr>
+<tr>
+<td style="text-align:left">RENDER_MINOR_NAME</td>
+<td style="text-align:left"><code>drmR</code></td>
+<td style="text-align:left"><code>renderD</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li><a href="https://cgit.freedesktop.org/~airlied/linux/commit/?h=drm-next&amp;id=1793126fcebd7c18834f95d43b55e387a8803aa8" target="_blank" rel="noopener">drm: implement experimental render nodes</a></li>
+</ol>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/DRM/">DRM</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/gfx/gallium-driver/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">Mesa Gallium 驱动框架</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/gfx/program-object/">  
+        <span class="next-text nav-default">OpenGL Program Object</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>

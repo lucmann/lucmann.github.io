@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="ROCm" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="ROCm, Eureka" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Eureka">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://lucmann.github.io/comp/rocm/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });  
+  </script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":true};
+</script>
+  
+  <title>ROCm - Eureka</title>
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Eureka</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Eureka</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      ROCm
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2024-09-03
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/computing/">computing</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CLR"><span class="toc-number">1.</span> <span class="toc-text">CLR</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ROCR"><span class="toc-number">2.</span> <span class="toc-text">ROCR</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ROCm-llvm-project"><span class="toc-number">3.</span> <span class="toc-text">ROCm&#x2F;llvm-project</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AMDKFD"><span class="toc-number">4.</span> <span class="toc-text">AMDKFD</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#UDNA"><span class="toc-number">5.</span> <span class="toc-text">UDNA</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HSA-vs-UXL"><span class="toc-number">6.</span> <span class="toc-text">HSA vs UXL</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <blockquote>
+<p>高端硅片可以构建市场，但最终，软件支持往往决定了赢家和输家</p>
+<pre><code>        -- Jack Huynh, AMD 高级副总裁兼计算和图形业务集团总经理
+</code></pre></blockquote>
+<p>AMD 的通用计算平台 ROCm (Radeon Open Compute) 是在通用计算领域与 NVIDIA 的 CUDA （Compute Unified Device Architecture) 相抗衡的软件基础设施。ROCm 实现的其实是由 AMD 发起的 HSA (Heterogeneous System Architecture) 标准，所以它的运行时主要由 3 个部分组成:</p>
+<p>OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力学和热力学领域著名物理学家路德维希·玻尔兹曼，他的工作对理解物质的微观行为和能量分布有着深远的影响。AMD 选取这个名字，可能是为了强调该平台在高性能计算领域的强大计算力和科学计算的应用前景。</p>
+<a id="more"></a>
+<ul>
+<li><a href="https://github.com/ROCm/clr" target="_blank" rel="noopener">AMD Compute Common Language Runtimes</a><ul>
+<li><a href="https://github.com/ROCm/HIP" target="_blank" rel="noopener">HIP runtime</a> (C++ Heterogeneous-Compute Interface for Portability)<ul>
+<li>可以算是一种 C++ 方言</li>
+<li>AMD 提供工具 <a href="https://github.com/ROCm/HIPIFY" target="_blank" rel="noopener">HIPIFY</a> 可以把 CUDA 源代码翻译成 HIP C++</li>
+</ul>
+</li>
+<li><a href="https://www.khronos.org/opencl/" target="_blank" rel="noopener">OpenCL runtime</a> （Open Computing Language)<ul>
+<li>由 Khronos Group 发布的开放异构系统并行编程语言</li>
+<li>语言风格更接近 C</li>
+</ul>
+</li>
+<li><a href="https://github.com/ROCm/clr/tree/amd-staging/rocclr" target="_blank" rel="noopener">rocclr</a> HIP 和 OpenCL 共用的 runtime</li>
+</ul>
+</li>
+<li><a href="https://github.com/ROCm/HIP" target="_blank" rel="noopener">HIP</a><ul>
+<li>这个仓库以前主要提供一个 compiler driver utility <code>hipcc</code> 脚本，目前 hipcc 已经被移到 AMD 自己 forked <a href="https://github.com/ROCm/llvm-project/tree/amd-staging/amd/hipcc" target="_blank" rel="noopener">llvm-project/amd/hipcc</a></li>
+<li>hipcc 之于 HIP-Clang 就像 gcc 之于 GCC</li>
+</ul>
+</li>
+<li><p><a href="https://github.com/ROCm/ROCR-Runtime" target="_blank" rel="noopener">ROCR</a></p>
+<ul>
+<li>ROCt libhsakmt-staticdrm HSA Kernel Mode Trunk 用户态库<ul>
+<li>libhsakmt 总是被构建成静态库 .a</li>
+<li>libhsakmt 通过 DRM 设备节点与 KFD 交互</li>
+</ul>
+</li>
+<li><p>ROCr libhsa-runtime64 </p>
+<ul>
+<li>用户可以通过 CMAKE 变量 <code>BUILD_SHARED_LIBS</code> 选择构建 libhsa-runtime64 为静态库或动态库</li>
+</ul>
+</li>
+<li><p>ROCR 主要向用户提供 AMD GPU/NPU/HSA 设备内核驱动 (包括 KFD 和 <a href="https://patchwork.freedesktop.org/series/136294/" target="_blank" rel="noopener">XDNA</a>) 的用户态封装和抽象, 类似 amdgpu.ko 与 libdrm_amdgpu 的关系。它的 libhsakmt 通过 KFD 提供的 IOCTL 直接访问 HSA 硬件，而 libhsa-runtime64 主要实现 HSA 标准的 Core Profile 和各厂家的扩展 (extension)。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>可以说，ROCm 的整个运行时环境分的 3 大块，分别负责打通</p>
+<ul>
+<li>CLR   向上，面向编程语言</li>
+<li>ROCR  向下，面向内核驱动</li>
+<li>HIP   面向编译系统(HIP 原来提供的 hipcc 已并入 ROCm/llvm-project)</li>
+</ul>
+<h1 id="CLR"><a href="#CLR" class="headerlink" title="CLR"></a><a href="https://github.com/ROCm/clr" target="_blank" rel="noopener">CLR</a></h1><p>所谓 Common Language Runtimes, 就是指 HIP 和 OpenCL 两种编程语言的运行时, 类似 C/C++ 的 libc.so 和 libstdc++.so。</p>
+<ul>
+<li>libamdhip64.so</li>
+<li>libamdocl64.so.2.1.nnn</li>
+</ul>
+<p>这两个动态库各自都需要链接 rocclr</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target_link_libraries(amdocl PUBLIC rocclr)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># ROCclr abstracts the usage of multiple AMD compilers and runtimes.</span><br><span class="line"># It is possible to support multiple backends concurrently in the same binary.</span><br><span class="line">option(ROCCLR_ENABLE_HSAIL &quot;Enable support for HSAIL compiler&quot; OFF)</span><br><span class="line">option(ROCCLR_ENABLE_LC    &quot;Enable support for LC compiler&quot;    ON)</span><br><span class="line">option(ROCCLR_ENABLE_HSA   &quot;Enable support for HSA runtime&quot;    ON)</span><br><span class="line">option(ROCCLR_ENABLE_PAL   &quot;Enable support for PAL runtime&quot;    OFF)</span><br></pre></td></tr></table></figure>
+<p>因为无论 amdhip64 还是 amdocl ，它们也都要调到编译器后端，在 CLR 的实现里支持两个编译器后端：</p>
+<ul>
+<li><code>ROCCLR_ENABLE_HSAIL</code> HSAIL (HSA Intermediate Language, 似乎已经废弃)<ul>
+<li>CLR 的源码中是通过宏 <code>WITH_COMPILER_LIB</code> guard</li>
+</ul>
+</li>
+<li><code>ROCCLR_ENABLE_LC</code>    <a href="https://github.com/ROCm/llvm-project/tree/amd-staging/amd/comgr" target="_blank" rel="noopener">COMGR</a> (Code Object Manager) 目前在 <code>ROCm/llvm-project/amd/comgr/</code> 下维护<ul>
+<li>CLR 的源码中是通过宏 <code>USE_COMGR_LIBRARY</code> guard</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">bool Program::compileImpl(const std::string&amp; sourceCode,</span><br><span class="line">                          const std::vector&lt;const std::string*&gt;&amp; headers,</span><br><span class="line">                          const char** headerIncludeNames, amd::option::Options* options,</span><br><span class="line">                          const std::vector&lt;std::string&gt;&amp; preCompiledHeaders) &#123;</span><br><span class="line">  if (isLC()) &#123;</span><br><span class="line">    return compileImplLC(sourceCode, headers, headerIncludeNames, options, preCompiledHeaders);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    return compileImplHSAIL(sourceCode, headers, headerIncludeNames, options);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CLR 也支持两个运行时后端：</p>
+<ul>
+<li><code>ROCCLR_ENABLE_HSA</code><ul>
+<li>如果使用 HSA runtime, 那么 CLR 需要调用 ROCR (libhsa-runtime64)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">find_package(hsa-runtime64 1.11 REQUIRED CONFIG</span><br><span class="line">  PATHS</span><br><span class="line">    &#x2F;opt&#x2F;rocm&#x2F;</span><br><span class="line">    $&#123;ROCM_INSTALL_PATH&#125;</span><br><span class="line">  PATH_SUFFIXES</span><br><span class="line">    cmake&#x2F;hsa-runtime64</span><br><span class="line">    lib&#x2F;cmake&#x2F;hsa-runtime64</span><br><span class="line">    lib64&#x2F;cmake&#x2F;hsa-runtime64)</span><br><span class="line">target_link_libraries(rocclr PUBLIC hsa-runtime64::hsa-runtime64)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><code>ROCCLR_ENABLE_PAL</code> <a href="https://github.com/GPUOpen-Drivers/pal" target="_blank" rel="noopener">PAL</a> (Platform Abstraction Library)<ul>
+<li>如果使用 PAL runtime, rocclr 需要链接 libpal.so 和 libamdhsaloader.so<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">find_package(AMD_PAL)</span><br><span class="line">find_package(AMD_HSA_LOADER)</span><br><span class="line">target_link_libraries(rocclr PUBLIC pal amdhsaloader)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="ROCR"><a href="#ROCR" class="headerlink" title="ROCR"></a><a href="https://github.com/ROCm/ROCR-Runtime" target="_blank" rel="noopener">ROCR</a></h1><p>计算世界的 libdrm</p>
+<p>ROCR 提供底层设备驱动用户态封装，它将驱动本身进行抽象，很方便扩展到对新设备驱动的支持，例如，在最近 ROCR 就增加了对 <a href="https://patchwork.freedesktop.org/series/136294/" target="_blank" rel="noopener">AMD NPU 驱动 XDNA</a> 的支持。</p>
+<p>OOC: libhsa-runtime64.so 打开的是 <code>/dev/kfd</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">hsa_status_t XdnaDriver::DiscoverDriver() &#123;</span><br><span class="line">  const int max_minor_num(64);</span><br><span class="line">  const std::string devnode_prefix(&quot;&#x2F;dev&#x2F;accel&#x2F;accel&quot;);</span><br><span class="line"></span><br><span class="line">  for (int i &#x3D; 0; i &lt; max_minor_num; ++i) &#123;</span><br><span class="line">    std::unique_ptr&lt;Driver&gt; xdna_drv(</span><br><span class="line">        new XdnaDriver(devnode_prefix + std::to_string(i)));</span><br><span class="line">    if (xdna_drv-&gt;Open() &#x3D;&#x3D; HSA_STATUS_SUCCESS) &#123;</span><br><span class="line">      if (xdna_drv-&gt;QueryKernelModeDriver(</span><br><span class="line">              core::DriverQuery::GET_DRIVER_VERSION) &#x3D;&#x3D; HSA_STATUS_SUCCESS) &#123;</span><br><span class="line">        core::Runtime::runtime_singleton_-&gt;RegisterDriver(xdna_drv);</span><br><span class="line">        return HSA_STATUS_SUCCESS;</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        xdna_drv-&gt;Close();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return HSA_STATUS_ERROR;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="ROCm-llvm-project"><a href="#ROCm-llvm-project" class="headerlink" title="ROCm/llvm-project"></a><a href="https://github.com/ROCm/llvm-project" target="_blank" rel="noopener">ROCm/llvm-project</a></h1><p><a href="https://github.com/ROCm/llvm-project" target="_blank" rel="noopener">ROCm/llvm-project</a> 是 AMD 专为 ROCm fork 出来的 LLVM 仓库，它里面包含所有 <a href="https://github.com/llvm/llvm-project" target="_blank" rel="noopener">llvm-project</a> 上游变更，再加上 AMD 特有的 <strong>amd</strong> 子目录。 在 amd 目录下存在 3 个组件:</p>
+<ul>
+<li>amd_comgr</li>
+<li>device-libs</li>
+<li>hipcc</li>
+</ul>
+<p>这 3 个组件可以有两种构建方式:</p>
+<ul>
+<li>因为每个子目录下都有自己的 CMakeLists.txt, 所以可以通过 cmake 的 <code>-S</code> 选项分别逐个构建<ul>
+<li>虽然这 3 个组件是可以独立构建的，但 amd_comgr 依赖 device-libs</li>
+</ul>
+</li>
+<li>也可以通过 llvm 构建选项 <code>LLVM_EXTERNAL_PROJECTS</code>, <code>LLVM_EXTERNAL_DEVICELIBS_SOURCE_DIR</code>, <code>LLVM_EXTERNAL_COMGR_SOURCE_DIR</code> 与 llvm 一起构建<ul>
+<li>这种方式好像需要运行 <code>amd/utils/omnibus.sh</code>, 试了一下没有成功，还是第一种方式相对简单些</li>
+</ul>
+</li>
+</ul>
+<p>构建顺序应该只能是：</p>
+<ul>
+<li><code>cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0/llvm -DLLVM_ENABLE_PROJECTS=&quot;clang;lld;llvm&quot; -DLLVM_TARGETS_TO_BUILD=&quot;BPF;AMDGPU;host&quot; -DLLVM_LIBDIR_SUFFIX=64 -DLLVM_BUILD_LLVM_DYLIB=OFF -DBUILD_SHARED_LIBS=OFF -DLLVM_USE_LINKER=gold</code><ul>
+<li>构建 comgr 不支持 shared libraries LLVM,  所以必须将 LLVM 编译成静态库 (<code>-DBUILD_SHARED_LIBS=OFF</code>)</li>
+<li><a href="https://github.com/ROCm/llvm-project/issues/37" target="_blank" rel="noopener"><code>CMAKE_BUILD_TYPE</code> 不要选 Debug 或 RelWithDebInfo, 除非你有足够的硬盘空间</a></li>
+</ul>
+</li>
+<li><code>cmake -S amd/device-libs -B build-rocm -G &quot;Ninja&quot; -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0 -DLLVM_DIR=~/.local/rocm/6.2.0/llvm/lib64/cmake/llvm</code><ul>
+<li><code>LLVM_DIR</code> 要设置的是包含 <code>LLVMConfig.cmake</code> 的路径, 而不是 <code>llvm-config --prefix</code> 输出的路径</li>
+</ul>
+</li>
+<li><code>cmake -S amd/comgr -B build-rocm -G &quot;Ninja&quot; -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0 -DLLVM_DIR=~/.local/rocm/6.2.0/llvm/lib64/cmake/llvm -DCMAKE_MODULE_PATH=~/local/rocm/6.2.0/lib/cmake/AMDDeviceLibs</code></li>
+</ul>
+<h1 id="AMDKFD"><a href="#AMDKFD" class="headerlink" title="AMDKFD"></a><a href="https://github.com/ROCm/ROCK-Kernel-Driver" target="_blank" rel="noopener">AMDKFD</a></h1><p>计算世界的 AMDGPU</p>
+<p>AMDKFD 是 AMD Kernel Fusion Driver, 它基本上是 AMD HSA 在内核中的实现，所以 ROCm/OpenCL 都需要它。<a href="https://lwn.net/Articles/619581/" target="_blank" rel="noopener">AMDKFD 在 2014 年合入 Linux kernel 3.19 的主线</a>, 而在 2018 年 AMDKFD 正式与 AMDGPU 合并成为一个单一内核模块 <a href="https://lists.freedesktop.org/archives/amd-gfx/2018-July/023673.html" target="_blank" rel="noopener">amdgpu.ko</a>。</p>
+<p>OOC: AMD “Fusion” 是 AMD 在 2011 年推出的一系列处理器，旨在将 CPU 和 GPU 集成到一个芯片上，称为 APU (加速处理单元)。这些处理器的目标是提供更高的性能和能效，特别是在图形和并行计算任务方面。</p>
+<p>AMDKFD 有 3 个内核配置选项:</p>
+<ul>
+<li>HSA_AMD     基本上在 X86_64, ARM64 和 PPC64 系统上是默认打开的</li>
+<li>HSA_AMD_SVM 基于 HMM 的共享虚拟内存管理器</li>
+<li>HSA_AMD_P2P 基于 PCI_P2PDMA 的多 GPU 间数据传输功能</li>
+</ul>
+<h1 id="UDNA"><a href="#UDNA" class="headerlink" title="UDNA"></a><a href="https://winbuzzer.com/2024/09/10/amd-combines-rdna-and-cdna-into-udna-to-rival-nvidia-cuda-xcxwbn/" target="_blank" rel="noopener">UDNA</a></h1><p>在未来， AMD 计划将 RDNA 和 CDNA 架构统一为 UDNA 架构，并为该架构引入张量计算单元，以更好地支持 AI 计算，统一的 UDNA 架构对开发者来说将更友好，可以让开发者利用相同的底层微架构来实现 AI, HPC 和游戏。</p>
+<h1 id="HSA-vs-UXL"><a href="#HSA-vs-UXL" class="headerlink" title="HSA vs UXL"></a><a href="https://hsafoundation.com/" target="_blank" rel="noopener">HSA</a> vs <a href="https://uxlfoundation.org/" target="_blank" rel="noopener">UXL</a></h1><p>  HSA 标准是 ROCm 的基石之一，它让用户在通用计算领域除了 CUDA 之外能有另外一个选择。而 UXL (Unified Acceleration) Foundation 旨在为不同架构不同厂商的加速器构建统一的软件生态系统，从而也成为另一个能与 nVIDIA 的 GPU 和 CUDA 相抗衡的计算平台。 </p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://rocm.docs.amd.com/en/latest/what-is-rocm.html" target="_blank" rel="noopener">What’s ROCm</a></li>
+<li><a href="https://hsafoundation.com/standards/" target="_blank" rel="noopener">Heterogeneous System Architecture standards</a></li>
+<li><a href="https://www.hsafoundation.com/wp-content/uploads/2021/02/HSA-PRM-1.1.1.pdf" target="_blank" rel="noopener">HSA Programmer’s Reference Manual: HSAIL Virtual ISA</a></li>
+<li><a href="https://lwn.net/Articles/619581/" target="_blank" rel="noopener">AMDKFD Kernel Driver</a></li>
+</ul>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/ROCm/">ROCm</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/lnx/accel/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">Linux accel 子系统</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/gfx/radv/">  
+        <span class="next-text nav-default">AMD GPU Vulkan Drivers for Linux</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  <a href="mailto:lucmann@qq.com" class="iconfont icon-email" title="email"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <a href="https://github.com/lucmann" target="_blank" rel="noopener" class="iconfont icon-github" title="github"></a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/zeed-w-beez/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2015 - 2024      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">Luc</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/mermaid/mermaid.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script type="text/javascript" src="https://unpkg.com/mermaid@11.2.1/dist/mermaid.min.js"></script>
+<script>
+    if (window.mermaid) {
+        mermaid.initialize({"version":"7.1.2","enable":true,"theme":"forest","logLevel":5,"startOnLoad":true,"arrowMarkerAbsolute":false,"flowchart":{"htmlLabels":true,"useMaxWidth":true,"curve":"linear"},"sequence":{"diagramMarginX":50,"diagramMarginY":10,"actorMargin":50,"width":150,"height":65,"boxMargin":10,"boxTextMargin":5,"noteMargin":10,"messageMargin":35,"mirrorActors":true,"bottomMarginAdj":1,"useMaxWidth":true},"gantt":{"titleTopMargin":25,"barHeight":20,"barGap":4,"topPadding":50,"leftPadding":75,"gridLineStartPadding":35,"fontSize":11,"fontFamily":"\"Open-Sans\", \"sans-serif\"","numberSectionStyles":4,"axisFormat":"%Y-%m-%d"},"class":{},"git":{}});
+    }
+</script>
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>
