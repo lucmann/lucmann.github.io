@@ -5,6 +5,19 @@ tags: [mesa]
 categories: graphics
 ---
 
+# Overview
+Mesa 包含了各种 GPU/CPU 的 OpenGL, OpenCL, Vulkan 实现(Usermode Driver), 也包括 GLX, EGL, GBM 等协议的实现。
+
+- Vulkan 驱动
+
+| codename | directories                                  | platforms                       |
+|:---------|:---------------------------------------------|:--------------------------------|
+| anv      | src/intel/vulkan, src/intel/vulkan_hasvk     | Alder Lake-P                    |
+| asahi    | src/asahi/vulkan                             | Apple M1, M2                    |
+| lpv      | src/gallium/drivers/llvmpipe                 | CPU                             |
+| panvk    | src/panfrost/vulkan                          | RK3399                          |
+| v3dv     | src/broadcom/vulkan                          | Raspberry Pi                    |
+
 # Build
 
 ```
