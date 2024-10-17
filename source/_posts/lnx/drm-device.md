@@ -10,17 +10,20 @@ categories: graphics
 
 <!--more-->
 
-# DRM Device
-## Type
-DRM Device分为3类：
-- primary
-- control
-- render
+# DRM Device Nodes
 
-例如:
-- `/dev/dri/card0`
-- `/dev/dri/controlD0`
-- `/dev/dri/renderD128`
+DRM Device node 有 3 种
+
+- primary (cardn), 如 `/dev/dri/card0`
+- renderDn, 如 `/dev/dri/renderD128`
+- controlDn, 如 `/dev/dri/controlD0`
+
+在各种 UMD 和 Compositor 的实现中使用比较多的是 cardn 和 renderDn 节点， 两者的主要区别在于文件权限，访问 cardn 需要 root 权限，cardn 是 Linux DRM 历史遗留产物，在现代图形应用中， 一般推荐使用 renderDn 节点。 比如 Xorg 使用的就是 cardn 节点。
+
+关于 primary 节点，需要了解:
+- 每个 DRM 设备都有 primary 节点 `/dev/dri/card123`， 无论它是 render-only 设备，还是 display-only 设备，还是像 Intel/AMD/NVIDIA 那些桌面 GPU, 渲染和显示都可以的设备
+- primary 节点和 render 节点底层可以是同一个物理设备，也可以是不同的物理设备，比如在一个使用 Mali GPU IP 和 MTK display controller IP 的 MTK SoC 上， MTK 设备只有显示能力 (`/dev/dri/card0`), 而 Mali 设备只有渲染能力，但它同时会有 primary 节点 (`/dev/dri/card1`) 和 render 节点 (`/dev/dri/renderD128`).
+
 
 ## Major Number 
 DRM设备的主设备号在不同的系统上不同。
