@@ -8,13 +8,13 @@ categories: graphics
 # Definition
 
 {% katex %}
-E_01(P)=(P.x - V_0.x) * (V_1.y - V_0.y) - (P.y - V_0.y) * (V_1.x - V_0.x)
+E_0_1(P)=(P.x - V_0.x) * (V_1.y - V_0.y) - (P.y - V_0.y) * (V_1.x - V_0.x)
 {% endkatex %}
 
 更好记的形式:
 
 {% katex %}
-\text{\textbardbl} \overrightarpoon{V_1V_0} \times \overrightarpoon{PV_0} \text{\textbardbl}
+\text{\textbardbl} \overrightharpoon{V_1V_0} \times \overrightharpoon{PV_0} \text{\textbardbl}
 {% endkatex %}
 
 # Reference
