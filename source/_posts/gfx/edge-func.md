@@ -5,7 +5,7 @@ tags: [OpenGL]
 categories: graphics
 ---
 
-# Definition
+# Edge 函数定义
 
 {% katex %}
 E_{01}(P)=(P.x - V_0.x) * (V_1.y - V_0.y) - (P.y - V_0.y) * (V_1.x - V_0.x)
@@ -17,5 +17,5 @@ E_{01}(P)=(P.x - V_0.x) * (V_1.y - V_0.y) - (P.y - V_0.y) * (V_1.x - V_0.x)
 \text{\textbardbl} \overrightharpoon{V_1V_0} \times \overrightharpoon{PV_0} \text{\textbardbl}
 {% endkatex %}
 
-# Reference
+# 参考
 [A Parallel Algorithm for Polygon Rasteriztion](https://www.cs.drexel.edu/~deb39/Classes/Papers/comp175-06-pineda.pdf)
