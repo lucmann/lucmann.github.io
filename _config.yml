@@ -110,7 +110,9 @@ math:
   katex:
     css: https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css
     js: https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js
-    config:
+    options:
+      output: html
+      displayMode: true
       throwOnError: false
 
 # Deployment
