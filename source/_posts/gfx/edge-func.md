@@ -8,7 +8,7 @@ categories: graphics
 # Definition
 
 {% katex %}
-E_0_1(P)=(P.x - V_0.x) * (V_1.y - V_0.y) - (P.y - V_0.y) * (V_1.x - V_0.x)
+E_{01}(P)=(P.x - V_0.x) * (V_1.y - V_0.y) - (P.y - V_0.y) * (V_1.x - V_0.x)
 {% endkatex %}
 
 更好记的形式:
