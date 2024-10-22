@@ -111,7 +111,7 @@ math:
     css: https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css
     js: https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js
     options:
-      output: html
+      output: mathml
       displayMode: true
       throwOnError: false
 
