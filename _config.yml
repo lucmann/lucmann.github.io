@@ -108,6 +108,7 @@ theme: even
 math:
   katex:
     css: 'https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css'
+    copy_tex: false
     options:
       throwOnError: false
 
