@@ -21,9 +21,10 @@ DRM Device node 有 3 种
 在各种 UMD 和 Compositor 的实现中使用比较多的是 cardn 和 renderDn 节点， 两者的主要区别在于文件权限，访问 cardn 需要 root 权限，cardn 是 Linux DRM 历史遗留产物，在现代图形应用中， 一般推荐使用 renderDn 节点。 比如 Xorg 使用的就是 cardn 节点。
 
 关于 primary 节点，需要了解:
-- 每个 DRM 设备都有 primary 节点 `/dev/dri/card123`， 无论它是 render-only 设备，还是 display-only 设备，还是像 Intel/AMD/NVIDIA 那些桌面 GPU, 渲染和显示都可以的设备
+- 无论它是低端的显示卡，还是 SoC，或像 Intel/AMD/NVIDIA 那些桌面 GPU, 只要注册一个 DRM 设备就都会默认有 primary 节点 `/dev/dri/card123`
+- primary 节点和 render 节点的主要区别在**权限**， 操作 (open, ioctl) primary 节点需要 root 权限， 而 render 节点不需要
 - primary 节点和 render 节点底层可以是同一个物理设备，也可以是不同的物理设备，比如在一个使用 Mali GPU IP 和 MTK display controller IP 的 MTK SoC 上， MTK 设备只有显示能力 (`/dev/dri/card0`), 而 Mali 设备只有渲染能力，但它同时会有 primary 节点 (`/dev/dri/card1`) 和 render 节点 (`/dev/dri/renderD128`).
-
+- render 节点是专门用来执行非全局的渲染命令的（那些全局的 modeset 命令是通过 primary 节点执行的)，如果一个驱动不支持 render 节点，那么它只能通过 primary 节点和 `drmAuth` 功能一起完成渲染任务。
 
 ## Major Number 
 DRM设备的主设备号在不同的系统上不同。
