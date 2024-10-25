@@ -11,11 +11,11 @@ categories: graphics
 E_{01}(P)=(P.x - V_0.x) * (V_1.y - V_0.y) - (P.y - V_0.y) * (V_1.x - V_0.x)
 {% endkatex %}
 
-更好记的形式:
+- $E_{01}(P) > 0$ 当 $P$ 在 $\overrightharpoon{V_0V_1}$ 的**右边**
+- $E_{01}(P) = 0$ 当 $P$ 在 $\overrightharpoon{V_0V_1}$ 的**边上**
+- $E_{01}(P) < 0$ 当 $P$ 在 $\overrightharpoon{V_0V_1}$ 的**左边**
 
-{% katex %}
-\text{\textbardbl} \overrightharpoon{V_1V_0} \times \overrightharpoon{PV_0} \text{\textbardbl}
-{% endkatex %}
+更好记的形式: $\lVert \overrightharpoon{V_1V_0} \times \overrightharpoon{PV_0} \rVert$
 
 <!--more-->
 
