@@ -1,7 +1,7 @@
 ---
 title: C++ 标准库
 date: 2024-08-12 16:07:50
-tags: c++
+tags: [C/C++]
 categories: programming
 ---
 

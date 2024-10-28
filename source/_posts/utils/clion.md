@@ -1,7 +1,7 @@
 ---
 title: CLion 使用笔记
 date: 2022-09-03 22:18:16
-tags: [c++]
+tags: [[C/C++]]
 categories: utilities
 ---
 

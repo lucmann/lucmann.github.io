@@ -1,7 +1,7 @@
 ---
 title: C++ Template
 date: 2021-10-14 16:07:50
-tags: c++
+tags: [C/C++]
 categories: programming
 ---
 
