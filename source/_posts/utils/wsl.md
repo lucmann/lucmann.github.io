@@ -22,7 +22,7 @@ wsl -l -v
 
 Microsoft在`Build 21364.co_release`版本内发布了[WSLg](https://github.com/microsoft/wslg)功能，该功能允许在**WSL**里运行**X11**和**Wayland**的客户端程序(GUI Application).
 
-![xeyes on WSL2](xeyes.gif)
+![xeyes on WSL2](/images/xeyes.gif)
 
 如果你已经加入[Windows Insider Program](https://insider.windows.com/zh-cn/)计划并且也正在使用**WSL2**, 那么只需要如下操作即可激活**WSLg**功能。
 
@@ -48,11 +48,11 @@ c/     wsl/   wslg/
 apt install nautilus -y
 ```
 
-![WSLg nautilus](wslg-nautilus.png)
+![WSLg nautilus](/images/wslg-nautilus.png)
 
 ## glmark2
 
-![WSLg glmark2](wslg-glmark2.png)
+![WSLg glmark2](/images/wslg-glmark2.png)
 
 # WSL 如何支持 Nvidia
 

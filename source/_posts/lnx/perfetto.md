@@ -9,7 +9,7 @@ categories: linux
 
 Perfetto 是一个用于 Linux 和 Android 系统上进行系统级和应用级的跟踪和性能分析的开源工具。Perfetto 捆绑了许多数据源，这些数据源能够从不同的系统接口收集详细的性能数据，包括 ftrace, /proc, /sys, native heap profiling 等。Perfetto 还提供了一个基于 Web 的用户界面，用于跟踪数据的可视化和分析。这里主要是对第一次使用 perfetto 做一下记录，方便以后继续学习和整理。
 
-![perfetto](perfetto.png)
+![perfetto](/images/perfetto/perfetto.png)
 
 <!--more-->
 

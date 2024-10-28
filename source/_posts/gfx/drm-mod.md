@@ -18,7 +18,7 @@ layout或compression format的信息，DRM format modifier就是用来解决这�
 ## [DRM_FORMAT_MOD_ARM_16X16_BLOCK_U_INTERLEAVED](https://elixir.bootlin.com/mesa/latest/source/include/drm-uapi/drm_fourcc.h#L1332)
 
 ### How U-interleaved improves performance?
-![U-interleaved memory layout](u-interleaved.drawio.svg)
+![U-interleaved memory layout](/images/drm-mod/u-interleaved.drawio.svg)
 
 ### What is the block size?
 对于 U-interleaved 布局的纹理, 有两种可能的 block size:
@@ -37,10 +37,10 @@ $$ RowStride = BytesPerBlock * nBlocksX $$
 
 #### 非压缩格式的 U-interleaved 布局的 row stride
 
-![U-interleaved row stride in regular format](u-interleaved-row-stride-non-compress.drawio.svg)
+![U-interleaved row stride in regular format](/images/drm-mod/u-interleaved-row-stride-non-compress.drawio.svg)
 
 #### 压缩格式的 U-interleaved 布局的 row stride
 以 [BC1 压缩格式](https://sv-journal.org/2014-1/06/en/index.php?lang=en#5)为例, BC1 是 S3TC 家族的一员(所有的 S3TC 家族都使用 4x4 的块大小)，而 DRM_FORMAT_MOD_ARM_16X16_BLOCK_U_INTERLEAVED 是 16x16 大小的，所以一个 U-interleaved 块中包含 4x4 个 BC1 压缩块。
 
-![U-interleaved row stride in BC1 compression format](u-interleaved-row-stride-compress.drawio.svg)
+![U-interleaved row stride in BC1 compression format](/images/drm-mod/u-interleaved-row-stride-compress.drawio.svg)
 

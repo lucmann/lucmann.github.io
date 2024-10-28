@@ -11,7 +11,7 @@ categories: utilities
 
 # `find` 的命令行组成
 
-![example-of-find](find.drawio.png)
+![example-of-find](/images/find.drawio.png)
 
 - Options
 - Starting-point

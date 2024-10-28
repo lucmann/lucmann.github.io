@@ -11,7 +11,7 @@ categories: misc
 
 # Display Drivers for NVIDIA GT 520M
 
-![Before NVIDIA Display Driver Installed](before-install-driver.png)
+![Before NVIDIA Display Driver Installed](/images/upgrade-ubuntu/before-install-driver.png)
 
 ## What Will Be Installed By This Installer?
 
@@ -53,7 +53,7 @@ Sogou 输入法真心做得不错，支持主流的国产 Linux 操作系统。�
 
 另外，`sogoupinyin-configtool` 也在上面这个目录，而且 sogoupinyin 也支持五笔
 
-![sogoupinyin config interface](sogoupinyin-configtool.png)
+![sogoupinyin config interface](/images/upgrade-ubuntu/sogoupinyin-configtool.png)
 
 # Alacritty
 
@@ -67,4 +67,4 @@ sudo add-apt-repository ppa:aslatter/ppa
 
 安装后，`Ctrl-Alt-T`，Good Looking
 
-![Alacritty](alacritty-first-sight.png)
+![Alacritty](/images/upgrade-ubuntu/alacritty-first-sight.png)

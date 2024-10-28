@@ -21,7 +21,7 @@ glmark2 -b desktop:nframes=1000000:show-fps=true -b build:duration=100
 
 3. glmark2 提供一个公共选项 (Option) **show-fps**, 可以显示 Head-up Display (HUD) 形式的 FPS
 
-![glmark2-desktop show-fps](glmark2-desktop-show-fps.png)
+![glmark2-desktop show-fps](/images/glmark2-desktop-show-fps.png)
 
 4. glmark2 计算 FPS 的时间精度 (resolution) 是 nanosecond. 它使用的是 `struct timespec`, 而不是 `struct timeval`
 

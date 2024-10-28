@@ -14,6 +14,6 @@ categories: hardware
 - OOC
     - Hantro 的 IP 为什么会在芯原的[货架](https://www.verisilicon.com/cn/IPPortfolio/HantroVPUIP)上
     - Hantro 的名字好像来自一个芬剧(Shattered Dreams)角色，有点像 Python
-    ![Hantro](hantro.jpeg)
+    ![Hantro](/images/verisilicon/hantro.jpeg)
 
 

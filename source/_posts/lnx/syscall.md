@@ -30,7 +30,7 @@ categories: linux
 
 # ioctl
 
-![ioctl](ioctl-ioctl.drawio.png)
+![ioctl](/images/ioctl-ioctl.drawio.png)
 
 ## ioctl 的返回值
 

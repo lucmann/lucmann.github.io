@@ -38,5 +38,5 @@ sudo make install
 
 # Graphics Boot-up
 
-![lightdm starts Xorg](lightdm-start-x.png)
+![lightdm starts Xorg](/images/lightdm-start-x.png)
 

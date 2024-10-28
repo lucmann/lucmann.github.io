@@ -5,4 +5,4 @@ tags: [RISC-V]
 categories: hardware
 ---
 
-![LicheePi4A](licheepi4a.jpg)
+![LicheePi4A](/images/SiPEED-LicheePi4A/licheepi4a.jpg)

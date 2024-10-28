@@ -85,7 +85,7 @@ index 8806dd1c..7d6cbd29 100644
 
 测试结果如下:
 
-![VisualID=0x23](visual_0x23.png)
-![VisualID=0x5b](visual_0x5b.png)
+![VisualID=0x23](/images/X/kylin-alpha-issue/visual_0x23.png)
+![VisualID=0x5b](/images/X/kylin-alpha-issue/visual_0x5b.png)
 
 从测试结果看，在`VisualID=0x23`的情况下，这个VISUAL对应的`pict format`没有alpha通道，所以修改`bg`的alpha值不会对窗口背景的透明度有任何影响。

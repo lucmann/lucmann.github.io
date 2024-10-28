@@ -9,5 +9,5 @@ categories: misc
 
 <!--more-->
 
-![奔跑的Luc执黑 vs 年年有鱼执白(210手黑中盘负)](game.gif)
+![奔跑的Luc执黑 vs 年年有鱼执白(210手黑中盘负)](/images/game/game.gif)
 

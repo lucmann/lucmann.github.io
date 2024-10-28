@@ -62,7 +62,7 @@ mutt -H /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch "`.
 
 带有 `Fixes:` tag 的patch 应该会被 backport 到以前必要 -stable tree.
 
-![patch-backport](patch-backport.png)
+![patch-backport](/images/patch-submit/patch-backport.png)
 
 ### 使用 git-send-email 提交 patch
 

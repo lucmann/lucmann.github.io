@@ -7,11 +7,11 @@ categories: graphics
 
 # OpenGL Pipeline
 
-![](../ogl-pipeline/ogl-pipeline.png)
+![](/images/../ogl-pipeline/ogl-pipeline.png)
 
 # OpenGL Pipeline Stage Flowchart
 
-![](../ogl-pipeline/RenderingPipeline.png)
+![](/images/../ogl-pipeline/RenderingPipeline.png)
 
 说明:
 

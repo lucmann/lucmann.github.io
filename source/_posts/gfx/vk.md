@@ -132,7 +132,7 @@ GPU1:
 
 - vkcube/vkcubepp
     - `vkcube --gpu_number 1 --width 800 --height 600`
-    ![vkcube](vkcube.gif)
+    ![vkcube](/images/vk/vkcube.gif)
 
 ## [SPIRV-Tools](https://github.com/KhronosGroup/SPIRV-Tools)
 
@@ -146,7 +146,7 @@ SPIRV-Tools 包含的比较常用的工具:
 # [Vulkan-Samples](https://github.com/KhronosGroup/Vulkan-Samples)
 
 `./build/app/bin/Debug/x86_64/vulkan_samples sample surface_rotation`
-![surface_rotation](surface_rotation.png)
+![surface_rotation](/images/vk/surface_rotation.png)
 
 # [VulkanExamples](https://github.com/jherico/VulkanExamples)
 
@@ -172,8 +172,8 @@ static const VkFormat formats[] = {
 而且 [KhronosGroup/Vulkan-Samples](https://github.com/KhronosGroup/Vulkan-Samples) 自从 [38d628b032a8](https://github.com/KhronosGroup/Vulkan-Samples/commit/38d628b032a88cf032e88877c1b75aa470333c32) 就已经首选 `vk::Format::eR8G8B8A8Srgb` 作为 swapchain image 的格式了。
 
 将 `ExampleBase::colorformat` 改为 sRGB 后的对比效果(哪个是 sRGB 呢?)
-![gears-srgb](gears-srgb.gif)
-![gears-rgb](gears-rgb.gif)
+![gears-srgb](/images/vk/gears-srgb.gif)
+![gears-rgb](/images/vk/gears-rgb.gif)
 
 # Vulkan ICD
 
@@ -253,6 +253,6 @@ Zink 不是某个具体 GPU 的驱动，而是一个将OpenGL API 调用翻译�
 - `LIBGL_ALWAYS_SOFTWARE=true` 是因为 zink 的实现要求 [`/* allow software rendering only if forced by the user */`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/drivers/zink/zink_screen.c#L1763)
 - `ZINK_DEBUG=nir` 为了能直观地看到驱动使用的是 Zink 而非 LLVMpipe 的OpenGL实现，特意加了 Zink 调试环境变量，将 shader 的 NIR 打印出来
     - glxgears on Zink
-    ![glxgears on Zink](glxgears-on-zink.gif)
+    ![glxgears on Zink](/images/vk/glxgears-on-zink.gif)
     - glmark2 on Zink
-    ![glmark2 on Zink](glmark2-on-zink.gif)
+    ![glmark2 on Zink](/images/vk/glmark2-on-zink.gif)

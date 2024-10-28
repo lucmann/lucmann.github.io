@@ -5,7 +5,7 @@ tags: [DRM]
 categories: linux
 ---
 
-![AMDGPU Microarchitecture Roadmap](amd-arch.jpg)
+![AMDGPU Microarchitecture Roadmap](/images/amd-arch.jpg)
 
 <!--more-->
 

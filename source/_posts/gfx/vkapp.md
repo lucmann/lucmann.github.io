@@ -96,4 +96,4 @@ debug_parse_flags_option: help for LP_PERF:
 
 Vulkan 应用的“神奇”之处在于，场景在变，而它的 `draw()` 函数却不随着被反复调用
 
-![VulkanExamples-gears](gears.gif)
+![VulkanExamples-gears](/images/vkapp/gears.gif)

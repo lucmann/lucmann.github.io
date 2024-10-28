@@ -16,7 +16,7 @@ categories: misc
 
 征子也叫“扭羊头”，是吃子的一种技巧。邱老师说，征子既厉害又危险。一旦征子失败，“原来追别人的棋现在全变成自己的断点，刚才追得很高兴，现在大概也死得很惨”。
 
-![征子](ladder.png)
+![征子](/images/thinking-in-go/ladder.png)
 
 兵家有云，“穷寇莫追”。虽然有可能将对方赶尽杀绝，但也可能在追的时候将自己置于危险之中。竞争也是一样，如果一味地想超越对手，很可能最后把自己搞得惨不忍睹。
 
@@ -24,7 +24,7 @@ categories: misc
 
 围棋里“勇敢”的行为，扑 (uchikaki, throw-in), 含有置之死地而后生之意。
 
-![扑](uchikaki.png)
+![扑](/images/thinking-in-go/uchikaki.png)
 
 # 基本棋形的死活
 
@@ -52,7 +52,7 @@ categories: misc
 
 高效地围地才是决定胜负的关键，而围杀对方的子只不过是其中一种手段罢了。
 
-![围地的效率](efficiency.png)
+![围地的效率](/images/thinking-in-go/efficiency.png)
 
 # 中国规则的数子与日本规则的数目
 

@@ -110,7 +110,7 @@ Khronos-approved, multivendor, 以及vendor-specific extensions都可以被_晋�
 
 # `PIPE_CAP_*` vs Extensions in Mesa
 
-![determination of gl version](extension2version.png)
+![determination of gl version](/images/extension2version.png)
 
 ```c
 /**

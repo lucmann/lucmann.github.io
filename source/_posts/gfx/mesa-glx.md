@@ -52,13 +52,13 @@ flowchart TD
 
 ## dri2CreateScreen
 
-![dri2CreateScreen](dri2CreateScreen.drawio.png)
+![dri2CreateScreen](/images/dri2CreateScreen.drawio.png)
 
 ## driswCreateScreenDriver
 
-![driswCreateScreenDriver](dri2CreateScreen-driswCreateScreenDriver.drawio.png)
+![driswCreateScreenDriver](/images/dri2CreateScreen-driswCreateScreenDriver.drawio.png)
 
 ## dri3_create_screen
 
-![dri3_create_screen](dri2CreateScreen-dri3_create_screen.drawio.png)
+![dri3_create_screen](/images/dri2CreateScreen-dri3_create_screen.drawio.png)
 
