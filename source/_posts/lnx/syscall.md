@@ -72,4 +72,46 @@ weak_alias (__ioctl, ioctl)
 	b	__syscall_error;
 # endif
 ```
-可以看到无论是 `#if` 或 `#else` 哪个分支， 都有 `mov x0, -1`, 所以当 C 库封装的系统调用函数失败时，它的返回值是 `-1`.
+
+可以看到无论是 `#if` 或 `#else` 哪个分支， 都有 `mov x0, -1`, 所以结论就是 C 库函数 `ioctl()` 的返回值：成功 `0`, 失败 `-1`. 相应的错误码会保存在 `errno`.
+
+这里再看一下 [libdrm](https://gitlab.freedesktop.org/mesa/drm) 库对 ioctl 的封装函数  `drmIoctl()`, 它的返回值仍然是：成功 `0`, 失败 `-1`. 只不过它对 `EINTR`(4, "Interrupted system call") 和 `EAGAIN`(11, "Try again") 这两种错误码进行了重试。
+
+```
+drm_public int
+drmIoctl(int fd, unsigned long request, void *arg)
+{
+    int ret;
+
+    do {
+        ret = ioctl(fd, request, arg);
+    } while (ret == -1 && (errno == EINTR || errno == EAGAIN));
+    return ret;
+}
+```
+
+再看一个调用 `drmIoctl()` 的 libdrm 的库函数，比如 `drmSyncobjWait()`, 它的返回值在失败时变成了 `-errno`, 当然这样避免让上层调用者去检查 `errno`, 但却打破了接口的一致性，有利有弊吧。
+
+```
+drm_public int drmSyncobjWait(int fd, uint32_t *handles, unsigned num_handles,
+                              int64_t timeout_nsec, unsigned flags,
+                              uint32_t *first_signaled)
+{
+    struct drm_syncobj_wait args;
+    int ret;
+
+    memclear(args);
+    args.handles = (uintptr_t)handles;
+    args.timeout_nsec = timeout_nsec;
+    args.count_handles = num_handles;
+    args.flags = flags;
+
+    ret = drmIoctl(fd, DRM_IOCTL_SYNCOBJ_WAIT, &args);
+    if (ret < 0)
+        return -errno;
+
+    if (first_signaled)
+        *first_signaled = args.first_signaled;
+    return ret;
+}
+```
