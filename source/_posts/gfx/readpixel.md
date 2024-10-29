@@ -26,10 +26,21 @@ void glReadPixels(GLint x, GLint y,
 - 格式转换 (required than preferred)
 - memcpy 的效率 (row by row or one-shot)
 
+```
+if (tex_xfer->stride == bytesPerRow && destStride == bytesPerRow) {
+   memcpy(dest, map, bytesPerRow * height);
+} else {
+   GLuint row;
+
+   for (row = 0; row < (unsigned) height; row++) {
+      memcpy(dest, map, bytesPerRow);
+      map += tex_xfer->stride;
+      dest += destStride;
+   }
+}
+```
+
 第 2 个问题需要理解一张图片或一块像素它在内存中的存储方式
 
 ![The usual layout of pixels of an image in memory](/images/readpixel/image-in-memory.png)
 ![How to compute the address of a pixel](/images/readpixel/image-in-address.png)
-
-
-
