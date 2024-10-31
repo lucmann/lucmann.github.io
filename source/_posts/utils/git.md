@@ -16,8 +16,14 @@ categories: utilities
     - 克隆仓库时连同子仓库一同克隆
 
 # git describe
-- `git describe --all <commit>`
-    - 找到离给定 `<commit>` 最近的 tag
+- `git describe <commit>`
+    - 找到离 `<commit>` 最近的 tag
+
+- `git describe --contains <commit>`
+    - 找到**包含** `<commit>` 的 tag
+    - 例：`git describe --contains a6149f03` 
+      - `v6.8-rc1~111^2~23^2~81`
+    - 它和不加 `--contains` 的区别是，`git describe` 仅仅是**离得最近**，从前往后都算，而 `git describe --contains` 是 **包含**，上面例子中命令的输出 `v6.8-rc1~111^2~23^2~81`， 表示在 v6.8 中一定包含 `a6149f03` 这个 commit, 而且它指出了具体的位置：从 `v6.8-rc1` 这个 tag 的 commit 往后第 111 个 commit (`^2` 表示它是一个 **merge commit**), 从这个 merge commit 再往后第 23 个 commit (仍然是一个 merge commit), 从这个 commit 再往后第 81 个 commit， 就是 `a6149f03`
 
 # git log
 - `git log -S<regex> --pickaxe-regex /path/to/a/file`
