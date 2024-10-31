@@ -1,5 +1,5 @@
 ---
-title: GPU Scheduler in Linux Kernel
+title: drm_gpu_scheduler
 date: 2021-09-17 11:38:43
 tags: [DRM]
 categories: linux
@@ -14,19 +14,21 @@ Linux DRM 子系统的 `drm_gpu_scheduler` 负责提交和调度 GPU job，以�
 
 - `drm_gpu_scheduler`
 
-一个调度器实例 (instance)，运行时实际上是一个内核线程 (kthread), 这个线程启动是在 `drm_sched_init()`
+调度器实例 (instance)，运行时实际上是一个内核线程 (kthread), 这个线程启动是在 `drm_sched_init()`。
+
+实际上，自从内核 v6.8-rc1 [a6149f039369 ("drm/sched: Convert drm scheduler to use a work queue rather than kthread")](https://lore.kernel.org/all/20231031032439.1558703-3-matthew.brost@intel.com/) `drm_gpu_scheduler` 的实现已经从 kthread 变成 work queue 了。
 
 - `drm_sched_rq`
 
-一个 entity 的队列。一个 scheduler 实际最多可以有 `DRM_SCHED_PRIORITY_COUNT` 个 runqueue. 一个优先级对应一个 runqueue.
+entity 的队列。一个 scheduler 实例最多可以有 `DRM_SCHED_PRIORITY_COUNT` 个 runqueue. 一个优先级对应一个 runqueue.
 
 - `drm_sched_entity`
 
-一个 job 队列的封装
+job 队列的封装
 
 - `drm_sched_job`
 
-一个被 entity 运行的 job, 一个 job 总是属于某一个 entity
+被 entity 运行的 job, 一个 job 总是属于某一个 entity
 
 
 # drm_scheduler 的一些问题
