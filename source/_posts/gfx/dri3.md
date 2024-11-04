@@ -187,7 +187,8 @@ sequenceDiagram
 
 通常 `eglCreate***Surface()` 需要 App 先调用 `XCreateWindow()` 让 X11 创建 Pixmap, 但是 `eglCreatePbufferSurface()` 不用，它由 Mesa 调用 `xcb_create_pixmap()` 让 X11 创建 Pixmap, 之后 Mesa 再调用 `xcb_dri3_buffers_from_pixmap()` 让 X11 导出 Pixmap(gbm_bo) 关联的 FD, 由 Mesa 导入。
 
-{% mermaid sequenceDiagram %}
+```mermaid
+sequenceDiagram
     autonumber
     participant App
     participant Mesa
@@ -220,7 +221,7 @@ sequenceDiagram
     Mesa->>Mesa: xxx_bo_import()
     end
     end
-{% endmermaid %}
+```
 
 # dri3_find_back
 
