@@ -1,6 +1,3 @@
-[submodule "themes/even"]
-	path = themes/even
-	url = https://github.com/lucmann/hexo-theme-even
 [submodule "themes/next"]
 	path = themes/next
 	url = https://github.com/lucmann/hexo-theme-next.git
