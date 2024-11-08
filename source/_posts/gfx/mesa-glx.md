@@ -1,5 +1,5 @@
 ---
-title: Mesa 的 GLX 实现
+title: Mesa GLX 实现
 date: 2021-03-11 14:44:56
 tags: [mesa]
 categories: graphics
@@ -7,14 +7,9 @@ categories: graphics
 
 # GLX
 
-{% blockquote %}
-GLX (Initialism for "OpenGL Extension to the X Window System") is an extension to the X Window System core protocol providing an interface between OpenGL and the X Window System as well as extensions to OpenGL itself. (From WiKi)
-{% endblockquote %}
+GLX 是 Mesa 中实现的三大支持平台(EGL, GLX, GBM)之一, 原来 GLX 在 Mesa 中有 *xlib*, *gallium-xlib* 和 *dri* 三种实现，自从 [Delete Mesa Classic](https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/10153) 后就只剩下 *xlib*，*dri* 两种实现，其中 *dri* 使用得比较多一些。
 
-Mesa的 GLX 实现自从 [Delete Mesa Classic](https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/10153) 已经从原来的 3 种变成现在的 2 种:
-
-- dri
-- xlib
+<!--more-->
 
 ```mermaid
 flowchart TD
@@ -42,23 +37,25 @@ flowchart TD
 
 # dri
 
-在 Linux 下 dri-based glx 实现我们只关注 3 个实现：
+## glXMakeCurrent
 
-|   源文件                                                                                | 关键函数                                     |
-|:----------------------------------------------------------------------------------------|:---------------------------------------------|
-| [dri2_glx.c](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/dri2_glx.c)   | [dri2CreateScreen()](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/dri2_glx.c#L1001)                |
-| [dri3_glx.c](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/dri3_glx.c)   | [dri3_create_screen()](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/dri3_glx.c#L789)                     |
-| [drisw_glx.c](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/drisw_glx.c) | [driswCreateScreenDriver()](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/glx/drisw_glx.c#L925)                |
+```mermaid
+sequenceDiagram
+    autonumber
+    participant GLX
+    participant Gallium
+    participant Compositor
 
-## dri2CreateScreen
-
-![dri2CreateScreen](/images/dri2CreateScreen.drawio.png)
-
-## driswCreateScreenDriver
-
-![driswCreateScreenDriver](/images/dri2CreateScreen-driswCreateScreenDriver.drawio.png)
-
-## dri3_create_screen
-
-![dri3_create_screen](/images/dri2CreateScreen-dri3_create_screen.drawio.png)
-
+    GLX     ->> GLX     : MakeContextCurrent()
+    GLX     ->> Gallium : driUnbindContext()
+    Gallium ->> Gallium : st_api_make_current()
+    Gallium ->> Gallium : st_glFlush()
+    opt not the first time MakeCurrent()
+        GLX     ->> Gallium : driBindContext()
+        Gallium ->> Gallium : st_api_make_current()
+        Gallium ->> Gallium : st_glFlush()
+        GLX     ->> Gallium : driDestroyContext()
+        Gallium ->> Gallium : st_glFlush()
+        Gallium ->> Gallium : st_context_destroy()
+    end
+```

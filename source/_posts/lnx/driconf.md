@@ -27,6 +27,27 @@ Mesa 实现的读取和解析的顺序是从上到下，后解析的会覆盖前
 
 Mesa 中 (`util/xmlconfig.c`) 提供了读取和解析 XML 文件的 Helper 函数，并在 `util/driconf.h` 中定义好了常见配置选项。
 
+- `driParseOptionInfo`
+
+```
+void
+driParseOptionInfo(driOptionCache *info,
+                   const driOptionDescription *configOptions,
+                   unsigned numOptions);
+```
+
+- `driParseConfigFiles`
+
+```
+void
+driParseConfigFiles(driOptionCache *cache, const driOptionCache *info,
+                    int screenNum, const char *driverName,
+                    const char *kernelDriverName,
+                    const char *deviceName,
+                    const char *applicationName, uint32_t applicationVersion,
+                    const char *engineName, uint32_t engineVersion)
+```
+
 # References
 - [Common Configuration Options](https://dri.freedesktop.org/wiki/ConfigurationOptions/)
 - [https://dri.freedesktop.org/wiki/ConfigurationInfrastructure/](https://dri.freedesktop.org/wiki/ConfigurationInfrastructure/)
