@@ -58,3 +58,31 @@ sequenceDiagram
         Gallium ->> Gallium : st_context_destroy()
     end
 ```
+
+# GLVND(Vendor Neutral GL dispatch library)
+
+| Source Directory |  Shared libraray       | APT Package                            |
+|:-----------------|:-----------------------|:---------------------------------------|
+| GLDispatch       | libGLdispatch.so.0.0.0 | libglvnd0_1.3.2-1~kylin0.20.04.2_arm64 |
+| GLX              | libGLX.so.0.0.0        | libglx0_1.3.2-1~kylin0.20.04.2_arm64   |
+| EGL              | libEGL.so.1.1.0        | libegl1_1.3.2-1~kylin0.20.04.2_arm64   |
+| OpenGL           | libOpenGL.so           | libopengl0_1.3.2-1~kylin0.20.04.2_arm64|
+| GLESv1           | libGLESv1_CM.so        | libgles1_1.3.2-1~kylin0.20.04.2_arm64  |
+| GLESv2           | libGLESv2.so           | libgles2_1.3.2-1~kylin0.20.04.2_arm64  |
+| GL               | libGL.so.1.7.0         | libgl1_1.3.2-1~kylin0.20.04.2_arm64    |
+
+上面这些包和动态库文件都来自同一个源码库 [glvnd/libglvnd](https://gitlab.freedesktop.org/glvnd/libglvnd), 但它们并不是真正的 OpenGL 实现 (驱动)， 它们只是一个 **Dispatch Layer**, 利用 [Dynamic Tag `DT_FILTER`](https://docs.oracle.com/cd/E19683-01/817-3677/6mj8mbtbr/index.html#chapter4-31738) 实现多个 Vendor 的 OpenGL 驱动能在同一个系统上共存。 libglvnd 向用户提供环境变量
+
+`__GLX_VENDOR_LIBRARY_NAME`
+
+来指定运行时到底是哪个 vendor 的驱动被调用。
+
+# Mesa
+
+| APT Package      |  Target              | Description                    |
+|:-----------------|:---------------------|:-------------------------------|
+| libglapi-mesa    | libglapi.so          | free implementation of GL API  |
+| libgles2-mesa    |                      | transitional dummy package     |
+
+# References
+- [Dynamic Linking/Dynamic Section](https://docs.oracle.com/cd/E19683-01/817-3677/chapter6-42444/index.html)
