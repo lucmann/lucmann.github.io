@@ -149,7 +149,7 @@ sequenceDiagram
     Mesa->>Mesa: dri_st_framebuffer_validate()
     Mesa->>Mesa: dri2_allocate_textures()
     Mesa->>Mesa: loader_dri3_get_buffers()
-    note left of Mesa: Return all necessary buffers<br/>Allocating as needed
+    note left of Mesa: Return all necessary buffers and allocating as needed
     Mesa->>Mesa: dri3_get_buffer()
     rect rgb(191, 223, 255)
     Mesa->>Mesa: dri3_alloc_render_buffer()
@@ -206,7 +206,7 @@ sequenceDiagram
     Mesa->>Mesa: loader_dri3_get_buffers()
     Mesa->>Mesa: dri3_get_pixmap_buffer()
     rect rgb(200, 150, 255)
-    note left of X11: X11 导出 FD</br>(调用 gbm_bo_get_fd(gbm_bo*))
+    note left of X11: X11 导出 FD(调用 gbm_bo_get_fd(gbm_bo*))
     Mesa-->>X11: xcb_dri3_buffers_from_pixmap()
     X11-->>Mesa: xcb_dri3_buffers_from_pixmap_reply()
     Mesa-->>X11: loader_dri3_create_image_from_buffers()
@@ -246,7 +246,7 @@ sequenceDiagram
     participant X11
 
     Mesa->>Mesa: dri3_find_back
-    note right of Mesa: 选取一个合适的空闲 slot id</br>buffers[id]有可能是空</br>这时需要调</br>dri3_alloc_render_buffer()
+    note right of Mesa: 选取一个合适的空闲 slot id, buffers[id]有可能是空, 这时需要创建 buffer: dri3_alloc_render_buffer()
     rect rgb(200, 150, 255)
     note right of Mesa: mtx_lock()
     alt pefer_a_different==false

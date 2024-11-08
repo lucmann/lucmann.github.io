@@ -44,7 +44,6 @@ sequenceDiagram
     autonumber
     participant GLX
     participant Gallium
-    participant Compositor
 
     GLX     ->> GLX     : MakeContextCurrent()
     GLX     ->> Gallium : driUnbindContext()
