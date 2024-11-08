@@ -75,6 +75,11 @@ sequenceDiagram
 
 `__GLX_VENDOR_LIBRARY_NAME`
 
+或
+
+- `__EGL_VENDOR_LIBRARY_FILENAMES`
+- `__EGL_VENDOR_LIBRARY_DIRS`
+
 来指定运行时到底是哪个 vendor 的驱动被调用。
 
 # Mesa
