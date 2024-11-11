@@ -11,6 +11,32 @@ categories: linux
 
 <!--more-->
 
+一个 drirc XML 文件的示例
+
+```xml
+<driconf>
+  <device screen="0" driver="swrast">
+    <application name="default">
+      <!-- Default options for all applications -->
+      <option name="pp_nogreen" value="0"/>
+    </application>
+    <application name="specific_application" executable="application_executable">
+      <!-- Specific options for 'specific_application' -->
+      <option name="option_name" value="option_value"/>
+    </application>
+    <!-- Add more application-specific settings here -->
+  </device>
+  <!-- Add more device-specific settings here -->
+</driconf>
+```
+
+这个示例中用了 4 个 XML 元素，drirc 文件支持 5 个 XML 元素:
+- `<driconf></driconf>`
+- `<device></device>`
+- `<application></application>`
+- `<engine></engine>`
+- `<option ... />`
+
 # Mesa DriConf Implementation
 
 ## Configuration Override
@@ -47,6 +73,33 @@ driParseConfigFiles(driOptionCache *cache, const driOptionCache *info,
                     const char *applicationName, uint32_t applicationVersion,
                     const char *engineName, uint32_t engineVersion)
 ```
+
+它们俩个都必须有两个 `driOptionCache` 作为入参，一个是调用者输入的 (const 修饰的)，驱动用它来初始化另一个 `driOptionCache`。调用者输入的 `driOptionCache` 是 Gallium **pipe-loader** 把从原始的 XML 文件解析出来的 Option 的描述 `driOptionDescription` 保存在 `struct drm_driver_descriptor` 结构体的 `.driconf` 成员中。
+
+pipe-loader 甚至提供了一个 C 头文件 *src/gallium/auxiliary/pipe-loader/driinfo_gallium.h*， 里面包含了所有 Gallium 驱动都支持的 DRI 配置选项，就是说即使在系统中没有任何额外的 drirc XML 文件的情况下, 通过修改 *driinfo_gallium.h* 重新编译驱动，就能改变驱动的一些行为 (当然，系统路径下的 drirc 如果设置了相同的选项会覆盖 driinfo_gallium.h 的设置, 因为系统路径下的配置运行时才解析的)
+
+```diff
+diff --git a/src/gallium/auxiliary/pipe-loader/driinfo_gallium.h b/src/gallium/auxiliary/pipe-loader/driinfo_gallium.h
+index 3b0ab726e8f..0e8184a6b95 100644
+--- a/src/gallium/auxiliary/pipe-loader/driinfo_gallium.h
++++ b/src/gallium/auxiliary/pipe-loader/driinfo_gallium.h
+@@ -9,7 +9,7 @@ DRI_CONF_SECTION_END
+ DRI_CONF_SECTION_QUALITY
+    DRI_CONF_PP_CELSHADE(0)
+    DRI_CONF_PP_NORED(0)
+-   DRI_CONF_PP_NOGREEN(0)
++   DRI_CONF_PP_NOGREEN(1)
+    DRI_CONF_PP_NOBLUE(0)
+    DRI_CONF_PP_JIMENEZMLAA(0, 0, 32)
+    DRI_CONF_PP_JIMENEZMLAA_COLOR(0, 0, 32)
+```
+
+![glmark2 -bshadow](/images/driconf/scene-shadow-no-green.png)
+
+
+## How to add driconf support in Gallium driver
+
+一般是在 gallium xxx_device (或 xxx_screen) 结构体中添加一个包含 `driOptionCache` 结构体和一大堆配置选项变量的结构体，在 `xxx_screen_create()` 函数里调用 `driParseConfigFiles()` 或 `driParseOptionInfo()` 函数把 `/etc/drirc` 文件里的选项解析到 xxx_device 或 xxx_screen 结构体中
 
 # References
 - [Common Configuration Options](https://dri.freedesktop.org/wiki/ConfigurationOptions/)
