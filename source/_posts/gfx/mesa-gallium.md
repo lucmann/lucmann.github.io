@@ -7,58 +7,51 @@ categories: graphics
 
 # Gallium Framework
 
-## `-Dgallium-drivers` 与 `-Ddri-drivers` 的区别，以及它们与 `-Degl` 的关系 
+引用[ Mesa3D 官方文档](https://docs.mesa3d.org/gallium/intro.html#what-is-gallium)的话，Gallium 本质上是一种应用程序接口，用于编写与设备基本无关的图形驱动程序。它提供了多个对象，以简单明了的方式封装了图形硬件的核心服务。据说，Gallium 的设计是借鉴了 DirectX。
 
-从构建的角度看， `-Dgallium-drivers` 与 `-Ddri-drivers` 是无关的。
+<!--more-->
 
+它提供的比较核心的对象，我觉得有
+
+- `pipe_screen`
+- `pipe_context`
+- `pipe_resource`
+- `pipe_surface`
+- `pipe_framebuffer_state`
+
+一开始看 Gallium 时，疑问为什么没有 *pipe_device*, 其实很简单，Gallium 这一套 API 之所以可以用来编写**与设备基本无关**的图形驱动程序，可能就是因为它没有抽象 device 这个数据结构。
+
+Gallium 确实是一组 API, 因为 `pipe_screen` 里是一大堆函数, `pipe_context` 里也是一大堆函数。虽然 Gallium 没有定义 pipe_device, 但几乎与硬件设备相关的一切都包含在了 `pipe_screen`,  一个 `pipe_screen` 同时可以追踪多个 `pipe_context`, 每个 `pipe_context` 里都有一个指向它所在的 `pipe_screen` 的指针 (handle)。
+
+当一个 Gallium 驱动初始化时，第一个调用的函数就是 `driCreateNewScreen3()`
+
+```c
+/**
+ * This is the first entrypoint in the driver called by the DRI driver loader
+ * after dlopen()ing it.
+ *
+ * It's used to create global state for the driver across contexts on the same
+ * Display.
+ */
+__DRIscreen *
+driCreateNewScreen3(int scrn, int fd,
+                    const __DRIextension **loader_extensions,
+                    enum dri_screen_type type,
+                    const __DRIconfig ***driver_configs, bool driver_name_is_inferred,
+                    bool has_multibuffer, void *data)
 ```
-        DRI platform:    drm
-        DRI drivers:     no
-        DRI driver dir:  /usr/lib/x86_64-linux-gnu/dri
-```
 
-```
-        EGL:             yes
-        EGL drivers:     builtin:egl_dri2 builtin:egl_dri3
-        EGL/Vulkan/VL platforms:   x11 surfaceless drm xcb
-```
+```mermaid
+flowchart TD
+    A["__glXInitialize()"]
+    B["AllocAndFetchScreenConfigs()"]
+    C["dri3_create_screen()"]
+    D["dri_screen_init()"]
+    E["`**driCreateNewScreen3()**`"]
+    F["pipe_loader_create_screen()"]
+    G["`**xxx_create_screen()**`"]
 
-```
-        Gallium drivers: swrast panfrost
-        Gallium st:      mesa
-        HUD lmsensors:   no
-```
-
-```
-build/src/gallium/targets/dri/libgallium_dri.so
-build/src/gallium/targets/dri/8381c20@@gallium_dri@sha/target.c.o
-build/src/gallium/targets/dri/8381c20@@gallium_dri@sha/megadriver_stub.c.o
-```
-
-```plantuml
-@startuml
-class pipe_loader_device
-
-class pipe_loader_sw_device {
-    sw_driver_descriptor * dd
-    .. !GALLIUM_STATIC_TARGETS ..
-    util_dl_library * lib
-    ..
-    sw_winsys * ws
-    int fd
-}
-
-class pipe_loader_drm_device {
-    drm_driver_descriptor * dd
-    .. !GALLIUM_STATIC_TARGETS ..
-    util_dl_library * lib
-    ..
-    int fd
-}
-
-pipe_loader_device <|-- pipe_loader_drm_device
-pipe_loader_device <|-- pipe_loader_sw_device
-@enduml
+    A --> B --> C --> D --> E --> F --> G
 ```
 
 # resource_copy_region
@@ -80,4 +73,3 @@ pipe_loader_device <|-- pipe_loader_sw_device
 
 resource_copy_region 只能在 buffer 与 buffer 之间或 texture 与 texture 之间 memcpy, 而且源与目标的 format 必须相同。之所以不能做 buffers 与 textures 之间的 memcpy, 至少是因为缺少 stride 参数。一些硬件(如 nvidia) 可以通过专门的 copy engine 完成这些拷贝，但对于其它硬件可能需要一个 compute shader 去做这些拷贝。另一方面，那些专门的 copy engine 通常是比较慢的，所以只在那些带宽非常有限的 PCIe 传输场景下才有用。如果想利用全部的
 VRAM 带宽(甚至 infinity cache bandwidth), 你很可能必须使用 compute shaders.
-
