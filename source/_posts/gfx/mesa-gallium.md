@@ -46,12 +46,15 @@ flowchart TD
     A["__glXInitialize()"]
     B["AllocAndFetchScreenConfigs()"]
     C["dri3_create_screen()"]
-    D["dri_screen_init()"]
-    E["`**driCreateNewScreen3()**`"]
+    D["`**driCreateNewScreen3()**`"]
+    E["dri2_init_screen()"]
     F["pipe_loader_create_screen()"]
-    G["`**xxx_create_screen()**`"]
+    G["pipe_loader_create_screen_vk()"]
+    H["pipe_loader_drm_create_screen()"]
+    I["pipe_xxx_create_screen()"]
+    J["`**xxx_create_screen()**`"]
 
-    A --> B --> C --> D --> E --> F --> G
+    A --> B --> C --> D --> E --> F --> G --> H --> I --> J
 ```
 
 # resource_copy_region
