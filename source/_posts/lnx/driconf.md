@@ -37,6 +37,22 @@ categories: linux
 - `<engine></engine>`
 - `<option ... />`
 
+Option 的值类型可以是以下 5 种, 但 bool 类型的值在 XML 文件中只能填 `true/false`, 不能填 `0/1`, 这应该和 XML Parser 有关。enum 和 int 类型在 XML 文件中都是填数字。
+- bool
+- enum
+- int
+- float
+- string
+
+```c
+typedef union driOptionValue {
+   unsigned char _bool; /**< \brief Boolean */
+   int _int;      /**< \brief Integer or Enum */
+   float _float;  /**< \brief Floating-point */
+   char *_string;   /**< \brief String */
+} driOptionValue;
+```
+
 # Mesa DriConf Implementation
 
 ## Configuration Override
