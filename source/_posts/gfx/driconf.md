@@ -2,12 +2,12 @@
 title: DRI Configuration Infrastructure
 date: 2024-11-06 14:44:56
 tags: [mesa]
-categories: linux
+categories: graphics
 ---
 
 # Introduction
 
-**driconf** 是一个基于 XML 的 DRI 驱动配置机制，它同时提供系统范围的和每用户的配置方式 (如果同时存在，后者覆盖前者)。driconf 提供统一的配置格式，并整理出驱动常见的配置选项，方便易用。
+**driconf** 是一个基于 XML 的 DRI 驱动配置机制，它同时提供系统范围的和每用户的配置方式 (如果同时存在，后者覆盖前者)。driconf 提供统一的配置格式，并整理出驱动常见的配置选项，方便易用。 driconf 不仅可以针对指定设备，指定 screen, 指定驱动设置选项，而且可以针对每个应用设置选项。
 
 <!--more-->
 
@@ -51,6 +51,46 @@ typedef union driOptionValue {
    float _float;  /**< \brief Floating-point */
    char *_string;   /**< \brief String */
 } driOptionValue;
+```
+
+# Per Application Setting
+
+下面的例子展示将 glxgears 的红色通道禁用，而 glmark2 的绿色通道禁用的 `~/.drirc` 配置, 你可以同时在同一个驱动下运行这两个应用，对它们进行独立的驱动设置。
+
+```xml
+<driconf>
+  <device screen="0" driver="swrast">
+    <application name="glmark2" executable="glmark2">
+      <option name="pp_nogreen" value="1"/>
+    </application>
+    <application name="glxgears" executable="glxgears">
+      <option name="pp_nored" value="1"/>
+    </application>
+  </device>
+  <!-- Add more device-specific settings here -->
+</driconf>
+```
+![per-application driconf](/images/driconf/per-application-dri-conf.png)
+
+更有意思的是 `application` 元素不仅提供 `executable` 这一种指定应用的方式，它还提供
+- `executable_regexp`
+- `sha1`
+- `application_name_match`
+
+多种方式指定一个或多个应用，甚至可以指定应用的版本 `application_versions`。
+
+```c
+   for (i = 0; attr[i]; i += 2) {
+      if (!strcmp(attr[i], "name")) /* not needed here */;
+      else if (!strcmp(attr[i], "executable")) exec = attr[i+1];
+      else if (!strcmp(attr[i], "executable_regexp")) exec_regexp = attr[i+1];
+      else if (!strcmp(attr[i], "sha1")) sha1 = attr[i+1];
+      else if (!strcmp(attr[i], "application_name_match"))
+         application_name_match = attr[i+1];
+      else if (!strcmp(attr[i], "application_versions"))
+         application_versions = attr[i+1];
+      else XML_WARNING("unknown application attribute: %s.", attr[i]);
+   }
 ```
 
 # Mesa DriConf Implementation
