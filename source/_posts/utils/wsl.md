@@ -22,7 +22,7 @@ wsl -l -v
 
 Microsoft在`Build 21364.co_release`版本内发布了[WSLg](https://github.com/microsoft/wslg)功能，该功能允许在**WSL**里运行**X11**和**Wayland**的客户端程序(GUI Application).
 
-![xeyes on WSL2](/images/xeyes.gif)
+![xeyes on WSL2](/images/wsl/xeyes.gif)
 
 如果你已经加入[Windows Insider Program](https://insider.windows.com/zh-cn/)计划并且也正在使用**WSL2**, 那么只需要如下操作即可激活**WSLg**功能。
 
@@ -48,11 +48,11 @@ c/     wsl/   wslg/
 apt install nautilus -y
 ```
 
-![WSLg nautilus](/images/wslg-nautilus.png)
+![WSLg nautilus](/images/wsl/wslg-nautilus.png)
 
 ## glmark2
 
-![WSLg glmark2](/images/wslg-glmark2.png)
+![WSLg glmark2](/images/wsl/wslg-glmark2.png)
 
 # WSL 如何支持 Nvidia
 
@@ -75,6 +75,8 @@ apt install nautilus -y
 - libnvwgf2umx.so
 - nvidia-smi
 
-# LKM in WSL2
+# 关于 WSL2 需要知道的几件事
 
-WSL2 上没有可加载的内核模块，因为所有模块是被直接编进内核的。如果 `lsmod`, 不会输出任何模块。 但我们仍可以通过查看内核配置文件找到有哪些模块被编译进内核了。
+- WSL2 所有的 Distros 使用同一个内核，你可以在同一个 WSL2 安装 Ubuntu, 安装 Debian, 安装 Kali, 但不管安装多少个 Distros, 它们都用同一个 Linux 内核
+- WSL2 中所有内核模块都是直接被编译进内核的
+- WSL2 中没有内核线程，或者说你看不到它们
