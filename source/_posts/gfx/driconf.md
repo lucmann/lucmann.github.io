@@ -53,7 +53,7 @@ typedef union driOptionValue {
 } driOptionValue;
 ```
 
-# Per Application Setting
+# Setting Per-Application
 
 下面的例子展示将 glxgears 的红色通道禁用，而 glmark2 的绿色通道禁用的 `~/.drirc` 配置, 你可以同时在同一个驱动下运行这两个应用，对它们进行独立的驱动设置。
 
