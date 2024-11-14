@@ -354,6 +354,37 @@ typedef struct {
 } DrawElementsIndirectCommand;
 ```
 
+## Mesa 实现 Indirect Draw
+应该很少有直接支持 Indirect Draw 的硬件，Mesa 中提供一个 utility 函数 `util_draw_indirect()`, 它将 indirect buffer 中的参数分析后把 indirect draw 展开成普通的 gallium->draw_vbo(), 像 sb7code 中 multidrawindirect 这个 demo, 展开后的循环次数是 50000 次。
+
+```c
+/* This extracts the draw arguments from the indirect resource,
+ * puts them into a new instance of pipe_draw_info, and calls draw_vbo on it.
+ */
+void
+util_draw_indirect(struct pipe_context *pipe,
+                   const struct pipe_draw_info *info_in,
+                   unsigned drawid_offset,
+                   const struct pipe_draw_indirect_info *indirect)
+{
+    ...
+   for (unsigned i = 0; i < draw_count; i++) {
+      struct pipe_draw_start_count_bias draw;
+
+      draw.count = params[0];
+      info.instance_count = params[1];
+      draw.start = params[2];
+      draw.index_bias = info_in->index_size ? params[3] : 0;
+      info.start_instance = info_in->index_size ? params[4] : params[3];
+
+      pipe->draw_vbo(pipe, &info, i + drawid_offset, NULL, &draw, 1);
+
+      params += indirect->stride / 4;
+   }
+    ...
+}
+```
+
 # References
 
 - [https://learnopengl.com/Advanced-OpenGL/Instancing](https://learnopengl.com/Advanced-OpenGL/Instancing)
