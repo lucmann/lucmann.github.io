@@ -1,24 +1,23 @@
 ---
-title: Draw Commands
+title: OpenGL Draw 命令
 date: 2020-09-15 16:44:37
 tags: OpenGL
 categories: graphics
 ---
 
-# 绘制那些事
+# Overview
 
-OpenGL中有多种绘制(Draw)方式:
+OpenGL 有很多 Draw 命令， 大体分为 4 类:
 
-- Basic
-- Indexed
-- Instanced
-- Indirect
+- DrawArrays
+- DrawElements (Indexed)
+- DrawInstanced
+- DrawIndirect
 
 <!--more-->
 
 所谓的绘制，如果从pipeline的角度看，实际上主要是顶点着色(vertex shading)的过程。所以这些绘制方式中主要涉及的问题是顶点(vertices)及这些顶点如果构成图元(primitives)。这些绘制方式的不同主要在于它们各自是如何看待顶点，例如，在Basic绘制中，顶点就是顶点，而在Indexed绘制中，除了顶点本身外，还给出了构造三角形的顶点索引，这在特定场景下，是一种更有效率的绘制方式。
 
-# Category
 OpenGL中的Draw Commands是一组生成GPU渲染Command Stream的API，我们可以将它们简单分为4类:
 
 | Drawing   | 适用场景                       | Vertex Attributes Buffer Object Binding类型 |
@@ -30,7 +29,8 @@ OpenGL中的Draw Commands是一组生成GPU渲染Command Stream的API，我们�
 
 Array Drawing是最基本的Draw命令，其它3类都是从它衍生来的，为了某种绘制便利或顶点复用对Array Drawing API进行扩展，从而得到相应的索引绘制、实例绘制、间接绘制。
 
-# Array Drawing
+# DrawArrays
+
 ```c
 void glDrawArrays(GLenum mode,
                   GLint first,
@@ -73,7 +73,7 @@ void glDrawArrays(GLenum mode,
 glDrawArrays(GL_TRIANGLES, 0, 3);
 ```
 
-# Indexed Drawing
+# DrawElements
 
 ```c
 void glDrawElements(GLenum mode,
@@ -155,7 +155,8 @@ glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, &indices);
 glDrawElementsBaseVertex(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, &indices, 100);
 ```
 
-# Instanced Draw
+# Draw*Instanced 
+
 ```c
 void glDrawArraysInstanced(GLenum mode,
                            GLint first,
@@ -245,7 +246,7 @@ glBindBuffer(GL_ARRAY_BUFFER, 0);
 glVertexAttribDivisor(2, 1);
 ```
 
-# Indirect Drawing
+# Draw*Indirect 
 
 Indirect Drawing是将Array/Indexed Drawing命令的参数存入专门的Buffer Object，也就是GPU Storage里，这里的Buffer Object的绑定类型是`GL_DRAW_INDIRECT_BUFFER`。之所以这样做，是为了能让GPU直接写回这些值，比方Compute Shader, 或者为Transform Feedback设计的Geometry Shader, 亦或是OpenCL/CUDA kernel函数。这样避免了这些参数在GPU和CPU之间来回地复制(round-trip)
 
@@ -277,7 +278,7 @@ typedef struct {
 } DrawArraysIndirectCommand;
 ```
 
-这所以在OpenGL ES和OpenGL里有`baseInstance`的区别，是因为在OpenGL ES中没有下面的draw command:
+之所以 ES 的 DrawIndirectCommand 里没有 `baseInstance`，是因为 ES 没有下面的命令:
 
 ```c
 void glDrawArraysIntancedBaseInstance(GLenum mode,
@@ -287,19 +288,40 @@ void glDrawArraysIntancedBaseInstance(GLenum mode,
 				      GLuint baseinstance);
 ```
 
-因此在OpenGL ES中，`glDrawArraysIndirect`相当于
+因此在 ES 中，`glDrawArraysIndirect()` 可以分解成
 
 ```c
 DrawArraysIndirectCommand *cmd = (DrawArraysIndirectCommand *)indirect;
 DrawArraysInstanced(mode, cmd->first, cmd->count, cmd->instanceCount);
 ```
 
-而在OpenGL中，`glDrawArraysIndirect`相当于
+而在OpenGL中，`glDrawArraysIndirect()` 可以分解成
 
 ```c
 DrawArraysIndirectCommand *cmd = (DrawArraysIndirectCommand *)indirect;
 DrawArraysInstancedBaseInstance(mode, cmd->first, cmd->count,
                 cmd->instanceCount, cmd->baseInstance);
+```
+
+下面是 [SuperBible7 multidrawindirect](https://github.com/linzj/sb7code_withmedia/blob/master/src/multidrawindirect/multidrawindirect.cpp) 中 MultiDraw 的实现 ([GL_ARB_multi_draw_indirect](https://registry.khronos.org/OpenGL/extensions/ARB/ARB_multi_draw_indirect.txt) 是 4.1 引入的新扩展)：
+
+```c
+    if (mode == MODE_MULTIDRAW)
+    {
+        glMultiDrawArraysIndirect(GL_TRIANGLES, NULL, NUM_DRAWS, 0);
+    }
+    else if (mode == MODE_SEPARATE_DRAWS)
+    {
+        for (j = 0; j < NUM_DRAWS; j++)
+        {
+            GLuint first, count;
+            object.get_sub_object_info(j % object.get_sub_object_count(), first, count);
+            glDrawArraysInstancedBaseInstance(GL_TRIANGLES,
+                                              first,
+                                              count,
+                                              1, j);
+        }
+    }
 ```
 
 ## DrawElementsIndirect
@@ -334,4 +356,4 @@ typedef struct {
 
 # References
 
-[[1] https://learnopengl.com/Advanced-OpenGL/Instancing](https://learnopengl.com/Advanced-OpenGL/Instancing)
+- [https://learnopengl.com/Advanced-OpenGL/Instancing](https://learnopengl.com/Advanced-OpenGL/Instancing)
