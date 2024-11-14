@@ -57,7 +57,7 @@ flowchart TD
     A --> B --> C --> D --> E --> F --> G --> H --> I --> J
 ```
 
-## Gallium API
+# Gallium API
 
 ## resource_copy_region
 
@@ -152,3 +152,5 @@ Syntax: GALLIUM_HUD=name1[+name2][...][:value1][,nameI...][;nameJ...]
     primitives-generated
     render-passes
 ```
+
+![`GALLIUM_HUD=fps` 的效果](/images/mesa-gallium/sb7-asteroids.png)
