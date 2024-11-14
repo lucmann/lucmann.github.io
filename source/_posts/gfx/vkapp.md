@@ -91,9 +91,3 @@ debug_parse_flags_option: help for LP_PERF:
 | no_rast_linear [0x0000000000000100]
 |       no_shade [0x0000000000000200]
 ```
-
-# Gears
-
-Vulkan 应用的“神奇”之处在于，场景在变，而它的 `draw()` 函数却不随着被反复调用
-
-![VulkanExamples-gears](/images/vkapp/gears.gif)
