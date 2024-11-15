@@ -37,7 +37,7 @@ flowchart TD
 
 # dri
 
-## glXMakeCurrent
+## glXMakeCurrent()
 
 ```mermaid
 sequenceDiagram
@@ -57,6 +57,33 @@ sequenceDiagram
         Gallium ->> Gallium : st_glFlush()
         Gallium ->> Gallium : st_context_destroy()
     end
+```
+
+## glXSwapBuffers()
+
+```mermaid
+flowchart TD
+    A["glXSwapBuffers()"]
+    B["driswSwapBuffers()"]
+    C["drisw_swap_buffers_with_damage()"]
+    D["drisw_copy_to_front()"]
+    E["drisw_present_texture()"]
+    F["llvmpipe_flush_frontbuffer()"]
+    G["dri_sw_displaytarget_display()"]
+    H["drisw_put_image_shm()"]
+    I["drisw_put_image()"]
+
+    B2["dri3_swap_buffers()"]
+    C2["loader_dri3_swap_buffer_msc()"]
+    D2["glx_dri3_flush_drawable()"]
+    E2["dri3_flush_present_events()"]
+    F2["xcb_present_pixmap()"]
+    G2["xcb_flush()"]
+    H2["dri2_invalidate_drawable()"]
+
+    A --> B --> C --> D --> E --> F --> G --is_shm--> H
+    G --> I
+    A --> B2 --> C2 --> D2 --> E2 --> F2 --> G2 --> H2
 ```
 
 # GLVND(Vendor Neutral GL dispatch library)
