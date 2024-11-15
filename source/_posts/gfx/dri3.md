@@ -181,9 +181,11 @@ sequenceDiagram
     end
 ```
 
-- 所有情况都是 **Mesa 创建导出，X11 导入**吗? 
+## 所有情况都是 **Mesa (DRI client) 创建导出 RenderBuffer，X11 导入**吗?
 
-`eglCreatePbufferSurface()` 是个例外，实际上 PBuffer 是离屏渲染使用的，它是由 X11 创建 buffer, X11 导出 FD, Mesa (应用进程) 导入作为伪前缓冲 (fake front buffer) 使用。
+- `eglCreatePbufferSurface()`
+
+实际上 PBuffer 是离屏渲染使用的，它是由 X11 创建 buffer, X11 导出 FD, Mesa (应用进程) 导入作为伪前缓冲 (fake front buffer) 使用。
 
 通常 `eglCreate***Surface()` 需要 App 先调用 `XCreateWindow()` 让 X11 创建 Pixmap, 但是 `eglCreatePbufferSurface()` 不用，它由 Mesa 调用 `xcb_create_pixmap()` 让 X11 创建 Pixmap, 之后 Mesa 再调用 `xcb_dri3_buffers_from_pixmap()` 让 X11 导出 Pixmap(gbm_bo) 关联的 FD, 由 Mesa 导入。
 
@@ -222,6 +224,12 @@ sequenceDiagram
     end
     end
 ```
+
+- DRI2
+
+DRI3 与 DRI2 的一个主要区别就是在 DRI3, RenderBuffer 是由 DRI client (Mesa) 创建后通过 bo_export() 导出其 DMA-BUF fd，由 X server 通过 `proc_dri3_pixmap_from_buffers()` 导入的。 而且 DRI2 不仅导入导出方面是反着的，而且 DRI client 导入的是 [GEM name](https://www.kernel.org/doc/html/v5.1/gpu/drm-mm.html#gem-objects-naming)(不是 DMA-BUF fd), 据说 GEM name 这玩意虽然也可以在进程间传递，但相比 DMA-BUF fd 很不安全，所以新驱动都用 DMA-BUF fd 在进程间传递 Buffer, 只有旧驱动可能还有 GEM name。
+
+*实现上没太明白 GEM name 为什么不安全，大家都是 32-bit 整数，GEM name 能被猜，文件描述符 fd 也能被猜啊*
 
 # dri3_find_back
 
@@ -402,3 +410,4 @@ __DRIimage *
 # 参考
 - MSC: Graphics Media Stream Counter, 实际上就是CRTC 的Vblank中断次数 [(GLX_OML_sync_control)](https://registry.khronos.org/OpenGL/extensions/OML/GLX_OML_sync_control.txt)
 - SBC: Swap Buffer Counter, 就是Swapbuffer 的次数 [(GLX_EXT_swap_control)](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_swap_control.txt)
+- [GEM Objects Naming](https://www.kernel.org/doc/html/v5.1/gpu/drm-mm.html#gem-objects-naming)
