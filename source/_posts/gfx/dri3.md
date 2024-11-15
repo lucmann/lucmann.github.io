@@ -363,6 +363,10 @@ typedef struct present_event {
 
 以上无论是 `loader_dri3_wait_for_msc()` 还是 `loader_dri3_wait_for_sbc()`, 当所等待的条件满足后，都会更新(`dri3_handle_present_event()`)当前client 的状态(UST, MSC, SBC), 整个过程是一种同步，也是一种协商。
 
+# DRI2 Throttle
+
+这个扩展原来好像是控制 DRI client 能同时并发地渲染多少个 RenderBuffer (或者说多少帧)的，因为原来 mesa 里有一个 `PIPE_CAP_MAX_FRAMES_IN_FLIGHT`, 因为这个值后来要么是 1， 要么是 0，就被改成 [`PIPE_CAP_THROTTLE`](https://docs.mesa3d.org/gallium/screen.html?highlight=pipe_cap_throttle) 了, 默认是 throttle 的, 按目前的实现，如果节流了，就是说当驱动提交了第 2 帧的渲染命令后，要等第 1 帧渲染完成 (pipe_fence_handle 是 drm_syncobj 的封装)，才能继续准备第 3 帧的渲染命令。
+
 # Modifiers
 
 向 X server 查询并获取显示/渲染设备所支持的 modifiers 是执行 [`__DRIimageExtension::createImage()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/include/mesa_interface.h#L1570) 的一个准备工作。但 `createImage()` 允许modifiers 为空，此情况下让驱动来选一个合适的纹理图像内存布局。
@@ -411,3 +415,4 @@ __DRIimage *
 - MSC: Graphics Media Stream Counter, 实际上就是CRTC 的Vblank中断次数 [(GLX_OML_sync_control)](https://registry.khronos.org/OpenGL/extensions/OML/GLX_OML_sync_control.txt)
 - SBC: Swap Buffer Counter, 就是Swapbuffer 的次数 [(GLX_EXT_swap_control)](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_swap_control.txt)
 - [GEM Objects Naming](https://www.kernel.org/doc/html/v5.1/gpu/drm-mm.html#gem-objects-naming)
+- [Implement a throttle dri extension v2](https://lists.freedesktop.org/archives/mesa-dev/2011-October/013221.html)
