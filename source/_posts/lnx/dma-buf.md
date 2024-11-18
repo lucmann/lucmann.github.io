@@ -168,3 +168,89 @@ classDiagram
 ## Implicit Synchronization
 
 ## Explicit Synchronization
+
+- drm_syncobj
+
+```c
+/**
+ * struct drm_syncobj - sync object.
+ *
+ * This structure defines a generic sync object which wraps a &dma_fence.
+ */
+struct drm_syncobj {
+	/**
+	 * @refcount: Reference count of this object.
+	 */
+	struct kref refcount;
+	/**
+	 * @fence:
+	 * NULL or a pointer to the fence bound to this object.
+	 *
+	 * This field should not be used directly. Use drm_syncobj_fence_get()
+	 * and drm_syncobj_replace_fence() instead.
+	 */
+	struct dma_fence __rcu *fence;
+	/**
+	 * @cb_list: List of callbacks to call when the &fence gets replaced.
+	 */
+	struct list_head cb_list;
+	/**
+	 * @ev_fd_list: List of registered eventfd.
+	 */
+	struct list_head ev_fd_list;
+	/**
+	 * @lock: Protects &cb_list and &ev_fd_list, and write-locks &fence.
+	 */
+	spinlock_t lock;
+	/**
+	 * @file: A file backing for this syncobj.
+	 */
+	struct file *file;
+};
+```
+这个定义简洁明了，首先它是一个同步原语，所以它本质上是一个 `dma_fence` 的封装。其次它是一个内核对象，所以它有引用计数 `kref`。最后它是要被用户态使用的，所以它得有一个对应的文件 `struct file`。
+
+`drm_syncobj` 应该就是为了能让用户态感知到 `dma_fence` 这个本来只被隐藏于内核里的同步原语，能够让 `dma_fence` 在用户空间由应用程序显式地操作。而 Linux “一切皆文件”， 所以就把 `dma_fence` 搞成披着“文件马甲”的一个东西。
+
+- drmSyncobjCreate()
+
+```c
+extern int drmSyncobjCreate(int fd, uint32_t flags, uint32_t *handle);
+```
+
+drm_syncobj 在用户空间只是一个 32 位整数 (handle), 创建它的用户态接口接受两个入参，一个出参:
+
+- fd: drm 设备节点打开后的文件描述符
+- flags: 要么 0， 要么 `DRM_SYNCOBJ_CREATE_SIGNALED`
+- handle: 由内核返回的代表新创建的 drm_syncobj 的 ID 存放在 handle 这个地址
+
+再看看创建 syncobj 的内核态接口，它里面有两步: 
+
+- drm_syncobj_create() 
+
+仅仅是申请 `struct drm_syncobj` 的内存, 初始化它的数据成员, 而且最关键的成员 `dma_fence` 还是空的，当用户传入 `DRM_SYNCOBJ_CREATE_SIGNALED` 标志时，`drm_syncobj_create()` 会自己创建一个 **stub fence** 赋给这个 syncobj, 如果创建时标志是 0， 则由用户后面绑定相关的 `dma_fence` (当然还是通过 syncobj 的形式，因为用户不能直接接触 `dma_fence`， 一般是用 `drmSyncobjExportSyncFile()`, `drmSyncobjCreate()`, `drmSyncobjImportSyncFile()` 这套组合拳来完成的。)
+
+- drm_syncobj_get_handle()
+
+返回的这个 32 位整数代表的就是 drm_syncobj, 但它仍然不是文件描述符 fd, 最终要让 drm_syncobj 能有一个真正的文件描述符还需要两个 IOCTL:
+
+- `DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD`
+- `DRM_IOCTL_SYNCOBJ_FD_TO_HANDLE`
+
+感觉为了让用户空间能够直接操作 `dma_fence` 这个内核的同步原语，费了“好大劲”，这背后应该有系统设计层面的考虑，后面有时间再琢磨。
+
+```c
+/**
+ * drm_syncobj_get_handle - get a handle from a syncobj
+ * @file_private: drm file private pointer
+ * @syncobj: Sync object to export
+ * @handle: out parameter with the new handle
+ *
+ * Exports a sync object created with drm_syncobj_create() as a handle on
+ * @file_private to userspace.
+ *
+ * Returns 0 on success or a negative error value on failure.
+ */
+int drm_syncobj_get_handle(struct drm_file *file_private,
+			   struct drm_syncobj *syncobj, u32 *handle)
+```
