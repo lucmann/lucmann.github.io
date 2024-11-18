@@ -1,7 +1,7 @@
 ---
 title: Using Sanitizers
 date: 2022-11-08 15:58:26
-tags: sanitizer
+tags: [Compiler]
 categories: programming
 ---
 

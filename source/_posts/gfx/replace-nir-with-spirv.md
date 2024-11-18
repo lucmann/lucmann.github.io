@@ -1,7 +1,7 @@
 ---
 title: "Replacing NIR with SPIR-V?"
 date: 2023-09-16 16:09:13
-tags: [compiler]
+tags: [Compiler]
 categories: graphics
 ---
 

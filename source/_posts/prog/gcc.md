@@ -1,7 +1,7 @@
 ---
 title: gcc那些事儿
 date: 2021-04-15 15:58:26
-tags: gcc
+tags: [Compiler]
 categories: programming
 ---
 

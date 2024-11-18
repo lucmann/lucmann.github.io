@@ -1,7 +1,7 @@
 ---
 title: GCC __attribute__
 date: 2020-02-26 10:49:57
-tags: [gcc]
+tags: [Compiler]
 categories: programming
 ---
 
