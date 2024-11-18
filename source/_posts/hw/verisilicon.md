@@ -1,7 +1,7 @@
 ---
 title: 芯原 VPU
 date: 2024-08-27 15:29:25+08:00
-tags: [verisilicon]
+tags: [Hardware]
 categories: hardware
 ---
 

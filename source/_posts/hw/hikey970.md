@@ -1,7 +1,7 @@
 ---
-title: Play with HiKey970
+title: HiKey970
 date: 2023-06-14 15:00:41
-tags: [hisilicon]
+tags: [Hardware]
 categories: hardware
 ---
 

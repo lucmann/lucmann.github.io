@@ -1,7 +1,7 @@
 ---
-title: 龙芯CPU&GPU
+title: 龙芯 CPU & GPU
 date: 2024-07-29 09:09:13
-tags: [loongson]
+tags: [Hardware]
 categories: hardware
 ---
 

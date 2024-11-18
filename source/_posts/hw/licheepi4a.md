@@ -1,7 +1,7 @@
 ---
 title: SiPEED LicheePi4A
 date: 2024-10-28 12:07:56
-tags: [RISC-V]
+tags: [Hardware]
 categories: hardware
 ---
 
