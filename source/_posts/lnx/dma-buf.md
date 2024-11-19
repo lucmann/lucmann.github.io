@@ -9,9 +9,17 @@ categories: linux
 
 <!--more-->
 
-- `dma_buf` 代表sg_table, 暴露给用户FD
-- `dma_fence` 通知机制
-- `dma_resv` 管理共享的或专有的fences
+- `dma_buf`
+
+代表 shared buffer, 可以在进程间，设备间，驱动间进行共享
+
+- `dma_fence`
+
+内核同步原语
+
+- `dma_resv`
+
+可容纳任意数量的 `dma_fence` 的容器， 一个 `dma_buf` 对应有一个 `dma_resv`
 
 # DMA-BUF
 
@@ -122,46 +130,31 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 
 ## dma_resv
 
+`dma_resv` (reservation object) 提供一个管理 `dma_fence` 容器的机制，这些 `dma_fence` 都与某个 `dma_buf` 关联。它可以容纳任意数量的 `dma_fence`。 每个 `dma_fence` 被加入这个容器时都带有一个 `usage` 参数，`dma_resv_usage` 有两个作用：
+
+- 描述对 `dma_resv` 不同的使用场景
+- 在调用 `dma_resv_get_fences()` 时，决定哪些 fences 被返回
+
 ```mermaid
-classDiagram
-	dma_resv  -- dma_resv_list : *fences
-    dma_fence -- dma_fence_ops : *ops
-    dma_resv_list o-- dma_fence: max_fences
-	class dma_resv{
-		+ww_mutex lock
-		+dma_resv_list *fences
-	}
-    class dma_resv_list{
-        -rcu_head rcu
-        -u32 num_fences
-        -u32 max_fences
-        -dma_fence *table[]
-    }
-	class dma_fence{
-		+spinlock_t *lock
-		+dma_fence_ops *ops
-        +list_head cb_list
-        +ktime_t timestamp
-        +rcu_head rcu
-        +u64 context
-        +u64 seqno
-        +unsigned long flags
-        +kref refcount
-        +int error
-	}
-    class dma_fence_ops{
-        +use_64bit_seqno
-        +get_driver_name(fence) char *
-        +get_timeline_name(fence) char *
-        +enable_signaling(fence) bool
-        +signaled(fence) bool
-        +wait(fence, intr, timeout) signed long
-        +release(fence) void
-        +fence_value_str(fence, char *, size) void
-        +timeline_value_str(fence, char *, size) void
-        +set_deadline(fence, deadline) void
-    }
+flowchart TD
+    subgraph gem [drm_gem_object]
+        D[dma_buf]
+        subgraph _resv ["struct dma_resv _resv"]
+            _F@{ shape: docs, label: "dma_fence"}
+        end
+        RP["struct dma_resv *resv"]
+    end
+    B@{ shape: lin-cyl, label: "dma_buf"}
+    subgraph resv [dma_resv]
+        F@{ shape: docs, label: "dma_fence"}
+    end
+    D --> B --> resv
+    RP --except for imported GEM objects--> _resv
 ```
+
+- 为什么同一个 `dma_buf` 会有那么多 `dma_fence` 与之关联呢？
+
+因为同一个 Buffer 会有多个**使用者**， 有的读，有的写，有的等，这个 Buffer 的所有使用者的每个操作，理论上都有一个 `dma_fence`, 这些 `dma_fence` 在这整个机制下“有条不紊”地被 signaled, 才能保证所有访问都是按预期的顺序发生，这就是同步(每个使用者都可能是并发的进程)。
 
 # Synchronization
 
