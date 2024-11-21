@@ -95,3 +95,4 @@ int main(int argc, char *argv[])
 
 # References
 - [What's the purpose of the LEA instruction?](https://stackoverflow.com/questions/1658294/whats-the-purpose-of-the-lea-instruction)
+- [Understanding the x86 code models](https://eli.thegreenplace.net/2012/01/03/understanding-the-x64-code-models)

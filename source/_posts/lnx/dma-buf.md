@@ -254,6 +254,17 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 			   struct drm_syncobj *syncobj, u32 *handle)
 ```
 
+- syncobj 的 handle 可以是 0 吗？
+
+**不会是 0**
+
+`drm_syncobj_get_handle()` 和 `drm_gem_handle_create_tail()` 一样，是通过 `idr_alloc()` 申请的一个给定范围内的 32 位整数，
+
+```c
+	ret = idr_alloc(&file_private->syncobj_idr, syncobj, 1, 0, GFP_NOWAIT);
+```
+它申请范围在最小值是 1 (包含)和最大值是 0 (不包含，实际上最大值是 0xffffffff) 之间的一个整数。 
+
 # References
 - [Explicit sync](https://zamundaaa.github.io/wayland/2024/04/05/explicit-sync.html)
 - [Bridging the synchronization gap on Linux](https://www.collabora.com/news-and-blog/blog/2022/06/09/bridging-the-synchronization-gap-on-linux/)
