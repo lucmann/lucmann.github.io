@@ -393,7 +393,7 @@ flowchart LR
 
 Throttle 的效果是 CPU 在提交后一帧的渲染命令后，要等(所谓“等”就是主线程调用 `drmSyncobjWait()` 阻塞)前一帧渲染完成后才唤醒继续准备下一帧数据，整个过程实际上是节流 CPU, 是让生产者-消费者中的**生产者(CPU)** 慢一点。所以 DRI2 Throttle 的本意就是在 GPU 渲染任务比较重(延迟大)的时候，CPU 这边没必要“玩命”准备数据，否则反而会导致比如过多消耗显存等其它问题。
 
-Mesa 中对 Throttle 的实现很有技巧性。因为这里“等”的是上一帧数据提交给内核后，drm_gpu_scheduler 为这个 job 创建的一个 `dma_fence`, 在提交时，userspace 会给 kernel 一个 syncobj (当一个 fence 容器用，意思是 gpu scheduler 创建好 fence 后 attach 到这个 syncobj, userspace 就可以通过 `drmSyncobjWait()` 这个容器知道里面的 fence 是否被 signaled)。 因为 fence 是在渲染命令被提交到内核后由 gpu scheduler 创建的, 所以提交时带下去的 syncobj 是用来装当前产生的 fence 的，如果你需要在下一帧数据提交后等上一帧的 fence, 你需要在当前帧提交后，创建一个新的 syncobj 来存当前帧的 fence，这样就可以在下一帧提交后， 用这个新的 syncobj 来等上一帧的 fence 了。
+Mesa 中对 Throttle 的实现很有技巧性。因为这里“等”的是上一帧数据提交给内核后，drm_gpu_scheduler 为这个 job 创建的一个 `dma_fence`, 在提交时，userspace 会给 kernel 一个 syncobj (当一个 fence 容器用，意思是 gpu scheduler 创建好 fence 后 attach 到这个 syncobj, userspace 就可以通过 `drmSyncobjWait()` 阻塞式地等 syncobj 包含的 fence 是否被 signaled)。 因为 fence 是在渲染命令 push 到 drm_gpu_scheduler 后内核才创建的, 所以提交时带下去的 syncobj 用来装当前产生的 fence，如果你需要在下一帧数据提交后等上一帧的 fence, 你需要在当前帧提交后，创建一个新的 syncobj 来存当前帧的 fence，这样就可以在下一帧提交后， 用这个新的 syncobj 来等上一帧的 fence 了。 **相当于同一个 fence 放在两个不同的容器里用**。
 
 # Modifiers
 
