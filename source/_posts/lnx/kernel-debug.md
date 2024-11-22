@@ -96,7 +96,7 @@ Dynamic Debug 就通过 `/sys/kernel/debug/dynamic_debug/control` 文件打开�
 
 # kern.log
 
-`/var/log/kern.log` 的一个主要问题是每行前面的 `%HOSTNAME%` 太长又没什么用，查了一下，查了一下配置的方法，实际上就是要在 `rsyslog.conf` 里定义一个 `$template`
+`/var/log/kern.log` 的一个主要问题是每行前面的 `%HOSTNAME%` 太长又没什么用，查了一下配置方法，实际上就是要在 `rsyslog.conf` 里定义一个 `$template`
 
 ```
 $template SimpleFormat,"%timegenerated% %msg:::drop-last-lf%\n"
