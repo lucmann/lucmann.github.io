@@ -367,6 +367,32 @@ typedef struct present_event {
 
 这个扩展原来好像是控制 DRI client 能同时并发地渲染多少个 RenderBuffer (或者说多少帧)的，因为原来 mesa 里有一个 `PIPE_CAP_MAX_FRAMES_IN_FLIGHT`, 因为这个值后来要么是 1， 要么是 0，就被改成 [`PIPE_CAP_THROTTLE`](https://docs.mesa3d.org/gallium/screen.html?highlight=pipe_cap_throttle) 了, 默认是 throttle 的, 按目前的实现，如果节流了，就是说当驱动提交了第 2 帧的渲染命令后，要等第 1 帧渲染完成 (pipe_fence_handle 是 drm_syncobj 的封装)，才能继续准备第 3 帧的渲染命令。
 
+```mermaid
+flowchart LR
+    subgraph "Frame 0"
+        F1["CPU Submit 1"]
+    end
+    subgraph "Frame 1"
+        F2["CPU Submit 2"]
+        R1["GPU Render Done 1 fa:fa-spinner"]
+    end
+    subgraph "Frame 2"
+        F3["CPU Submit 3"]
+        R2["GPU Render Done 2 fa:fa-spinner"]
+    end
+    subgraph "Frame 3"
+        F4["CPU Submit 4"]
+        R3["GPU Render Done 3 fa:fa-spinner"]
+    end
+
+    F1 --> F2
+    F2 --Block until--> R1 --> F3
+    F3 --Block until--> R2 --> F4
+    F4 --Block until--> R3
+```
+
+Throttle 的效果是 CPU 在提交后一帧的渲染命令后，要等(主线程 `drmSyncobjWait()` 阻塞)前一帧渲染完成后才唤醒继续准备下一帧数据，整个过程实际上是节流 CPU, 是让生产者-消费者中的**生产者(CPU)** 慢一点。所以 DRI2 Throttle 的本意就是在 GPU 渲染任务比较重(延迟大)的时候，CPU 这边没必要“玩命”准备数据，否则反而会导致比如过多消耗显存等其它问题。
+
 # Modifiers
 
 向 X server 查询并获取显示/渲染设备所支持的 modifiers 是执行 [`__DRIimageExtension::createImage()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/include/mesa_interface.h#L1570) 的一个准备工作。但 `createImage()` 允许modifiers 为空，此情况下让驱动来选一个合适的纹理图像内存布局。
