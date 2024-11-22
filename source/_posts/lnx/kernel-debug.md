@@ -94,7 +94,32 @@ Dynamic Debug 就通过 `/sys/kernel/debug/dynamic_debug/control` 文件打开�
 
 [`dma_fence_wait_timeout()`](https://www.kernel.org/doc/html/latest/driver-api/dma-buf.html?highlight=dma_fence_wait_timeout#c.dma_fence_wait_timeout) 会睡眠调用进程直到 fence 被 signaled 或者指定定时器超时。该函数中会调用 `might_sleep()` 来标识 (annotation) 调用进程可能进入睡眠状态，并打印源文件名和行号，帮助调试。 但只有内核配置了 `CONFIG_DEBUG_ATOMIC_SLEEP` 才有效，否则 `__might_sleep()` 是一个空函数。
 
+# kern.log
+
+`/var/log/kern.log` 的一个主要问题是每行前面的 `%HOSTNAME%` 太长又没什么用，查了一下，查了一下配置的方法，实际上就是要在 `rsyslog.conf` 里定义一个 `$template`
+
+```
+$template SimpleFormat,"%timegenerated% %msg:::drop-last-lf%\n"
+```
+
+然后在 rsyslog.conf 的规则里加上这个 template
+
+```
+kern.* -/var/log/kern.log;SimpleFormat
+```
+
+注意，不要直接在 `/etc/rsyslog.conf` 里直接加上面这条规则，要加在 `/etc/rsyslog.d/50-default.conf`， 否则会输出两遍。
+
+最后，就是要重启 rsyslog 服务生效。
+
+内核的 log 实际上都是写入一个 ring buffer 里的，暴露给用户的接口是 `/proc/kmsg` 和 `/dev/kmsg`, rsyslog 服务也是通过这些接口，重新处理 log 后写入 `/var/log/kern.log` 的。下面的操作可以让 `dmesg` 多一条 log
+
+```shell
+echo "<3>HELLO" > /dev/kmsg
+```
+
 # References
 
 - [https://access.redhat.com/solutions/5914171](https://access.redhat.com/solutions/5914171)
 - [Dynamic Debug Howto](https://www.kernel.org/doc/html/v4.14/admin-guide/dynamic-debug-howto.html)
+- [How to bind a template in rsyslog.conf](https://www.rsyslog.com/how-to-bind-a-template/)
