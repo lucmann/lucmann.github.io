@@ -64,13 +64,37 @@ drwxr-xr-x 35 root root 0 May 19 17:03 ./bdi
 
 `/sys/kernel/debug` 目录的权限是 700, 只有 root 用户才能进入，sudo 也不行
 
+# CONFIG_DYNAMIC_DEBUG
+
+Dynamic Debug 就通过 `/sys/kernel/debug/dynamic_debug/control` 文件打开或关闭特定文件的某行或函数里的打印，但它只对使用
+
+- `pr_debug()`
+- `dev_dbg()`
+- `print_hex_dump_debug()`
+- `print_hex_dump_bytes()`
+
+这 4 个函数的打印来有用。
+
+# `CONFIG_DRM_USE_DYNAMIC_DEBUG`
+
+这是内核 6.1 (2022-12-11) 才引入的专门控制 `drm_dbg()` 是否用 **Dynamic Debug** 来实现的可配置选项。
+
+```c
+#if !defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)
+#define drm_dev_dbg(dev, cat, fmt, ...)				\
+	__drm_dev_dbg(NULL, dev, cat, fmt, ##__VA_ARGS__)
+#else
+#define drm_dev_dbg(dev, cat, fmt, ...)				\
+	_dynamic_func_call_cls(cat, fmt, __drm_dev_dbg,		\
+			       dev, cat, fmt, ##__VA_ARGS__)
+#endif
+```
+
 # `CONFIG_DEBUG_ATOMIC_SLEEP`
 
 [`dma_fence_wait_timeout()`](https://www.kernel.org/doc/html/latest/driver-api/dma-buf.html?highlight=dma_fence_wait_timeout#c.dma_fence_wait_timeout) 会睡眠调用进程直到 fence 被 signaled 或者指定定时器超时。该函数中会调用 `might_sleep()` 来标识 (annotation) 调用进程可能进入睡眠状态，并打印源文件名和行号，帮助调试。 但只有内核配置了 `CONFIG_DEBUG_ATOMIC_SLEEP` 才有效，否则 `__might_sleep()` 是一个空函数。
 
-# `CONFIG_DRM_USE_DYNAMIC_DEBUG`
-
 # References
 
-[1] https://access.redhat.com/solutions/5914171
-
+- [https://access.redhat.com/solutions/5914171](https://access.redhat.com/solutions/5914171)
+- [Dynamic Debug Howto](https://www.kernel.org/doc/html/v4.14/admin-guide/dynamic-debug-howto.html)
