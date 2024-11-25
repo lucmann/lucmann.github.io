@@ -1,7 +1,7 @@
 ---
 title: CMake 不是一个构建系统
 date: 2021-01-10 07:42:04
-tags: [cmake]
+tags: [tools]
 categories: utilities
 ---
 

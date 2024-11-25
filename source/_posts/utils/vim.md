@@ -1,7 +1,7 @@
 ---
 title: vim 速查手册
 date: 2020-02-29 21:58:03
-tags: vim
+tags: [tools]
 categories: utilities
 ---
 

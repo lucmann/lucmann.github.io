@@ -1,7 +1,7 @@
 ---
 title: Regular Expression
 date: 2022-06-19 22:18:16
-tags: regex
+tags: [tools]
 categories: utilities
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: find
 date: 2022-03-19 22:18:16
-tags: shell
+tags: [tools]
 categories: utilities
 ---
 

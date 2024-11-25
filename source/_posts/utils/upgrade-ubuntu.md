@@ -1,7 +1,7 @@
 ---
 title: Sogou IM on Ubuntu Jammy Jellyfish
 date: 2022-07-31 20:47:35
-tags: ubuntu
+tags: [linux]
 categories: misc
 ---
 

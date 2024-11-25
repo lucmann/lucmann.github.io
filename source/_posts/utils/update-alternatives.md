@@ -1,7 +1,7 @@
 ---
-title: Altering Your GCC/Python Version Easily
+title: update-alternatives
 date: 2020-12-04 17:21:05
-tags: [gcc, python]
+tags: [tools]
 categories: utilities
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Git Cheat Sheet
 date: 2021-01-25 20:42:05
-tags: git
+tags: [tools]
 categories: utilities
 ---
 

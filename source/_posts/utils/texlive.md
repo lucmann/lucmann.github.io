@@ -1,7 +1,7 @@
 ---
 title: TexLive
 date: 2022-04-17 08:00:02
-tags: latex
+tags: [tools]
 categories: utilities
 ---
 
