@@ -1,7 +1,7 @@
 ---
 title: Linux accel 子系统
 date: 2024-09-06 10:42:45
-tags: accel
+tags: [linux]
 categories: linux
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Cache 一致性
 date: 2023-06-27 15:42:45
-tags: [perf]
+tags: [Hardware]
 categories: linux
 ---
 
