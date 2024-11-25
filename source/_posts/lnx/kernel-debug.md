@@ -96,10 +96,10 @@ Dynamic Debug 就通过 `/sys/kernel/debug/dynamic_debug/control` 文件打开�
 
 # kern.log
 
-`/var/log/kern.log` 的一个主要问题是每行前面的 `%HOSTNAME%` 太长又没什么用，查了一下配置方法，实际上就是要在 `rsyslog.conf` 里定义一个 `$template`
+`/var/log/kern.log` 的一个主要问题是每行前面的 `%HOSTNAME%` 太长又没什么用，`%timegenerated%` 和内核原始打印 `%msg%` 里的时间戳实际上有一个就可以了。查了一下配置方法，实际上就是要在 `rsyslog.conf` 里定义一个 `$template`
 
 ```
-$template SimpleFormat,"%timegenerated% %msg:::drop-last-lf%\n"
+$template SimpleFormat,"%msg:::drop-last-lf%\n"
 ```
 
 然后在 rsyslog.conf 的规则里加上这个 template
@@ -123,3 +123,4 @@ echo "<3>HELLO" > /dev/kmsg
 - [https://access.redhat.com/solutions/5914171](https://access.redhat.com/solutions/5914171)
 - [Dynamic Debug Howto](https://www.kernel.org/doc/html/v4.14/admin-guide/dynamic-debug-howto.html)
 - [How to bind a template in rsyslog.conf](https://www.rsyslog.com/how-to-bind-a-template/)
+- [Rsyslog properties](https://www.rsyslog.com/doc/configuration/properties.html#message-properties)
