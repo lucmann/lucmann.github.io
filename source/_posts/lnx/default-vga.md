@@ -1,7 +1,7 @@
 ---
 title: Boot-up Graphics in Linux
 date: 2023-08-30 11:20:00
-tags: [display]
+tags: [X11]
 categories: linux
 ---
 
