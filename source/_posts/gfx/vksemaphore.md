@@ -16,11 +16,11 @@ flowchart LR
     subgraph "Process 1"
         c1((VkCommandBuffer 1))
     end
-    subgraph "Process 1"
+    subgraph "Process 2"
         c2((VkCommandBuffer 2))
         c3((VkCommandBuffer 3))
     end
-    subgraph "Process 2"
+    subgraph "Process 3"
         c4((VkCommandBuffer 4))
         c5((VkCommandBuffer 5))
     end
