@@ -19,7 +19,7 @@ AMD 在 Linux 下维护着两套开源 Vulkan 驱动:
 
 AMDVLK 的 README 有一张[架构图](https://github.com/GPUOpen-Drivers/AMDVLK?tab=readme-ov-file#amd-open-source-driver-for-vulkan), 非常清晰地展示了整个驱动包含的组件和层次结构。
 
-![topLevelArch](/images/topLevelArch.png)
+![topLevelArch](/images/radv/topLevelArch.png)
 
 AMDVLK 驱动由 5 个代码仓库构建:
 
