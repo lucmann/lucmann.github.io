@@ -9,7 +9,7 @@ categories: graphics
 如果把基于 Vulkan 的渲染看成一个图，那么 `VkCommandBuffer` 是节点 (node)，`VkSemaphore` 是边 (edge)
 {% endblockquote %}
 
-(这里主要是记录一下对 Faith Ekstrand 文章所讲的 Implicit Sync 世界里的 Explicit Sync 的理解和思考)
+(这里主要记录一下对 Faith Ekstrand 文章所讲的 Implicit Sync 世界里的 Explicit Sync 的理解和思考)
 
 ```mermaid
 flowchart LR
