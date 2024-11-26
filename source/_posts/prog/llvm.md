@@ -145,3 +145,11 @@ CMake Error at /home/luc/gh/llvm-project/libcxx/CMakeLists.txt:880 (message):   
 ```
 set(LIBCXX_ABI_NAMESPACE "" CACHE STRING "The inline ABI namespace used by libc++. It defaults to __n where `n` is the  current ABI version.")
 ```
+
+# LLVM JIT
+
+- Just-In-Time
+- Ahead-Of-Time
+
+# References
+- [Learning LLVM Part-3](https://sh4dy.com/2024/11/24/learning_llvm_03/)
