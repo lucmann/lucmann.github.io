@@ -127,13 +127,47 @@ struct drm_prime_member {
 
 - 导出者 `DRM_IOCTL_PRIME_HANDLE_TO_FD`
 
-handle 先放在这个红黑树里，对应的 drm_gem_object 转换成(新申请 `struct dma_buf`) dma_buf 也放在这个红黑树里，这时**导出者** 还需要持有这个 drm_gem_object 的 reference.
+先拿这个 gem_handle 去红黑树里找 dma_buf (**`drm_prime_lookup_buf_by_handle()`**), 如果有就返回这个 dma_buf，如果没有就调用 `export_and_register_object()` 给对应的 drm_gem_object 新申请一个 `struct dma_buf`，再由内核把这个 gem_handle 和 dma_buf 都缓存到红黑树中 (**`drm_prime_add_buf_handle()`**)， 最后 `fd_install(fd, dmabuf->file);` 把 fd 返回用户态的导出者。
+
+```c
+static struct dma_buf *export_and_register_object(struct drm_device *dev,
+						  struct drm_gem_object *obj,
+						  uint32_t flags)
+{
+	struct dma_buf *dmabuf;
+
+	/* prevent races with concurrent gem_close. */
+	if (obj->handle_count == 0) {
+		dmabuf = ERR_PTR(-ENOENT);
+		return dmabuf;
+	}
+
+	if (obj->funcs && obj->funcs->export)
+		dmabuf = obj->funcs->export(obj, flags);
+	else
+		dmabuf = drm_gem_prime_export(obj, flags);
+	if (IS_ERR(dmabuf)) {
+		/* normally the created dma-buf takes ownership of the ref,
+		 * but if that fails then drop the ref
+		 */
+		return dmabuf;
+	}
+
+	/*
+	 * Note that callers do not need to clean up the export cache
+	 * since the check for obj->handle_count guarantees that someone
+	 * will clean it up.
+	 */
+	obj->dma_buf = dmabuf;
+	get_dma_buf(obj->dma_buf);
+
+	return dmabuf;
+}
+```
 
 - 导入者 `DRM_IOCTL_PRIME_FD_TO_HANDLE`
 
-先通过这个 fd ，`dma_buf_get(prime_fd)` 返回一个 `struct dma_buf *`, 然后拿这个 `dma_buf` 指针去上面的红黑树里遍历找，如果找到相等的(地址), 就把当时缓存的 handle 返回给导入者， 导入者拿到 gem_handle 后，在自己的进程中再创建 GPU mappings (`DRM_IOCTL_XXX_GET_BO_OFFSET`) 和 CPU mappings (`mmap()`)
-
-所以可以得出一个基本结论，导出前和导入后，**两个进程里的 gem_handle 值是一样的**。
+导入者接收底层透过 UNIX domain socket 传来的 prime_fd (如 Xorg 通过 `proc_dri3_pixmap_from_buffers()` 接收)，通过 `DRM_IOCTL_PRIME_FD_TO_HANDLE` IOCTL 陷入内核态，内核 `dma_buf_get(prime_fd)` 返回一个 `struct dma_buf *`, 然后拿这个 `dma_buf` 指针去上面的红黑树里遍历找 **`drm_prime_lookup_buf_handle()`**，如果找到相等的(地址), 就把当时缓存的 handle 返回给导入者， 导入者拿到 gem_handle 后，在自己的进程中再创建 GPU mappings (`DRM_IOCTL_XXX_GET_BO_OFFSET`) 和 CPU mappings (`mmap()`)
 
 ```c
 	while (rb) {
@@ -151,8 +185,9 @@ handle 先放在这个红黑树里，对应的 drm_gem_object 转换成(新申�
 	}
 ```
 
-## dma_fence
+所以可以得出一个基本结论，导出前和导入后，**两个进程里的 gem_handle 值是一样的**。
 
+## dma_fence
 
 `dma_fence_default_wait` 是 dma-fence 默认的 wait 操作。该函数会让当前进程(task) 进入睡眠状态 (可中断睡眠或不可中断睡眠，取决于调用者传入的参数 `intr`）, 直到 dma-fence 被 signaled 或者设置的超时时间到。
 
