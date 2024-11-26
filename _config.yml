@@ -118,9 +118,18 @@ math:
       minRuleThickness: 0.06
       throwOnError: false
 
+# Docs: https://github.com/theme-next/hexo-theme-next/blob/master/docs/zh-CN/LEANCLOUD-COUNTER-SECURITY.md
+leancloud_counter_security:
+  enable_sync: true
+  app_id: RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI
+  app_key: 9gRe7wBvmmjIneYA9pYAJywK
+  username: #如留空则将在部署时询问
+  password: #建议留空以保证安全性，如留空则将在部署时询问
+
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: git
-  repository: git@github.com:lucmann/lucmann.github.io.git
-  branch: master
+  - type: git
+    repository: git@github.com:lucmann/lucmann.github.io.git
+    branch: master
+  - type: leancloud_counter_security_sync
