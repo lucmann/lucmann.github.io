@@ -123,8 +123,8 @@ leancloud_counter_security:
   enable_sync: true
   app_id: RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI
   app_key: 9gRe7wBvmmjIneYA9pYAJywK
-  username: #如留空则将在部署时询问
-  password: #建议留空以保证安全性，如留空则将在部署时询问
+  username: lucmann
+  password: m123456
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
