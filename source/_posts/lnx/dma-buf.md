@@ -110,12 +110,46 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 从上面两个函数的接口看，它们共同涉及3个数据对象：
 
 - drm_device
-- dma_buf fd
-- drm_gem_object handle
+- dma_buf `struct file`
+- drm_gem_object
 
-显然两个函数里的`dev`一定是**不同**的`drm_device`, `dma_buf` fd一定是同一个FD（也即同一个dma-buf, 要不然也不叫共享了），那么`handle`呢？肯定也是**不同**的`handle`, 因为`handle`其实是对`device`而言的，它是一个设备持有的`drm_gem_object`的ID. 但这个ID背后的东西(backing storage)可能是**同一个**东西。
+但在内核里有一个红黑树收集了所有 exporting 的 drm_gem_object(当然这些也即是将要importing 的 buffer object), exporter/importer 就像淘宝上的**买家/卖家**， buffer object 就是钱，**钱必须先放在第三方支付平台**, 就是这个**红黑树**
 
-可以打个比方，你去银行要办两种业务，两种业务分别排号，假如你要办的A业务排到7号，B业务也刚好排到7号（注意:号码相同，但是两个号），但是很有可能是同一个业务员为你办理这两种业务，这里的业务就是设备驱动，而那个业务员就是dma-buf(或者它封装的那块显存)。
+```c
+struct drm_prime_member {
+	struct dma_buf *dma_buf;
+	uint32_t handle;
+
+	struct rb_node dmabuf_rb;
+	struct rb_node handle_rb;
+};
+```
+
+- 导出者 `DRM_IOCTL_PRIME_HANDLE_TO_FD`
+
+handle 先放在这个红黑树里，对应的 drm_gem_object 转换成(新申请 `struct dma_buf`) dma_buf 也放在这个红黑树里，这时**导出者** 还需要持有这个 drm_gem_object 的 reference.
+
+- 导入者 `DRM_IOCTL_PRIME_FD_TO_HANDLE`
+
+先通过这个 fd ，`dma_buf_get(prime_fd)` 返回一个 `struct dma_buf *`, 然后拿这个 `dma_buf` 指针去上面的红黑树里遍历找，如果找到相等的(地址), 就把当时缓存的 handle 返回给导入者， 导入者拿到 gem_handle 后，在自己的进程中再创建 GPU mappings (`DRM_IOCTL_XXX_GET_BO_OFFSET`) 和 CPU mappings (`mmap()`)
+
+所以可以得出一个基本结论，导出前和导入后，**两个进程里的 gem_handle 值是一样的**。
+
+```c
+	while (rb) {
+		struct drm_prime_member *member;
+
+		member = rb_entry(rb, struct drm_prime_member, dmabuf_rb);
+		if (member->dma_buf == dma_buf) {
+			*handle = member->handle;
+			return 0;
+		} else if (member->dma_buf < dma_buf) {
+			rb = rb->rb_right;
+		} else {
+			rb = rb->rb_left;
+		}
+	}
+```
 
 ## dma_fence
 
