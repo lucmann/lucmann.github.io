@@ -123,7 +123,7 @@ leancloud_counter_security:
   enable_sync: true
   app_id: RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI
   app_key: 9gRe7wBvmmjIneYA9pYAJywK
-  username: lucmann
+  username: luc
   password: m123456
 
 # Deployment
