@@ -231,6 +231,8 @@ DRI3 与 DRI2 的一个主要区别就是在 DRI3, RenderBuffer 是由 DRI clien
 
 *实现上没太明白 GEM name 为什么不安全，大家都是 32-bit 整数，GEM name 能被猜，文件描述符 fd 也能被猜啊*
 
+找到解释了，[PRIME Buffer Sharing - Overview and Lifetime Rules](https://www.kernel.org/doc/html/next/gpu/drm-mm.html#overview-and-lifetime-rules), 文件描述符 (file descriptor) 必须通过 **UNIX domain sockets** 在应用之间 send，不可能像全局唯一的 GEM names 一样被猜。 **send over UNIX domain sockets** 应该就是 XCB 库实现的这个函数 `xcb_send_requests_with_fds()`。
+
 # dri3_find_back
 
 ```c
