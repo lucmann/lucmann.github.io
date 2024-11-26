@@ -1,7 +1,7 @@
 ---
 title: 多线程中的同步
-tags: [multi-threads]
 date: 2024-08-08 16:24:00
+tags: [C/C++]
 categories: programming
 ---
 
