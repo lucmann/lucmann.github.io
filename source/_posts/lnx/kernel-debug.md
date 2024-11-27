@@ -5,7 +5,7 @@ tags: linux
 categories: linux
 ---
 
-# `CONFIG_DEBUG_FS`
+# CONFIG_DEBUG_FS
 
 ## 如何在 WSL2 上启用 debugfs
 
@@ -63,6 +63,42 @@ drwxr-xr-x 35 root root 0 May 19 17:03 ./bdi
 ```
 
 `/sys/kernel/debug` 目录的权限是 700, 只有 root 用户才能进入，sudo 也不行
+
+# CONFIG_TRACING
+
+CONFIG_TRACING 是内核 2.6.27 (2008-10-09)* 引入的一个**不可配置的(not configurable)** 内核选项，**不可配置**的意思是只能通过别的配置选项的打开来影响它的打开。
+
+它对应的 **tracefs** 也需要挂载
+
+```shell
+mount -t tracefs none /sys/kernel/tracing
+```
+像 **ftrace**, **trace-cmd** 都需要挂载这个目录。
+
+## tracers
+
+要使用 **ftrace**, 不光要挂载 tracefs, 内核相应的追踪器 (tracer) 也要编译进内核，可用的内核追踪器可以通过 `cat /sys/kernel/tracing/available_tracers` 查看。
+
+- CONFIG_FUNCTION_TRACER
+- CONFIG_FUNCTION_GRAPH_TRACER
+- CONFIG_HWLAT_TRACER
+- CONFIG_IRQSOFF_TRACER
+- CONFIG_OSNOISE_TRACER
+- CONFIG_PREEMPT_TRACER
+- CONFIG_SCHED_TRACER
+- CONFIG_STACK_TRACER
+- CONFIG_CONTEXT_SWITCH_TRACER
+- CONFIG_NOP_TRACER
+
+## ftrace
+
+## trace-cmd
+
+**trace-cmd** 实际上是为了方便使用 **ftrace**, 比方下面的 trace-cmd 命令与直接 `cat /sys/kernel/tracing/available_events` 是等价的
+
+```shell
+trace-cmd list -e
+```
 
 # CONFIG_DYNAMIC_DEBUG
 
