@@ -107,22 +107,46 @@ int drm_gem_prime_fd_to_handle(struct drm_device *dev,
 
 ```
 
-从上面两个函数的接口看，它们共同涉及3个数据对象：
-
-- drm_device
-- dma_buf `struct file`
-- drm_gem_object
-
-但在内核里有一个红黑树收集了所有 exporting 的 drm_gem_object(当然这些也即是将要importing 的 buffer object), exporter/importer 就像淘宝上的**买家/卖家**， buffer object 就是钱，**钱必须先放在第三方支付平台**, 就是这个**红黑树**
+内核里有一个红黑树收集了所有 exporting 的 drm_gem_object(当然这些也即是将要importing 的 buffer object), exporter/importer 就像淘宝上的**买家/卖家**， buffer object 就是钱，**钱必须先放在第三方支付平台**, 就是这个**红黑树**, 它是维护在每个 `drm_file` 下的数据结构
 
 ```c
-struct drm_prime_member {
-	struct dma_buf *dma_buf;
-	uint32_t handle;
-
-	struct rb_node dmabuf_rb;
-	struct rb_node handle_rb;
+/**
+ * struct drm_prime_file_private - per-file tracking for PRIME
+ *
+ * This just contains the internal &struct dma_buf and handle caches for each
+ * &struct drm_file used by the PRIME core code.
+ */
+struct drm_prime_file_private {
+/* private: */
+	struct mutex lock;
+	struct rb_root dmabufs;
+	struct rb_root handles;
 };
+```
+
+`struct file`, `struct drm_file`, `struct drm_prime_file_private` 三者的关系是
+
+```mermaid
+erDiagram
+	file ||--|| drm_file : contains
+	file {
+		atomic_long_t	f_count
+		spinlock_t		f_lock
+		fmode_t			f_mode
+		file_operations	*f_op
+		address_space	*f_mapping
+		void			*private_data
+	}
+	drm_file ||--|| drm_prime_file_private : contains
+	drm_file {
+		TYPES					others
+		drm_prime_file_private	prime
+	}
+	drm_prime_file_private {
+		mutex lock
+		rb_root dmabufs
+		rb_root handles
+	}
 ```
 
 - 导出者 `DRM_IOCTL_PRIME_HANDLE_TO_FD`
