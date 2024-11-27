@@ -61,53 +61,9 @@ Date:   Fri Nov 25 15:21:02 2011 +0000
     Signed-off-by: Dave Airlie <airlied@redhat.com>
 ```
 
-- exporter调用
+`PRIME_HANDLE_TO_FD` (导出) 和 `PRIME_FD_TO_HANDLE` (导入) 这两个操作的核心就是**将 DMA-BUF (`struct dma_buf`)** 文件化，这样就可能在设备间，进程间传递**文件描述符**了。
 
-```c
-/**
- * drm_gem_prime_handle_to_fd - PRIME export function for GEM drivers
- * @dev: dev to export the buffer from
- * @file_priv: drm file-private structure
- * @handle: buffer handle to export
- * @flags: flags like DRM_CLOEXEC
- * @prime_fd: pointer to storage for the fd id of the create dma-buf
- *
- * This is the PRIME export function which must be used mandatorily by GEM
- * drivers to ensure correct lifetime management of the underlying GEM object.
- * The actual exporting from GEM object to a dma-buf is done through the
- * &drm_gem_object_funcs.export callback.
- */
-int drm_gem_prime_handle_to_fd(struct drm_device *dev,
-			       struct drm_file *file_priv, uint32_t handle,
-			       uint32_t flags,
-			       int *prime_fd)
-
-```
-
-- importer调用
-
-```c
-/**
- * drm_gem_prime_fd_to_handle - PRIME import function for GEM drivers
- * @dev: dev to export the buffer from
- * @file_priv: drm file-private structure
- * @prime_fd: fd id of the dma-buf which should be imported
- * @handle: pointer to storage for the handle of the imported buffer object
- *
- * This is the PRIME import function which must be used mandatorily by GEM
- * drivers to ensure correct lifetime management of the underlying GEM object.
- * The actual importing of GEM object from the dma-buf is done through the
- * &drm_driver.gem_prime_import driver callback.
- *
- * Returns 0 on success or a negative error code on failure.
- */
-int drm_gem_prime_fd_to_handle(struct drm_device *dev,
-			       struct drm_file *file_priv, int prime_fd,
-			       uint32_t *handle)
-
-```
-
-内核里有一个红黑树收集了所有 exporting 的 drm_gem_object(当然这些也即是将要importing 的 buffer object), exporter/importer 就像淘宝上的**买家/卖家**， buffer object 就是钱，**钱必须先放在第三方支付平台**, 就是这个**红黑树**, 它是维护在每个 `drm_file` 下的数据结构
+为了实现上的优化，内核专门在 drm_file 下搞了一个 dmabuf 和 handle 的红黑树作为 **DMA-BUF 缓存**， 这样在同一设备文件中的导出导入或同一 DMA-BUF 被同一个设备多次导入的情况就会高效一些。DMA-BUF cache 如下：
 
 ```c
 /**
@@ -149,67 +105,189 @@ erDiagram
 	}
 ```
 
+`struct file`， `struct dma_buf` 的关系
+
 - 导出者 `DRM_IOCTL_PRIME_HANDLE_TO_FD`
 
 先拿这个 gem_handle 去红黑树里找 dma_buf (**`drm_prime_lookup_buf_by_handle()`**), 如果有就返回这个 dma_buf，如果没有就调用 `export_and_register_object()` 给对应的 drm_gem_object 新申请一个 `struct dma_buf`，再由内核把这个 gem_handle 和 dma_buf 都缓存到红黑树中 (**`drm_prime_add_buf_handle()`**)， 最后 `fd_install(fd, dmabuf->file);` 把 fd 返回用户态的导出者。
 
 ```c
-static struct dma_buf *export_and_register_object(struct drm_device *dev,
-						  struct drm_gem_object *obj,
-						  uint32_t flags)
+/**
+ * dma_buf_export - Creates a new dma_buf, and associates an anon file
+ * with this buffer, so it can be exported.
+ * Also connect the allocator specific data and ops to the buffer.
+ * Additionally, provide a name string for exporter; useful in debugging.
+ *
+ * @exp_info:	[in]	holds all the export related information provided
+ *			by the exporter. see &struct dma_buf_export_info
+ *			for further details.
+ *
+ * Returns, on success, a newly created struct dma_buf object, which wraps the
+ * supplied private data and operations for struct dma_buf_ops. On either
+ * missing ops, or error in allocating struct dma_buf, will return negative
+ * error.
+ *
+ * For most cases the easiest way to create @exp_info is through the
+ * %DEFINE_DMA_BUF_EXPORT_INFO macro.
+ */
+struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
 {
 	struct dma_buf *dmabuf;
+	struct dma_resv *resv = exp_info->resv;
+	struct file *file;
+	size_t alloc_size = sizeof(struct dma_buf);
+	int ret;
 
-	/* prevent races with concurrent gem_close. */
-	if (obj->handle_count == 0) {
-		dmabuf = ERR_PTR(-ENOENT);
-		return dmabuf;
+	if (WARN_ON(!exp_info->priv || !exp_info->ops
+		    || !exp_info->ops->map_dma_buf
+		    || !exp_info->ops->unmap_dma_buf
+		    || !exp_info->ops->release))
+		return ERR_PTR(-EINVAL);
+
+	if (WARN_ON(exp_info->ops->cache_sgt_mapping &&
+		    (exp_info->ops->pin || exp_info->ops->unpin)))
+		return ERR_PTR(-EINVAL);
+
+	if (WARN_ON(!exp_info->ops->pin != !exp_info->ops->unpin))
+		return ERR_PTR(-EINVAL);
+
+	if (!try_module_get(exp_info->owner))
+		return ERR_PTR(-ENOENT);
+
+	file = dma_buf_getfile(exp_info->size, exp_info->flags);
+	if (IS_ERR(file)) {
+		ret = PTR_ERR(file);
+		goto err_module;
 	}
 
-	if (obj->funcs && obj->funcs->export)
-		dmabuf = obj->funcs->export(obj, flags);
+	if (!exp_info->resv)
+		alloc_size += sizeof(struct dma_resv);
 	else
-		dmabuf = drm_gem_prime_export(obj, flags);
-	if (IS_ERR(dmabuf)) {
-		/* normally the created dma-buf takes ownership of the ref,
-		 * but if that fails then drop the ref
-		 */
-		return dmabuf;
+		/* prevent &dma_buf[1] == dma_buf->resv */
+		alloc_size += 1;
+	dmabuf = kzalloc(alloc_size, GFP_KERNEL);
+	if (!dmabuf) {
+		ret = -ENOMEM;
+		goto err_file;
 	}
 
-	/*
-	 * Note that callers do not need to clean up the export cache
-	 * since the check for obj->handle_count guarantees that someone
-	 * will clean it up.
-	 */
-	obj->dma_buf = dmabuf;
-	get_dma_buf(obj->dma_buf);
+	dmabuf->priv = exp_info->priv;
+	dmabuf->ops = exp_info->ops;
+	dmabuf->size = exp_info->size;
+	dmabuf->exp_name = exp_info->exp_name;
+	dmabuf->owner = exp_info->owner;
+	spin_lock_init(&dmabuf->name_lock);
+	init_waitqueue_head(&dmabuf->poll);
+	dmabuf->cb_in.poll = dmabuf->cb_out.poll = &dmabuf->poll;
+	dmabuf->cb_in.active = dmabuf->cb_out.active = 0;
+	INIT_LIST_HEAD(&dmabuf->attachments);
+
+	if (!resv) {
+		dmabuf->resv = (struct dma_resv *)&dmabuf[1];
+		dma_resv_init(dmabuf->resv);
+	} else {
+		dmabuf->resv = resv;
+	}
+
+	ret = dma_buf_stats_setup(dmabuf, file);
+	if (ret)
+		goto err_dmabuf;
+
+	file->private_data = dmabuf;
+	file->f_path.dentry->d_fsdata = dmabuf;
+	dmabuf->file = file;
+
+	__dma_buf_debugfs_list_add(dmabuf);
 
 	return dmabuf;
+
+err_dmabuf:
+	if (!resv)
+		dma_resv_fini(dmabuf->resv);
+	kfree(dmabuf);
+err_file:
+	fput(file);
+err_module:
+	module_put(exp_info->owner);
+	return ERR_PTR(ret);
 }
 ```
 
 - 导入者 `DRM_IOCTL_PRIME_FD_TO_HANDLE`
 
-导入者接收底层透过 UNIX domain socket 传来的 prime_fd (如 Xorg 通过 `proc_dri3_pixmap_from_buffers()` 接收)，通过 `DRM_IOCTL_PRIME_FD_TO_HANDLE` IOCTL 陷入内核态，内核 `dma_buf_get(prime_fd)` 返回一个 `struct dma_buf *`, 然后拿这个 `dma_buf` 指针去上面的红黑树里遍历找 **`drm_prime_lookup_buf_handle()`**，如果找到相等的(地址), 就把当时缓存的 handle 返回给导入者， 导入者拿到 gem_handle 后，在自己的进程中再创建 GPU mappings (`DRM_IOCTL_XXX_GET_BO_OFFSET`) 和 CPU mappings (`mmap()`)
+导入者接收到底层透过 UNIX domain socket 传来的 prime_fd 后 (如 Xorg 通过 `proc_dri3_pixmap_from_buffers()` 接收)，通过 `DRM_IOCTL_PRIME_FD_TO_HANDLE` IOCTL 陷入内核态，内核通过 `dma_buf_get(prime_fd)` 直接找到对应的 DMA-BUF, 然后先去 DMA-BUF 缓存中找 (`drm_prime_lookup_buf_handle()`)，如果命中就直接将 handle 返回给导入者， 如果不命中，就调用 `drm_gem_prime_import_dev()` 来完成 DMA-BUF Sharing 中最最关键的操作：**当 Buffer 导入另外一个进程后，这个 Buffer 的 GPU Mappings (GPU pagetables) 怎么复制过来**。
 
 ```c
-	while (rb) {
-		struct drm_prime_member *member;
+/**
+ * drm_gem_prime_import_dev - core implementation of the import callback
+ * @dev: drm_device to import into
+ * @dma_buf: dma-buf object to import
+ * @attach_dev: struct device to dma_buf attach
+ *
+ * This is the core of drm_gem_prime_import(). It's designed to be called by
+ * drivers who want to use a different device structure than &drm_device.dev for
+ * attaching via dma_buf. This function calls
+ * &drm_driver.gem_prime_import_sg_table internally.
+ *
+ * Drivers must arrange to call drm_prime_gem_destroy() from their
+ * &drm_gem_object_funcs.free hook when using this function.
+ */
+struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
+					    struct dma_buf *dma_buf,
+					    struct device *attach_dev)
+{
+	struct dma_buf_attachment *attach;
+	struct sg_table *sgt;
+	struct drm_gem_object *obj;
+	int ret;
 
-		member = rb_entry(rb, struct drm_prime_member, dmabuf_rb);
-		if (member->dma_buf == dma_buf) {
-			*handle = member->handle;
-			return 0;
-		} else if (member->dma_buf < dma_buf) {
-			rb = rb->rb_right;
-		} else {
-			rb = rb->rb_left;
+	if (dma_buf->ops == &drm_gem_prime_dmabuf_ops) {
+		obj = dma_buf->priv;
+		if (obj->dev == dev) {
+			/*
+			 * Importing dmabuf exported from our own gem increases
+			 * refcount on gem itself instead of f_count of dmabuf.
+			 */
+			drm_gem_object_get(obj);
+			return obj;
 		}
 	}
-```
 
-所以可以得出一个基本结论，导出前和导入后，**两个进程里的 gem_handle 值是一样的**。
+	if (!dev->driver->gem_prime_import_sg_table)
+		return ERR_PTR(-EINVAL);
+
+	attach = dma_buf_attach(dma_buf, attach_dev);
+	if (IS_ERR(attach))
+		return ERR_CAST(attach);
+
+	get_dma_buf(dma_buf);
+
+	sgt = dma_buf_map_attachment_unlocked(attach, DMA_BIDIRECTIONAL);
+	if (IS_ERR(sgt)) {
+		ret = PTR_ERR(sgt);
+		goto fail_detach;
+	}
+
+	obj = dev->driver->gem_prime_import_sg_table(dev, attach, sgt);
+	if (IS_ERR(obj)) {
+		ret = PTR_ERR(obj);
+		goto fail_unmap;
+	}
+
+	obj->import_attach = attach;
+	obj->resv = dma_buf->resv;
+
+	return obj;
+
+fail_unmap:
+	dma_buf_unmap_attachment_unlocked(attach, sgt, DMA_BIDIRECTIONAL);
+fail_detach:
+	dma_buf_detach(dma_buf, attach);
+	dma_buf_put(dma_buf);
+
+	return ERR_PTR(ret);
+}
+```
 
 ## dma_fence
 
