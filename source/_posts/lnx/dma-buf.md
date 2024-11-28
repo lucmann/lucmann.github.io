@@ -5,63 +5,22 @@ tags: [linux]
 categories: linux
 ---
 
-本文的标题来自[Linux Kernel 5.6.0-rc4文档](https://01.org/linuxgraphics/gfx-docs/drm/driver-api/dma-buf.html), dma-buf作为一个内核子系统，它的使用场景不局限于drm "[PRIME](https://blog.csdn.net/hexiaolong2009/article/details/105961192)" multi-GPU支持，它主要由3个组件支撑:
+# DMA-BUF
+
+DMA-BUF 是 Linux 内核驱动中在上下文间，进程间，设备间，子系统间共享 buffer 的一种机制。 大概在[内核 3.2 版本就实现了](https://lwn.net/Articles/473668/)。 按最初的设计文档描述的，该框架大致是这样的:
+
+- 导出者创建一个固定大小的 buffer object, 并将一个 struct file(anon file) 和 allocator 定义的一组操作与之关联
+- 不同的设备使用 `dma_buf_attach()` 将自己加到这个 buffer object， 以便这个 buffer 的 backing storage 后面能被访问
+- 这个导出的 buffer object 在各种实体间通过共享文件描述符 fd 来共享
+- 收到 fd 的导入者将重新获取到 buffer object, 使用导出者当初关联的 allocator 定义的 operations 去访问这个 buffer
+- 导出者和导入者使用 `map_dma_buf()` 和 `unmap_dma_buf()` 来共享 buffer object 的 scatterlist
 
 <!--more-->
 
-- `dma_buf`
+DMA-BUF 共享的过程 `PRIME_HANDLE_TO_FD` (Exporter) 和 `PRIME_FD_TO_HANDLE` (Importer) 主要有两个主要问题：
 
-代表 shared buffer, 可以在进程间，设备间，驱动间进行共享
-
-- `dma_fence`
-
-内核同步原语
-
-- `dma_resv`
-
-可容纳任意数量的 `dma_fence` 的容器， 一个 `dma_buf` 对应有一个 `dma_resv`
-
-# DMA-BUF
-
-dma-buf是Linux内核中在上下文间，进程间，设备间，子系统间进行 buffer 共享的一种实现。 它十几年前就已经合入内核了。
-
-```
-commit 3248877ea1796915419fba7c89315fdbf00cb56a
-Author: Dave Airlie <airlied@redhat.com>
-Date:   Fri Nov 25 15:21:02 2011 +0000
-
-    drm: base prime/dma-buf support (v5)
-
-    This adds the basic drm dma-buf interface layer, called PRIME. This
-    commit doesn't add any driver support, it is simply and agreed upon starting
-    point so we can work towards merging driver support for the next merge window.
-
-    Current drivers with work done are nouveau, i915, udl, exynos and omap.
-
-    The main APIs exposed to userspace allow translating a 32-bit object handle
-    to a file descriptor, and a file descriptor to a 32-bit object handle.
-
-    The flags value is currently limited to O_CLOEXEC.
-
-    Acknowledgements:
-    Daniel Vetter: lots of review
-    Rob Clark: cleaned up lots of the internals and did lifetime review.
-
-    v2: rename some functions after Chris preferred a green shed
-    fix IS_ERR_OR_NULL -> IS_ERR
-    v3: Fix Ville pointed out using buffer + kmalloc
-    v4: add locking as per ickle review
-    v5: allow re-exporting the original dma-buf (Daniel)
-
-    Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-    Reviewed-by: Rob Clark <rob.clark@linaro.org>
-    Reviewed-by: Sumit Semwal <sumit.semwal@linaro.org>
-    Reviewed-by: Inki Dae <inki.dae@samsung.com>
-    Acked-by: Ben Widawsky <benjamin.widawsky@intel.com>
-    Signed-off-by: Dave Airlie <airlied@redhat.com>
-```
-
-`PRIME_HANDLE_TO_FD` (导出) 和 `PRIME_FD_TO_HANDLE` (导入) 这两个操作的核心就是**将 DMA-BUF (`struct dma_buf`)** 文件化，这样就可能在设备间，进程间传递**文件描述符**了。
+- 要给 DMA-BUF 套一层匿名文件(Anonymous File), 这样才可以安全地在进程间共享
+- 新进程 (Importer) 也要有一份 DMA-BUF 的 GPU 页表，而且需要保证两个进程里的 GPU VA 映射到同一个物理显存位置
 
 为了实现上的优化，内核专门在 drm_file 下搞了一个 dmabuf 和 handle 的红黑树作为 **DMA-BUF 缓存**， 这样在同一设备文件中的导出导入或同一 DMA-BUF 被同一个设备多次导入的情况就会高效一些。DMA-BUF cache 如下：
 
@@ -437,5 +396,9 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 它申请范围在最小值是 1 (包含)和最大值是 0 (不包含，实际上最大值是 0xffffffff) 之间的一个整数。 
 
 # References
+
+- [Linux Kernel Documentation: Buffer Sharing and Synchronization](https://01.org/linuxgraphics/gfx-docs/drm/driver-api/dma-buf.html)
+- [Sharing buffers between devices](https://lwn.net/Articles/454389/)
+- [PRIME](https://blog.csdn.net/hexiaolong2009/article/details/105961192)
 - [Explicit sync](https://zamundaaa.github.io/wayland/2024/04/05/explicit-sync.html)
 - [Bridging the synchronization gap on Linux](https://www.collabora.com/news-and-blog/blog/2022/06/09/bridging-the-synchronization-gap-on-linux/)
