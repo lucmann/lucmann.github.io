@@ -19,6 +19,29 @@ DMA-BUF 是 Linux 内核驱动中在上下文间，进程间，设备间，子�
 
 以 Xorg 和 3D应用之间的 PRIME DMA-BUF 共享过程为例 `PRIME_HANDLE_TO_FD` (Exporter) 和 `PRIME_FD_TO_HANDLE` (Importer) 主要有两个主要问题：
 
+```mermaid
+flowchart TD
+	subgraph app [glxgears]
+		BO_10
+	end
+	subgraph xorg [X server]
+		BO_11
+		BO_20
+	end
+	subgraph compositor ["kwin_x11"]
+		BO_21
+	end
+
+	bufOfApp@{ img: "https://github.com/lucmann/lucmann.github.io/blob/dev/source/images/dma-buf/window-content.png", label: "vram for rendering", pos: "d", w: 60, h: 60 }
+	bufOfWin@{ img: "https://github.com/lucmann/lucmann.github.io/blob/dev/source/images/dma-buf/frame-window.png", label: "vram for window frame", pos: "d", w: 60, h: 60 }
+
+	bufOfApp --Export--> BO_10
+	bufOfApp --Import--> BO_11
+
+	bufOfWin --Export--> BO_20
+	bufOfWin --Import--> BO_21
+```
+
 - 要给 DMA-BUF 套一层匿名文件(Anonymous File), 这样才可以安全地在进程间共享
 - 新进程 (Importer) 的 GPU一个物理显存位置
 
