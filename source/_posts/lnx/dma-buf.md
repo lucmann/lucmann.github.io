@@ -9,18 +9,18 @@ categories: linux
 
 DMA-BUF 是 Linux 内核驱动中在上下文间，进程间，设备间，子系统间共享 buffer 的一种机制。 大概在[内核 3.2 版本就实现了](https://lwn.net/Articles/473668/)。 按最初的设计文档描述的，该框架大致是这样的:
 
-- 导出者创建一个固定大小的 buffer object, 并将一个 struct file(anon file) 和 allocator 定义的一组操作与之关联
-- 不同的设备使用 `dma_buf_attach()` 将自己加到这个 buffer object， 以便这个 buffer 的 backing storage 后面能被访问
+- 导出者创建一个固定大小的 buffer object, 并将一个 struct file(anon file) 和 allocator 定义的一组操作 (`struct dma_buf_attach_ops`) 与之关联
+- 不同的设备使用 `dma_buf_attach()` 将自己加到 buffer object 的 attachments 列表， 以便这个 buffer 的 backing storage 后面能被访问
 - 这个导出的 buffer object 在各种实体间通过共享文件描述符 fd 来共享
-- 收到 fd 的导入者将重新获取到 buffer object, 使用导出者当初关联的 allocator 定义的 operations 去访问这个 buffer
+- 收到 fd 的导入者将重新获取到 buffer object, 使用导出时关联的 `dma_buf_attach_ops` 去访问这个 buffer
 - 导出者和导入者使用 `map_dma_buf()` 和 `unmap_dma_buf()` 来共享 buffer object 的 scatterlist
 
 <!--more-->
 
-DMA-BUF 共享的过程 `PRIME_HANDLE_TO_FD` (Exporter) 和 `PRIME_FD_TO_HANDLE` (Importer) 主要有两个主要问题：
+以 Xorg 和 3D应用之间的 PRIME DMA-BUF 共享过程为例 `PRIME_HANDLE_TO_FD` (Exporter) 和 `PRIME_FD_TO_HANDLE` (Importer) 主要有两个主要问题：
 
 - 要给 DMA-BUF 套一层匿名文件(Anonymous File), 这样才可以安全地在进程间共享
-- 新进程 (Importer) 也要有一份 DMA-BUF 的 GPU 页表，而且需要保证两个进程里的 GPU VA 映射到同一个物理显存位置
+- 新进程 (Importer) 的 GPU一个物理显存位置
 
 为了实现上的优化，内核专门在 drm_file 下搞了一个 dmabuf 和 handle 的红黑树作为 **DMA-BUF 缓存**， 这样在同一设备文件中的导出导入或同一 DMA-BUF 被同一个设备多次导入的情况就会高效一些。DMA-BUF cache 如下：
 
