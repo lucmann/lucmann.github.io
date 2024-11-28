@@ -16,7 +16,7 @@ categories: programming
 
 如果使用**armv7**的工具链，那么只有`__ARM_ARCH_7A`会被定义，而如果使用**armv8**的工具链，那么只有`__ARM_ARCH_8A`会被定义。但以上两个编译器都会定义`__aarch64__`.
 
-# How to Check Macros Predefined by Compiler
+## How to Check Macros Predefined by Compiler
 ```
 aarch64-linux-gnu-gcc -march=armv8-a -E -dM - < /dev/null
 ```
@@ -33,7 +33,7 @@ aarch64-linux-gnu-gcc -march=armv8-a -E -dM - < /dev/null
 
 - C/C++ 宏 `offsetof` 包含在头文件 `stddef.h`
 
-# 内置函数 Built-in Functions
+# 内置函数
 
 ## [`__builtin_clz`](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html)
 
@@ -41,9 +41,22 @@ aarch64-linux-gnu-gcc -march=armv8-a -E -dM - < /dev/null
 
 返回一个数的高位端的 `0` 的个数
 
-## [`__sync_val_compare_and_swap`](https://gcc.gnu.org/onlinedocs/gcc-4.1.2/gcc/Atomic-Builtins.html)
+## [原子操作函数族](https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html)
 
-- `type __sync_val_compare_and_swap (type *ptr, type oldval, type newval, ...)`
+- `type __atomic_add_fetch(type *ptr, type val, int memorder)`
+
+以原子方式给 `ptr` 指向的内存值加上 `val`, 并返回 `ptr` 指向内存加完后的值。它与 GCC 的 `__sync_add_and_fetch()` 有何区别呢？ 唯一的区别是 `__atomic_add_fetch` 更新。
+
+- `bool __atomic_compare_exchange_n(type *ptr, type *expected, type desired, bool weak, int success_memorder, int failure_memorder)`
+
+原子 CAS 操作：
+```
+if (*ptr == *expected); then
+   *ptr = desired  // read-modify-write
+else
+   *expected = *ptr // read
+```
+
+`type __sync_val_compare_and_swap (type *ptr, type oldval, type newval, ...)`
 
 内置的原子比较和交换操作，也就是说，如果 `*ptr` 的当前值是 `oldval`, 则把 `newval` 写入 `*ptr`, 并且返回写入前的 `*ptr` 值。
-
