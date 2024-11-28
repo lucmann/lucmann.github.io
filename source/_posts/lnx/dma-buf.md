@@ -7,6 +7,31 @@ categories: linux
 
 # DMA-BUF
 
+```mermaid
+flowchart BT
+	subgraph app [glxgears]
+		BO_10
+	end
+	subgraph x11 [Xorg]
+		BO_11
+		BO_20
+	end
+	subgraph compositor [kwin_x11]
+		BO_21
+	end
+
+	App@{ img: "/images/dma-buf/window-content.png", label: "vram for rendering", pos: "d", w: 60, h: 60, constraint: "on" }
+	Window@{ img: "/images/dma-buf/window-frame.png", label: "vram for window frame", pos: "d", w: 60, h: 60, constraint: "on" }
+
+	App --Exporter--> BO_10
+	App --Importer--> BO_11
+
+	Window --Exporter--> BO_20
+	Window --Importer--> BO_21
+```
+
+<!--more-->
+
 DMA-BUF 是 Linux 内核驱动中在上下文间，进程间，设备间，子系统间共享 buffer 的一种机制。 大概在[内核 3.2 版本就实现了](https://lwn.net/Articles/473668/)。 按最初的设计文档描述的，该框架大致是这样的:
 
 - 导出者创建一个固定大小的 buffer object, 并将一个 struct file(anon file) 和 allocator 定义的一组操作 (`struct dma_buf_attach_ops`) 与之关联
@@ -15,35 +40,10 @@ DMA-BUF 是 Linux 内核驱动中在上下文间，进程间，设备间，子�
 - 收到 fd 的导入者将重新获取到 buffer object, 使用导出时关联的 `dma_buf_attach_ops` 去访问这个 buffer
 - 导出者和导入者使用 `map_dma_buf()` 和 `unmap_dma_buf()` 来共享 buffer object 的 scatterlist
 
-<!--more-->
-
-以 Xorg 和 3D应用之间的 PRIME DMA-BUF 共享过程为例 `PRIME_HANDLE_TO_FD` (Exporter) 和 `PRIME_FD_TO_HANDLE` (Importer) 主要有两个主要问题：
-
-```mermaid
-flowchart TD
-	subgraph app [glxgears]
-		BO_10
-	end
-	subgraph xorg [X server]
-		BO_11
-		BO_20
-	end
-	subgraph compositor ["kwin_x11"]
-		BO_21
-	end
-
-	bufOfApp@{ img: "https://github.com/lucmann/lucmann.github.io/blob/dev/source/images/dma-buf/window-content.png", label: "vram for rendering", pos: "d", w: 60, h: 60 }
-	bufOfWin@{ img: "https://github.com/lucmann/lucmann.github.io/blob/dev/source/images/dma-buf/frame-window.png", label: "vram for window frame", pos: "d", w: 60, h: 60 }
-
-	bufOfApp --Export--> BO_10
-	bufOfApp --Import--> BO_11
-
-	bufOfWin --Export--> BO_20
-	bufOfWin --Import--> BO_21
-```
+以 glxgears(`PRIME_HANDLE_TO_FD`) 和 Xorg(`PRIME_FD_TO_HANDLE`) 之间的共享过程为例, 主要有两个主要问题：
 
 - 要给 DMA-BUF 套一层匿名文件(Anonymous File), 这样才可以安全地在进程间共享
-- 新进程 (Importer) 的 GPU一个物理显存位置
+- 导入者导入后，新建的 GPU VA 到 GPU PA 的映射要能够映射到与导出者进程里同样的物理显存位置 (GPU VA 倒无所谓)
 
 为了实现上的优化，内核专门在 drm_file 下搞了一个 dmabuf 和 handle 的红黑树作为 **DMA-BUF 缓存**， 这样在同一设备文件中的导出导入或同一 DMA-BUF 被同一个设备多次导入的情况就会高效一些。DMA-BUF cache 如下：
 
@@ -423,5 +423,6 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 - [Linux Kernel Documentation: Buffer Sharing and Synchronization](https://01.org/linuxgraphics/gfx-docs/drm/driver-api/dma-buf.html)
 - [Sharing buffers between devices](https://lwn.net/Articles/454389/)
 - [PRIME](https://blog.csdn.net/hexiaolong2009/article/details/105961192)
+- [何小龙的 DMA-BUF 系列文章](https://blog.csdn.net/hexiaolong2009/category_10838100.html)
 - [Explicit sync](https://zamundaaa.github.io/wayland/2024/04/05/explicit-sync.html)
 - [Bridging the synchronization gap on Linux](https://www.collabora.com/news-and-blog/blog/2022/06/09/bridging-the-synchronization-gap-on-linux/)
