@@ -40,10 +40,13 @@ DMA-BUF 是 Linux 内核驱动中在上下文间，进程间，设备间，子�
 - 收到 fd 的导入者将重新获取到 buffer object, 使用导出时关联的 `dma_buf_attach_ops` 去访问这个 buffer
 - 导出者和导入者使用 `map_dma_buf()` 和 `unmap_dma_buf()` 来共享 buffer object 的 scatterlist
 
+从用户态传递文件描述符一直到内核底层，最终共享的实际上是 scatter/gather table, 实际上就是那个 buffer 的内存物理地址(或 DMA 物理地址)
+
 以 glxgears(`PRIME_HANDLE_TO_FD`) 和 Xorg(`PRIME_FD_TO_HANDLE`) 之间的共享过程为例, 主要有两个主要问题：
 
 - 要给 DMA-BUF 套一层匿名文件(Anonymous File), 这样才可以安全地在进程间共享
 - 导入者导入后，新建的 GPU VA 到 GPU PA 的映射要能够映射到与导出者进程里同样的物理显存位置 (GPU VA 倒无所谓)
+
 
 为了实现上的优化，内核专门在 drm_file 下搞了一个 dmabuf 和 handle 的红黑树作为 **DMA-BUF 缓存**， 这样在同一设备文件中的导出导入或同一 DMA-BUF 被同一个设备多次导入的情况就会高效一些。DMA-BUF cache 如下：
 
@@ -271,6 +274,8 @@ fail_detach:
 }
 ```
 
+## Dynamic DMA-BUF Mapping 和 Cached Sg Table
+
 ## dma_fence
 
 `dma_fence_default_wait` 是 dma-fence 默认的 wait 操作。该函数会让当前进程(task) 进入睡眠状态 (可中断睡眠或不可中断睡眠，取决于调用者传入的参数 `intr`）, 直到 dma-fence 被 signaled 或者设置的超时时间到。
@@ -424,5 +429,6 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 - [Sharing buffers between devices](https://lwn.net/Articles/454389/)
 - [PRIME](https://blog.csdn.net/hexiaolong2009/article/details/105961192)
 - [何小龙的 DMA-BUF 系列文章](https://blog.csdn.net/hexiaolong2009/category_10838100.html)
+- [Dynamic DMA Mapping Guide](http://www.wowotech.net/memory_management/DMA-Mapping-api.html)
 - [Explicit sync](https://zamundaaa.github.io/wayland/2024/04/05/explicit-sync.html)
 - [Bridging the synchronization gap on Linux](https://www.collabora.com/news-and-blog/blog/2022/06/09/bridging-the-synchronization-gap-on-linux/)
