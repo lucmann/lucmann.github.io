@@ -31,6 +31,53 @@ categories: linux
 | bison        | √           |               |
 | libaudit-dev | √           |               |
 
+# Install apitrace
+
+apitrace 不带 GUI 的话可以非常顺利的安装，带 GUI 的话因为依赖 Qt5/6, 稍微麻烦一点
+
+```
+if (ENABLE_GUI)
+    if (NOT (ENABLE_GUI STREQUAL "AUTO"))
+        set (REQUIRE_GUI REQUIRED)
+    endif ()
+    if (POLICY CMP0020)
+        cmake_policy (SET CMP0020 NEW)
+    endif()
+    if (ENABLE_QT6)
+        find_package (Qt6 COMPONENTS Widgets Network ${REQUIRE_GUI})
+    else ()
+        find_package (Qt5 5.15 COMPONENTS Widgets Network ${REQUIRE_GUI})
+    endif ()
+endif ()
+```
+
+## Install Qt
+
+一开始通过 [qt-online-installer-linux-x64-4.8.1.run](https://www.qt.io/download-qt-installer-oss) 安装 Qt 6.8, 安装后 cmake `find_package` 还是有问题，就只能源码安装 [qt 5.15.16](https://download.qt.io/archive/qt/5.15/)
+
+- `mkdir -p /opt/Qt5.15`
+- `mkdir -p ~/qt-build`
+- `cd ~/qt-build`
+- `~/qt-everywhere-src-5.15.16/configure -prefix /opt/Qt5.15`
+- `make -j $(nproc)`
+- `sudo make install`
+
+Qt 5.15.16 安装完成后就可以继续安装 qapitrace 了
+
+- `cd ~/apitrace`
+- `cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_MODULE_PATH=/opt/Qt5.15/lib/pkgconfig`
+- `sudo cmake --install build`
+
+可惜安装后运行 `qapitrace glxgears.trace` 报段错误，难道是 Qt 的版本太高了?
+
+```
+UKUIStylePlugin.........
+QObject::connect: No such slot UKUIStylePlugin::tableModeChanged(bool)
+BlurHelper00000.............
+m_cfgPath... "/usr/share/qt5-ukui-platformtheme/themeconfig/default.json"
+段错误
+```
+
 # Resources
 
 - [KylinOS 的软件包 OpenKylin 基本都能用](https://archive.kylinos.cn/kylin/KYLIN-ALL/)
