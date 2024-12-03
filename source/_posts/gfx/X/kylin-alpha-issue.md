@@ -89,3 +89,17 @@ index 8806dd1c..7d6cbd29 100644
 ![VisualID=0x5b](/images/X/kylin-alpha-issue/visual_0x5b.png)
 
 从测试结果看，在`VisualID=0x23`的情况下，这个VISUAL对应的`pict format`没有alpha通道，所以修改`bg`的alpha值不会对窗口背景的透明度有任何影响。
+
+# glx visual 和 fbconfig 不是一回事
+
+所以 **GLX_VISUAL_ID** 和 **GLX_FBCONFIG_ID** 也不是一回事， 虽然它俩都是 `XID`, 但 mesa 的实现虽然将 glx visual 和 fbconfig 统一用 `glx_config` 来表示, 但
+
+```c
+_GLX_PUBLIC XVisualInfo *
+glXChooseVisual(Display * dpy, int screen, int *attribList);
+
+_GLX_PUBLIC GLXFBConfig *
+glXChooseFBConfig(Display * dpy, int screen, const int *attribList, int *nitems)
+```
+
+是完全不同的实现，而且 mesa 的 `glXChooseVisual()` 实际上无法通过指定 **GLX_VISUAL_ID** 来选择某个特定的 X Visual (这可能是一个 Bug)。
