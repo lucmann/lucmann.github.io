@@ -54,6 +54,7 @@ flowchart TD
 带有 `GFP_KERNEL` 标志的内存申请既可以触发 direct reclaim, 也可以触发 background reclaim。如果 direct reclaim 被触发，回调注册的 shrinker 回调函数，而这个回调函数可以实现任何逻辑(取决于实现这个 shrinker 的文件系统或驱动)，如果这个逻辑恰好是在**等待某个 GPU job 的 dma_fence 被 signaled**, 而你又正好是在 kick off 这个 GPU job 时触发的 direct reclaim, 这样是不是就死锁了？
 
 # 参考
+- [Performance Analysis And Tuning On Modern CPUs](https://weedge.github.io/perf-book-cn/zh/chapters/3-CPU-Microarchitecture/3-7_Virtual_memory_cn.html)
 - [Locking and pinning](https://lwn.net/Articles/600502/)
 - [Smarter Shrinker](https://tinylab.org/lwn-550463/)
 - [GFP flags and reclaim behavior](https://www.kernel.org/doc/html/next/core-api/memory-allocation.html#gfp-flags-and-reclaim-behavior)
