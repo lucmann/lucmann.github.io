@@ -243,3 +243,4 @@ private:
 - [inline_asm_lockfree_queue](https://github.com/fangcun010/inline_asm_lockfree_queue)
 - [Implementing generic double-word compare and swap for x86/64](https://blog.lse.epita.fr//2013/02/27/implementing-generic-double-word-compare-and-swap.html)
 - [linux - futex 原理分析](https://www.openeuler.org/zh/blog/wangshuo/Linux_Futex_Principle_Analysis/Linux_Futex_Principle_Analysis.html)
+- [Mutex vs Atomic](https://coffeebeforearch.github.io/2020/08/04/atomic-vs-mutex.html)
