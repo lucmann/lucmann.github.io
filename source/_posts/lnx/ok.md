@@ -90,7 +90,7 @@ Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, 
 已放弃
 ```
 
- 所以检查编译配置，发现 **QPA backends** 中的 EGLFS 虽然打开了，但 EGLFS details 里所有的后端一个也没有打开， 阅读 [EGLFS 的文档](https://doc.qt.io/qt-6/embedded-linux.html#eglfs) 后了解到 EGLFS 似乎是运行在 EGL 和 OpenGL ES 2.0 之上， 但 **Qt Gui** 里的 OpenGL ES 2.0/3.0/3.1/3.2 都没有开启，所以安装这一系列相关软件包后， 重新配置 Qt 5.15.16
+ 所以检查编译配置，发现 **QPA backends** 中的 EGLFS 虽然打开了，但 EGLFS details 里所有的后端一个也没有打开， 阅读 [EGLFS 的文档](https://doc.qt.io/qt-6/embedded-linux.html#eglfs) 后了解到 EGLFS 似乎是运行在 EGL 和 OpenGL ES 2.0 之上， 但 **Qt Gui** 里的 OpenGL ES 2.0/3.0/3.1/3.2 都没有开启， 还有 **XCB Xlib** 也没有开启。
 
 ```
 Qt Gui:
@@ -154,6 +154,10 @@ QPA backends:
   VNC .................................... yes
 ```
 
+所以继续阅读 [Qt for X11 requirements](https://doc.qt.io/qt-6/linux-requirements.html) 文档, 安装文档中所有列出的依赖软件包后， 重新编译 Qt 5.15.16, 这次 qapitrace 运行正常，而且之前报出的缺少 **Qt Platform plugin "xcb" in ""** 也消失了
+
+![qapitrace](/images/ok/apitrace.png)
+
 ## PAL
 
 Qt Platform Abstraction (QPA) 是 Qt 中主要的**平台抽象层 (Platform Abstraction Layer)**, PAL 这个概念在 [AMD GPU 驱动](https://github.com/GPUOpen-Drivers/pal)中也有， 在 Android 里也有类似的 HAL (Hardware Abstraction Layer) 的概念，在系统软件设计中， PAL 的作用可谓是"承上启下"， 设计一个**接口稳定，易于扩展**的 PAL API 是整个用户态系统软件实现效率的关键。通过这次安装 Qt, 又多了一个学习的例子。
@@ -163,3 +167,5 @@ Qt Platform Abstraction (QPA) 是 Qt 中主要的**平台抽象层 (Platform Abs
 - [KylinOS 的软件包 OpenKylin 基本都能用](https://archive.kylinos.cn/kylin/KYLIN-ALL/)
 - [trace-cmd](https://trace-cmd.org/)
 - [Platform plugins for Embedded Linux devices - EGLFS](https://doc.qt.io/qt-6/embedded-linux.html#embedded-eglfs)
+- [Qt for X11 Requirements](https://doc.qt.io/qt-6/linux-requirements.html)
+
