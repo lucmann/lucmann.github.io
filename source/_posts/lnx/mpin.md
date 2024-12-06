@@ -14,7 +14,7 @@ categories: linux
 # 内存 Pin
 Linux 是基于页 (page) 来管理内存的，物理内存页和虚拟内存页一般有相同的大小，比较常见的是 4KB 页大小。
 
-![Paging mechanism](/images/mpin/linux-mem-page.png)
+![Paging mechanism](/images/mpin/L2PageTables.png)
 
 # 内存 Reclaim
 
