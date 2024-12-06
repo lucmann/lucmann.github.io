@@ -13,3 +13,5 @@ categories: hardware
 
 # Upstream Drivers
 - [drm/imagination: Enable PowerVR driver for RISC-V (WIP)](https://patchwork.kernel.org/project/dri-devel/patch/20241203134137.2114847-12-m.wilczynski@samsung.com/)
+- [drm/verisilicon : support DC8200 and inno hdmi (WIP)](https://lore.kernel.org/all/20241120061848.196754-1-keith.zhao@starfivetech.com/)
+  (平头哥 TH1520 和 赛昉 JH7110 都集成了显示控制器 IP - DC8200 (好像来自芯原))
