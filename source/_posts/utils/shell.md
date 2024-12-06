@@ -5,7 +5,9 @@ tags: shell
 categories: utilities
 ---
 
-# Bash Shell
+# $SHELL - 日常操作 
+
+Linux 下的 Shell 有很多， sh, bash, csh, zsh 等, 这里主要记录一下 bash 和 zsh 的一些不同之处
 
 ## Parameter Expansion
 
@@ -37,21 +39,24 @@ ${var@Q}
 
 带 `@Q` 指变量展开后的值被单引号引起来，例如 `export ABC=abc`, `echo "ABC=${ABC@Q}"` 的结果是 `ABC='abc'`
 
-# Text Manipulation
+# awk - 文本处理
 
 Linux 下的文本处理三剑客: grep, sed, awk, 除了它们其实还有一些小巧的命令，如 `tr`, `cut` 也可以帮助我们快速处理和格式化文本。
 下面以一个例子为例。
 
-**在 Linux 内核源码树里，搜索出目录 `drivers/gpu/drm` 下所有的 `DRIVER_NAME` 定义，并排序后格式化输出**
+**在 Linux 内核源码目录下，搜索 `drivers/gpu/drm` 下所有的 `DRIVER_NAME` 定义，并排序后格式化输出**
 
 命令如下:
 
 ```bash
-rg '#define DRIVER_NAME' drivers/gpu/drm --no-heading | tr -s '\t' | tr '\t' ' ' | tr -s ' ' | awk -F':' '{printf("%-52s%-40s\n",$1,$2)}' | sort -k4 | xclip -i
+rg '#define DRIVER_NAME' drivers/gpu/drm --no-heading \
+    | tr -s '\t' | tr '\t' ' ' | tr -s ' ' \
+    | awk -F':' '{printf("%-52s%-40s\n",$1,$2)}' \
+    | sort -k4 | xclip -i
 ```
 
 - `rg` ([ripgrep](https://github.com/BurntSushi/ripgrep)) 比 grep 更快，更强大
-- `tr` 在不带任何选项时，默认执行替换，例子是中将 tab 替换成 空格, `-s` 表示 `squeeze-repeats`, 就是去重
+- `tr` 在不带任何选项时，默认执行替换，例子是中将 tab 替换成 空格, `-s` 表示 `squeeze-repeats`, 就是去掉重复的字符，例如多个空格只保留一个
 - `awk` 天生支持 C-Style printf
 
 输出结果:
@@ -162,3 +167,4 @@ drivers/gpu/drm/vkms/vkms_drv.c                     #define DRIVER_NAME "vkms"
 drivers/gpu/drm/omapdrm/omap_drv.c                  #define DRIVER_NAME MODULE_NAME         
 ```
 
+# crontab - 定时任务
