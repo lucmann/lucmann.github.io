@@ -52,7 +52,7 @@ Linux 下的文本处理三剑客: grep, sed, awk, 除了它们其实还有一�
 rg '#define DRIVER_NAME' drivers/gpu/drm --no-heading \
     | tr -s '\t' | tr '\t' ' ' | tr -s ' ' \
     | awk -F':' '{printf("%-52s%-40s\n",$1,$2)}' \
-    | sort -k4 | xclip -i
+    | sort -k4
 ```
 
 - `rg` ([ripgrep](https://github.com/BurntSushi/ripgrep)) 比 grep 更快，更强大
