@@ -162,6 +162,50 @@ QPA backends:
 
 Qt Platform Abstraction (QPA) 是 Qt 中主要的**平台抽象层 (Platform Abstraction Layer)**, PAL 这个概念在 [AMD GPU 驱动](https://github.com/GPUOpen-Drivers/pal)中也有， 在 Android 里也有类似的 HAL (Hardware Abstraction Layer) 的概念，在系统软件设计中， PAL 的作用可谓是"承上启下"， 设计一个**接口稳定，易于扩展**的 PAL API 是整个用户态系统软件实现效率的关键。通过这次安装 Qt, 又多了一个学习的例子。
 
+# [openKylin:linux-6.6-next](https://gitee.com/openkylin/linux/tree/linux-6.6-next)
+
+主要关注了一下国产 GPU/DRM 驱动
+
+```
+./omapdrm
+./nouveau
+./mxsfb
+./mwv207 # 景嘉微
+./msm
+./mgag200
+./meson
+./mediatek
+./mcde
+./loongson # 龙芯
+./logicvc
+./lima
+./lib
+./kmb
+./ingenic
+./imx
+./i915
+./i2c
+./hyperv
+./hisilicon
+./gud
+./gma500
+./fsl-dcu
+./exynos
+./etnaviv
+./display
+./ci
+./bridge
+./atmel-hlcdc
+./ast
+./aspeed
+./armada
+./arm
+./arise  # 格兰菲
+./amd
+.
+➜  drm git:(linux-6.6-next)
+```
+
 # Resources
 
 - [KylinOS 的软件包 OpenKylin 基本都能用](https://archive.kylinos.cn/kylin/KYLIN-ALL/)
