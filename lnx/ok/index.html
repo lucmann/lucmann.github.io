@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="OpenKylin 2.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="openKylin 2.0">
+<meta property="og:url" content="https://lucmann.github.io/lnx/ok/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="OpenKylin 2.0">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/images/ok/ok2.0.png">
+<meta property="og:image" content="https://lucmann.github.io/images/ok/apitrace.png">
+<meta property="article:published_time" content="2024-11-26T23:36:16.000Z">
+<meta property="article:modified_time" content="2024-12-09T12:04:24.004Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/images/ok/ok2.0.png">
+
+
+<link rel="canonical" href="https://lucmann.github.io/lnx/ok/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/lnx/ok/","path":"lnx/ok/","title":"openKylin 2.0"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>openKylin 2.0 | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#openkylin-20"><span class="nav-number">1.</span> <span class="nav-text"> OpenKylin 2.0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-trace-cmd"><span class="nav-number">2.</span> <span class="nav-text"> Install trace-cmd</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-apitrace"><span class="nav-number">3.</span> <span class="nav-text"> Install apitrace</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-qt"><span class="nav-number">3.1.</span> <span class="nav-text"> Install Qt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pal"><span class="nav-number">3.2.</span> <span class="nav-text"> PAL</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#openkylinlinux-66-next"><span class="nav-number">4.</span> <span class="nav-text"> openKylin:linux-6.6-next</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#resources"><span class="nav-number">5.</span> <span class="nav-text"> Resources</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/lnx/ok/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="openKylin 2.0 | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          openKylin 2.0
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-11-27 07:36:16" itemprop="dateCreated datePublished" datetime="2024-11-27T07:36:16+08:00">2024-11-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-12-09 20:04:24" itemprop="dateModified" datetime="2024-12-09T20:04:24+08:00">2024-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/lnx/ok/" class="post-meta-item leancloud_visitors" data-flag-title="openKylin 2.0" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/lnx/ok/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="lnx/ok/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="openkylin-20"><a class="markdownIt-Anchor" href="#openkylin-20"></a> <a target="_blank" rel="noopener" href="https://www.openkylin.top/">OpenKylin 2.0</a></h1>
+<p><img src="/images/ok/ok2.0.png" alt="ok2.0" /></p>
+<span id="more"></span>
+<h1 id="install-trace-cmd"><a class="markdownIt-Anchor" href="#install-trace-cmd"></a> Install trace-cmd</h1>
+<p>还算顺利，大部分依赖包从系统 apt 源里都能安装，但也有一些问题</p>
+<ul>
+<li><code>/usr/lib64/pkgconfig</code> 没有在 <code>pkg-config</code> 默认的 search paths 里
+<ul>
+<li><code>export PKG_CONFIG_PTH=/usr/lib64/pkgconfig</code> 可解决构建问题</li>
+</ul>
+</li>
+<li><code>/usr/lib64</code> 没有在 <code>ld.so</code> 的默认的 search paths 里
+<ul>
+<li><code>/etc/ld.so.conf.d/x86_64-linux-gnu.conf</code> 里增加 <code>/usr/lib64</code> 可解决运行时找不到 shared library 的问题</li>
+</ul>
+</li>
+<li>因为 xmlto 的依赖问题无法安装，幸好它只是用来构建 Documentation, 通过 <code>-Ddoc=false</code> 不构建就可以继续下去</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Dependency</th>
+<th style="text-align:center">Apt Install</th>
+<th style="text-align:left">Problem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">meson</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">cmake</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">asciidoc</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">xmlto</td>
+<td style="text-align:center">∅</td>
+<td style="text-align:left">docbook unmet</td>
+</tr>
+<tr>
+<td style="text-align:left">flex</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">bison</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">libaudit-dev</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h1 id="install-apitrace"><a class="markdownIt-Anchor" href="#install-apitrace"></a> Install apitrace</h1>
+<p>apitrace 不带 GUI 的话可以非常顺利的安装，带 GUI 的话因为依赖 Qt5/6, 稍微麻烦一点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">if (ENABLE_GUI)</span><br><span class="line">    if (NOT (ENABLE_GUI STREQUAL &quot;AUTO&quot;))</span><br><span class="line">        set (REQUIRE_GUI REQUIRED)</span><br><span class="line">    endif ()</span><br><span class="line">    if (POLICY CMP0020)</span><br><span class="line">        cmake_policy (SET CMP0020 NEW)</span><br><span class="line">    endif()</span><br><span class="line">    if (ENABLE_QT6)</span><br><span class="line">        find_package (Qt6 COMPONENTS Widgets Network $&#123;REQUIRE_GUI&#125;)</span><br><span class="line">    else ()</span><br><span class="line">        find_package (Qt5 5.15 COMPONENTS Widgets Network $&#123;REQUIRE_GUI&#125;)</span><br><span class="line">    endif ()</span><br><span class="line">endif ()</span><br></pre></td></tr></table></figure>
+<h2 id="install-qt"><a class="markdownIt-Anchor" href="#install-qt"></a> Install Qt</h2>
+<p>一开始通过 <a target="_blank" rel="noopener" href="https://www.qt.io/download-qt-installer-oss">qt-online-installer-linux-x64-4.8.1.run</a> 安装 Qt 6.8, 安装后 cmake <code>find_package</code> 还是有问题，就只能源码安装 <a target="_blank" rel="noopener" href="https://download.qt.io/archive/qt/5.15/">qt 5.15.16</a></p>
+<ul>
+<li><code>mkdir -p /opt/Qt5.15</code></li>
+<li><code>mkdir -p ~/qt-build</code></li>
+<li><code>cd ~/qt-build</code></li>
+<li><code>~/qt-everywhere-src-5.15.16/configure -prefix /opt/Qt5.15</code></li>
+<li><code>make -j $(nproc)</code></li>
+<li><code>sudo make install</code></li>
+</ul>
+<p>Qt 5.15.16 安装完成后就可以继续安装 qapitrace 了</p>
+<ul>
+<li><code>cd ~/apitrace</code></li>
+<li><code>cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_MODULE_PATH=/opt/Qt5.15/lib/pkgconfig</code></li>
+<li><code>sudo cmake --install build</code></li>
+</ul>
+<p>可惜安装后运行 <code>qapitrace glxgears.trace</code> 报段错误，难道是 Qt 的版本太高了?</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">UKUIStylePlugin.........</span><br><span class="line">QObject::connect: No such slot UKUIStylePlugin::tableModeChanged(bool)</span><br><span class="line">BlurHelper00000.............</span><br><span class="line">m_cfgPath... &quot;/usr/share/qt5-ukui-platformtheme/themeconfig/default.json&quot;</span><br><span class="line">段错误</span><br></pre></td></tr></table></figure>
+<p>将 <code>/opt/Qt5.15/lib</code> 添加到 ld.so.conf 后又报出下面的错误, 提示 Qt 缺少 <strong>wayland, xcb platform plugin</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">qt.qpa.plugin: Could not find the Qt platform plugin &quot;wayland&quot; in &quot;&quot;</span><br><span class="line">qt.qpa.plugin: Could not find the Qt platform plugin &quot;xcb&quot; in &quot;&quot;</span><br><span class="line">This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.</span><br><span class="line"></span><br><span class="line">Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, webgl.</span><br><span class="line"></span><br><span class="line">已放弃</span><br></pre></td></tr></table></figure>
+<p>所以检查编译配置，发现 <strong>QPA backends</strong> 中的 EGLFS 虽然打开了，但 EGLFS details 里所有的后端一个也没有打开， 阅读 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-6/embedded-linux.html#eglfs">EGLFS 的文档</a> 后了解到 EGLFS 似乎是运行在 EGL 和 OpenGL ES 2.0 之上， 但 <strong>Qt Gui</strong> 里的 OpenGL ES 2.0/3.0/3.1/3.2 都没有开启， 还有 <strong>XCB Xlib</strong> 也没有开启。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">Qt Gui:</span><br><span class="line">  Accessibility .......................... yes</span><br><span class="line">  FreeType ............................... yes</span><br><span class="line">    Using system FreeType ................ yes</span><br><span class="line">  HarfBuzz ............................... yes</span><br><span class="line">    Using system HarfBuzz ................ no</span><br><span class="line">  Fontconfig ............................. yes</span><br><span class="line">  Image formats:</span><br><span class="line">    GIF .................................. yes</span><br><span class="line">    ICO .................................. yes</span><br><span class="line">    JPEG ................................. yes</span><br><span class="line">      Using system libjpeg ............... yes</span><br><span class="line">    PNG .................................. yes</span><br><span class="line">      Using system libpng ................ yes</span><br><span class="line">  Text formats:</span><br><span class="line">    HtmlParser ........................... yes</span><br><span class="line">    CssParser ............................ yes</span><br><span class="line">    OdfWriter ............................ yes</span><br><span class="line">    MarkdownReader ....................... yes</span><br><span class="line">      Using system libmd4c ............... no</span><br><span class="line">    MarkdownWriter ....................... yes</span><br><span class="line">  EGL .................................... yes</span><br><span class="line">  OpenVG ................................. no</span><br><span class="line">  OpenGL:</span><br><span class="line">    Desktop OpenGL ....................... yes</span><br><span class="line">    OpenGL ES 2.0 ........................ no</span><br><span class="line">    OpenGL ES 3.0 ........................ no</span><br><span class="line">    OpenGL ES 3.1 ........................ no</span><br><span class="line">    OpenGL ES 3.2 ........................ no</span><br><span class="line">  Vulkan ................................. no</span><br><span class="line">  Session Management ..................... yes</span><br><span class="line">Features used by QPA backends:</span><br><span class="line">  evdev .................................. yes</span><br><span class="line">  libinput ............................... no</span><br><span class="line">  INTEGRITY HID .......................... no</span><br><span class="line">  mtdev .................................. no</span><br><span class="line">  tslib .................................. no</span><br><span class="line">  xkbcommon .............................. no</span><br><span class="line">  X11 specific:</span><br><span class="line">    XLib ................................. yes</span><br><span class="line">    XCB Xlib ............................. no</span><br><span class="line">    EGL on X11 ........................... no</span><br><span class="line">    xkbcommon-x11 ........................ no</span><br><span class="line">QPA backends:</span><br><span class="line">  DirectFB ............................... no</span><br><span class="line">  EGLFS .................................. yes</span><br><span class="line">  EGLFS details:</span><br><span class="line">    EGLFS OpenWFD ........................ no</span><br><span class="line">    EGLFS i.Mx6 .......................... no</span><br><span class="line">    EGLFS i.Mx6 Wayland .................. no</span><br><span class="line">    EGLFS RCAR ........................... no</span><br><span class="line">    EGLFS EGLDevice ...................... no</span><br><span class="line">    EGLFS GBM ............................ no</span><br><span class="line">    EGLFS VSP2 ........................... no</span><br><span class="line">    EGLFS Mali ........................... no</span><br><span class="line">    EGLFS Raspberry Pi ................... no</span><br><span class="line">    EGLFS X11 ............................ no</span><br><span class="line">  LinuxFB ................................ yes</span><br><span class="line">  VNC .................................... yes</span><br></pre></td></tr></table></figure>
+<p>所以继续阅读 <a target="_blank" rel="noopener" href="https://doc.qt.io/qt-6/linux-requirements.html">Qt for X11 requirements</a> 文档, 安装文档中所有列出的依赖软件包后， 重新编译 Qt 5.15.16, 这次 qapitrace 运行正常，而且之前报出的缺少 <strong>Qt Platform plugin “xcb” in “”</strong> 也消失了</p>
+<p><img src="/images/ok/apitrace.png" alt="qapitrace" /></p>
+<h2 id="pal"><a class="markdownIt-Anchor" href="#pal"></a> PAL</h2>
+<p>Qt Platform Abstraction (QPA) 是 Qt 中主要的<strong>平台抽象层 (Platform Abstraction Layer)</strong>, PAL 这个概念在 <a target="_blank" rel="noopener" href="https://github.com/GPUOpen-Drivers/pal">AMD GPU 驱动</a>中也有， 在 Android 里也有类似的 HAL (Hardware Abstraction Layer) 的概念，在系统软件设计中， PAL 的作用可谓是&quot;承上启下&quot;， 设计一个<strong>接口稳定，易于扩展</strong>的 PAL API 是整个用户态系统软件实现效率的关键。通过这次安装 Qt, 又多了一个学习的例子。</p>
+<h1 id="openkylinlinux-66-next"><a class="markdownIt-Anchor" href="#openkylinlinux-66-next"></a> <a target="_blank" rel="noopener" href="https://gitee.com/openkylin/linux/tree/linux-6.6-next">openKylin:linux-6.6-next</a></h1>
+<p>主要关注了一下国产 GPU/DRM 驱动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">./omapdrm</span><br><span class="line">./nouveau</span><br><span class="line">./mxsfb</span><br><span class="line">./mwv207 # 景嘉微 0x0731</span><br><span class="line">./msm</span><br><span class="line">./mgag200</span><br><span class="line">./meson</span><br><span class="line">./mediatek</span><br><span class="line">./mcde</span><br><span class="line">./loongson # 龙芯 0x0014</span><br><span class="line">./logicvc</span><br><span class="line">./lima</span><br><span class="line">./lib</span><br><span class="line">./kmb</span><br><span class="line">./ingenic</span><br><span class="line">./imx</span><br><span class="line">./i915</span><br><span class="line">./i2c</span><br><span class="line">./hyperv</span><br><span class="line">./hisilicon</span><br><span class="line">./gud</span><br><span class="line">./gma500</span><br><span class="line">./fsl-dcu</span><br><span class="line">./exynos</span><br><span class="line">./etnaviv</span><br><span class="line">./display</span><br><span class="line">./ci</span><br><span class="line">./bridge</span><br><span class="line">./atmel-hlcdc</span><br><span class="line">./ast</span><br><span class="line">./aspeed</span><br><span class="line">./armada</span><br><span class="line">./arm</span><br><span class="line">./arise  # 格兰菲 0x6766</span><br><span class="line">./amd</span><br><span class="line">.</span><br><span class="line">➜  drm git:(linux-6.6-next)</span><br></pre></td></tr></table></figure>
+<h1 id="resources"><a class="markdownIt-Anchor" href="#resources"></a> Resources</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://archive.kylinos.cn/kylin/KYLIN-ALL/">KylinOS 的软件包 OpenKylin 基本都能用</a></li>
+<li><a target="_blank" rel="noopener" href="https://trace-cmd.org/">trace-cmd</a></li>
+<li><a target="_blank" rel="noopener" href="https://doc.qt.io/qt-6/embedded-linux.html#embedded-eglfs">Platform plugins for Embedded Linux devices - EGLFS</a></li>
+<li><a target="_blank" rel="noopener" href="https://doc.qt.io/qt-6/linux-requirements.html">Qt for X11 Requirements</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/gfx/vksemaphore/" rel="prev" title="VkSemaphore">
+                  <i class="fa fa-angle-left"></i> VkSemaphore
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>
