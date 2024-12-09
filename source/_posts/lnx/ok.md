@@ -170,13 +170,13 @@ Qt Platform Abstraction (QPA) 是 Qt 中主要的**平台抽象层 (Platform Abs
 ./omapdrm
 ./nouveau
 ./mxsfb
-./mwv207 # 景嘉微
+./mwv207 # 景嘉微 0x0731
 ./msm
 ./mgag200
 ./meson
 ./mediatek
 ./mcde
-./loongson # 龙芯
+./loongson # 龙芯 0x0014
 ./logicvc
 ./lima
 ./lib
@@ -200,7 +200,7 @@ Qt Platform Abstraction (QPA) 是 Qt 中主要的**平台抽象层 (Platform Abs
 ./aspeed
 ./armada
 ./arm
-./arise  # 格兰菲
+./arise  # 格兰菲 0x6766
 ./amd
 .
 ➜  drm git:(linux-6.6-next)
