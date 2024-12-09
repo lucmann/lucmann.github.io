@@ -292,6 +292,20 @@ struct scatterlist {
 
 ![本图来自蜗窝科技](/images/dma-buf/cpuva-cpupa-dma-addr.gif)
 
+- `dma_direct_map_sg()`
+
+`dma_direct_map_sg()` 是由一个 scatterlist 对应的物理页得到对应的 `dma_address`, 就是上图中 **Y 到 Z 的映射**
+
+```mermaid
+flowchart LR
+	A["struct scatterlist *"]
+	B["struct page *"]
+	C["phys_addr_t phys"]
+	D["sg->dma_address"]
+
+	A -- sg_page() --> B -- page_to_phys() --> C -- phys_to_dma() --> D
+```
+
 ## dma_fence
 
 `dma_fence_default_wait` 是 dma-fence 默认的 wait 操作。该函数会让当前进程(task) 进入睡眠状态 (可中断睡眠或不可中断睡眠，取决于调用者传入的参数 `intr`）, 直到 dma-fence 被 signaled 或者设置的超时时间到。
