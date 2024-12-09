@@ -276,6 +276,22 @@ fail_detach:
 
 ## Dynamic DMA-BUF Mapping 和 Cached Sg Table
 
+sg_table 是描述**不连续的物理内存块**(这个内存块是以物理页为单位的)的表结构，就是 scatterlist 的数组。
+
+```c
+struct scatterlist {
+		unsigned long 	page_link;
+		unsigned int 	offset;
+		unsigned int 	length;
+		dma_addr_t		dma_address;
+}
+```
+
+- `page_link` 保存的是 `struct page *`, 即物理页的结构体指针再加最低两位的两个标识位
+- `dma_address` 在有 IOMMU 的系统中是一个 I/O 虚拟地址(下图中的 Z)，在没有 IOMMU 的系统中就是设备地址空间(或 DMA 地址空间)的物理地址(下图中的 Y)
+
+![本图来自蜗窝科技](/images/dma-buf/cpuva-cpupa-dma-addr.gif)
+
 ## dma_fence
 
 `dma_fence_default_wait` 是 dma-fence 默认的 wait 操作。该函数会让当前进程(task) 进入睡眠状态 (可中断睡眠或不可中断睡眠，取决于调用者传入的参数 `intr`）, 直到 dma-fence 被 signaled 或者设置的超时时间到。
@@ -430,5 +446,7 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 - [PRIME](https://blog.csdn.net/hexiaolong2009/article/details/105961192)
 - [何小龙的 DMA-BUF 系列文章](https://blog.csdn.net/hexiaolong2009/category_10838100.html)
 - [Dynamic DMA Mapping Guide](http://www.wowotech.net/memory_management/DMA-Mapping-api.html)
+- [Linux kernel scatterlist API 介绍](http://www.wowotech.net/memory_management/scatterlist.html)
+- [深入理解 iommu 系列一：iommu 硬件架构和驱动初始化](https://kernelnote.com/deep-dive-iommu-hardware-driver.html)
 - [Explicit sync](https://zamundaaa.github.io/wayland/2024/04/05/explicit-sync.html)
 - [Bridging the synchronization gap on Linux](https://www.collabora.com/news-and-blog/blog/2022/06/09/bridging-the-synchronization-gap-on-linux/)
