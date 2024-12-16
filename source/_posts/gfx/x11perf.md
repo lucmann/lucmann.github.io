@@ -9,7 +9,7 @@ categories: graphics
 
 [x11perf](https://gitlab.freedesktop.org/xorg/test/x11perf) 是一个 X11 Server 的性能测试程序
 
-![]()
+![x11perf -range -ftext,-crgbftext](/images/x11perf/x11perf.png)
 
 <!--more-->
 
