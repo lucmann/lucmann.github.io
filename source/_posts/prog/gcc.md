@@ -60,3 +60,14 @@ else
 `type __sync_val_compare_and_swap (type *ptr, type oldval, type newval, ...)`
 
 内置的原子比较和交换操作，也就是说，如果 `*ptr` 的当前值是 `oldval`, 则把 `newval` 写入 `*ptr`, 并且返回写入前的 `*ptr` 值。
+
+# 与编译器相关的 keywords
+
+## volatile vs. register
+
+| volatile                               | register                                |
+|:---------------------------------------|:----------------------------------------|
+| type qualifier                         | storage class                           |
+| force (compiler)                       | hint (compiler)                         |
+| latency                                | fast                                    |
+| OK for global variables                | NOT for global variables                |
