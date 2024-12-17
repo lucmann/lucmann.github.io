@@ -37,3 +37,11 @@ categories: utilities
 | `` \` `` (backtick)    | position at the start of subject string |
 | `\'` (single quote)    | position at the end of subject string   |
 
+# Perl Compatiable Regular Expression (PCRE)
+
+## `grep` multiline match
+
+- `-P`: 使用 Perl 正则表达式扩展
+- `-z`: 让 grep 把输入的行看成是一个多个行的集合，一个整体
+- `.*?`: 后面的 `?` 表示 `.*` 按 **non-greedy** 模式匹配，也就是尽可能少(短)的匹配
+- `(?s)`: 让 `.` 匹配任意字符，包括 `\n` (aka. **PCRE_DOTALL**) 
