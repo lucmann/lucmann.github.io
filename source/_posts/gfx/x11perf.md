@@ -47,6 +47,10 @@ categories: graphics
 rg 'GetReq (.*, req)' --vimgrep -tc | awk -F"[ \t]+" '{printf "| %30-s | ", $1; $1=""; printf "%40-s |\n", $0}'
 ```
 
+# [Xserver](https://gitlab.freedesktop.org/xorg/xserver)
+
+Xserver 的工作方式是一个典型的 CS 架构，服务端接收到这些请求时，在一个 `while` 循环里分发和处理这些请求，或者睡眠(Block 自己)。Xserver 这个分发处理逻辑实现在 [dix/dispatch.c:Dispatch()](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dix/dispatch.c#L483) 函数里。Xserver 甚至搞了一个 **[`SmartScheduleClient()`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/dix/dispatch.c#L338)** 的 robin 算法来更高效地服务客户端。
+
 # ftext
 
 ```mermaid
