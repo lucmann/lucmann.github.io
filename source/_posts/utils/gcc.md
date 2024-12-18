@@ -1,9 +1,51 @@
 ---
-title: gcc那些事儿
+title: GNU Compiler Collection - gcc/g++
 date: 2021-04-15 15:58:26
 tags: [Compiler]
-categories: programming
+categories: utilities
 ---
+
+# `__attribute__`
+
+`__attribute__` is a keyword introduced by GCC. It is regarded as an extension of a language. It helps the compiler optimize calls, check code more carefully for correctness, control memory placement and code generation options.
+
+<!--more-->
+
+## Syntax
+```
+__attribute__ ((attribute-list))
+```
+
+where an attribute-list is a possibly empty comma-separated sequence of attributes. Say:
+
+```
+static void _init( void ) __attribute__((constructor));
+```
+
+## Categories
+- [Function Attributes](https://gcc.gnu.org/onlinedocs/gcc/Function-Attributes.html#Function-Attributes)
+- [Variable Attribute](https://gcc.gnu.org/onlinedocs/gcc/Variable-Attributes.html#Variable-Attributes)
+- [Type Attributes](https://gcc.gnu.org/onlinedocs/gcc/Type-Attributes.html#Type-Attributes)
+- [Label Attributes](https://gcc.gnu.org/onlinedocs/gcc/Label-Attributes.html#Label-Attributes)
+- [Enumerator Attributes](https://gcc.gnu.org/onlinedocs/gcc/Enumerator-Attributes.html#Enumerator-Attributes)
+- [Statement Attributes](https://gcc.gnu.org/onlinedocs/gcc/Statement-Attributes.html#Statement-Attributes)
+
+Let's say to specify an attribute of variables.
+
+```
+extern __thread struct _glapi_table * _glapi_tls_Dispatch
+    __attribute__((tls_model("initial-exec")));
+```
+
+where the `tls_model` attribute sets thread-local storage model of a particular thread variable, overriding `-ftls-model=` command-line switch on a per-variable basis. The [`tls_model`](https://docs.oracle.com/cd/E53394_01/html/E54813/man-tlsam.html#scrolltoc) argument should be one of `global-dynamic`, `local-dynamic`, `initial-exec`, or `local-exec`.
+
+### [Visibility](http://anadoxin.org/blog/control-over-symbol-exports-in-gcc.html)
+
+```
+__attribute__((visibility("default")));
+```
+
+this attribute involves with the visibility of exported symbols in a shared object, overriding `-fvisibility=hidden` command-line option during the compilation. The visibility argument should be one of `default`, `hidden`, `internal`, or `protected`.
 
 # 内置宏
 编译器会预定义许多宏，尤其在交叉编译时，不同的工具链编译器会定义不同的宏。例如:
@@ -11,8 +53,6 @@ categories: programming
 - __aarch64__
 - __ARM_ARCH_7A
 - __ARM_ARCH_8A
-
-<!--more-->
 
 如果使用**armv7**的工具链，那么只有`__ARM_ARCH_7A`会被定义，而如果使用**armv8**的工具链，那么只有`__ARM_ARCH_8A`会被定义。但以上两个编译器都会定义`__aarch64__`.
 
