@@ -38,5 +38,13 @@ sudo make install
 
 # Graphics Boot-up
 
-![lightdm starts Xorg](/images/lightdm-start-x.png)
-
+```mermaid
+flowchart TD
+    A["systemd"]
+    B["/usr/sbin/lightdm"]
+    C["`[Seat:*]
+        # Dump core
+        xserver-command=X -core`"]
+    D["X"]
+    A -- lightdm.service --> B -- /usr/share/lightdm/lightdm.conf.d/50-xserver-command.conf --> C --> D
+```
