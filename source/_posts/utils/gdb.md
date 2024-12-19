@@ -7,7 +7,11 @@ categories: utilities
 
 # [GDB Cheat Sheet](https://darkdust.net/files/GDB%20Cheat%20Sheet.pdf)
 
+![gdb cheatsheet1](/images/gdb/gdb-cheatsheet1.png)
+
 <!--more-->
+
+![gdb cheatsheet2](/images/gdb/gdb-cheatsheet2.png)
 
 # GDB Init File
 
