@@ -45,6 +45,8 @@ flowchart TD
     C["`[Seat:*]
         # Dump core
         xserver-command=X -core`"]
-    D["X"]
+    D["`X
+        Symbolic link to Xorg`"]
+
     A -- lightdm.service --> B -- /usr/share/lightdm/lightdm.conf.d/50-xserver-command.conf --> C --> D
 ```
