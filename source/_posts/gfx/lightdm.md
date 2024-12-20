@@ -50,3 +50,4 @@ flowchart TD
 
     A -- lightdm.service --> B -- /usr/share/lightdm/lightdm.conf.d/50-xserver-command.conf --> C --> D
 ```
+P.S. `lightdm --show-config` 可以显示与 lightdm 相关的配置
