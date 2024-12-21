@@ -26,11 +26,20 @@ update-alternatives [option...] command
 --remove <u>name</u> <u>path</u>
 
 --display <u>name</u>
-```ascii update-alternatives --display python
+
+```shell update-alternatives --display python
 python - auto mode
   link best version is /usr/bin/python3
   link currently points to /usr/bin/python3
   link python is /usr/bin/python
 /usr/bin/python3 - priority 5
+```
+
+```shell sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 3
+update-alternatives: 使用 /usr/bin/python3 来在自动模式中提供 /usr/bin/python (python)
+```
+
+```shell python -V
+Python 3.12.2
 ```
 
