@@ -7,6 +7,8 @@ categories: graphics
 
 [Xephyr /'zefə/](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/hw/kdrive/ephyr/README?ref_type=heads) 是一个嵌套的 X Server, 作为 X 应用程序运行。
 
+![Xephyr :1 -screen 1024x768 -glamor -ac -retro](/images/xephyr/xephyr-ok2.0.png)
+
 <!--more-->
 
 Xephyr 比 Xnest 更强大， 因为 Xnest 只是 Host X Server 的一个代理，而 Xephyr 是一个真正的 X Server, 它使用 Host X Server 的一个窗口作为它的 "framebuffer"。Xephyr 对调试与 X Server 交互的应用程序非常有用。
