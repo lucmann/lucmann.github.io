@@ -55,7 +55,9 @@ categories: utilities
     - 在主仓库初始化一个子仓库
 - `git submodule update`
     - 更新所有子仓库
-
+- `fatal: remote error: upload-pack: not our ref e15ab44e64c70b54fc375c019c95bddc066a84cf
+fatal: Fetched in submodule path 'submodules/ImGuiScope', but it did not contain e15ab44e64c70b54fc375c019c95bddc066a84cf. Direct fetching of that commit failed`
+    - 如果你需要在一个 submodule 仓库里添加自己的修改，那么可能需要将 `.gitmodules` 文件里对应仓库的 `url` 变成你自己的**远程可写**仓库的 URL
 
 # .gitignore
 
