@@ -5,13 +5,13 @@ tags: [Debugger]
 categories: utilities
 ---
 
-# [GDB Cheat Sheet](https://darkdust.net/files/GDB%20Cheat%20Sheet.pdf)
+# [GDB Cheat Sheet](https://github.com/lucmann/x-cheatsheet)
 
-![gdb cheatsheet1](/images/gdb/gdb-cheatsheet1.png)
+![gdb cheatsheet1](/images/gdb/gdb-cheatsheet-1.png)
 
 <!--more-->
 
-![gdb cheatsheet2](/images/gdb/gdb-cheatsheet2.png)
+![gdb cheatsheet2](/images/gdb/gdb-cheatsheet-2.png)
 
 # GDB Init File
 
