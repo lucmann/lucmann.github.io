@@ -1,7 +1,7 @@
 ---
 title: 我在邮件列表里学英语
 date: 2023-07-15 20:20:40
-tags: English
+tags: Hobbies
 categories: misc
 ---
 

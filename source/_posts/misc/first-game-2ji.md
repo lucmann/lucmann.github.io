@@ -1,7 +1,7 @@
 ---
 title: 升2级后的第一盘
 date: 2024-07-29 19:00:41
-tags: [weiqi]
+tags: [Hobbies]
 categories: misc
 ---
 

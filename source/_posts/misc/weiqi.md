@@ -1,7 +1,7 @@
 ---
 title: 弈城围棋
 date: 2021-11-19 15:00:41
-tags: [weiqi]
+tags: [Hobbies]
 categories: misc
 ---
 

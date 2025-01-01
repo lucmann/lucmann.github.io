@@ -1,7 +1,7 @@
 ---
 title: 学弈
 date: 2023-08-27 15:00:41
-tags: [weiqi]
+tags: [Hobbies]
 categories: misc
 ---
 
