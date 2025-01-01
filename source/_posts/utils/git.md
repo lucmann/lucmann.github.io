@@ -92,5 +92,5 @@ git config --global "url.ssh://git@ssh.github.com:443.insteadOf" git@github.com:
 ``` vim ~/.ssh/config
 Host github.com
     Hostname ssh.github.com
-    Port 433
+    Port 443
 ```
