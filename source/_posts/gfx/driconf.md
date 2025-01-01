@@ -1,7 +1,7 @@
 ---
 title: DRI Configuration Infrastructure
 date: 2024-11-06 14:44:56
-tags: [mesa]
+tags: [Mesa]
 categories: graphics
 ---
 

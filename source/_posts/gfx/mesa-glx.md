@@ -1,7 +1,7 @@
 ---
 title: Mesa GLX 实现
 date: 2021-03-11 14:44:56
-tags: [mesa]
+tags: [Mesa]
 categories: graphics
 ---
 

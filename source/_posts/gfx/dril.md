@@ -1,7 +1,7 @@
 ---
 title: DRI Legacy
 date: 2024-09-13 14:44:56
-tags: [mesa]
+tags: [Mesa]
 categories: graphics
 ---
 

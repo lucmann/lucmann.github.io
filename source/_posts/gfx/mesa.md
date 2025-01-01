@@ -1,7 +1,7 @@
 ---
 title: Notes for Mesa
 date: 2020-02-04
-tags: [mesa]
+tags: [Mesa]
 categories: graphics
 ---
 

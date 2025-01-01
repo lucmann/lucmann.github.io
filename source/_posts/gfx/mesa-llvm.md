@@ -1,7 +1,7 @@
 ---
 title: Mesa 对 LLVM 的依赖
 date: 2023-06-25
-tags: [mesa]
+tags: [Mesa]
 categories: graphics
 ---
 
