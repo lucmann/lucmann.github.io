@@ -11,7 +11,7 @@ categories: graphics
 
 <!--more-->
 
-# HAL
+# Android Graphics Stack
 
 ```mermaid
 block-beta
@@ -23,7 +23,7 @@ block-beta
     C["..."]
   end
   block:group2:3
-    a["EGL/GLES"]
+    a["Gralloc"]
     b["HWComposer"]
     c["..."]
   end
@@ -32,13 +32,21 @@ block-beta
     b1["DC"]
     c1["..."]
   end
-  %% 海沫蓝
-  style group1 fill:#19C5AE
+  %% **蓝
+  style group1 fill:#55AEF7
   %% **橙
   style group2 fill:#F87529
   %% **绿
   style group3 fill:#25A768
 ```
+
+# SurfaceFlinger (`/f'lɪngər/`:抛投器)
+
+# HAL
+
+## Gralloc
+
+## HWC
 
 # References
 - [Andorid 文档：实现硬件混合渲染器 HAL](https://source.android.com/docs/core/graphics/implement-hwc?hl=zh-cn)
