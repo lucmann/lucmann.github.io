@@ -74,3 +74,23 @@ git rm --cached file # 永久撤销对file文件的跟踪
 
 - git支持嵌套的`.gitignore`文件，就是说可以在repo下的某个子目录里写一个`.gitignore`文件，但是这个`.gitignore`只能影响这个目录下的内容
 - `.gitignore`文件里的记录*只影响untracked*的文件，就是说如果想ignore一个之前已经跟踪了的文件，就必须先对这个文件执行`git rm --cached`，否则即使把这个文件写到`.gitignore`中也不生效。而且会产生疑惑，明明已经把某个文件加到`.gitignore`中了，为什么仍然被跟踪? 这时最好使用`git ls-tree -r --name-only master`命令确认那个文件是否还在被跟踪。
+
+# GitHub
+
+## `ssh: connect to host github.com port 22: Connection timed out`
+
+之前好好的，突然 `git pull`, `git clone` 等这个错误，两种解决方法
+
+- 修改 git 配置
+
+```shell
+git config --global "url.ssh://git@ssh.github.com:443.insteadOf" git@github.com
+```
+
+- 修改 ssh 配置
+
+``` vim ~/.ssh/config
+Host github.com
+    Hostname ssh.github.com
+    Port 433
+```
