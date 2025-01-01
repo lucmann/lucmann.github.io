@@ -1,7 +1,7 @@
 ---
 title: Hello, Rust
 date: 2021-07-11 23:47:20
-tags: rust
+tags: Rust
 categories: programming
 ---
 

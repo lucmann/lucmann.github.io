@@ -1,7 +1,7 @@
 ---
 title: Vulkan Application
 date: 2024-09-18 21:21:27
-tags: vulkan
+tags: Vulkan
 categories: graphics
 ---
 

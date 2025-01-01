@@ -1,7 +1,7 @@
 ---
 title: drm_gpu_scheduler
 date: 2021-09-17 11:38:43
-tags: [DRM]
+tags: [DRM/KMS]
 categories: linux
 ---
 

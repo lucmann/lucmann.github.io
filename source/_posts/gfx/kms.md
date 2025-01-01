@@ -1,7 +1,7 @@
 ---
 title: Knowledge from "[RFC] Plane color pipeline KMS uAPI"
 date: 2023-05-11 15:35:43
-tags: [kms]
+tags: [DRM/KMS]
 categories: graphics
 ---
 

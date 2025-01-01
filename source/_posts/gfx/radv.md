@@ -1,7 +1,7 @@
 ---
 title: AMD GPU Vulkan Drivers for Linux
 date: 2024-09-02 11:01:15+08:00
-tags: vulkan
+tags: Vulkan
 categories: graphics
 ---
 

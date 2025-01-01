@@ -1,7 +1,7 @@
 ---
 title: VkSemaphore
 date: 2024-11-22 11:21:27
-tags: vulkan
+tags: Vulkan
 categories: graphics
 ---
 
