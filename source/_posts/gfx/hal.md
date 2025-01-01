@@ -11,6 +11,8 @@ categories: graphics
 
 <!--more-->
 
+# HAL
+
 ```mermaid
 block-beta
   columns 3
