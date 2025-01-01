@@ -42,11 +42,11 @@ block-beta
 
 # SurfaceFlinger (`/f'lɪngər/`:抛投器)
 
-# HAL
+# [HAL](https://android.googlesource.com/platform/hardware/libhardware/)
 
-## Gralloc
+## [Gralloc](https://android.googlesource.com/platform/hardware/libhardware/+/refs/heads/main/modules/gralloc/)
 
-## HWC
+## [HWComposer](https://android.googlesource.com/platform/hardware/libhardware/+/refs/heads/main/modules/hwcomposer/)
 
 # References
 - [Andorid 文档：实现硬件混合渲染器 HAL](https://source.android.com/docs/core/graphics/implement-hwc?hl=zh-cn)
