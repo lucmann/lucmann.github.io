@@ -48,5 +48,14 @@ block-beta
 
 ## [HWComposer](https://android.googlesource.com/platform/hardware/libhardware/+/refs/heads/main/modules/hwcomposer/)
 
+### [drm-hwcomposer](https://gitlab.freedesktop.org/drm-hwcomposer/drm-hwcomposer)
+
+一个基于 KMS 的 HWComposer 实现。
+
+### [ARM drm-hwcomposer](https://github.com/ARM-software/drm-hwcomposer)
+
+给 Mali DP 量身定制的 drm-hwcomposer.
+
 # References
-- [Andorid 文档：实现硬件混合渲染器 HAL](https://source.android.com/docs/core/graphics/implement-hwc?hl=zh-cn)
+- [Android 文档：实现硬件混合渲染器 HAL](https://source.android.com/docs/core/graphics/implement-hwc?hl=zh-cn)
+- [Android drm-hwcomposer](https://blog.csdn.net/stray2b/article/details/130291840)
