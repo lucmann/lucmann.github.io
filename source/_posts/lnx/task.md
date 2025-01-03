@@ -27,8 +27,8 @@ stateDiagram-v2
     D --> R: I/O Completed
     T --> R: SIGCONT
     T --> t: gdb/strace
-    T --> Z: SIGKILL
-    T --> Z: Killed but parent's gone
+    T --> Z: SIGKILL But Sth Wrong with Its Parent
+    R --> Z: Exit But Sth Wrong with Its Parent
     t --> T: Quit gdb
 ```
 
