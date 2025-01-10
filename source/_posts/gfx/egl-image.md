@@ -42,7 +42,7 @@ EGLImageKHR image
 typedef void * EGLClientBuffer;
 ```
 
-eglCreateImageKHR可以接受的target的值有:
+- `eglCreateImageKHR()` 接受的 **targets**:
 
 | target                             | Notes                                             |
 |:-----------------------------------|:--------------------------------------------------|
@@ -56,6 +56,23 @@ eglCreateImageKHR可以接受的target的值有:
 | EGL_GL_TEXTURE_3D                  | Used for GL 3D texture images                     |
 | EGL_GL_RENDERBUFFER                | Used for GL renderbuffer images                   |
 | EGL_NATIVE_PIXMAP_KHR              | Used for X11 Pixmap (added EGL_KHR_image_pixmap)  |
+
+- `eglCreateImageKHR()` 接受的 **attributes**:
+
+| attribute                          | Notes                                             |
+|:-----------------------------------|:--------------------------------------------------|
+| EGL_WIDTH                          |                                                   |
+| EGL_HEIGHT                         |                                                   |
+| EGL_LINUX_DRM_FOURCC_EXT           |                                                   |
+| EGL_DMA_BUF_PLANE0_FD_EXT          |                 0x3272                            |
+| EGL_DMA_BUF_PLANE0_OFFSET_EXT      |                 0x3273                            |
+| EGL_DMA_BUF_PLANE0_PITCH_EXT       |                 0x3274                            |
+| EGL_DMA_BUF_PLANE1_FD_EXT          |                 0x3275                            |
+| EGL_DMA_BUF_PLANE1_OFFSET_EXT      |                 0x3276                            |
+| EGL_DMA_BUF_PLANE1_PITCH_EXT       |                 0x3277                            |
+| EGL_DMA_BUF_PLANE2_FD_EXT          |                 0x3278                            |
+| EGL_DMA_BUF_PLANE2_OFFSET_EXT      |                 0x3279                            |
+| EGL_DMA_BUF_PLANE2_PITCH_EXT       |                 0x327A                            |
 
 ## EGLImageKHR in [kylin-wlcom](https://gitee.com/openkylin/kylin-wayland-compositor)
 
