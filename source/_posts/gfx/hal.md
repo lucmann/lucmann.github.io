@@ -1,15 +1,18 @@
 ---
-title: Android HAL
+title: Android Graphics Overview
 date: 2025-01-01 14:44:56
 tags: [Android]
 categories: graphics
 ---
 
+
+![Android Graphics](/images/hal/android-graphics.png)
+
+<!--more-->
+
 # [Android Stack](https://source.android.com/docs/core/architecture?hl=zh-cn)
 
 ![Android Stack](/images/hal/android-stack.svg)
-
-<!--more-->
 
 # Android Graphics Stack
 
@@ -56,6 +59,14 @@ block-beta
 
 给 Mali DP 量身定制的 drm-hwcomposer.
 
+# Android Sync Framework
+
+
+
 # References
+
+- [Android Graphics](https://blog.csdn.net/liuning1985622/article/details/138453346?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-4-138453346-blog-45080305.235^v43^pc_blog_bottom_relevance_base6&spm=1001.2101.3001.4242.3&utm_relevant_index=6)
 - [Android 文档：实现硬件混合渲染器 HAL](https://source.android.com/docs/core/graphics/implement-hwc?hl=zh-cn)
 - [Android drm-hwcomposer](https://blog.csdn.net/stray2b/article/details/130291840)
+- [Fence](https://blog.csdn.net/MoLiYw/article/details/118829051)
+- [Android Sync](https://blog.linuxplumbersconf.org/2014/ocw/system/presentations/2355/original/03%20-%20sync%20&%20dma-fence.pdf)
