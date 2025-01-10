@@ -42,3 +42,5 @@ categories: graphics
 
 [[阅读原文]](https://wayland.freedesktop.org/architecture.html)
 
+# 参考
+- [Wayland Book](https://wayland-book.com/)
