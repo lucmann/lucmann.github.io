@@ -1,5 +1,5 @@
 ---
-title: Render To Texture on TBR GPU
+title: Render To Texture
 date: 2025-01-11 11:21:27
 tags: OpenGL
 categories: graphics
