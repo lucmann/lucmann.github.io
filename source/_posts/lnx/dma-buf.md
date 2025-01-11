@@ -350,11 +350,15 @@ flowchart TD
 
 ## Implicit Synchronization
 
+所谓**隐式同步**，就是驱动 (KMD) 会在每个 dmabuf 以及 buffer object 上附加一个 `dma_fence`, 以确保渲染命令的**有序**执行，以及 buffer 是否已经准备就绪后才可让**消费者**进行读取，所有这些工作基本上在内核完成，完全不需要应用程序的干预。这种方案虽然简单（对于应用开发者）来说，但会有**过度同步 (Over-Synchronization)** 的问题。
+
 ## Explicit Synchronization
 
 - sync_file
 
-`CONFIG_SYNC_FILE` 是内核 3.10 引入的一个可配置的 (configurable) 配置选项， 它控制的是内核 Explicit Synchronization Framework 的编译。Sync File Framework 增加了由用户空间控制的 explicit synchronization, 它提供了通过用户空间组件(Wayland, Vulkan 等)在驱动之间以 Sync File 文件描述符形式的 `struct dma_fence` 向用户空间的收发能力。Sync File 的主要使用者是图形子系统，图形子系统经常会将一个 dma_fence 关联到一个 buffer, 当一个 job 被提交给 GPU 时，一个 dma_fence 也会被附加到那个 buffer, dma_fence 会以 Sync File 文件描述符的形式通过用户空间传送到 DRM 驱动。
+`CONFIG_SYNC_FILE` 是内核 3.10 引入的一个可配置的 (configurable) 配置选项， 它控制的是 Linux 内核 Explicit Synchronization Framework 的编译。Sync File Framework 增加了由用户空间控制的显式同步, 它提供了通过用户空间组件 (Wayland, Vulkan 等)在驱动之间以 Sync File 文件描述符形式的 `struct dma_fence` 向用户空间的收发能力。Sync File 的主要使用者是 GPU 和 V4L 驱动, 它们通常会将一个 `dma_fence` 关联到一个 dmabuf, 这是**隐式同步**的做法,  而现在驱动会将与 dmabuf 相关的这个 `dma_fence` 以 **Sync File FD**传送到用户空间。
+
+*NOTE: sync file 最初是先在 Android kernel 内实现的*
 
 - drm_syncobj
 
@@ -456,6 +460,7 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 # References
 
 - [Linux Kernel Documentation: Buffer Sharing and Synchronization](https://01.org/linuxgraphics/gfx-docs/drm/driver-api/dma-buf.html)
+- [Sync File API Guide](https://docs.kernel.org/driver-api/sync_file.html)
 - [Sharing buffers between devices](https://lwn.net/Articles/454389/)
 - [PRIME](https://blog.csdn.net/hexiaolong2009/article/details/105961192)
 - [何小龙的 DMA-BUF 系列文章](https://blog.csdn.net/hexiaolong2009/category_10838100.html)

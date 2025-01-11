@@ -67,7 +67,7 @@ Android Sync Framework 实现的是**显式同步 (Explicit Synchronization)**, 
   - control ordering
 - sync_pt (point)
   - represent a fence
-- sync_fence
+- sync_fence (like sync file in Linux kernel)
   - for fd passing across userspace processes like `SurfaceFlinger` and 3D applications
 
 # References
