@@ -61,7 +61,14 @@ block-beta
 
 # Android Sync Framework
 
+Android Sync Framework 实现的是**显式同步 (Explicit Synchronization)**, 所谓显式同步，指的是用户态可见，与隐式同步 (Implicit Synchronization) 相对，隐式同步用户态应用程序是不感知的。虽然隐式同步完全由**驱动和内核控制**，无需应用程序干预(这对应用开发者来说可能更简单些，但有时简单的方案可能不是最高效的)，但[显式同步比隐式同步更能发挥硬件的并行性](https://www.collabora.com/news-and-blog/blog/2022/06/09/bridging-the-synchronization-gap-on-linux/)，这应该也是 Android 实现的是显式同步的主要原因。
 
+- sync_timeline
+  - control ordering
+- sync_pt (point)
+  - represent a fence
+- sync_fence
+  - for fd passing across userspace processes like `SurfaceFlinger` and 3D applications
 
 # References
 
@@ -70,3 +77,5 @@ block-beta
 - [Android drm-hwcomposer](https://blog.csdn.net/stray2b/article/details/130291840)
 - [Fence](https://blog.csdn.net/MoLiYw/article/details/118829051)
 - [Android Sync](https://blog.linuxplumbersconf.org/2014/ocw/system/presentations/2355/original/03%20-%20sync%20&%20dma-fence.pdf)
+- [Mainline Explicit Fencing](https://www.collabora.com/news-and-blog/blog/2016/09/13/mainline-explicit-fencing-part-1/)
+- [Explicit Sync](https://zamundaaa.github.io/wayland/2024/04/05/explicit-sync.html)
