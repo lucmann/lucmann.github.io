@@ -13,7 +13,7 @@ Render-To-Texture 是一种十分常见和简单的渲染技术，它将纹理�
 
 # TBR vs IMR
 
-TBR (Tile-Based Rendering) 和 IMR (Immediate Mode Rendering) 是两种不同的渲染架构，前者常见于移动 GPU (Imagniation, Mali), 后者常见于桌面 GPU (NVIDIA, AMD)。
+TBR (Tile-Based Rendering) 和 IMR (Immediate Mode Rendering) 是两种不同的渲染架构，前者常见于移动 GPU (Imagination, Mali), 后者常见于桌面 GPU (NVIDIA, AMD)。
 
 # References
 
