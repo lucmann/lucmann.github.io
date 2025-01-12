@@ -37,3 +37,10 @@ Perfetto 是一个用于 Linux 和 Android 系统上进行系统级和应用级�
 
 从第一次使用 perfetto 的情况，感觉它比较依赖 KMD 的实现，像 GPU 的性能计数器，只有内核驱动实现了，才能通过 perfetto 收集到，不过 perfetto 提供的库和 UI 确实简化了性能数据采集的过程和分析的难度。
 
+# Perfetto in Android
+
+Perfetto 在 Android 上主要是和 [systrace](https://source.android.google.cn/devices/tech/debug/systrace?hl=zh-cn) 配合使用，开发者可以在 Android 设备上打开 **System Tracing**, 将追踪的 trace 文件通过 Chrome 浏览器打开网页 `ui.perfetto.dev` 加载进行查看分析。
+
+# References
+
+- [Android 性能分析工具-systrace使用](https://blog.csdn.net/Jason_Lee155/article/details/126691265)
