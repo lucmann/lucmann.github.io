@@ -66,7 +66,7 @@ drwxr-xr-x 35 root root 0 May 19 17:03 ./bdi
 
 # CONFIG_TRACING
 
-CONFIG_TRACING 是内核 2.6.27 (2008-10-09)* 引入的一个**不可配置的(not configurable)** 内核选项，**不可配置**的意思是只能通过别的配置选项的打开来影响它的打开。
+CONFIG_TRACING 是内核 2.6.27 (2008-10-09)* 引入的一个**不可配置的(not configurable)** 内核选项，所谓**不可配置**的意思是这个 CONFIG **不能直接**由用户打开或关闭，它的开启与否只能由其它依赖它的选项的状态决定。
 
 它对应的 **tracefs** 也需要挂载
 
