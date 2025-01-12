@@ -9,6 +9,9 @@ categories: linux
 
 ```mermaid
 flowchart BT
+	App@{ img: "/images/dma-buf/window-content.png", label: "vram for rendering", pos: "d", w: 60, h: 60, constraint: "on" }
+	Window@{ img: "/images/dma-buf/window-frame.png", label: "vram for window frame", pos: "d", w: 60, h: 60, constraint: "on" }
+
 	subgraph app [glxgears]
 		BO_10
 	end
@@ -20,14 +23,11 @@ flowchart BT
 		BO_21
 	end
 
-	App@{ img: "/images/dma-buf/window-content.png", label: "vram for rendering", pos: "d", w: 60, h: 60, constraint: "on" }
-	Window@{ img: "/images/dma-buf/window-frame.png", label: "vram for window frame", pos: "d", w: 60, h: 60, constraint: "on" }
-
 	App --Exporter--> BO_10
-	BO_11 --Importer--> App
+	App ~~~ BO_11 --Importer--> App
 
 	Window --Exporter--> BO_20
-	BO_21 --Importer--> Window
+	Window ~~~ BO_21 --Importer--> Window
 ```
 
 <!--more-->
