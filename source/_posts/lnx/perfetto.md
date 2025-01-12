@@ -53,6 +53,7 @@ flowchart LR
 	Step_1@{ img: "/images/perfetto/activate-system-tracing-1.png", w: 360, h: 720, constraint: "on" }
 	Step_2@{ img: "/images/perfetto/activate-system-tracing-2.png", w: 360, h: 720, constraint: "on" }
 	Step_3@{ img: "/images/perfetto/activate-system-tracing-3.png", w: 360, h: 720, constraint: "on" }
+    Step_1 --> Step_2 --> Step_3
 ```
 
 - 打开**系统跟踪**
