@@ -50,9 +50,9 @@ NOTE: 上面的跟踪日志文件来自我的红米手机，需要先让**开发
 
 ```mermaid
 flowchart LR
-	Step_1@{ img: "/images/perfetto/activate-system-tracing-1.png", pos: "d", w: 60, h: 120, constraint: "on" }
-	Step_2@{ img: "/images/perfetto/activate-system-tracing-2.png", pos: "d", w: 60, h: 120, constraint: "on" }
-	Step_3@{ img: "/images/perfetto/activate-system-tracing-3.png", pos: "d", w: 60, h: 120, constraint: "on" }
+	Step_1@{ img: "/images/perfetto/activate-system-tracing-1.png", w: 360, h: 720, constraint: "on" }
+	Step_2@{ img: "/images/perfetto/activate-system-tracing-2.png", w: 360, h: 720, constraint: "on" }
+	Step_3@{ img: "/images/perfetto/activate-system-tracing-3.png", w: 360, h: 720, constraint: "on" }
 ```
 
 - 打开**系统跟踪**
