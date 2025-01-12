@@ -16,8 +16,8 @@ flowchart BT
 		BO_10
 	end
 	subgraph x11 [Xorg]
-		BO_11
 		BO_20
+		BO_11
 	end
 	subgraph compositor [kwin_x11]
 		BO_21
