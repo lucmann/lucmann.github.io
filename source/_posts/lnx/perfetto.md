@@ -39,7 +39,23 @@ Perfetto 是一个用于 Linux 和 Android 系统上进行系统级和应用级�
 
 # Perfetto in Android
 
-Perfetto 在 Android 上主要是和 [systrace](https://source.android.google.cn/devices/tech/debug/systrace?hl=zh-cn) 配合使用，开发者可以在 Android 设备上打开 **System Tracing**, 将追踪的 trace 文件通过 Chrome 浏览器打开网页 `ui.perfetto.dev` 加载进行查看分析。
+Perfetto 在 Android 上主要是和 [systrace](https://source.android.google.cn/devices/tech/debug/systrace?hl=zh-cn) 配合使用，开发者可以在 Android 设备上打开 **System Tracing**, 将追踪的 trace 文件通过 Chrome 浏览器打开网页 [ui.perfetto.dev](https://ui.perfetto.dev/) 加载进行查看分析。
+
+![xiaomi-system-tracing](/images/perfetto/xiaomi-system-tracing.png)
+![xiaomi-system-tracing-2](/images/perfetto/xiaomi-system-tracing-2.png)
+
+NOTE: 上面的跟踪日志文件来自我的红米手机，需要先让**开发者选项**在**设置**界面出现，才能打开 System Tracing
+
+- 调出**开发者选项**
+
+```mermaid
+flowchart LR
+	Step_1@{ img: "/images/perfetto/activate-system-tracing-1.png", pos: "d", w: 60, h: 120, constraint: "on" }
+	Step_2@{ img: "/images/perfetto/activate-system-tracing-2.png", pos: "d", w: 60, h: 120, constraint: "on" }
+	Step_3@{ img: "/images/perfetto/activate-system-tracing-3.png", pos: "d", w: 60, h: 120, constraint: "on" }
+```
+
+- 打开**系统跟踪**
 
 # References
 
