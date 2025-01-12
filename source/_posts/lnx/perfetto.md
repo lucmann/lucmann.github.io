@@ -62,7 +62,7 @@ flowchart LR
 flowchart LR
 	Step_1@{ img: "/images/perfetto/activate-system-tracing-4.png", w: 360, h: 720, constraint: "on" }
 	Step_2@{ img: "/images/perfetto/activate-system-tracing-5.png", w: 360, h: 720, constraint: "on" }
-	Step_3@{ img: "/images/perfetto/activate-system-tracing-6.png", w: 360, h: 720, constraint: "on" }
+	Step_3@{ img: "/images/perfetto/activate-system-tracing-6.jpg", w: 360, h: 720, constraint: "on" }
     Step_1 --> Step_2 --> Step_3
 ```
 
