@@ -23,11 +23,11 @@ flowchart BT
 		BO_21
 	end
 
-	App --Exporter--> BO_10
-	App ~~~ BO_11 --Importer--> App
+	App ~~~ BO_10 --Exporter--> App
+	App --Importer--> BO_11
 
-	Window --Exporter--> BO_20
-	Window ~~~ BO_21 --Importer--> Window
+	Window ~~~ BO_20 --Exporter--> Window
+	Window --Importer--> BO_21
 ```
 
 <!--more-->
