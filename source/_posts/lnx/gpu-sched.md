@@ -5,12 +5,43 @@ tags: [DRM/KMS]
 categories: linux
 ---
 
+# Task State
 
-Linux DRM 子系统的 `drm_gpu_scheduler` 负责提交和调度 GPU job，以一个单独的内核模块(`gpu-sched`) 的形式存在。
+```mermaid
+stateDiagram-v2
+    R: running
+    S: sleeping
+    D: disk sleep
+    T: stopped
+    t: tracing stop
+    X: dead
+    Z: zombie
+    P: parked
+    I: idle
+
+    R --> S: Wait for Sth
+    R --> D: Wait for Disk I/O
+    R --> T: SIGTSTP
+    R --> t: gdb/strace
+    S --> R: Sth Available
+    D --> R: I/O Completed
+    T --> R: SIGCONT
+    T --> t: gdb/strace
+    T --> Z: SIGKILL But Sth Wrong with Its Parent
+    R --> Z: Exit But Sth Wrong with Its Parent
+    t --> T: Quit gdb
+```
 
 <!--more-->
 
+Notes:
+- `disk sleep` 也就是 **uninterruptible sleep** 状态
+- `zombie` 状态的进程在 `ps` 中被标记为 `<defunct>`
+- 正常的空闲用户进程一般是 `sleeping` 状态，空闲的 kthread 是 `idle` 状态
+
 #  数据结构
+
+Linux DRM 子系统的 `drm_gpu_scheduler` 负责提交和调度 GPU job，以一个单独的内核模块(`gpu-sched`) 的形式存在。
 
 - `drm_gpu_scheduler`
 
@@ -29,6 +60,14 @@ Linux DRM 子系统的 `drm_gpu_scheduler` 负责提交和调度 GPU job，以�
 - `drm_sched_job`
 
 被 entity 运行的一个 job, 一个 job 总是属于某一个 entity
+
+# 内核中和调度相关的 APIs
+
+- `static inline int signal_pending(struct task_struct *)`
+    - 检查当前 task 是否有信号处理，返回*非 0* 表示有信号需要处理
+
+- `signed long __sched shedule_timeout_interruptible(signed long timeout);`
+    - 调用者 task 开始*睡眠直到超时*
 
 # References
 
