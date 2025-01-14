@@ -7,6 +7,10 @@ categories: graphics
 
 [Xephyr /'zefə/](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/hw/kdrive/ephyr/README?ref_type=heads) 是一个嵌套的 X Server, 作为 X 应用程序运行。
 
+```shell Start Xephyr
+ Xephyr :1 -glamor -screen 1024x768 -ac -retro
+```
+
 ![Xephyr :1 -screen 1024x768 -glamor -ac -retro](/images/xephyr/xephyr-ok2.0.png)
 
 <!--more-->
