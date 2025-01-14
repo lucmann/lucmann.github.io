@@ -17,8 +17,8 @@ IMR (Immediate Mode Rendering) 和 TBR (Tile-Based Rendering) 是两种不同的
 
 ## IMR
 
-- 一整块一整块渲染，所以在片上做了**大面积**的高速缓存
-- 需要大量带宽，所以功耗高
+- 一整块一整块渲染，需要大量访存，所以必须有**比较大的 L1, L2 Cache** 来降低访存延时
+- 需要大量带宽，所以**功耗高**
 - 渲染管线执行**流畅**， 从顶点到片段**一口气弄完**
 
 ```mermaid
@@ -44,13 +44,12 @@ block-beta
     ZB --> L
     H --> FB
     FB --> H
-
-    style pipeline fill:#00bc00
 ```
+
 ## TBR
 
-- 一小块一小块**渲染**, 对于每一小块来说，所需要的访存的带宽就相对较小，可以在片上做一小块高速缓存
-- 需要的带宽小，所以功耗也相对较低
+- 一小块一小块**渲染**, 对于每一小块来说，所需要的访存的带宽就相对较小，可以在片上做一**小块高速缓存**
+- 需要的带宽小，所以**功耗低**
 
 ```mermaid
 block-beta
@@ -82,9 +81,10 @@ block-beta
     CC --> FB
     FB --> CC
 
-    style pipeline fill:#00bc00
     style onchip   fill:#00bc00,stroke:#ff0000,stroke-dasharray:5 5
 ```
+
+由上面的两张图可以看到，在 TBR 架构下，GPU 产生的每个像素并不是直接写入显存的，而是暂存在**片上的 Color Buffer** 中，对于 RTT 来说，如果渲染得到的纹理作为后面绘制命令的源纹理，那么如果没有显式地将还存在于片上的 Color Buffer 刷新入显存中，那么当前的绘制中，纹理采样获取的纹素就是旧数据。
 
 # References
 
