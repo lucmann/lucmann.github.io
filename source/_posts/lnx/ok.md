@@ -206,6 +206,10 @@ Qt Platform Abstraction (QPA) 是 Qt 中主要的**平台抽象层 (Platform Abs
 ➜  drm git:(linux-6.6-next)
 ```
 
+# RedEclipse
+
+![RedEclipse on NV137](/images/ok/nv137-redeclipse.png)
+
 # Resources
 
 - [KylinOS 的软件包 OpenKylin 基本都能用](https://archive.kylinos.cn/kylin/KYLIN-ALL/)
