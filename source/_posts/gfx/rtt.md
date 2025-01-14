@@ -55,7 +55,7 @@ block-beta
 block-beta
     columns 1
     block:pipeline
-        A["Vertex<br>Processing"] space B["Clip<br>Cull"] space C["Tiling"] space D["Raster"] space E["Early-Z<br>Test"] space F["Texture<br>Fragment"] space G["Alpha<br>Test"] space H["Alpha<br>Blend"]
+        A["Vertex<br>Processing"] space B["Clip<br>Cull"] space C["Tiling"] space D["Raster"] space E["Early-Z<br>Test"] space F["Texture<br>Fragment"] space G["Late-Z<br>Test"] space H["Alpha<br>Blend"]
         A --> B
         B --> C
         D --> E
@@ -64,7 +64,7 @@ block-beta
         G --> H
     end
     block:onchip
-        space:8 ZC["On-Chip<br>Depth Buffer"] space:5 CC["On-Chip<br>Color Buffer"]
+        space:12 ZC["On-Chip<br>Depth Buffer"] space CC["On-Chip<br>Color Buffer"]
     end
     space
     block:vram
@@ -74,8 +74,8 @@ block-beta
     C --> PL
     PL --> D
     TD --> F
-    E --> ZC
-    ZC --> E
+    G --> ZC
+    ZC --> G
     H --> CC
     CC --> H
     CC --> FB
@@ -89,4 +89,5 @@ block-beta
 # References
 
 - [Tutorial 14: Render To Texture](https://www.opengl-tutorial.org/intermediate-tutorials/tutorial-14-render-to-texture/)
-- [渲染架构比较：IMR,TBR & TBDR](https://zhuanlan.zhihu.com/p/390625258)
+- [GPU 帧缓冲内存：了解瓦片渲染 TBR(tile-based rendering)](https://zhuanlan.zhihu.com/p/654389634)
+- [GPU Framebuffer Memory: Understanding Tiling](https://developer.samsung.com/galaxy-gamedev/resources/articles/gpu-framebuffer.html)
