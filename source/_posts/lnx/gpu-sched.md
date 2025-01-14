@@ -19,11 +19,11 @@ stateDiagram-v2
     P: parked
     I: idle
 
-    R --> S: Wait for Sth
+    R --> S: schedule_timeout()
     R --> D: Wait for Disk I/O
     R --> T: SIGTSTP
     R --> t: gdb/strace
-    S --> R: Sth Available
+    S --> R: wake_up_process()
     D --> R: I/O Completed
     T --> R: SIGCONT
     T --> t: gdb/strace
