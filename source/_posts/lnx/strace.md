@@ -6,7 +6,7 @@ categories: linux
 ---
 
 
-```strace -c -w -o glmark2.strace glmark2
+```txt strace -c -w -o glmark2.strace glmark2
 % time     seconds  usecs/call     calls    errors syscall
 ------ ----------- ----------- --------- --------- ------------------
  55.82   14.421660          55    258416           ioctl
@@ -58,3 +58,7 @@ categories: linux
 <!--more-->
 
 [strace](https://github.com/strace/strace) 主要是用来跟踪分析 Linux 系统调用的，因为系统调用是用户程序与内核交互的唯一途径，所以 strace 对于调试像用户态驱动程序这样的系统软件很有帮助。
+
+# 参考
+
+- [strace vs. ltrace vs. ptrace vs. ftrace](https://gist.github.com/reveng007/3e1d7a692649d30a75e566684207880c)
