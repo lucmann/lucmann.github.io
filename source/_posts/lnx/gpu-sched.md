@@ -69,6 +69,9 @@ Linux DRM 子系统的 `drm_gpu_scheduler` 负责提交和调度 GPU job，以�
 - `signed long __sched shedule_timeout_interruptible(signed long timeout);`
     - 调用者 task 开始*睡眠直到超时*
 
+- `wait_event_timeout(wq_head, condition, timeout)`
+    - `wq_head`: 正在等待的一个队列 *waitqueue*, 每次 *wq_head* 被唤醒， *condition* 都会被检查一次 
+
 # References
 
 - [when-to-use-kernel-threads-vs-workqueues-in-the-linux-kernel](https://stackoverflow.com/questions/2147299/when-to-use-kernel-threads-vs-workqueues-in-the-linux-kernel)
