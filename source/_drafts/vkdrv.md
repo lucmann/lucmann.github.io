@@ -5,6 +5,13 @@ tags: Vulkan
 categories: graphics
 ---
 
+# `vk::PhysicalDevice` vs `vk::Device`
+
+- `vk::PhysicalDevice`
+  - 物理设备 GPU
+- `vk::Device`
+  - 逻辑设备 从 app 角度看到的设备
+
 # dispatch table
 
 mesa 代码库中使用 [`src/vulkan/util/vk_dispatch_table_gen.py`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/vulkan/util/vk_dispatch_table_gen.py) 生成 vulkan 各种 **dispatch tables**
