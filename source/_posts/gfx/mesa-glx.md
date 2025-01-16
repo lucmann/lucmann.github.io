@@ -109,12 +109,21 @@ flowchart TD
 
 来指定运行时到底是哪个 vendor 的驱动被调用。
 
-# Mesa
+# Mesa 的包与库
 
-| APT Package      |  Target              | Description                    |
-|:-----------------|:---------------------|:-------------------------------|
-| libglapi-mesa    | libglapi.so          | free implementation of GL API  |
-| libgles2-mesa    |                      | transitional dummy package     |
+``` shell find /usr -path /usr/share -prune -o -name 'libGL*' -type f -exec dpkg -S {} \;
+libglew2.2:amd64: /usr/lib/x86_64-linux-gnu/libGLEW.so.2.2.0
+libglvnd0:amd64: /usr/lib/x86_64-linux-gnu/libGLdispatch.so.0.0.0
+libglew-dev:amd64: /usr/lib/x86_64-linux-gnu/libGLEW.a
+arise-linux-graphics-driver-dri:amd64: /usr/lib/x86_64-linux-gnu/libGLX_arise.so.0.0.0
+libglx-mesa0:amd64: /usr/lib/x86_64-linux-gnu/libGLX_mesa.so.0.0.0
+libglx0:amd64: /usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+libgles2:amd64: /usr/lib/x86_64-linux-gnu/libGLESv2.so.2.1.0
+libgles1:amd64: /usr/lib/x86_64-linux-gnu/libGLESv1_CM.so.1.2.0
+libgl1:amd64: /usr/lib/x86_64-linux-gnu/libGL.so.1.7.0
+libglu1-mesa:amd64: /usr/lib/x86_64-linux-gnu/libGLU.so.1.3.1
+libglu1-mesa-dev:amd64: /usr/lib/x86_64-linux-gnu/libGLU.a
+```
 
 # References
 - [Dynamic Linking/Dynamic Section](https://docs.oracle.com/cd/E19683-01/817-3677/chapter6-42444/index.html)
