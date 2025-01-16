@@ -84,7 +84,7 @@ git rm --cached file # 永久撤销对file文件的跟踪
 - 修改 git 配置
 
 ```shell
-git config --global "url.ssh://git@ssh.github.com:443.insteadOf" git@github.com:
+git config --global "url.ssh://git@ssh.github.com:443/.insteadOf" git@github.com:
 ```
 
 - 修改 ssh 配置
