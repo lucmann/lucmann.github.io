@@ -111,7 +111,7 @@ flowchart TD
 
 # Mesa 的包与库
 
-``` shell find /usr -path /usr/share -prune -o -name 'libGL*' -type f -exec dpkg -S {} \;
+```bash find /usr -path /usr/share -prune -o -name 'libGL*' -type f -exec dpkg -S {} \;
 libglew2.2:amd64: /usr/lib/x86_64-linux-gnu/libGLEW.so.2.2.0
 libglvnd0:amd64: /usr/lib/x86_64-linux-gnu/libGLdispatch.so.0.0.0
 libglew-dev:amd64: /usr/lib/x86_64-linux-gnu/libGLEW.a
