@@ -20,6 +20,10 @@ Mesa 包含了各种 GPU/CPU 的 OpenGL, OpenCL, Vulkan 实现(Usermode Driver),
 
 # Build
 
+## Build Dependencies
+
+- glslangValidator (*)
+
 ```
 meson build -Dprefix=/usr -Dplatforms=x11 -Dgallium-drivers=swrast,panfrost,radeonsi -Dvulkan-drivers=swrast -Dglx=dri -Dllvm=enabled -Dcpp_rtti=false -Dxmlconfig=enabled -Dglvnd=true
 ```
