@@ -25,9 +25,9 @@ Sanitizer 检测内存越界，未初始化，泄漏的原理是让编译器在�
 
 ![various red zones](/images/sanitizer/redzones.png)
 
-要完成这些需要让程序链接一个叫 **`libasan.so`** 的运行时动态库，以及在编译和链接时指定 `-fsanitize=address`。
+要完成这些需要让程序链接一个叫 **`libasan.so`** 的运行时动态库，以及在编译和链接时指定 **`-fsanitize=address`**。
 
-- AddressSanitizer (ASan `-fsanitizer=address`):
+- AddressSanitizer (ASan **`-fsanitizer=address`**):
     - use-after-free
     - double-free
     - buffer (heap, stack, and global buffer) overflows
@@ -47,7 +47,7 @@ int main() {
 
 ![Leak Sanitizer](/images/sanitizer/leak-sanitizer.png)
 
-- MemorySanitizer (MSan `-fsanitizer=memory -fsanitizer-memory-track-origins`):
+- MemorySanitizer (MSan **`-fsanitizer=memory -fsanitizer-memory-track-origins`**):
     - uninitialized memory reads
 
 # 死锁
@@ -56,7 +56,7 @@ int main() {
 
 # 未定义行为
 
-- UndefinedBehaviorSanitizer (UBSan `-fsanitizer=undefined`)
+- UndefinedBehaviorSanitizer (UBSan **`-fsanitizer=undefined`**)
     - signed integer overflow
     - use-of-null-pointer
     - division by zero
