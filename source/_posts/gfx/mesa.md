@@ -28,10 +28,10 @@ Mesa 包含了各种 GPU/CPU 的 OpenGL, OpenCL, Vulkan 实现(Usermode Driver),
 | /usr/bin/rustc             | rustc               | 1.78.0 or newer    | `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`                                               |
 | bindgen (rust package)     | cargo               | 0.65 or newer      | `cargo install bindgen-cli`                                                                                    |
 | libclc-dev                 | libclc-17-dev       |                    |  not required if -Dmesa-clc=auto                                                                               |
-| libdrm                     | libdrm-dev          | 2.4.121(120 ok2.0) | [https://gitlab.freedesktop.org/mesa/drm](https://gitlab.freedesktop.org/mesa/drm)                             |
+|+libdrm                     | libdrm-dev          | 2.4.121(120 ok2.0) | [https://gitlab.freedesktop.org/mesa/drm](https://gitlab.freedesktop.org/mesa/drm)                             |
 | llvm                       | llvm-17-dev         | (17.0.6 ok2.0)     | [https://github.com/llvm/llvm-project](https://github.com/llvm/llvm-project)                                   |
 | libLLVMSPIRVLib.so.17      | llvm-spirv-17       | (17.0.0 ok2.0)     | [https://github.com/KhronosGroup/SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator) |
-| LLVMSPIRVLib.h             | llvmspirvlib-17-dev | (absent ok2.0)     | [https://github.com/KhronosGroup/SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator) |
+|+LLVMSPIRVLib.h             | llvmspirvlib-17-dev | (absent ok2.0)     | [https://github.com/KhronosGroup/SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator) |
 | clang-cpp                  | libclang-cpp17-dev  | (17.0.6 ok2.0)     | not required if -Dmesa-clc=auto                                                                                |
 |*clang-dev                  | libclang-17-dev     |                    | [Debian package issue](https://gitlab.freedesktop.org/mesa/mesa/-/issues/10485)                                |
 | xshmfence                  | libxshmfence-dev    | (1.3    ok2.0)     | required if -Dplatforms=x11                                                                                    |
@@ -39,14 +39,100 @@ Mesa 包含了各种 GPU/CPU 的 OpenGL, OpenCL, Vulkan 实现(Usermode Driver),
 | xrandr                     | libxrandr-dev       | (1.5.2  ok2.0)     | required since -Dxlib-lease=true                                                                               |
 | cbindgen (rust package)    | cargo               | 0.28.0             | `cargo install cbindgen`; required if -Dgallium-drivers=nouveau                                                |
 
-NOTE: (*) 表示本来不需要的依赖
+NOTE:
+- (*) 表示本来不需要的依赖
+- (+) 在 OpenKylin 2.0 的源里没有，需要源码构建
 
-```
-meson build -Dprefix=/usr -Dplatforms=x11 -Dgallium-drivers=swrast,panfrost,radeonsi -Dvulkan-drivers=swrast -Dglx=dri -Dllvm=enabled -Dcpp_rtti=false -Dxmlconfig=enabled -Dglvnd=true
+```bash
+meson build -Dprefix=/usr/local -Dlibdir=lib/x86_64-linux-gnu -Dplatforms=x11 -Dgallium-drivers=nouveau
 ```
 
-``` bash
-ninja -C build && sudo ninja -C build install
+- `-Dprefix=/usr/local` 避免覆盖系统原来的 `libGL*`
+- `-Dlibdir=lib/x86_64-linux-gnu` 设置库的安装路径为 `/etc/ld.so.conf.d/x86_64-linux-gnu.conf` 中搜索**第一顺位**的路径
+- 其他默认就好， 出现的依赖在 OpenKylin 2.0 上 apt-get 基本都能解决
+
+```console
+Build targets in project: 437
+WARNING: Project specifies a minimum meson_version '>= 1.1.0' but uses features which were added in newer versions:
+ * 1.3.0: {'rust.proc_macro', 'rust_abi arg in static_library'}
+
+mesa 25.0.0-devel
+
+  Directories
+    prefix                       : /usr/local
+    libdir                       : lib/x86_64-linux-gnu
+    includedir                   : include
+
+  Common C and C++ arguments
+    c_cpp_args                   : -mtls-dialect=gnu2
+
+  OpenGL
+    OpenGL                       : YES
+    ES1                          : YES
+    ES2                          : YES
+    Shared glapi                 : YES
+    GLVND                        : YES
+
+  DRI
+    Platform                     : drm
+    Driver dir                   : /usr/local/lib/x86_64-linux-gnu/dri
+
+  GLX
+    Enabled                      : YES
+    Provider                     : dri
+
+  EGL
+    Enabled                      : YES
+    Drivers                      : builtin:egl_dri2 builtin:egl_dri3
+    Platforms                    : x11 surfaceless drm xcb
+
+  GBM
+    Enabled                      : YES
+    Backends path                : /usr/local/lib/x86_64-linux-gnu/gbm
+
+  Vulkan
+    Drivers                      : amd intel intel_hasvk nouveau swrast
+    Platforms                    : x11 surfaceless drm xcb
+    ICD dir                      : share/vulkan/icd.d
+    Intel Ray tracing            : YES
+
+  Video
+    Codecs                       : av1dec av1enc vp9dec
+    APIs                         : vulkan xa
+
+  LLVM
+    Enabled                      : YES
+    Version                      : 17.0.6
+
+  Gallium
+    Enabled                      : YES
+    Drivers                      : nouveau
+    Platforms                    : x11 surfaceless drm xcb
+    Frontends                    : mesa xa
+    Off-screen rendering (OSMesa): NO
+    HUD lm-sensors               : NO
+
+  Perfetto
+    Enabled                      : NO
+
+  Teflon (TensorFlow Lite delegate)
+    Enabled                      : NO
+
+  Subprojects
+    paste                        : YES
+    proc-macro2                  : YES (from syn => quote)
+    quote                        : YES (from syn)
+    syn                          : YES
+    unicode-ident                : YES (from syn)
+
+  User defined options
+    libdir                       : lib/x86_64-linux-gnu
+    prefix                       : /usr/local
+    gallium-drivers              : nouveau
+    platforms                    : x11
+
+Found ninja-1.11.1 at /usr/bin/ninja
+WARNING: Running the setup command as `meson [options]` instead of `meson setup [options]` is ambiguous and deprecated.
 ```
 
 <!--more-->
@@ -683,7 +769,8 @@ struct gl_vertex_array_object
 - vl
 
 # Q&A
-#### When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
+
+- When xlib creates pipe screen, *only* software rasterizers or pipes'screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. [Zink](https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/) is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?
 
 The answer is **`sw_winsys`**. All of target helpers's parameter is a `sw_winsys`. Check mesa source directory: [mesa/src/gallium/winsys](https://gitlab.freedesktop.org/mesa/mesa/tree/master/src/gallium/winsys)
 
@@ -728,11 +815,11 @@ That means you have to declare a bunch of new interfaces from the top. So you'd 
 ```
 
 
-#### libGL.so is not built until glx option is enabled in **meson_options.txt**.
+- libGL.so is not built until glx option is enabled in **meson_options.txt**.
 
 Only with essential build-time dependencies for X11 installed and glx option configured is libGL.so built.
 
-#### What role do DRM, DRI and Gallium play in Mesa? 
+- What role do DRM, DRI and Gallium play in Mesa? 
 
 ``` meson
 _libdrm_checks = [
@@ -755,7 +842,7 @@ if with_dri_i915 and with_gallium_i915
 endif
 ```
 
-#### What problems are encountered when you build mesa on the WSL?
+- What problems are encountered when you build mesa on the WSL?
 
 - dri based GLX requires shared-glapi
 - Gallium-xlib based GLX requires softpipe or llvmpipe
@@ -792,13 +879,13 @@ option(
 - Cannot build GLX support without X11 platform support and at least one OpenGL API
     * GLX, As the name suggests, is dedicated to X11 winsys.
 
-#### When `__glXInitialize` creates the `Display`, **only** `driswCreateDisplay` returns successfully. Both of `dri2CreateDisplay` and `driCreateDisplay` failed.
+- When `__glXInitialize` creates the `Display`, **only** `driswCreateDisplay` returns successfully. Both of `dri2CreateDisplay` and `driCreateDisplay` failed.
 
 - env: WSL on Windows 10 and with vcXsrv installed on the host as X server
 
 The cause of failure is that vcXsrv has no extensions with DRI or DRI2. This lack of X server extension fails `DRI2QueryExtension` and `XF86DRIQueryExtension` so that the loading of gallium driver is not invoked.
 
-``` c
+```c
 /*
  * XextAddDisplay - add a display to this extension
  */
@@ -883,6 +970,8 @@ XExtDisplayInfo *XextAddDisplay (
 
 # Debug
 
-## envars
+## env vars
+
+- MESA_VERBOSE=api glmark2
 - MESA_GLSL=dump_on_error MESA_DEBUG=1 glmark2
 
