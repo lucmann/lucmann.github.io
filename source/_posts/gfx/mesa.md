@@ -33,12 +33,13 @@ Mesa 包含了各种 GPU/CPU 的 OpenGL, OpenCL, Vulkan 实现(Usermode Driver),
 | libLLVMSPIRVLib.so.17      | llvm-spirv-17       | (17.0.0 ok2.0)     | [https://github.com/KhronosGroup/SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator) |
 | LLVMSPIRVLib.h             | llvmspirvlib-17-dev | (absent ok2.0)     | [https://github.com/KhronosGroup/SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator) |
 | clang-cpp                  | libclang-cpp17-dev  | (17.0.6 ok2.0)     | not required if -Dmesa-clc=auto                                                                                |
+|*clang-dev                  | libclang-17-dev     |                    | [Debian package issue](https://gitlab.freedesktop.org/mesa/mesa/-/issues/10485)                                |
 | xshmfence                  | libxshmfence-dev    | (1.3    ok2.0)     | required if -Dplatforms=x11                                                                                    |
 | xxf86vm                    | libxxf86vm-dev      | (1.1.4  ok2.0)     | required since -Dglx-direct=true by default                                                                    |
 | xrandr                     | libxrandr-dev       | (1.5.2  ok2.0)     | required since -Dxlib-lease=true                                                                               |
 | cbindgen (rust package)    | cargo               | 0.28.0             | `cargo install cbindgen`; required if -Dgallium-drivers=nouveau                                                |
 
-- glslangValidator (*)
+NOTE: (*) 表示本来不需要的依赖
 
 ```
 meson build -Dprefix=/usr -Dplatforms=x11 -Dgallium-drivers=swrast,panfrost,radeonsi -Dvulkan-drivers=swrast -Dglx=dri -Dllvm=enabled -Dcpp_rtti=false -Dxmlconfig=enabled -Dglvnd=true
