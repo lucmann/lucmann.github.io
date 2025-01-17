@@ -457,6 +457,19 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 ```
 它申请范围在最小值是 1 (包含)和最大值是 0 (不包含，实际上最大值是 0xffffffff) 之间的一个整数。 
 
+# Questions
+
+这里主要根据[内核邮件列表里的一个讨论](https://patchwork.kernel.org/project/kvm/patch/20250107142719.179636-2-yilun.xu@linux.intel.com/)来更好的理解 dma-buf 的设计思路和使用原则。
+
+- 对于 dma-buf 来说， 什么是 **static attach** ？ 什么是 **dynamic attach** ? 
+	- static attach 应该是指 dma-buf 对应的 page 不会在内存中移动 (move), 而 dynamic attach 相反**有可能移动**
+
+- 用户为什么不直接将 dma-buf 的 PFN (物理页帧号) 共享给 importer, 让 importer 自己去创建 mappings ？
+	- dma-buf 设计的就是不把 `struct page` 或 pfn 暴露给 importer, 本质上, dma-buf 只传送 dma_addr。所以 mappings 总是由 exporter 创建，而不是由 importer。
+	- 但为什么一定要让 exporter 去 map 呢？
+
+
+
 # References
 
 - [Linux Kernel Documentation: Buffer Sharing and Synchronization](https://01.org/linuxgraphics/gfx-docs/drm/driver-api/dma-buf.html)
@@ -469,3 +482,4 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 - [深入理解 iommu 系列一：iommu 硬件架构和驱动初始化](https://kernelnote.com/deep-dive-iommu-hardware-driver.html)
 - [Explicit sync](https://zamundaaa.github.io/wayland/2024/04/05/explicit-sync.html)
 - [Bridging the synchronization gap on Linux](https://www.collabora.com/news-and-blog/blog/2022/06/09/bridging-the-synchronization-gap-on-linux/)
+- [KVM 之内存虚拟化](https://royhunter.github.io/2016/03/13/kvm-mmu-virtualization/)
