@@ -22,22 +22,22 @@ Mesa 包含了各种 GPU/CPU 的 OpenGL, OpenCL, Vulkan 实现(Usermode Driver),
 
 ## Build Dependencies (since mesa-25.0.0)
 
-| dep                        | apt-get             | version required   | yet another install                                                                                            |
-|:---------------------------|:--------------------|:-------------------|:---------------------------------------------------------------------------------------------------------------|
-| /usr/bin/glslangValidator  | glslang-tools       |                    | [https://github.com/KhronosGroup/glslang](https://github.com/KhronosGroup/glslang)                             |
-| /usr/bin/rustc             | rustc               | 1.78.0 or newer    | `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`                                               |
-| bindgen (rust package)     | cargo               | 0.65 or newer      | `cargo install bindgen-cli`                                                                                    |
-| libclc-dev                 | libclc-17-dev       |                    |  not required if -Dmesa-clc=auto                                                                               |
-|+libdrm                     | libdrm-dev          | 2.4.121(120 ok2.0) | [https://gitlab.freedesktop.org/mesa/drm](https://gitlab.freedesktop.org/mesa/drm)                             |
-| llvm                       | llvm-17-dev         | (17.0.6 ok2.0)     | [https://github.com/llvm/llvm-project](https://github.com/llvm/llvm-project)                                   |
-| libLLVMSPIRVLib.so.17      | llvm-spirv-17       | (17.0.0 ok2.0)     | [https://github.com/KhronosGroup/SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator) |
-|+LLVMSPIRVLib.h             | llvmspirvlib-17-dev | (absent ok2.0)     | [https://github.com/KhronosGroup/SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator) |
-| clang-cpp                  | libclang-cpp17-dev  | (17.0.6 ok2.0)     | not required if -Dmesa-clc=auto                                                                                |
-|*clang-dev                  | libclang-17-dev     |                    | [Debian package issue](https://gitlab.freedesktop.org/mesa/mesa/-/issues/10485)                                |
-| xshmfence                  | libxshmfence-dev    | (1.3    ok2.0)     | required if -Dplatforms=x11                                                                                    |
-| xxf86vm                    | libxxf86vm-dev      | (1.1.4  ok2.0)     | required since -Dglx-direct=true by default                                                                    |
-| xrandr                     | libxrandr-dev       | (1.5.2  ok2.0)     | required since -Dxlib-lease=true                                                                               |
-| cbindgen (rust package)    | cargo               | 0.28.0             | `cargo install cbindgen`; required if -Dgallium-drivers=nouveau                                                |
+|  | dep                        | apt-get             | version required   | yet another install                                                                                            |
+|:-|:---------------------------|:--------------------|:-------------------|:---------------------------------------------------------------------------------------------------------------|
+|  | /usr/bin/glslangValidator  | glslang-tools       |                    | [https://github.com/KhronosGroup/glslang](https://github.com/KhronosGroup/glslang)                             |
+|  | /usr/bin/rustc             | rustc               | 1.78.0 or newer    | `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`                                               |
+|  | bindgen (rust package)     | cargo               | 0.65 or newer      | `cargo install bindgen-cli`                                                                                    |
+|  | libclc-dev                 | libclc-17-dev       |                    |  not required if -Dmesa-clc=auto                                                                               |
+|+ | libdrm                     | libdrm-dev          | 2.4.121(120 ok2.0) | [https://gitlab.freedesktop.org/mesa/drm](https://gitlab.freedesktop.org/mesa/drm)                             |
+|  | llvm                       | llvm-17-dev         | (17.0.6 ok2.0)     | [https://github.com/llvm/llvm-project](https://github.com/llvm/llvm-project)                                   |
+|  | libLLVMSPIRVLib.so.17      | llvm-spirv-17       | (17.0.0 ok2.0)     | [https://github.com/KhronosGroup/SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator) |
+|+ | LLVMSPIRVLib.h             | llvmspirvlib-17-dev | (absent ok2.0)     | [https://github.com/KhronosGroup/SPIRV-LLVM-Translator](https://github.com/KhronosGroup/SPIRV-LLVM-Translator) |
+|  | clang-cpp                  | libclang-cpp17-dev  | (17.0.6 ok2.0)     | not required if -Dmesa-clc=auto                                                                                |
+|* | clang-dev                  | libclang-17-dev     |                    | [Debian package issue](https://gitlab.freedesktop.org/mesa/mesa/-/issues/10485)                                |
+|  | xshmfence                  | libxshmfence-dev    | (1.3    ok2.0)     | required if -Dplatforms=x11                                                                                    |
+|  | xxf86vm                    | libxxf86vm-dev      | (1.1.4  ok2.0)     | required since -Dglx-direct=true by default                                                                    |
+|  | xrandr                     | libxrandr-dev       | (1.5.2  ok2.0)     | required since -Dxlib-lease=true                                                                               |
+|  | cbindgen (rust package)    | cargo               | 0.28.0             | `cargo install cbindgen`; required if -Dgallium-drivers=nouveau                                                |
 
 NOTE:
 - (*) 表示本来不需要的依赖
