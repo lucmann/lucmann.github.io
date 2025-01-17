@@ -1,8 +1,8 @@
 ---
 title: Build your program from source code on Linux
 date: 2022-09-18 17:02:49
-tags: build
-categories: programming
+tags: tools
+categories: utils
 ---
 
 # 编译器
@@ -83,6 +83,21 @@ categories: programming
 # `pkg-config` vs `ldconfig`
 
 ## pkg-config
+
+**pkg-config (symbolic link to `/usr/bin/pkgconf`)** 是用来获取系统上安装的库的信息的程序。cmake, meson 这些构建系统底层都是靠它来解析依赖包的。 下面的命令可以查看 pkg-config 工作时所搜索的路径和优先次序， 用户也可以通过环境变量 **`PKG_CONFIG_PATH`** 来指定自己想要优先搜索的路径。
+
+```bash
+pkg-config --variable pc_path pkg-config | sed 's/:/\n/g'
+```
+
+```
+/usr/local/lib/x86_64-linux-gnu/pkgconfig
+/usr/local/lib/pkgconfig
+/usr/local/share/pkgconfig
+/usr/lib/x86_64-linux-gnu/pkgconfig
+/usr/lib/pkgconfig
+/usr/share/pkgconfig
+```
 
 `pkg-config` 是二进制可执行程序 `/usr/bin/pkgconf` 的一个符号链接文件，它是 CMake, meson 等构建系统主要使用的系统动态库检测的工具。`pkg-config` 本质上是在解析 `*.pc` 文件。下面是常见的 Mesa OpenGL Library 的 .pc 文件。
 

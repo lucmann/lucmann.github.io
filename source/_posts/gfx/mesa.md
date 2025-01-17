@@ -20,7 +20,15 @@ Mesa 包含了各种 GPU/CPU 的 OpenGL, OpenCL, Vulkan 实现(Usermode Driver),
 
 # Build
 
-## Build Dependencies
+## Build Dependencies (since mesa-25.0.0)
+
+| dep                        | apt-get       | version required   | yet another install                                                                              |
+|:---------------------------|:--------------|:-------------------|:-------------------------------------------------------------------------------------------------|
+| /usr/bin/glslangValidator  | glslang-tools |                    | [https://github.com/KhronosGroup/glslang](https://github.com/KhronosGroup/glslang)               |
+| /usr/bin/rustc             | rustc         | 1.78.0 or newer    | `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`                                 |
+| bindgen (rust package)     | cargo         | 0.65 or newer      | `cargo install bindgen-cli`                                                                      |
+| libclc-dev                 | libclc-17-dev |                    |  not required if -Dmesa-clc=auto                                                                 |
+| libdrm                     | libdrm-dev    | 2.4.121(120 ok2.0) | [https://gitlab.freedesktop.org/mesa/drm](https://gitlab.freedesktop.org/mesa/drm)               |
 
 - glslangValidator (*)
 
