@@ -210,6 +210,17 @@ Qt Platform Abstraction (QPA) 是 Qt 中主要的**平台抽象层 (Platform Abs
 
 ![RedEclipse on NV137](/images/ok/nv137-redeclipse.png)
 
+# [Hyprland](git@github.com:hyprwm/Hyprland.git)
+
+## Dependencies
+
+|  | dep                        | apt-get             | version required   | yet another install                                                                                            |
+|:-|:---------------------------|:--------------------|:-------------------|:---------------------------------------------------------------------------------------------------------------|
+|  | wayland-protocols          | wayland-protocols   | 1.38-ok1           | [https://github.com/KhronosGroup/glslang](https://github.com/KhronosGroup/glslang)                             |
+|  | wayland                    | libwayland-dev      | 1.23.0-1ok3        |                                                                                                                |
+|  | libdisplay-info            | libdisplay-info-dev | 0.1.1-ok1          |                                                                                                                |
+
+
 # Resources
 
 - [KylinOS 的软件包 OpenKylin 基本都能用](https://archive.kylinos.cn/kylin/KYLIN-ALL/)

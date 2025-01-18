@@ -2,7 +2,7 @@
 title: LLVM
 date: 2022-09-09 15:58:26
 tags: [Compiler]
-categories: programming
+categories: utilities
 ---
 
 # LLVM & llvm-project
@@ -45,14 +45,14 @@ llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 
         - `sudo fallocate -l 4G /swapfile`
             - 比 `dd if=/dev/zero of=/swapfile bs=1 count=0 seek=4G` 快一点
             - 当 `-DBUILD_SHARED_LIBS=OFF` (构建 LLVM 为静态库) 时，最好 10G
-            ![how horrible static linking is](/images/static-link.png)
+            ![how horrible static linking is](/images/llvm/static-link.png)
         - `sudo chmod 600 /swapfile`
         - `sudo mkswap /swapfile`
             - 格式化成 swap 分区
         - `sudo swapon /swapfile`
             - 激活 swap 分区
         - 增大 swap 分区后的效果
-        ![](/images/mkswap-4G.gif)
+        ![](/images/llvm/mkswap-4G.gif)
 - `-DLLVM_USE_LINKER=gold`
     - 将默认链接器 `bfd` 换成 `gold` (可能会链接得快一点)
     - 一般 Linux 系统上默认安装有两个链接器
@@ -60,7 +60,7 @@ llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 
         - /usr/bin/ld.bfd -> x86_64-linux-gnu-ld.bfd
         - /usr/bin/ld.gold -> x86_64-linux-gnu-ld.gold
     - `-DLLVM_USE_LINKER=gold`
-    ![/usr/bin/ld.gold](/images/gold.gif)
+    ![/usr/bin/ld.gold](/images/llvm/gold.gif)
 
 安装后，我们需要将 `bin` 目录加入 `PATH`, 并创建 `/etc/ld.so.conf.d/llvm.conf` 包含下面一行
 
