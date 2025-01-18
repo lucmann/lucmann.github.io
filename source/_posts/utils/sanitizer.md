@@ -66,3 +66,4 @@ int main() {
 - [Be wise, sanitize: Keeping your C++ code free from bugs](https://microblink.com/be-wise-sanitize-keeping-your-c-code-free-from-bugs/)
 - [AddressSanitizer flags](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags)
 - [An LLVM developer setup: Modern C++ development tools](https://llvm.org/devmtg/2016-01/slides/ModernCplusplusDevelopment.pdf)
+- [Sanitizer 在字节跳动 C++ 中的实践](https://www.bilibili.com/video/BV1YT411Q7BU/?spm_id_from=333.788.top_right_bar_window_history.content.click&vd_source=b3ba1ad08e1b41cd7118d8dd88f0e670)

@@ -466,7 +466,23 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 
 - 用户为什么不直接将 dma-buf 的 PFN (物理页帧号) 共享给 importer, 让 importer 自己去创建 mappings ？
 	- dma-buf 设计的就是不把 `struct page` 或 pfn 暴露给 importer, 本质上, dma-buf 只传送 dma_addr。所以 mappings 总是由 exporter 创建，而不是由 importer。
-	- 但为什么一定要让 exporter 去 map 呢？
+	- exported buffer 未必一定是内存 (有 `struct page`), 也可能是 MMIO
+- 但为什么一定要让 exporter 去 map 呢？
+
+- Exporter mapping 存在问题的场景:
+	- Private address space
+	- Multi-path PCI
+	- Importing devices need to do things like turn on ATS on their DMA
+	- TPH bits needs to be programmed into importer device
+	- iommufd and KVM
+
+- 为什么把 dma-buf 的 backing storage 信息暴露给 importer 是一个坏主意？
+
+- exporter 会获取 importer 的 `struct device`
+
+- multipath 总是需要在 importer 侧有额外的元信息去告诉 device 选择哪个 path 
+
+:( 这5个场景目前一个都不知道是干什么的 :(
 
 
 
@@ -483,3 +499,4 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 - [Explicit sync](https://zamundaaa.github.io/wayland/2024/04/05/explicit-sync.html)
 - [Bridging the synchronization gap on Linux](https://www.collabora.com/news-and-blog/blog/2022/06/09/bridging-the-synchronization-gap-on-linux/)
 - [KVM 之内存虚拟化](https://royhunter.github.io/2016/03/13/kvm-mmu-virtualization/)
+- [Dancing the DMA two-step](https://lwn.net/Articles/997563/)
