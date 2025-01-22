@@ -5,6 +5,10 @@ tags: perf
 categories: linux
 ---
 
+![RedEclipse on R7340](/images/perf/radeon.svg)
+
+<!--more-->
+
 # 环境 & 版本
 
 - Linux 5.10.16.3-microsoft-standard-WSL2 x86_64 x86_64
@@ -13,25 +17,18 @@ categories: linux
 
 NOTE: 如果没有特别说明，以下`perf`命令都在`root`权限下执行
 
-<!--more-->
-
 # 查询 & 罗列
 
-## 列出Virtual Memory相关的`static tracepoint`
+列出Virtual Memory相关的`static tracepoint`
 
-### vmscan
-{% asset_img perf_list-vmscan.png "perf list 'vmscan:*'" %}
+- `perf list 'vmscan:*'`
+![](/images/perf/perf_list-vmscan.png)
 
-### kmem
-{% asset_img perf_list-kmem.png "perf list 'kmem:*'" %}
+- `perf list 'kmem:*'
+k
 
-## `perf stat`
-
-```
-perf stat -a sleep
-```
-
-{% asset_img perf_stat.png %}
+- `perf stat -a sleep`
+![](/images/perf/perf_stat.png)
 
 # tracepoint 使能
 
@@ -57,12 +54,16 @@ root@sie-luc:~# cat /sys/kernel/debug/tracing/events/dma_fence/dma_fence_enable_
 
 # 常用命令
 
-- `perf top`
+- `perf top -e cycles`
 
-{% asset_img perf_top-cycles.png "perf top -e cycles" %}
+![perf top](/images/perf/perf_top-cycles.png)
 
 - `perf record -F 999 -p PID -g`
-    上面输出的结果默认是 perf.data, 如果要生成火焰图还要进行以下几步:
-    - `perf script | /path/to/FlameGraph/stackcollapse-perf.pl | /path/to/FlameGraph/framegraph.pl > result.svg`
+    - 默认会在当前目录下生成 perf.data, 后面如果再执行之前的 perf.data 会自动重命名 perf.data.old
 
-# [FlameGraph](https://github.com/brendangregg/FlameGraph)
+- `perf script | /path/to/FlameGraph/stackcollapse-perf.pl | /path/to/FlameGraph/framegraph.pl > result.svg`
+    - 生成火焰图需要这个脚本工具 [FlameGraph](https://github.com/brendangregg/FlameGraph)，而且如果想看到详细的调用栈需要编译跟踪对象为 **Debug** 版本
+
+# References
+
+- [FlameGraph](https://github.com/brendangregg/FlameGraph)
