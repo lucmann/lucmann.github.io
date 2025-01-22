@@ -155,6 +155,17 @@ kern.* -/var/log/kern.log;SimpleFormat
 echo "<3>HELLO" > /dev/kmsg
 ```
 
+# `sysctl` 和内核参数
+
+运行时内核参数大多在 `/proc/sys/` 目录下，二进制程序 `/usr/sbin/sysctl` 可用来查看，修改这些内核参数。
+
+- 查看某个内核参数的值
+	- `sysctl kernel.perf_event_paranoid`
+- 列出所有内核参数的值 (有些需要 root 权限)
+	- `sysctl -a`
+- 修改某个内核参数的值
+	- `sysctl kernel.perf_event_paranoid=-1`
+
 # References
 
 - [https://access.redhat.com/solutions/5914171](https://access.redhat.com/solutions/5914171)
