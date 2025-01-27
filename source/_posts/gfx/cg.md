@@ -5,12 +5,14 @@ tags: OpenGL
 categories: graphics
 ---
 
+![Field-of-View](/images/cg/fov.png)
+
+<!--more-->
+
 OpenGL (可能也有其它与 OpenGL 有关的)中的有些概念很相似，有些标准里也没有给出一个明确的定义，有些如果仅从字面意思理解很容易混淆，这里将平时自己查询的资料及自己的理解整理到一起，以备不时之需。
 
 - [Clip vs Cull](https://computergraphics.stackexchange.com/questions/9214/whats-the-difference-between-clipping-and-culling)
 - [Glyph vs Font](https://graphicdesign.stackexchange.com/questions/45162/what-is-the-difference-between-glyph-and-font)
-
-<!--more-->
 
 # Clip vs Cull
 
@@ -23,3 +25,7 @@ OpenGL (可能也有其它与 OpenGL 有关的)中的有些概念很相似，有
 glFrustum(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar);
 glm::mat4 glm::perspective(float fovy, float aspect, float zNear, float zFar);
 ```
+
+这两组参数之间可以转换，首先 `zNear`, `zFar` 是一样的，不需要转换，剩下就是 `left, right, bottom, top` 和 `fovy, aspect` 的关系了。首先 `left, right` 和 `bottom, top` 分别是以原点对称的
+
+
