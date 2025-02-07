@@ -94,12 +94,14 @@ sequenceDiagram
     compositor -->> compositor : gl_texture_from_dmabuf_buffer()
     compositor -->> compositor : gl_texture_from_dmabuf()
     compositor -->> compositor : ky_egl_create_image_from_dmabuf() -> EGLImageKHR
-    compositor ->> mesa        : eglCreateImageKHR() -> EGLImageKHR
-    mesa -->> mesa : dri2_create_image()
-    mesa -->> mesa : dri2_create_image_dma_buf()
-    mesa -->> mesa : ???_resource_from_handle()
-    mesa -->> mesa : ???_bo_import(..., fd) 
-    mesa ->> kernel: drmPrimeFDToHandle(..., fd) -> gem_handle
+    rect rgb(191, 223, 255)
+        compositor ->> mesa        : eglCreateImageKHR() -> EGLImageKHR
+        mesa -->> mesa : dri2_create_image()
+        mesa -->> mesa : dri2_create_image_dma_buf()
+        mesa -->> mesa : xxx_resource_from_handle()
+        mesa -->> mesa : xxx_bo_import(..., fd)
+        mesa ->> kernel: drmPrimeFDToHandle(..., fd) -> gem_handle
+    end
 ```
 
 # EGL_KHR_image_pixmap
