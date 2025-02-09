@@ -226,6 +226,19 @@ Qt Platform Abstraction (QPA) 是 Qt 中主要的**平台抽象层 (Platform Abs
 |^ | pugixml                    | libpugixml-dev      | 1.14-ok1             | required by hyprwayland-scanner                                                                                |
 |  | hyprutils                  |                     | >=0.2.3              | [https://github.com/hyprwm/hyprutils](https://github.com/hyprwm/hyprutils)                                     |
 
+```mermaid
+mindmap
+  root(hyprland)
+    wayland-protocols
+    libinput10<br>1.26.0
+      libudev
+    libdisplay-info
+    aquamarine<br>0.4.5
+    hyprwayland-scanner
+      pugixml
+    hyprutils<br>0.2.3
+```
+
 
 # Resources
 
