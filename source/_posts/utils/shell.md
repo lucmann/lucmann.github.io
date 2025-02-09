@@ -168,3 +168,11 @@ drivers/gpu/drm/omapdrm/omap_drv.c                  #define DRIVER_NAME MODULE_N
 ```
 
 # crontab - 定时任务
+
+`crontab -e` (添加定时任务)， 不光可以添加周期性的定时任务，也可以添加开机时一次性任务
+
+```bash
+@reboot /home/luc/mystart.sh
+```
+
+crontab 是每用户的， 就是说当前用户设定的任务，只有当前用户的权限，所以如果有些情况下任务执行需要 root 权限，就需要切换到 root 用户后 `crontab -e`
