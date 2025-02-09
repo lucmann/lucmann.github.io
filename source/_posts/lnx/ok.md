@@ -560,7 +560,10 @@ mindmap
   root(hyprland)
     wayland-protocols
     libinput10<br>1.26.0
-      libudev
+      libudev<br>255.2
+        systemd
+          libcap-dev
+          gperf
     libdisplay-info
     aquamarine<br>0.4.5
     hyprwayland-scanner
