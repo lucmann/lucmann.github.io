@@ -214,11 +214,17 @@ Qt Platform Abstraction (QPA) 是 Qt 中主要的**平台抽象层 (Platform Abs
 
 ## Dependencies
 
-|  | dep                        | apt-get             | version required   | yet another install                                                                                            |
-|:-|:---------------------------|:--------------------|:-------------------|:---------------------------------------------------------------------------------------------------------------|
-|  | wayland-protocols          | wayland-protocols   | 1.38-ok1           | [https://github.com/KhronosGroup/glslang](https://github.com/KhronosGroup/glslang)                             |
-|  | wayland                    | libwayland-dev      | 1.23.0-1ok3        |                                                                                                                |
-|  | libdisplay-info            | libdisplay-info-dev | 0.1.1-ok1          |                                                                                                                |
+|  | dep                        | apt-get             | version required     | yet another install                                                                                            |
+|:-|:---------------------------|:--------------------|:---------------------|:---------------------------------------------------------------------------------------------------------------|
+|  | wayland-protocols          | wayland-protocols   | 1.38-ok1             |                                                                                                                |
+|  | libseat                    | libseat-dev         | 0.8.0-ok2            |                                                                                                                |
+|  | libinput                   | libinput-dev        | 1.26.0(1.25.0-ok1.2) | [https://gitlab.freedesktop.org/libinput/libinput](https://gitlab.freedesktop.org/libinput/libinput)           |
+|  | wayland                    | libwayland-dev      | 1.23.0-1ok3          |                                                                                                                |
+|  | libdisplay-info            | libdisplay-info-dev | 0.1.1-ok1            |                                                                                                                |
+|  | aquamarine                 |                     | >=0.4.5              | [https://github.com/hyprwm/aquamarine](https://github.com/hyprwm/aquamarine)                                   |
+|^ | hyprwayland-scanner        |                     |                      | [https://github.com/hyprwm/hyprwayland-scanner](https://github.com/hyprwm/hyprwayland-scanner)                 |
+|^ | pugixml                    | libpugixml-dev      | 1.14-ok1             | required by hyprwayland-scanner                                                                                |
+|  | hyprutils                  |                     | >=0.2.3              | [https://github.com/hyprwm/hyprutils](https://github.com/hyprwm/hyprutils)                                     |
 
 
 # Resources
