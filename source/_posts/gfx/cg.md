@@ -28,4 +28,13 @@ glm::mat4 glm::perspective(float fovy, float aspect, float zNear, float zFar);
 
 这两组参数之间可以转换，首先 `zNear`, `zFar` 是一样的，不需要转换，剩下就是 `left, right, bottom, top` 和 `fovy, aspect` 的关系了。首先 `left, right` 和 `bottom, top` 分别是以原点对称的
 
+# Tessellation vs Bezier
 
+| Feature              | Tessellation (OpenGL)        | Bézier Curves/Surfaces      |
+|----------------------|----------------------------|-----------------------------|
+| **Definition**       | A technique that subdivides geometry into smaller pieces. | A mathematical way to define smooth curves/surfaces. |
+| **Input**           | Low-poly mesh, patches      | Control points defining the shape |
+| **Output**          | Subdivided triangles       | Interpolated curve/surface points |
+| **Hardware Acceleration** | Uses GPU tessellation shaders | Requires CPU or GPU evaluation |
+| **Level of Detail**  | Dynamically adjustable    | Fixed resolution unless re-evaluated |
+| **Use Case**        | Real-time rendering, adaptive detail | CAD, animation, precision modeling |
