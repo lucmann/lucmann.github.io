@@ -74,6 +74,10 @@ typedef void * EGLClientBuffer;
 | EGL_DMA_BUF_PLANE2_OFFSET_EXT      |                 0x3279                            |
 | EGL_DMA_BUF_PLANE2_PITCH_EXT       |                 0x327A                            |
 
+- `eglDestroyImageKHR()`
+
+
+
 ## EGLImageKHR in [kylin-wlcom](https://gitee.com/openkylin/kylin-wayland-compositor)
 
 ```mermaid
