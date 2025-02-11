@@ -12,3 +12,4 @@ categories: graphics
 # 参考
 
 - [Cuttlefish: GPU 图形加速](https://source.android.com/docs/devices/cuttlefish/gpu?hl=zh-cn)
+- [Virtual Device for Android host-side utilities](https://github.com/google/android-cuttlefish)
