@@ -51,6 +51,14 @@ block-beta
 
 ## [HWComposer](https://android.googlesource.com/platform/hardware/libhardware/+/refs/heads/main/modules/hwcomposer/)
 
+尽量让 GPU 少做合成的工作，让 DPU (Display Processor Unit) 多做合成的工作，因为合成涉及的操作主要有
+
+- 格式转换
+- 旋转缩放
+- 像素拷贝
+
+如果这些都占用 GPU 去做，太浪费 GPU 了。
+
 ### [drm-hwcomposer](https://gitlab.freedesktop.org/drm-hwcomposer/drm-hwcomposer)
 
 一个基于 KMS 的 HWComposer 实现。
@@ -73,6 +81,7 @@ Android Sync Framework 实现的是**显式同步 (Explicit Synchronization)**, 
 # References
 
 - [Android Graphics](https://blog.csdn.net/liuning1985622/article/details/138453346?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-4-138453346-blog-45080305.235^v43^pc_blog_bottom_relevance_base6&spm=1001.2101.3001.4242.3&utm_relevant_index=6)
+- [自上而下解读 Android 显示流程](https://zhuanlan.zhihu.com/p/261169653)
 - [Android 文档：实现硬件混合渲染器 HAL](https://source.android.com/docs/core/graphics/implement-hwc?hl=zh-cn)
 - [Android drm-hwcomposer](https://blog.csdn.net/stray2b/article/details/130291840)
 - [Fence](https://blog.csdn.net/MoLiYw/article/details/118829051)
