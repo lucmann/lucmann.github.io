@@ -272,7 +272,7 @@ returning flags string ""
 - libtool
 - gettext
 
-## meson
+## meson & ninja
 
 ### [-D buildtype](https://mesonbuild.com/Builtin-options.html#details-for-buildtype)
 
@@ -280,6 +280,26 @@ meson 的 buildtype 是用来设定编译优化级别 (optimization levels: -O0,
 
 - -Doptimization (plain|0|2|3|s, plain 指不设置任何 optimization flags)
 - -Ddebug (true|false)
+
+### 只编译某个 target
+
+```
+ninja -C build target
+```
+
+### meson install --tags tag1,tag2
+
+Installation tags 是专门为打包 (packaging) 设计的，因为打包时开发文件包(头文件)，文档包 (mannul) 和二进制包 (shared libraries) 一般是分开的 3 个包。所以 `meson install --tags` 可以让用户分 3 次安装，每次只安装这个包所需的文件。meson 有几个预定义的 tags (不用用户自己使用 `install_tag` 关键字去指定 tag 名)
+
+| tags      | files                                                                        |
+|:----------|:-----------------------------------------------------------------------------|
+| devel     | static_library(), install_headers(), .a, .pc                                 |
+| runtime   | executable(), shared_library(), shared_module(), .so, .dll                   |
+| man       | install_man()                                                                |
+| doc       | hotdoc.generate_doc()                                                        |
+| i18n      | i18n.gettext(), files installed into `localedir`                             |
+| bin       | scripts and executables bundled with a library used by end users             |
+| bin-devel | scripts and executables bundled with  a library used by developers           |
 
 ### use `gold`
 
