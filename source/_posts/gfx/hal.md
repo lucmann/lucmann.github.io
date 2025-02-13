@@ -49,6 +49,22 @@ block-beta
 
 ## [Gralloc](https://android.googlesource.com/platform/hardware/libhardware/+/refs/heads/main/modules/gralloc/)
 
+## 硬件合成器
+
+**硬件合成器**是 Android 系统中负责屏幕显示的硬件抽象层 (HAL) 组件之一。它负责将图形渲染的内容(比如应用程序界面，视频等)合成到帧缓冲里，以便高效地利用 DPU 加速，减少 GPU 合成的负担，从而整体上提供更流畅的图形渲染显示。
+
+hwcomposer 组件通常是由各个设备厂商根据自己的硬件特性实现的，有开源的，也有闭源的。在 AOSP 中有一个通用的基础的 **hwcomposer** 实现，主要用于那些不需要特别硬件加速或优化的设备，类似 xserver 中的 **modesetting**.
+
+```mermaid
+mindmap
+  root(HAL hwcomposer)
+    AOSP hwcomposer
+    drm-hwcomposer
+      Arm drm-hwcomposer
+    Qualcomm hwcomposer
+    Samsung hwcomposer
+    Huawei hwcomposer
+```
 ## [HWComposer](https://android.googlesource.com/platform/hardware/libhardware/+/refs/heads/main/modules/hwcomposer/)
 
 尽量让 GPU 少做合成的工作，让 DPU (Display Processor Unit) 多做合成的工作，因为合成涉及的操作主要有
