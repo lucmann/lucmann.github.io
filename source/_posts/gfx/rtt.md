@@ -91,3 +91,4 @@ block-beta
 - [Tutorial 14: Render To Texture](https://www.opengl-tutorial.org/intermediate-tutorials/tutorial-14-render-to-texture/)
 - [GPU 帧缓冲内存：了解瓦片渲染 TBR(tile-based rendering)](https://zhuanlan.zhihu.com/p/654389634)
 - [GPU Framebuffer Memory: Understanding Tiling](https://developer.samsung.com/galaxy-gamedev/resources/articles/gpu-framebuffer.html)
+- [Qualcomm Adreno GPU](https://docs.qualcomm.com/bundle/publicresource/topics/80-78185-2/gpu.html)
