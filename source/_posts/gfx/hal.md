@@ -58,7 +58,7 @@ hwcomposer 组件通常是由各个设备厂商根据自己的硬件特性实现
 ```mermaid
 mindmap
   root(HAL hwcomposer)
-    AOSP hwcomposer
+    AOSP sample hwcomposer
     drm-hwcomposer
       Arm drm-hwcomposer
     Qualcomm hwcomposer
