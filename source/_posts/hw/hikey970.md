@@ -56,10 +56,25 @@ HiKey970 有两个 Type-C 接口，而且当板子被设置为 Recovery 模式�
 
 ![Select CONFIG_USB_SERIAL_OPTION on WSL2 Kernal config](/images/hikey970/huawei-USB-SER-driver.png)
 
+# 显示
+
+```mermaid
+flowchart LR
+    DPE["Display Engine<br>(display controller)"]
+    DSI["Display Serial Interface"]
+    HDMI["external HDMI converter"]
+
+    subgraph in-chip
+      DPE -- RGB timing --> DSI
+    end
+
+    DSI --> HDMI
+```
 
 
 # 参考
 
-[1. HiKey970 官方文档](https://www.96boards.org/documentation/consumer/hikey/hikey970/installation/board-recovery.md.html)
-[2. usbipd-win github issues](https://github.com/dorssel/usbipd-win/issues/59)
+- [HiKey970 官方文档](https://www.96boards.org/documentation/consumer/hikey/hikey970/installation/board-recovery.md.html)
+- [DRM driver for HiKey 970](https://lore.kernel.org/bpf/20200820100440.2d30dc02@coco.lan/T/)
+- [usbipd-win github issues](https://github.com/dorssel/usbipd-win/issues/59)
 
