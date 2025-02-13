@@ -58,7 +58,7 @@ hwcomposer 组件通常是由各个设备厂商根据自己的硬件特性实现
 ```mermaid
 mindmap
   root(HAL hwcomposer)
-    AOSP sample hwcomposer
+    AOSP hwcomposer (demo)
     drm-hwcomposer
       Arm drm-hwcomposer
     Qualcomm hwcomposer
@@ -100,6 +100,7 @@ Android Sync Framework 实现的是**显式同步 (Explicit Synchronization)**, 
 - [自上而下解读 Android 显示流程](https://zhuanlan.zhihu.com/p/261169653)
 - [Android 文档：实现硬件混合渲染器 HAL](https://source.android.com/docs/core/graphics/implement-hwc?hl=zh-cn)
 - [Android drm-hwcomposer](https://blog.csdn.net/stray2b/article/details/130291840)
+- [DragonBoards using drm_hwcomposer](https://android.googlesource.com/device/linaro/dragonboard/+/refs/heads/main/shared/graphics/drm_hwcomposer/device.mk)
 - [Fence](https://blog.csdn.net/MoLiYw/article/details/118829051)
 - [Android Sync](https://blog.linuxplumbersconf.org/2014/ocw/system/presentations/2355/original/03%20-%20sync%20&%20dma-fence.pdf)
 - [Mainline Explicit Fencing](https://www.collabora.com/news-and-blog/blog/2016/09/13/mainline-explicit-fencing-part-1/)
