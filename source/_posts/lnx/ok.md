@@ -559,11 +559,12 @@ ukui-session(3768)-+-KylinTreasureBo(4259)-+-{KylinTreasureBo}(4279)
 mindmap
   root(hyprland)
     wayland-protocols
-    libinput10<br>1.26.0
+    libinput10 1.26.0<br>1.25.0-ok1
       libudev<br>255.2
         systemd
           libcap-dev
           gperf
+      libmtdev1 1.1.6<br>1.1.5
     libdisplay-info
     aquamarine<br>0.4.5
     hyprwayland-scanner
