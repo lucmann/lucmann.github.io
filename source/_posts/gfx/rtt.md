@@ -92,3 +92,4 @@ block-beta
 - [GPU 帧缓冲内存：了解瓦片渲染 TBR(tile-based rendering)](https://zhuanlan.zhihu.com/p/654389634)
 - [GPU Framebuffer Memory: Understanding Tiling](https://developer.samsung.com/galaxy-gamedev/resources/articles/gpu-framebuffer.html)
 - [Qualcomm Adreno GPU](https://docs.qualcomm.com/bundle/publicresource/topics/80-78185-2/gpu.html)
+- [ARM Mali GPU](https://developer.arm.com/documentation/102693/1-6/Useful-resources?lang=en)
