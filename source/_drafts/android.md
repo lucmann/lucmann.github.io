@@ -7,7 +7,7 @@ categories: linux
 
 # 1 号进程 - init
 
-在 Android 系统中， 1 号进程 (PID 1) 是 **init** 进程。它是系统启动后由 Linux 内核直接创建的第一个用户空间进程，负责初始化系统环境并启动关键服务。
+在 Android 系统中， 1 号进程 (PID 1) 是 [**init**](https://android.googlesource.com/platform/system/core/+/9441fe979291d6b4e7db3c3742d1ef913d831cae/init/) 进程。它是系统启动后由 Linux 内核直接创建的第一个用户空间进程，负责初始化系统环境并启动关键服务。
 
 ```mermaid
 mindmap
@@ -19,6 +19,8 @@ mindmap
       adbd<br>Android Debug Bridge Daemon
       ueventd<br>管理 /dev 设备节点
 ```
+
+<!--more-->
 
 # Apex - Android Pony EXpress
 
