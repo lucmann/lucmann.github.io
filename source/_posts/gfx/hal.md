@@ -75,6 +75,8 @@ mindmap
 
 如果这些都占用 GPU 去做，太浪费 GPU 了。
 
+![composition-with-hwcomposer](/images/hal/composition-with-hwcomposer.png)
+
 ### [drm-hwcomposer](https://gitlab.freedesktop.org/drm-hwcomposer/drm-hwcomposer)
 
 一个基于 KMS 的 HWComposer 实现。
@@ -99,6 +101,7 @@ Android Sync Framework 实现的是**显式同步 (Explicit Synchronization)**, 
 - [Android Graphics](https://blog.csdn.net/liuning1985622/article/details/138453346?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-4-138453346-blog-45080305.235^v43^pc_blog_bottom_relevance_base6&spm=1001.2101.3001.4242.3&utm_relevant_index=6)
 - [自上而下解读 Android 显示流程](https://zhuanlan.zhihu.com/p/261169653)
 - [Android 文档：实现硬件混合渲染器 HAL](https://source.android.com/docs/core/graphics/implement-hwc?hl=zh-cn)
+- [Android Graphic UI with GPU Hardware Acceleration](https://community.nxp.com/t5/i-MX-Processors-Knowledge-Base/Android-Graphic-UI-with-GPU-Hardware-Acceleration/ta-p/1102023)
 - [Android drm-hwcomposer](https://blog.csdn.net/stray2b/article/details/130291840)
 - [DragonBoards using drm_hwcomposer](https://android.googlesource.com/device/linaro/dragonboard/+/refs/heads/main/shared/graphics/drm_hwcomposer/device.mk)
 - [Fence](https://blog.csdn.net/MoLiYw/article/details/118829051)
