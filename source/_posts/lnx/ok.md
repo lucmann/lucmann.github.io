@@ -565,6 +565,7 @@ mindmap
           libcap-dev
           gperf
       libmtdev1 1.1.6<br>1.1.5
+      libevdev 1.13.1<br>1.12.1
     libdisplay-info
     aquamarine<br>0.4.5
     hyprwayland-scanner
