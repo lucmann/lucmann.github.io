@@ -573,6 +573,11 @@ mindmap
     hyprutils<br>0.2.3
 ```
 
+在 openKylin 2.0 上折腾(编译) Hyprland 遇到的两个问题是：
+
+- openKylin 的 APT 源里 development files 包和 library 包有很多版本不匹配的，导致 [**apt-get install libxxx-dev**](https://gitee.com/openkylin/release-management/issues/IBLF9O) 失败
+- hyprland 对 C++ 版本的要求太高了 (**c++26**), 这导致很多问题， 不仅需要升级编译器 (llvm 19.1.7), 甚至连 meson 都有刚刚不久才修复的跟 c++26 有关的 [Bug](https://github.com/mesonbuild/meson/pull/14139)
+
 
 # Resources
 
