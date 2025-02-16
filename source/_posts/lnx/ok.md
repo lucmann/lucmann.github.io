@@ -567,10 +567,10 @@ mindmap
       libmtdev1 1.1.6<br>1.1.5
       libevdev 1.13.1<br>1.12.1
     libdisplay-info
-    aquamarine<br>0.4.5
+    aquamarine=0.4.5
     hyprwayland-scanner
       pugixml
-    hyprutils<br>0.2.3
+    hyprutils=0.2.3
 ```
 
 在 openKylin 2.0 上折腾(编译) Hyprland 遇到的两个问题是：
