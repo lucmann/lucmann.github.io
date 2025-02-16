@@ -543,34 +543,40 @@ ukui-session(3768)-+-KylinTreasureBo(4259)-+-{KylinTreasureBo}(4279)
 
 ## Dependencies
 
-|  | dep                        | apt-get             | version required     | yet another install                                                                                            |
-|:-|:---------------------------|:--------------------|:---------------------|:---------------------------------------------------------------------------------------------------------------|
-|  | wayland-protocols          | wayland-protocols   | 1.38-ok1             |                                                                                                                |
-|  | libseat                    | libseat-dev         | 0.8.0-ok2            |                                                                                                                |
-|  | libinput                   | libinput-dev        | 1.26.0(1.25.0-ok1.2) | [https://gitlab.freedesktop.org/libinput/libinput](https://gitlab.freedesktop.org/libinput/libinput)           |
-|  | wayland                    | libwayland-dev      | 1.23.0-1ok3          |                                                                                                                |
-|  | libdisplay-info            | libdisplay-info-dev | 0.1.1-ok1            |                                                                                                                |
-|  | aquamarine                 |                     | >=0.4.5              | [https://github.com/hyprwm/aquamarine](https://github.com/hyprwm/aquamarine)                                   |
-|^ | hyprwayland-scanner        |                     |                      | [https://github.com/hyprwm/hyprwayland-scanner](https://github.com/hyprwm/hyprwayland-scanner)                 |
-|^ | pugixml                    | libpugixml-dev      | 1.14-ok1             | required by hyprwayland-scanner                                                                                |
-|  | hyprutils                  |                     | >=0.2.3              | [https://github.com/hyprwm/hyprutils](https://github.com/hyprwm/hyprutils)                                     |
+| dep                        | apt-get             | version required     | yet another install                                                                                            |
+|:---------------------------|:--------------------|:---------------------|:---------------------------------------------------------------------------------------------------------------|
+| wayland-protocols          | wayland-protocols   | 1.38-ok1             |                                                                                                                |
+| libseat                    | libseat-dev         | 0.8.0-ok2            |                                                                                                                |
+| libinput                   | libinput-dev        | 1.26.0(1.25.0-ok1.2) | [https://gitlab.freedesktop.org/libinput/libinput](https://gitlab.freedesktop.org/libinput/libinput)           |
+| wayland                    | libwayland-dev      | 1.23.0-1ok3          |                                                                                                                |
+| libdisplay-info            | libdisplay-info-dev | 0.1.1-ok1            |                                                                                                                |
+| aquamarine                 |                     | >=0.4.5              | [https://github.com/hyprwm/aquamarine](https://github.com/hyprwm/aquamarine)                                   |
+| hyprwayland-scanner        |                     |                      | [https://github.com/hyprwm/hyprwayland-scanner](https://github.com/hyprwm/hyprwayland-scanner)                 |
+| pugixml                    | libpugixml-dev      | 1.14-ok1             | required by hyprwayland-scanner                                                                                |
+| hyprutils                  |                     | >=0.2.3              | [https://github.com/hyprwm/hyprutils](https://github.com/hyprwm/hyprutils)                                     |
 
 ```mermaid
 mindmap
   root(hyprland)
-    wayland-protocols
-    libinput10 1.26.0<br>1.25.0-ok1
-      libudev<br>255.2
-        systemd
-          libcap-dev
-          gperf
-      libmtdev1 1.1.6<br>1.1.5
-      libevdev 1.13.1<br>1.12.1
-    libdisplay-info
     aquamarine=0.4.5
-    hyprwayland-scanner
-      pugixml
-    hyprutils=0.2.3
+      libseat=0.8.0
+      libinput10 1.26.0<br>1.25.0-ok1
+        libudev<br>255.2
+          systemd
+            libcap-dev
+            gperf
+        libmtdev1 1.1.6<br>1.1.5
+        libevdev 1.13.1<br>1.12.1
+      hyprwayland-scanner=0.4.0
+      hyprutils=0.2.3
+      wayland-protocols
+      wayland-client
+      libdisplay-info
+        pugixml
+      libdrm
+      gbm
+      pixman-1
+      hwdata
 ```
 
 在 openKylin 2.0 上折腾(编译) Hyprland 遇到的两个问题是：
@@ -578,6 +584,17 @@ mindmap
 - openKylin 的 APT 源里 development files 包和 library 包有很多版本不匹配的，导致 [**apt-get install libxxx-dev**](https://gitee.com/openkylin/release-management/issues/IBLF9O) 失败
 - hyprland 对 C++ 版本的要求太高了 (**c++26**), 这导致很多问题， 不仅需要升级编译器 (llvm 19.1.7), 甚至连 meson 都有刚刚不久才修复的跟 c++26 有关的 [Bug](https://github.com/mesonbuild/meson/pull/14139)
 
+```bash
+➜  aquamarine git:(0.7.1) ✗ CC=clang CXX=clang++ cmake -B build -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-stdlib=libc++"
+-- Checking for modules 'libseat>=0.8.0;libinput>=1.26.0;wayland-client;wayland-protocols;hyprutils>=0.2.3;pixman-1;libdrm;gbm;libudev;libdisplay-info;hwdata'
+--   Package 'libseat', required by 'virtual:world', not found
+--   Package 'libinput', required by 'virtual:world', not found
+--   Package 'wayland-client', required by 'virtual:world', not found
+--   Package 'wayland-protocols', required by 'virtual:world', not found
+--   Package 'libdrm', required by 'virtual:world', not found
+--   Package 'gbm', required by 'virtual:world', not found
+--   Package 'libdisplay-info', required by 'virtual:world', not found
+```
 
 # Resources
 
