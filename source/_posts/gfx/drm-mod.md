@@ -44,3 +44,24 @@ $$ RowStride = BytesPerBlock * nBlocksX $$
 
 ![U-interleaved row stride in BC1 compression format](/images/drm-mod/u-interleaved-row-stride-compress.drawio.svg)
 
+# Modifier Negotiation
+
+在 DRI3 扩展里， 因为 render buffer 是由驱动(应用)创建后导出给 X11 的， 所以在驱动创建 buffer 前，需要向 X11 查询现在支持哪些 modifiers, 驱动根据查询到的支持的 modifiers 再去创建 buffer (BO, 也即 resource)。
+
+```mermaid
+sequenceDiagram
+  participant Mesa
+  participant X11
+
+  Mesa ->> X11: xcb_dri3_get_supported_modifiers()
+  Mesa ->> X11: xcb_dri3_get_supported_modifiers_reply()
+  alt num_window_modifiers
+    X11 ->> Mesa: xcb_dri3_get_supported_modifiers_window_modifiers()
+  else num_screen_modifiers
+    X11 ->> Mesa: xcb_dri3_get_supported_modifiers_screen_modifiers()
+  end
+```
+
+# Reference
+
+- [Implementing DRM format modifiers in NVK](https://www.collabora.com/news-and-blog/news-and-events/implementing-drm-format-modifiers-in-nvk.html)
