@@ -2,7 +2,7 @@
 title: DRM format modifier
 date: 2020-11-11 15:35:43
 tags: [DRM/KMS]
-categories: graphics
+categories: linux
 ---
 
 # FourCC
@@ -65,6 +65,38 @@ sequenceDiagram
 ```
 
 ## On XWayland
+
+# Tool - [drm_info](https://gitlab.freedesktop.org/emersion/drm_info)
+
+**drm_info** 可以列举出所有 KMS 支持的 scanout modifiers ([https://pastebin.com/dwhfdVDf](https://pastebin.com/dwhfdVDf))
+
+```
+    ├───Plane 1
+    │   ├───Object ID: 44
+    │   ├───CRTCs: {0}
+    │   ├───Legacy info
+    │   │   ├───FB ID: 0
+    │   │   └───Formats:
+    │   │       ├───YUYV (0x56595559)
+    │   │       ├───UYVY (0x59565955)
+    │   │       ├───XRGB8888 (0x34325258)
+    │   │       ├───XRGB1555 (0x35315258)
+    │   │       ├───XBGR2101010 (0x30334258)
+    │   │       ├───XRGB2101010 (0x30335258)
+    │   │       └───XBGR16161616F (0x48344258)
+    │   └───Properties
+    │       ├───"type" (immutable): enum {Overlay, Primary, Cursor} = Overlay
+    │       ├───"IN_FORMATS" (immutable): blob = 45
+    │       │   ├───NVIDIA_BLOCK_LINEAR_2D(h=0, k=254, g=0, s=1, c=0) (0x03000000004fe010)
+    │       │   │   ├───YUYV (0x56595559)
+    │       │   │   ├───UYVY (0x59565955)
+    │       │   │   ├───XRGB8888 (0x34325258)
+    │       │   │   ├───XRGB1555 (0x35315258)
+    │       │   │   ├───XBGR2101010 (0x30334258)
+    │       │   │   ├───XRGB2101010 (0x30335258)
+    │       │   │   └───XBGR16161616F (0x48344258)
+    │       │   ├───NVIDIA_BLOCK_LINEAR_2D(h=1, k=254, g=0, s=1, c=0) (0x03000000004fe011)
+```
 
 # Reference
 
