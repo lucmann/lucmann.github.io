@@ -51,9 +51,14 @@ service vendor.hwcomposer-3 /vendor/bin/hw/android.hardware.composer.hwc3-servic
 
 **Apex** 是 Android 10 引入的容器格式，用于在系统启动早期安装或加载不适用 APK 安装的底层组件，如 Native Service, HAL, ART 等。
 
+# Soong (Android.bp)
+
+blueprint 文件
+
 # Zygote
 
 # References
 
 - [APEX 基础](https://juejin.cn/post/7109299045985681445)
 - [init.rc 详解](https://qiushao.net/2020/03/01/Android%E7%B3%BB%E7%BB%9F%E5%BC%80%E5%8F%91%E8%BF%9B%E9%98%B6/init.rc%E4%BB%8B%E7%BB%8D/index.html)
+- [Android Framework: Soong 构建系统](https://juejin.cn/post/7341592148305231881)
