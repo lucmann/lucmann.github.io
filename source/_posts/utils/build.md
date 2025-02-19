@@ -1,5 +1,5 @@
 ---
-title: pkg-config, ldconfig & LD_DEBUG
+title: CC, CXX, CC_LD, CXX_LD & LD_DEBUG
 date: 2022-09-18 17:02:49
 tags: tools
 categories: utilities
@@ -8,9 +8,9 @@ categories: utilities
 # 编译器
 
 - gcc 
-- g++ (GNU, latest version 12 ~ 13)
+- [g++](https://gcc.gnu.org/projects/cxx-status.html)
 - clang
-- clang++ (LLVM, latest version 16 ~ 17)
+- [clang++](https://clang.llvm.org/cxx_status.html)
 
 <!--more-->
 
@@ -318,4 +318,12 @@ cmake -S llvm -B build -G Ninja                                     \
 
 如果机器内存不够在编译 LLVM 的时候可能会触发 OOM Killer (我在 WSL2 下就100%触发). 可以通过临时添加 swap 分区的方法避免这个问题 （[Linux Add a Swap File Tutorial](https://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/)）
 
+# LD_DEBUG
 
+```bash
+LD_DEBUG=help ls
+```
+
+# Reference
+
+- [C++ compiler support](https://en.cppreference.com/w/cpp/compiler_support)
