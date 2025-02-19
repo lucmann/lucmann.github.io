@@ -1,8 +1,8 @@
 ---
-title: Build your program from source code on Linux
+title: pkg-config, ldconfig & LD_DEBUG
 date: 2022-09-18 17:02:49
 tags: tools
-categories: utils
+categories: utilities
 ---
 
 # 编译器
