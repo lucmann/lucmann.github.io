@@ -54,14 +54,30 @@ $$ RowStride = BytesPerBlock * nBlocksX $$
 sequenceDiagram
   participant Mesa
   participant X11
+  participant Glamor
+  participant DDX
+  participant Kernel
 
   Mesa ->> X11: xcb_dri3_get_supported_modifiers()
   Mesa ->> X11: xcb_dri3_get_supported_modifiers_reply()
+  Kernel ->> DDX: drmModeGetPropertyBlob()
+  DDX ->> Glamor: get_modifiers_set()
+  Glamor ->> X11: glamor_get_drawable_modifiers()
   alt num_window_modifiers
     X11 ->> Mesa: xcb_dri3_get_supported_modifiers_window_modifiers()
   else num_screen_modifiers
     X11 ->> Mesa: xcb_dri3_get_supported_modifiers_screen_modifiers()
   end
+```
+
+**modifiers** 集是提前存储在一个 DDX 内部的数据结构中的，例如 xserver 的 **modesetting**，是保存在 `drmmode_format_rec` 结构体中的(当然它是一组)
+
+```c
+typedef struct {
+    uint32_t format;
+    uint32_t num_modifiers;
+    uint64_t *modifiers;
+} drmmode_format_rec, *drmmode_format_ptr;
 ```
 
 ## On XWayland
