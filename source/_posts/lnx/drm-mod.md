@@ -18,9 +18,15 @@ layout或compression format的信息，DRM format modifier就是用来解决这�
 ## [DRM_FORMAT_MOD_ARM_16X16_BLOCK_U_INTERLEAVED](https://elixir.bootlin.com/mesa/latest/source/include/drm-uapi/drm_fourcc.h#L1332)
 
 ### How U-interleaved improves performance?
+
 ![U-interleaved memory layout](/images/drm-mod/u-interleaved.drawio.svg)
 
+这种交错 (interleave) 方式类似 [Morton order(Z-order)](https://en.wikipedia.org/wiki/Z-order_curve), Morton order 是一种将**多维数据映射到一维**的函数, 同时**保留数据点的位置特征**， 也就是说在**多维时离得近的数据点在一维时也离得近**。
+
+![four iterations of Z-order curve](/images/drm-mod/Z-curve45.svg.png)
+
 ### What is the block size?
+
 对于 U-interleaved 布局的纹理, 有两种可能的 block size:
 
 - 4x4 (压缩格式)
