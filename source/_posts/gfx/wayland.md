@@ -42,5 +42,21 @@ categories: graphics
 
 [[阅读原文]](https://wayland.freedesktop.org/architecture.html)
 
+## wayland.xml
+
+## wayland-scanner
+
+```mermaid
+flowchart LR
+  A[wayland.xml]
+  B[C headers & glue code]
+  A == wayland-scanner ==> B
+
+  click A "https://gitlab.freedesktop.org/wayland/wayland/-/blob/main/protocol/wayland.xml?ref_type=heads" _blank
+  click B "https://searchfox.org/mozilla-central/source/widget/gtk/wayland/linux-dmabuf-unstable-v1-client-protocol.h#476"
+```
+
 # 参考
+
 - [Wayland Book](https://wayland-book.com/)
+- [Wayland Protocol Explorer](https://wayland.app/protocols/hyprland-ctm-control-v1)
