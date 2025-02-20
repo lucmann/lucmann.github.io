@@ -42,9 +42,9 @@ categories: graphics
 
 [[阅读原文]](https://wayland.freedesktop.org/architecture.html)
 
-## wayland.xml
+## [wayland.xml](https://gitlab.freedesktop.org/wayland/wayland)
 
-## wayland-scanner
+## [wayland-scanner](https://gitlab.freedesktop.org/wayland/wayland)
 
 ```mermaid
 flowchart LR
@@ -55,6 +55,8 @@ flowchart LR
   click A "https://gitlab.freedesktop.org/wayland/wayland/-/blob/main/protocol/wayland.xml?ref_type=heads" _blank
   click B "https://searchfox.org/mozilla-central/source/widget/gtk/wayland/linux-dmabuf-unstable-v1-client-protocol.h#476"
 ```
+
+## [libwayland-{client,server,cursor,egl}](https://gitlab.freedesktop.org/wayland/wayland)
 
 # 参考
 
