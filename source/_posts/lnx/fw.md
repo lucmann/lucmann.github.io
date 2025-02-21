@@ -44,8 +44,8 @@ VBIOS version: 113-xxx-xxx
 
 现代 GPU/NPU 芯片里一般都会搭载多个微处理器(或微控制器)， 像 Intel [GuC](https://docs.kernel.org/gpu/i915.html#guc) (uC 指 µC, micro controller), AMD [MEC](https://docs.kernel.org/gpu/amdgpu/driver-core.html#graphics-and-compute-microcontrollers)(MicroEngine Compute), NVIDIA [GSP](https://download.nvidia.com/XFree86/Linux-x86_64/510.39.01/README/gsp.html) (GPU System Processor)。跑在这些微控制器上的代码一般以**固件 (Firmware)**的形式存在，即使是在 Linux 内核里也是二进制格式，源代码一般是不公开的，Linux 社区有一个专门的 git tree [*linux-firmware*](https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/) 来维护各种硬件的 **firmware/blob**。
 
-上面的 firmware 信息是从 AMD R7340 显卡机器上输出的
+上面的 firmware 信息是从 AMD R7340 显卡机器上输出的 (under root privilege)
 
 ```bash
-sudo cat /sys/kernel/debug/dri/0/amdgpu_firmware_info
+cat /sys/kernel/debug/dri/0/amdgpu_firmware_info
 ```
