@@ -118,3 +118,11 @@ echo "Hello, world!" | xclip
 - `s/\(^# .*$\)/\U\1/`
 
     * 与上面的表达式功能相反，即将 `\1` 匹配的结果中的所有字母都换成大写 (**U**ppercase)
+
+# TOhtml
+
+**vim** 有一个内置的扩展 **TOhtml**, 可以将 vim 的 buffer 自动转成 html 文件，这个功能对于 **vimdiff** 时尤其有用。
+
+1. `:[range]TOhtml` *range* 没有时默认是整个 buffer (vimdiff 时包括左右两个 window 哦)
+2. `:wqa` 生成的 html 默认保存为 [Diff.html](https://pastebin.com/nEtsC1Ce)
+3. 可以将生成的 html 内容直接粘贴到 [jsbin.com](https://jsbin.com/cikulin/edit?html,output), 然后就可以分享给他人
