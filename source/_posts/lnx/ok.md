@@ -596,6 +596,60 @@ mindmap
 --   Package 'libdisplay-info', required by 'virtual:world', not found
 ```
 
+# Kernel (linux-6.6.0-15.0ok9)
+
+[下载](https://build.openkylin.top/openkylin/+source/linux/6.6.0-15.0ok9) 以下源码包
+
+- [linux_6.6.0.orig.tar.gz](https://build.openkylin.top/openkylin/+archive/primary/+sourcefiles/linux/6.6.0-15.0ok9/linux_6.6.0.orig.tar.gz)
+- [linux_6.6.0-15.0ok9.debian.tar.xz](https://build.openkylin.top/openkylin/+archive/primary/+sourcefiles/linux/6.6.0-15.0ok9/linux_6.6.0-15.0ok9.debian.tar.xz)
+- [linux_6.6.0-15.0ok9.dsc](https://build.openkylin.top/openkylin/+archive/primary/+sourcefiles/linux/6.6.0-15.0ok9/linux_6.6.0-15.0ok9.dsc)
+
+```bash
+dpkg-source -x linux_6.6.0-15.0ok9.dsc
+cd linux-6.6.0
+fakeroot debian/rules binary
+```
+
+```
+  LD      .tmp_vmlinux.btf
+  BTF     .btf.vmlinux.bin.o
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+Reached the limit of per-CPU variables: 4096
+  LD      .tmp_vmlinux.kallsyms1
+  NM      .tmp_vmlinux.kallsyms1.syms
+  KSYMS   .tmp_vmlinux.kallsyms1.S
+  AS      .tmp_vmlinux.kallsyms1.o
+  LD      .tmp_vmlinux.kallsyms2
+  NM      .tmp_vmlinux.kallsyms2.syms
+  KSYMS   .tmp_vmlinux.kallsyms2.S
+  AS      .tmp_vmlinux.kallsyms2.o
+  LD      vmlinux
+  BTFIDS  vmlinux
+libbpf: failed to find '.BTF' ELF section in vmlinux
+FAILED: load BTF from vmlinux: No data available
+make[4]: *** [/home/luc/linux-6.6.0/scripts/Makefile.vmlinux:37: vmlinux] Error 255
+make[4]: *** Deleting file 'vmlinux'
+make[3]: *** [/home/luc/linux-6.6.0/Makefile:1178: vmlinux] Error 2
+make[2]: *** [/home/luc/linux-6.6.0/Makefile:236: __sub-make] Error 2
+make[2]: Leaving directory '/home/luc/linux-6.6.0/debian/build/build-generic'
+make[1]: *** [Makefile:236: __sub-make] Error 2
+make[1]: Leaving directory '/home/luc/linux-6.6.0'
+make: *** [debian/rules.d/2-binary-arch.mk:46: /home/luc/linux-6.6.0/debian/stamps/stamp-build-generic] Error 2
+```
+
+报错的原因是 [`.config` 文件里打开的模块太多了](https://lore.kernel.org/lkml/20240228032142.396719-1-jhubbard@nvidia.com/T/)(因为是试验性编译, 没有 `zcat /proc/config.gz > .config`)
+
 # Resources
 
 - [KylinOS 的软件包 OpenKylin 基本都能用](https://archive.kylinos.cn/kylin/KYLIN-ALL/)
