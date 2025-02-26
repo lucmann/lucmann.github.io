@@ -207,6 +207,34 @@ exec /sbin/ldconfig.real "$@"
 
 ## autotools
 
+```mermaid
+flowchart LR
+  autoreconf(("autoreconf<br>[Perl script]"))
+  autoconf(autoconf)
+  aclocal(aclocal)
+  automake(automake)
+  autoheader(autoheader)
+  gettextize(gettextize)
+  libtoolize(libtoolize)
+
+  am@{shape: docs, label: "Makefile.am"}
+  in@{shape: docs, label: "Makefile.in"}
+  mk@{shape: docs, label: "Makefile"}
+  ac@{shape: paper-tape, label: "configure.ac"}
+  co@{shape: paper-tape, label: "configure<br>[Shell script]"}
+
+  autoreconf --> autoconf
+  autoreconf -.-> aclocal
+  autoreconf -.-> automake
+  autoreconf -.-> autoheader
+  autoreconf -.-> gettextize
+  autoreconf -.-> libtoolize
+
+  am --> automake --> in
+  ac --> autoconf --> co
+  in --> co --> mk
+```
+
 [**autotools** 的唯一的可取处就是 GNU 项目广泛使用它](https://stackoverflow.com/questions/4071880/what-are-the-differences-between-autotools-cmake-and-scons)。使用它的项目的构建步骤一般是
 
 ```bash
