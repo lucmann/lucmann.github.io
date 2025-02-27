@@ -95,7 +95,7 @@ Linux DRM 子系统的 `drm_gpu_scheduler` 负责提交和调度 GPU job，以�
 
 被 entity 运行的一个 job, 一个 job 总是属于某一个 entity
 
-# 初始化 Sched 实例
+# 初始化 Scheduler 实例
 
 ## v6.8
 
@@ -156,10 +156,37 @@ Note:
 - 5.4 没有让驱动提供一个 timeout_wq, 而是固定使用 delayable workqueue 去执行 [drm_sched_job_timedout()](https://elixir.bootlin.com/linux/v5.19.17/source/drivers/gpu/drm/scheduler/sched_main.c#L1016)
 - 参数中的 `timeout` 是以 jiffies 计算的，如果设置成 `MAX_SCHEDULE_TIMEOUT`， 表示由驱动自己处理超时
 
+# Scheduler 如何工作
+
+Job 提交一般由用户驱动通过 **IOCTL_SUBMIT** 命令触发，将 job 下发给 hw, 所谓下发就是将 64 位的 job(chain) 的起始地址写入 MMIO 寄存器或 ringbuffer, 然后再触发 doorbell, hw 就开始执行
+
+```mermaid
+sequenceDiagram
+  participant UMD
+  participant KMD
+  participant Kworker
+
+  KMD ->> KMD : drm_sched_init()
+  note right of KMD : 创建一个 work item
+  KMD ->> KMD : INIT_WORK(&sched->work_run_job,<br>drm_sched_run_job_work)
+  UMD ->> KMD : ioctl(SUBMIT)
+  KMD ->> KMD : drm_sched_entity_push_job()
+  KMD ->> KMD : drm_sched_waitup()
+  note right of KMD : 将 work item 扔到 submit_wq 上去
+  KMD ->> KMD : drm_sched_run_job_queue()
+  note right of KMD : 一旦 workqueue 上有了 work,<br>空闲的 kworker 就会执行 work item
+  KMD ->> Kworker : wakeup
+  Kworker ->> Kworker : drm_sched_run_job_work()
+  Kworker ->> Kworker : drm_sched_entity_pop_job()
+  Kworker ->> Kworker : sched->ops->run_job()
+  note left of Kworker : writel(jc, dev->iomem + reg)<br>Go!
+```
+
 # 参考资料
 
 - [linux DRM GPU scheduler 笔记](https://www.cnblogs.com/yaongtime/p/14305463.html)
 - [drm/panfrost: Add initial panfrost driver](https://patchwork.freedesktop.org/patch/297644/)
 - [drivers/gpu 下的 `drm_sched_backend_ops`](https://pastebin.com/MssJk6Ky)
 - [PowerVR Rogue Command Stream format](https://gitlab.freedesktop.org/mesa/mesa/-/blob/f8d2b42ae65c2f16f36a43e0ae39d288431e4263/src/imagination/csbgen/rogue_kmd_stream.xml)
+- [Linux kernel workqueue 机制分析](https://www.cnblogs.com/jimbo17/p/8885814.html)
 
