@@ -102,24 +102,34 @@ Linux DRM 子系统的 `drm_gpu_scheduler` 负责提交和调度 GPU job，以�
 ```c
 int drm_sched_init(
   struct drm_gpu_scheduler *sched,
+
   // 需要由驱动实现的一组回调函数, 有
-  // prepare_job(), run_job(), timeout_job(), free_job()
+  // prepare_job(), run_job(), timedout_job(), free_job()
   const struct drm_sched_backend_ops *ops,
-  // 一个 workqueue(6.8 之前是 kthread) 负责向 hw run queue 提交 job
+
+  // 一个 workqueue(6.8 之前是 kthread) 用来向 hw run queue 提交 job
+  // 如果驱动没有提供，默认是一个 ordered workqueue
   struct workqueue_struct *submit_wq, 
+
   // 这个 sched 下的 drm_sched_rq 的个数，最多 4 个，分别对应
   // LOW, NORMAL, HIGH, KERNEL 4 个优先级
   u32 num_rqs,
-  // 用来 job flow control, sched 最多能提交多少 job 给 hw,
+
+  // 用来 job flow control, sched 最多能提交多少个 job(chain) 给 hw,
   // 防止 ring buffer overflow
+  // 这里的每个job 的概念因不同 GPU 而异
   u32 credit_limit,
+
   // 允许一个 job 在被丢弃前 hang 多少次
   unsigned int hang_limit,
+
   // job 超时时长 (jiffies)
   long timeout,
+
   // 另外一个 workqueue 用来执行超时之后的逻辑。驱动可以不指定，
-  // 默认是 system_wq (让这个 wq 执行的任务不要太长)
+  // 默认是 system_wq (让这个 workqueue 执行的任务不要太长)
   struct workqueue_struct *timeout_wq,
+
   atomic_t *score, // 与其它 sched 共享的原子整型的 score
   const char *name, // 用来调试
   struct device *dev // 所属 struct device
@@ -132,7 +142,7 @@ int drm_sched_init(
 int drm_sched_init(
   struct drm_gpu_scheduler *sched,
   // 需要由驱动实现的一组回调函数，有
-  // dependency(), run_job(), timeout_job(), free_job()
+  // dependency(), run_job(), timedout_job(), free_job()
   const struct drm_sched_backend_ops *ops,
   unsigned hw_submission, // 允许有多少个 hw 提交同时存在
   unsigned hang_limit, // 允许一个 job 在被丢弃前 hang 多少次
@@ -144,9 +154,12 @@ int drm_sched_init(
 Note:
 
 - 5.4 没有让驱动提供一个 timeout_wq, 而是固定使用 delayable workqueue 去执行 [drm_sched_job_timedout()](https://elixir.bootlin.com/linux/v5.19.17/source/drivers/gpu/drm/scheduler/sched_main.c#L1016)
+- 参数中的 `timeout` 是以 jiffies 计算的，如果设置成 `MAX_SCHEDULE_TIMEOUT`， 表示由驱动自己处理超时
 
 # 参考资料
 
 - [linux DRM GPU scheduler 笔记](https://www.cnblogs.com/yaongtime/p/14305463.html)
 - [drm/panfrost: Add initial panfrost driver](https://patchwork.freedesktop.org/patch/297644/)
+- [drivers/gpu 下的 `drm_sched_backend_ops`](https://pastebin.com/MssJk6Ky)
+- [PowerVR Rogue Command Stream format](https://gitlab.freedesktop.org/mesa/mesa/-/blob/f8d2b42ae65c2f16f36a43e0ae39d288431e4263/src/imagination/csbgen/rogue_kmd_stream.xml)
 
