@@ -22,12 +22,12 @@ flowchart TD
   runq02[drm_sched_rq<br>NORMAL]
   runq03[drm_sched_rq<br>LOW]
 
-  runq10[drm_sched_rq<br>HIGH]
-  runq11[drm_sched_rq<br>LOW]
+  runq10[drm_sched_rq<br>KERNEL]
+  runq11[drm_sched_rq<br>HIGH]
 
-  runq20[drm_sched_rq<br>HIGH]
-  runq21[drm_sched_rq<br>NORMAL]
-  runq22[drm_sched_rq<br>LOW]
+  runq20[drm_sched_rq<br>KERNEL]
+  runq21[drm_sched_rq<br>HIGH]
+  runq22[drm_sched_rq<br>NORMAL]
 
   entity00@{shape: docs, label: "drm_sched_entity<br>job chain"}
   entity01@{shape: docs, label: "drm_sched_entity<br>job chain"}
