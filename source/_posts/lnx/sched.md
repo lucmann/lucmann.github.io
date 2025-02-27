@@ -56,3 +56,4 @@ Notes:
 
 - [when-to-use-kernel-threads-vs-workqueues-in-the-linux-kernel](https://stackoverflow.com/questions/2147299/when-to-use-kernel-threads-vs-workqueues-in-the-linux-kernel)
 - [Making workqueues non-reentrant](https://lwn.net/Articles/511421/)
+- [知乎：Linux softirq, tasklet 和 workqueue](https://zhuanlan.zhihu.com/p/361409809)
