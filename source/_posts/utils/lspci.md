@@ -1,7 +1,7 @@
 ---
 title: lspci 学习笔记
 date: 2021-01-25 20:42:05
-tags: [linux]
+tags: [tools]
 categories: utilities
 ---
 

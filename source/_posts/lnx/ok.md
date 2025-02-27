@@ -1,7 +1,7 @@
 ---
 title: openKylin 2.0
 date: 2024-11-27 15:36:16+08:00
-tags: [linux]
+tags: [kernel]
 categories: linux
 ---
 

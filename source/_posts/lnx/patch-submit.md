@@ -1,7 +1,7 @@
 ---
 title: Submitting My First Linux Kernel Patch
 date: 2023-05-08 11:38:43
-tags: [linux]
+tags: [kernel]
 categories: linux
 ---
 

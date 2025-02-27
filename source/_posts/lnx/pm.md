@@ -1,7 +1,7 @@
 ---
 title: Linux Power Management
 date: 2025-02-18 11:38:10
-tags: [linux]
+tags: [kernel]
 categories: linux
 ---
 

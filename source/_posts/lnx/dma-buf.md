@@ -1,7 +1,7 @@
 ---
 title: Buffer Sharing and Synchronization
 date: 2021-09-15 18:30:15
-tags: [linux]
+tags: [kernel]
 categories: linux
 ---
 
