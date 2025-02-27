@@ -170,6 +170,7 @@ sequenceDiagram
   note right of KMD : 创建一个 work item
   KMD ->> KMD : INIT_WORK(&sched->work_run_job,<br>drm_sched_run_job_work)
   UMD ->> KMD : ioctl(SUBMIT)
+  KMD ->> KMD : drm_sched_job_arm()
   KMD ->> KMD : drm_sched_entity_push_job()
   KMD ->> KMD : drm_sched_waitup()
   note right of KMD : 将 work item 扔到 submit_wq 上去
@@ -181,6 +182,9 @@ sequenceDiagram
   Kworker ->> Kworker : sched->ops->run_job()
   note left of Kworker : writel(jc, dev->iomem + reg)<br>Go!
 ```
+
+Note:
+- `drm_sched_free_job_work()` 和 `drm_sched_run_job_work()` 是分开的两个 work item, 但它俩都会被扔到同一个 workqueue 上 `submit_wq` (workqueue 的实现很有意思，异步执行的单位的函数，kworker 内核线程一会执行这个函数，一会执行那个函数) 
 
 # 参考资料
 
