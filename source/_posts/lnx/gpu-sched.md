@@ -184,7 +184,8 @@ sequenceDiagram
 ```
 
 Note:
-- `drm_sched_free_job_work()` 和 `drm_sched_run_job_work()` 是分开的两个 work item, 但它俩都会被扔到同一个 workqueue 上 `submit_wq` (workqueue 的实现很有意思，异步执行的单位是函数，而且函数们是被放在一个队列里，一个个执行) 
+- `drm_sched_free_job_work()` 和 `drm_sched_run_job_work()` 是分开的两个 work item, 但它俩都会被扔到同一个 workqueue 上 `submit_wq` (workqueue 的实现很有意思，异步执行的单位是函数 (work_struct)，而这些函数会被加入一个队列 (workqueue) 里推迟执行 (deferred)，只要队列不为空，后台线程们就把它们拿出来**并发地**执行 (CMWQ). 后台线程是一个由内核自动管理的线程池，唤醒和睡眠不用驱动管，驱动只需要 `queue_work_on()`)
+-  gpu scheduler 里的 `submit_wq` 是一个 **Ordered Workqueue**, 意思就是加到这个 wq 上的函数保证是顺序执行的，这就天然地解决了 **run_job** 和 **free_job** 的依赖问题 (mutual exclusive)
 
 # 参考资料
 
@@ -193,4 +194,6 @@ Note:
 - [drivers/gpu 下的 `drm_sched_backend_ops`](https://pastebin.com/MssJk6Ky)
 - [PowerVR Rogue Command Stream format](https://gitlab.freedesktop.org/mesa/mesa/-/blob/f8d2b42ae65c2f16f36a43e0ae39d288431e4263/src/imagination/csbgen/rogue_kmd_stream.xml)
 - [Linux kernel workqueue 机制分析](https://www.cnblogs.com/jimbo17/p/8885814.html)
+- [异步处理的强力助手：Linux Workqueue 机制详解](https://cloud.tencent.com/developer/article/2441413)
+- [Concurrency Managed Workqueue之（一）：workqueue的基本概念](http://www.wowotech.net/irq_subsystem/workqueue.html)
 
