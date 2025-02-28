@@ -1,5 +1,5 @@
 ---
-title: 了解 Linux DRM 子系统
+title: Direct Rendering Management
 date: 2021-04-12 17:07:27
 tags: [DRM/KMS]
 categories: linux
@@ -55,4 +55,5 @@ categories: linux
 
 # 参考
 
-[[0] DRM Maintainer Tools](https://drm.pages.freedesktop.org/maintainer-tools/repositories.html)
+- [GPU Driver Developer's Guide](https://docs.kernel.org/gpu/index.html)
+- [DRM Maintainer Tools](https://drm.pages.freedesktop.org/maintainer-tools/repositories.html)

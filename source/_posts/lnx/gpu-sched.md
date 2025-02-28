@@ -184,7 +184,7 @@ sequenceDiagram
 ```
 
 Note:
-- `drm_sched_free_job_work()` 和 `drm_sched_run_job_work()` 是分开的两个 work item, 但它俩都会被扔到同一个 workqueue 上 `submit_wq` (workqueue 的实现很有意思，异步执行的单位的函数，kworker 内核线程一会执行这个函数，一会执行那个函数) 
+- `drm_sched_free_job_work()` 和 `drm_sched_run_job_work()` 是分开的两个 work item, 但它俩都会被扔到同一个 workqueue 上 `submit_wq` (workqueue 的实现很有意思，异步执行的单位是函数，而且函数们是被放在一个队列里，一个个执行) 
 
 # 参考资料
 
