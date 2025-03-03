@@ -109,3 +109,13 @@ sequenceDiagram
 ```
 
 # EGL_KHR_image_pixmap
+
+
+# [GL_OES_EGL_image](https://docs.imgtec.com/reference-manuals/open-gl-es-extensions/html/topics/GL_OES_EGL/image.html)
+
+通过 **EGLImage** 允许在上下文之间，API 之间 (如 OpenGL ES 与 Vulkan) 共享纹理数据。但需要纹理的 format/type 要被 OpenGL ES 支持，不支持的那些要走 [GL_OES_EGL_image_external](https://docs.imgtec.com/reference-manuals/open-gl-es-extensions/html/topics/GL_OES_EGL/image-external.html), 因为 format/type 不是 OpenGL ES 原生支持，所以这个扩展相比 GL_OES_EGL_image 多了几个**限制**
+
+- 不能在这些纹理对象上调用 `gl*Tex*Image*2D()` 和 `glGenerateMipmap()` 函数改变原本的存储内容(原因是这些导入进来的不被支持的格式可能依赖特定的硬件特性，所以不允许导入者修改它们)
+- 纹理目前只能绑定 `GL_TEXTURE_EXTERNAL_OES`, 而不是 GL_TEXTURE_2D， GL_TEXTURE_3D 等
+- 纹理采样时只允许使用 `GL_CLAMP_TO_EDGE` 这一个 wrap mode
+- 纹理采样时会隐式地将任何格式转换成线性 RGB
