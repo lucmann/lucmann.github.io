@@ -68,8 +68,46 @@ flowchart TD
 
 Notes:
 
-- 每个 hw run queue 对应一个 [drm_gpu_scheduler](https://elixir.bootlin.com/linux/v6.13.4/source/drivers/gpu/drm/panfrost/panfrost_job.c#L36)
-- 每个 scheduler 对应多个不同优先级的 scheduler run queue (sw run queue)
+- 每个 hw run queue (hw ring) 对应一个 [drm_gpu_scheduler](https://elixir.bootlin.com/linux/v6.13.4/source/drivers/gpu/drm/panfrost/panfrost_job.c#L36)
+
+| DRIVER    |  MAX_HW_RINGS                 |  VALUE  |
+|:----------|:------------------------------|:--------|
+| amdgpu    | AMDGPU_MAX_RINGS              | 124     |
+| etnaviv   | ETNA_MAX_PIPES                | 4       |
+| powervr   |                               | 4       |
+| panfrost  | NUM_JOB_SLOTS                 | 3       |
+| v3d       | V3D_MAX_QUEUES                | 6       |
+
+- 每个 scheduler 对应多个不同优先级(`enum drm_sched_priority`)的 scheduler run queue (sw run queue)
+
+但似乎对于未来的硬件，尤其那些通过 FW/HW 调度 job 的 GPU, 更希望的拓扑结构是 scheduler : run queue : entity 是 1:1:1. 这样的 `drm_gpu_scheduler` 已经退化成一个 **dependency resolver**, 没有了实质的~~调度~~的作用。
+
+```mermaid
+flowchart TD
+  subgraph GPU
+    GuC[FW/HW scheduler]
+    slot-0[HW Run Queue]
+    slot-1[HW Run Queue]
+    slot-2[HW Run Queue]
+  end
+
+  sched0[drm_gpu_scheduler]
+  sched1[drm_gpu_scheduler]
+  sched2[drm_gpu_scheduler]
+
+  runq00[drm_sched_rq<br>KERNEL]
+  runq10[drm_sched_rq<br>KERNEL]
+  runq20[drm_sched_rq<br>KERNEL]
+
+  entity00@{shape: docs, label: "drm_sched_entity<br>job chain"}
+  entity10@{shape: docs, label: "drm_sched_entity<br>job chain"}
+  entity20@{shape: docs, label: "drm_sched_entity<br>job chain"}
+
+  entity00 --> runq00 --> sched0 --> GuC --> slot-0
+  entity10 --> runq10 --> sched1 --> GuC --> slot-1
+  entity20 --> runq20 --> sched2 --> GuC --> slot-2
+```
+
 - 每个 scheduler run queue 是一个等待被调试的 entity 队列
 - 每个 entity 由包含若干个 gpu job 的链表组成
 
@@ -135,6 +173,19 @@ int drm_sched_init(
   struct device *dev // 所属 struct device
 );
 ```
+
+```c
+int drm_sched_entity_init(
+  struct drm_sched_entity *entity,
+
+  // 一个 priority 对应一个 run queue
+  enum drm_sched_priority priority,
+
+  // 这个 entity 上的 jobs 可以在这组 schedulers 中的任意一个 scheduler 上调度
+  struct drm_gpu_scheduler **sched_list,
+  unsigned int num_sched_list,
+  atomic_t *guilty
+);
 
 ## v5.4
 
