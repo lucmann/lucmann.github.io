@@ -108,7 +108,37 @@ flowchart TD
   entity20 --> runq20 --> sched2 --> GuC --> slot-2
 ```
 
-- 每个 scheduler run queue 是一个等待被调试的 entity 队列
+- 每个 scheduler run queue 是一个将被调度的 entity 队列
+- `drm_sched_entity.sched_list`, 一个 entity 上的 jobs 可以被调度到这个 **sched_list** 上的任意一个 scheduler 上, 实现这个过程是通过 [`drm_sched_entity_select_rq()`](https://elixir.bootlin.com/linux/v6.13.5/source/drivers/gpu/drm/scheduler/sched_entity.c#L539) 完成的。
+
+```mermaid
+flowchart TD
+  subgraph GPU
+    slot-0[HW Run Queue]
+    slot-1[HW Run Queue]
+    slot-2[HW Run Queue]
+  end
+
+  sched0[drm_gpu_scheduler]
+  sched1[drm_gpu_scheduler]
+  sched2[drm_gpu_scheduler]
+
+  runq00[drm_sched_rq<br>KERNEL]
+  runq10[drm_sched_rq<br>KERNEL]
+  runq20[drm_sched_rq<br>KERNEL]
+
+  entity00@{shape: docs, label: "drm_sched_entity<br>job chain"}
+  entity10@{shape: docs, label: "drm_sched_entity<br>job chain"}
+  entity20@{shape: docs, label: "drm_sched_entity<br>job chain"}
+
+  entity00 --> runq00 --> sched0 --> slot-0
+  entity00 -.-> runq10
+  entity10 --> runq10 --> sched1 --> slot-1
+  entity10 -.-> runq00
+  entity20 --> runq20 --> sched2 --> slot-2
+```
+
+
 - 每个 entity 由包含若干个 gpu job 的链表组成
 
 # 数据结构
