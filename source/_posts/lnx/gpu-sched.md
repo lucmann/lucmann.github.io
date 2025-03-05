@@ -80,7 +80,7 @@ Notes:
 
 - 每个 scheduler 对应多个不同优先级(`enum drm_sched_priority`)的 scheduler run queue (sw run queue)
 
-但似乎对于未来的硬件，尤其那些通过 FW/HW 调度 job 的 GPU, 更希望的拓扑结构是 scheduler : run queue : entity 是 1:1:1. 这样的 `drm_gpu_scheduler` 已经退化成一个 **dependency resolver**, 没有了实质的~~调度~~的作用。
+但似乎对于未来的硬件，尤其那些通过 FW/HW 调度 job 的 GPU, 更希望的拓扑结构是 scheduler : run queue : entity 是 1:1:1. 这样的 `drm_gpu_scheduler` 已经退化成一个 **dependency tracker**, 没有了实质的~~调度~~的作用。
 
 ```mermaid
 flowchart TD
@@ -237,6 +237,40 @@ Note:
 - 5.4 没有让驱动提供一个 timeout_wq, 而是固定使用 delayable workqueue 去执行 [drm_sched_job_timedout()](https://elixir.bootlin.com/linux/v5.19.17/source/drivers/gpu/drm/scheduler/sched_main.c#L1016)
 - 参数中的 `timeout` 是以 jiffies 计算的，如果设置成 `MAX_SCHEDULE_TIMEOUT`， 表示由驱动自己处理超时
 
+# Entity - Jobs 的容器
+
+```mermaid
+sequenceDiagram
+  participant Driver
+  participant Scheduler
+  participant Kworker
+
+  note right of Driver : Assign an entity to job
+  Driver ->> Scheduler : drm_sched_job_init()
+  Driver ->> Scheduler : drm_sched_job_arm(job)
+  note right of Scheduler : Given a priority, rq chosen,<br>then scheduler chosen,<br>then HW ring chosen
+  Scheduler ->> Scheduler : drm_sched_entity_select_rq(entity)
+  Driver ->> Scheduler : drm_sched_entity_push_job(job)
+  Scheduler ->> Scheduler : drm_sched_rq_add_entity(rq, entity)
+  opt DRM_SCHED_POLICY_FIFO
+    Scheduler ->> Scheduler : drm_sched_rq_update_fifo_locked(entity, rq, submit_timestamp)
+  end
+  note right of Scheduler : wake up the scheduler<br>(queue_work(submit_wq, &work_run_job))
+  Scheduler ->> Kworker : drm_sched_wakup()
+  rect rgb(200, 150, 255)
+    note left of Kworker : drm_sched_run_job_work()
+    Kworker ->> Scheduler : drm_sched_select_entity(sched)
+    Kworker ->> Scheduler : drm_sched_entity_pop_job(entity)
+    Kworker ->> Driver : sched->ops->run_job()
+    Kworker ->> Kworker : complete_all(entity->idle)
+    Kworker ->> Scheduler : drm_sched_fence_scheduled(s_fence, fence)
+    Kworker ->> Scheduler : drm_sched_job_done(job, result)
+    Kworker ->> Kworker : wake_up(&sched->job_scheduled)
+    note right of Kworker : again queue_work(submit_wq, &work_run_job)
+    Kworker ->> Kworker : drm_sched_run_job_queue()
+  end
+```
+
 # Scheduler 如何工作
 
 Job 提交一般由用户驱动通过 **IOCTL_SUBMIT** 命令触发，将 job 下发给 hw, 所谓下发就是将 64 位的 job(chain) 的起始地址写入 MMIO 寄存器或 ringbuffer, 然后再触发 doorbell, hw 就开始执行
@@ -251,6 +285,7 @@ sequenceDiagram
   note right of KMD : 创建一个 work item
   KMD ->> KMD : INIT_WORK(&sched->work_run_job,<br>drm_sched_run_job_work)
   UMD ->> KMD : ioctl(SUBMIT)
+  KMD ->> KMD : drm_sched_job_init()
   KMD ->> KMD : drm_sched_job_arm()
   KMD ->> KMD : drm_sched_entity_push_job()
   KMD ->> KMD : drm_sched_waitup()
