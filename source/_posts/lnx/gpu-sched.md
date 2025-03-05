@@ -270,6 +270,7 @@ Note:
 
 # 参考资料
 
+- [drm/scheduler: improve GPU scheduler documentation v2](https://patchwork.freedesktop.org/patch/567839/)
 - [linux DRM GPU scheduler 笔记](https://www.cnblogs.com/yaongtime/p/14305463.html)
 - [drm/panfrost: Add initial panfrost driver](https://patchwork.freedesktop.org/patch/297644/)
 - [drivers/gpu 下的 `drm_sched_backend_ops`](https://pastebin.com/MssJk6Ky)
