@@ -145,23 +145,55 @@ flowchart TD
 
 Linux DRM 子系统的 `drm_gpu_scheduler` 负责提交和调度 GPU job，以一个单独的内核模块(`gpu-sched`) 的形式存在。
 
-- `drm_gpu_scheduler`
+## `drm_gpu_scheduler`
 
 调度器实例 (instance)，运行时实际上是一个内核线程 (kthread), 这个线程启动是在 `drm_sched_init()`。
 
 实际上，自从内核 v6.8-rc1 [a6149f039369 ("drm/sched: Convert drm scheduler to use a work queue rather than kthread")](https://lore.kernel.org/all/20231031032439.1558703-3-matthew.brost@intel.com/) `drm_gpu_scheduler` 的实现已经从 kthread 变成 work queue 了。 这个修改与 Intel Gen9+ 引入的 microcontrollers (μC) 之一 [GuC](https://igor-blue.github.io/2021/02/10/graphics-part1.html#the-guc) 有关。
 
-- `drm_sched_rq`
+## `drm_sched_rq`
 
 若干个 `drm_sched_entity` (list) 的封装。一个 scheduler 实例最多可以有 `DRM_SCHED_PRIORITY_COUNT` 个 `drm_sched_rq`。调度器调度的其实就是一个个 entity。 这么多个 entity 按什么顺序提交给 GPU 由具体的 **调度策略 (Scheduling Policy)** 决定，而**调度优先级 (Scheduling Priority)** 由 `drm_sched_rq` 实现，有多少个优先级，一个 `drm_gpu_scheduler` 里就有多少个 `drm_sched_rq`，每个优先级对应一个 `drm_sched_rq`。 
 
-- `drm_sched_entity`
+## `drm_sched_entity`
 
 若干个 `drm_sched_job` (list) 的封装
 
-- `drm_sched_job`
+## `drm_sched_job`
 
 被 entity 运行的一个 job, 一个 job 总是属于某一个 entity
+
+## [`drm_sched_fence`](https://elixir.bootlin.com/linux/v6.13.5/source/include/drm/gpu_scheduler.h#L267)
+
+```c
+struct drm_sched_fence {
+  // job 一旦被调度了，就 signal 这个 fence
+  struct dma_fence scheduled;
+
+  // job 被硬件完成了， 就 signal 这个 fence
+  // 当一个 job 完成时，硬件一般会上报一个中断 interrupt
+  struct dma_fence finished;
+
+  //
+  ktime_t deadline;
+
+  // 由驱动提供的 run_job() 回调函数返回的 fence,
+  // 硬件上 finished/done 中断后，会先 signal 这个 fence
+  // scheduler signal @scheduled fence 时，会将 sched->ops->run_job() 的
+  // 返回值赋给 parent
+  struct dma_fence *parent;
+
+  //
+  struct drm_gpu_scheduler *sched;
+
+  //
+  spinlock_t lock;
+
+  //
+  void *owner;
+}
+```
+
 
 # 初始化 Scheduler 实例
 
