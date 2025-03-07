@@ -66,4 +66,4 @@ flowchart TB
 - export `drmPrimeHandleToFD()`
 - import `drmPrimeFDToHandle()`
 
-FD 是文件描述符，而 bo handles 在内核态和用户态各自维护有一份，分别是 **GEM bo handles** 和 **Userspace bo handlers**, 在 mesa 的实现里，这两个集合是 1:1 映射关系, 当一个 gem bo handle 被导入, 如果对应的 userspace bo handle(实际上就是 drmPrimeFDToHandle() 返回的整数)已经存在，mesa 驱动仅仅是将这个 userspace bo handle 的引用计数加 1. 这就有可能导致 bo_destroy 函数和 bo_import() 函数发生竞争 (race), 从而导致 UAF, 这个 Piglit 用例就是专门测试这种场景的。
+FD 是文件描述符，而 bo handles 在内核态和用户态各自维护有一份，分别是 **GEM bo handles** 和 **Userspace bo handles**, 在 mesa 的实现里，这两个集合是 1:1 映射关系, 当一个 gem bo handle 被导入, 如果对应的 userspace bo handle(实际上就是 drmPrimeFDToHandle() 返回的整数)已经存在，mesa 驱动仅仅是将这个 userspace bo handle 的引用计数加 1. 这就有可能导致 bo_destroy 函数和 bo_import() 函数发生竞争 (race), 从而导致 UAF, 这个 Piglit 用例就是专门测试这种场景的。
