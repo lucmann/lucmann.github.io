@@ -360,48 +360,30 @@ flowchart TD
 
 *NOTE: sync file 最初是先在 Android kernel 内实现的*
 
+这里我们可以将 [`struct drm_syncobj`](https://elixir.bootlin.com/linux/v6.13.5/source/include/drm/drm_syncobj.h#L39) 和 [`struct drm_gem_object`](https://elixir.bootlin.com/linux/v6.13.5/source/include/drm/drm_gem.h#L273) 做个对比, 何其相似！
+
 - drm_syncobj
 
-```c
-/**
- * struct drm_syncobj - sync object.
- *
- * This structure defines a generic sync object which wraps a &dma_fence.
- */
-struct drm_syncobj {
-	/**
-	 * @refcount: Reference count of this object.
-	 */
-	struct kref refcount;
-	/**
-	 * @fence:
-	 * NULL or a pointer to the fence bound to this object.
-	 *
-	 * This field should not be used directly. Use drm_syncobj_fence_get()
-	 * and drm_syncobj_replace_fence() instead.
-	 */
-	struct dma_fence __rcu *fence;
-	/**
-	 * @cb_list: List of callbacks to call when the &fence gets replaced.
-	 */
-	struct list_head cb_list;
-	/**
-	 * @ev_fd_list: List of registered eventfd.
-	 */
-	struct list_head ev_fd_list;
-	/**
-	 * @lock: Protects &cb_list and &ev_fd_list, and write-locks &fence.
-	 */
-	spinlock_t lock;
-	/**
-	 * @file: A file backing for this syncobj.
-	 */
-	struct file *file;
-};
-```
-这个定义简洁明了，首先它是一个同步原语，所以它本质上是一个 `dma_fence` 的封装。其次它是一个内核对象，所以它有引用计数 `kref`。最后它是要被用户态使用的，所以它得有一个对应的文件 `struct file`。
+```mermaid
+flowchart LR
+  A[file descriptor]
+  B[dma_fence]
 
-`drm_syncobj` 应该就是为了能让用户态感知到 `dma_fence` 这个本来只被隐藏于内核里的同步原语，能够让 `dma_fence` 在用户空间由应用程序显式地操作。而 Linux “一切皆文件”， 所以就把 `dma_fence` 搞成披着“文件马甲”的一个东西。
+  A -- DRM_IOCTL_SYNCOBJ_FD_TO_HANDLE<br>drmSyncobjImportSyncFile() --> B
+  A <-- drm_syncobj --> B
+  B -- DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD<br>drmSyncobjExportSyncFile() --> A
+```
+- drm_gem_object
+
+```mermaid
+flowchart LR
+  A[file descriptor]
+  B[dma_buf]
+
+  A -- DRM_IOCTL_PRIME_FD_TO_HANDLE<br>drmPrimeFDToHandle() --> B
+  A <-- drm_gem_object --> B
+  B -- DRM_IOCTL_PRIME_HANDLE_TO_FD<br>drmPrimeHandleToFD() --> A
+```
 
 - drmSyncobjCreate()
 
@@ -419,7 +401,7 @@ drm_syncobj 在用户空间只是一个 32 位整数 (handle), 创建它的用�
 
 - drm_syncobj_create() 
 
-仅仅是申请 `struct drm_syncobj` 的内存, 初始化它的数据成员, 而且最关键的成员 `dma_fence` 还是空的，当用户传入 `DRM_SYNCOBJ_CREATE_SIGNALED` 标志时，`drm_syncobj_create()` 会自己创建一个 **stub fence** 赋给这个 syncobj, 如果创建时标志是 0， 则由用户后面绑定相关的 `dma_fence` (当然还是通过 syncobj 的形式，因为用户不能直接接触 `dma_fence`， 一般是用 `drmSyncobjExportSyncFile()`, `drmSyncobjCreate()`, `drmSyncobjImportSyncFile()` 这套组合拳来完成的。)
+仅仅是申请 `struct drm_syncobj` 的内存, 初始化它的数据成员, 而且最关键的成员 `dma_fence` 还是空的，当用户传入 `DRM_SYNCOBJ_CREATE_SIGNALED` 标志时，`drm_syncobj_create()` 会自己创建一个 **stub fence** 赋给这个 syncobj, 如果创建时标志是 0， 则由用户后面绑定相关的 `dma_fence` (当然还是通过 syncobj 的形式，因为 `dma_fence` 对用户态不可见， 一般是用 `drmSyncobjExportSyncFile()`, `drmSyncobjCreate()`, `drmSyncobjImportSyncFile()` 来完成的。)
 
 - drm_syncobj_get_handle()
 
