@@ -369,9 +369,9 @@ flowchart LR
   A[file descriptor]
   B[dma_fence]
 
-  A -- SYNCOBJ_FD_TO_HANDLE<br>drmSyncobjImportSyncFile() --> B
+  A -- SYNCOBJ_FD_TO_HANDLE<br>drmSyncobjFDToHandle() --> B
   A <-- drm_syncobj --> B
-  B -- SYNCOBJ_HANDLE_TO_FD<br>drmSyncobjExportSyncFile() --> A
+  B -- SYNCOBJ_HANDLE_TO_FD<br>drmSyncobjHandleToFD() --> A
 ```
 - drm_gem_object
 
@@ -428,6 +428,24 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 			   struct drm_syncobj *syncobj, u32 *handle)
 ```
 
+## FD to Handle Convert
+
+- `int drmSyncobjFDToHandle(int fd, int obj_fd, uint32_t *handle);`
+- `int drmSyncobjHandleToFD(int fd, uint32_t handle, int *obj_fd);`
+
+## Sync File Transfer
+
+* `int drmSyncobjImportSyncFile(int fd, uint32_t handle, int sync_file_fd);`
+* `int drmSyncobjExportSyncFile(int fd, uint32_t handle, int *sync_file_fd);`
+
+`drmSyncobjFDToHandle()` 和 `drmSyncobjImportSyncFile()` 的区别仅仅是后者设置了 `DRM_SYNCOBJ_FD_TO_HANDLE_FLAGS_IMPORT_SYNC_FILE` 这个 flags。`drmSyncobjHandleToFD()` 和 `drmSyncobjExportSyncFile()` 也是类似。
+
+`drmSyncobjExportSyncFile()` 通过 ioctl 将用户给定的 syncobj ID 转换成一个文件描述符返回给用户。而 SyncobjExport/ImportSyncFile 这对操作和 SyncobjFDToHandle/HandleToFD 这对操作的区别是后者是给**同一个 drm_syncobj** 提供**两个不同的 ID** 而已。
+
+而前者通过和 `drmSyncobjCreate()` 配合，会产生另外一个**新的 drm_syncobj**
+
+# Questions
+
 - syncobj 的 handle 可以是 0 吗？
 
 **不会是 0**
@@ -439,7 +457,6 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 ```
 它申请范围在最小值是 1 (包含)和最大值是 0 (不包含，实际上最大值是 0xffffffff) 之间的一个整数。 
 
-# Questions
 
 这里主要根据[内核邮件列表里的一个讨论](https://patchwork.kernel.org/project/kvm/patch/20250107142719.179636-2-yilun.xu@linux.intel.com/)来更好的理解 dma-buf 的设计思路和使用原则。
 
