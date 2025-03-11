@@ -369,9 +369,9 @@ flowchart LR
   A[file descriptor]
   B[dma_fence]
 
-  A -- DRM_IOCTL_SYNCOBJ_FD_TO_HANDLE<br>drmSyncobjImportSyncFile() --> B
+  A -- SYNCOBJ_FD_TO_HANDLE<br>drmSyncobjImportSyncFile() --> B
   A <-- drm_syncobj --> B
-  B -- DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD<br>drmSyncobjExportSyncFile() --> A
+  B -- SYNCOBJ_HANDLE_TO_FD<br>drmSyncobjExportSyncFile() --> A
 ```
 - drm_gem_object
 
@@ -380,9 +380,9 @@ flowchart LR
   A[file descriptor]
   B[dma_buf]
 
-  A -- DRM_IOCTL_PRIME_FD_TO_HANDLE<br>drmPrimeFDToHandle() --> B
+  A -- PRIME_FD_TO_HANDLE<br>drmPrimeFDToHandle() --> B
   A <-- drm_gem_object --> B
-  B -- DRM_IOCTL_PRIME_HANDLE_TO_FD<br>drmPrimeHandleToFD() --> A
+  B -- PRIME_HANDLE_TO_FD<br>drmPrimeHandleToFD() --> A
 ```
 
 - drmSyncobjCreate()
