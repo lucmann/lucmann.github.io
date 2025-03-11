@@ -70,4 +70,4 @@ FD 是文件描述符，而 bo handles 在内核态和用户态各自维护有�
 
 # [Waffle](https://gitlab.freedesktop.org/mesa/waffle)
 
-[Waffle /wa:fl/ 动听而无意义的话](https://gitlab.freedesktop.org/mesa/waffle) 是一个跨平台的可以动态地选择 OpenGL, OpenGL ES, Vulkan 和窗口系统的库。piglit 用它来创建 EGLContext, 最终会创建 Galliumm pipe_context.
+[Waffle /wa:fl/ 动听而无意义的话](https://gitlab.freedesktop.org/mesa/waffle) 是一个跨平台的在运行时动态地选择一个 OpenGL API.piglit 用它来创建 EGLContext, 最终会创建 Galliumm pipe_context. 此外 apitrace, Dante (open source DOOM 3) 也使用 waffle
