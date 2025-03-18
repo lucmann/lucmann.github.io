@@ -308,6 +308,8 @@ flowchart LR
 
 ## dma_fence
 
+`struct dma_fence` 是一个类似 `struct completion` 的结构体，用来跟踪 GPU 任务，当一个 GPU 任务结束时，对应的 dma_fence 被 signaled.
+
 `dma_fence_default_wait` 是 dma-fence 默认的 wait 操作。该函数会让当前进程(task) 进入睡眠状态 (可中断睡眠或不可中断睡眠，取决于调用者传入的参数 `intr`）, 直到 dma-fence 被 signaled 或者设置的超时时间到。
 
 ```c
@@ -318,7 +320,7 @@ flowchart LR
 
 ## dma_resv
 
-`dma_resv` (reservation object) 提供一个管理 `dma_fence` 容器的机制，这些 `dma_fence` 都与某个 `dma_buf` 关联。它可以容纳任意数量的 `dma_fence`。 每个 `dma_fence` 被加入这个容器时都带有一个 `usage` 参数，`dma_resv_usage` 有两个作用：
+`dma_resv` (reservation object) 是一组 dma_fence + 一个锁，当调用者通过 `dma_resv_add_fence()` 向 dma_resv 里加入新的 dma_fence 时需要持有这个锁。
 
 - 描述对 `dma_resv` 不同的使用场景
 - 在调用 `dma_resv_get_fences()` 时，决定哪些 fences 被返回
