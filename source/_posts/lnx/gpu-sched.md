@@ -279,7 +279,7 @@ sequenceDiagram
 
   Driver ->> Scheduler : drm_sched_job_init()
   Driver ->> Scheduler : drm_sched_job_arm(job)
-  note right of Scheduler : 给定一个优先级，那么 runqueue 也就确定了<br>那么 sched 实例也就确定了,<br>那么在哪个硬件 slot 上执行这个 job 也就确定了
+  note right of Scheduler : 给定一个优先级，那么 runqueue 也就确定了<br>那么 sched 实例也就确定了,<br>那么在哪个硬件 slot 上执行也就确定了
   Scheduler ->> Scheduler : drm_sched_entity_select_rq(entity)
   note right of Driver : 一旦把 job push 到 entity queue,<br>这个 job 就可能在任何时间点完成被释放，<br>所以在这个时间点后，<br>驱动就不能再读写 job 的任何字段
   Driver ->> Scheduler : drm_sched_entity_push_job(job)
