@@ -36,7 +36,7 @@ categories: linux
 |:----|:---------------------------|:-----------------------------------------------|
 | KIQ | Kernel Interface Queue     | KMD 的一个控制队列，用来管理 GFX/Compute engine 上的其它队列 |
 | IB  | Indirect Buffer            | 某个特定 engine 的 command buffer, 通常不是直接将命令写入硬件 queue 里，而是先将命令写入一块内存，然后再将内存的地址写入硬件 queue |
-| HQD | Hardware Queue Descriptors | 定义一个将要在某个 Pipe 上执行的 queue, 一般是 register based memory |
+| HQD | Hardware Queue Descriptor  | kernel queues 或 user queues 将“映射”到一个 HQD, 一个 HQD 可能就是一个 MMIO 地址寄存器。kernel queues 和 user queues 映射的区别是， kernel queues 总是**静态地**映射到**一个 HQD**, 而 user queues 由 MES **动态地** 映射到剩余的所有其它 HQDs |
 | MQD | Memory Queue Descriptor    | 定义 queue 的状态，包括 GPU virtual address, doorbell 等，驱动为每个它创建的 queue 设置一个 MQD， MQD 被交给 MES firmware 去映射 |
 | KFD | Kernel Fusion Driver       | AMD APU 芯片的内核驱动， 主要用于 HSA 架构的芯片 |
 | KGD | Kernel Graphics Driver     | AMD GPU 芯片的内核驱动， 主要用于独立显卡和 OEM 上的 GPU 芯片 |
