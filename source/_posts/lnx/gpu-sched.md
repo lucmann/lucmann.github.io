@@ -277,28 +277,28 @@ sequenceDiagram
   participant Scheduler
   participant Kworker
 
-  note right of Driver : Assign an entity to job
   Driver ->> Scheduler : drm_sched_job_init()
   Driver ->> Scheduler : drm_sched_job_arm(job)
-  note right of Scheduler : Given a priority, rq chosen,<br>then scheduler chosen,<br>then HW ring chosen
+  note right of Scheduler : 给定一个优先级，那么 runqueue 也就确定了<br>那么 sched 实例也就确定了,<br>那么在哪个硬件 slot 上执行这个 job 也就确定了
   Scheduler ->> Scheduler : drm_sched_entity_select_rq(entity)
+  note right of Driver : 一旦把 job push 到 entity queue,<br>这个 job 就可能在任何时间点完成被释放，<br>所以在这个时间点后，<br>驱动就不能再读写 job 的任何字段
   Driver ->> Scheduler : drm_sched_entity_push_job(job)
   Scheduler ->> Scheduler : drm_sched_rq_add_entity(rq, entity)
   opt DRM_SCHED_POLICY_FIFO
     Scheduler ->> Scheduler : drm_sched_rq_update_fifo_locked(entity, rq, submit_timestamp)
   end
-  note right of Scheduler : wake up the scheduler<br>(queue_work(submit_wq, &work_run_job))
+  note right of Scheduler : 唤醒 sched kworker 线程<br>queue_work(submit_wq, &work_run_job)
   Scheduler ->> Kworker : drm_sched_wakup()
   rect rgb(200, 150, 255)
     note left of Kworker : drm_sched_run_job_work()
-    Kworker ->> Scheduler : drm_sched_select_entity(sched)
-    Kworker ->> Scheduler : drm_sched_entity_pop_job(entity)
-    Kworker ->> Driver : sched->ops->run_job()
+    Kworker ->> Kworker : drm_sched_select_entity(sched)
+    Kworker ->> Kworker : drm_sched_entity_pop_job(entity)
+    Kworker ->> Kworker : sched->ops->run_job()
     Kworker ->> Kworker : complete_all(entity->idle)
-    Kworker ->> Scheduler : drm_sched_fence_scheduled(s_fence, fence)
-    Kworker ->> Scheduler : drm_sched_job_done(job, result)
+    Kworker ->> Kworker : drm_sched_fence_scheduled(s_fence, fence)
+    Kworker ->> Kworker : drm_sched_job_done(job, result)
     Kworker ->> Kworker : wake_up(&sched->job_scheduled)
-    note right of Kworker : again queue_work(submit_wq, &work_run_job)
+    note right of Kworker : 再次唤醒 sched kwoker 线程<br>queue_work(submit_wq, &work_run_job)
     Kworker ->> Kworker : drm_sched_run_job_queue()
   end
 ```
