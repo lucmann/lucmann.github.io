@@ -556,8 +556,13 @@ The cause of failure is that vcXsrv has no extensions with DRI or DRI2. This lac
 
 # Debug
 
-## env vars
+## 环境变量
 
-- MESA_VERBOSE=api glmark2
-- MESA_GLSL=dump_on_error MESA_DEBUG=1 glmark2
+- MESA_VERBOSE=comma-separated-list
+  - MESA_VERBOSE=api
+- MESA_GLSL=comma-separated-list
+  - `MESA_GLSL=log` 把所有 GLSL shader 保存到文件里， shader_X.vert 或 shader_X.frag
 
+# References
+
+- [mdoc: Shading Languages Environment Variables](https://docs.mesa3d.org/shading.html#environment-variables)
