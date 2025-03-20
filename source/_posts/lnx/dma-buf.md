@@ -489,7 +489,7 @@ int drm_syncobj_get_handle(struct drm_file *file_private,
 
 # References
 
-- [Linux Kernel Documentation: Buffer Sharing and Synchronization](https://01.org/linuxgraphics/gfx-docs/drm/driver-api/dma-buf.html)
+- [kdoc: Buffer Sharing and Synchronization](https://docs.kernel.org/driver-api/dma-buf.html)
 - [Sync File API Guide](https://docs.kernel.org/driver-api/sync_file.html)
 - [Sharing buffers between devices](https://lwn.net/Articles/454389/)
 - [PRIME](https://blog.csdn.net/hexiaolong2009/article/details/105961192)
