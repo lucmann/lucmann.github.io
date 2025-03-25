@@ -53,7 +53,7 @@ classDiagram
         +int cur_blit_source
         +uint32_t *stamp
     }
-    note for loader_dri3_buffer "bool busy;\nSet on swap\nCleared on IdleNotify"
+    note for loader_dri3_buffer "bool busy;<br>dri3_swap_buffers() 时设置 busy 为 true<br>收到 X Server 的 XCB_PRESENT_EVENT_IDLE_NOTIFY 时设置 busy 为 false"
     class loader_dri3_buffer{
         +__DRIimage * image
         +uint32_t pixmap
@@ -307,7 +307,20 @@ flowchart TD
 
 ## 送显
 
-如果平台的窗口系统(Winsys)是X11, 则送显主要是通过 Present 扩展完成的。这个与Xserver 的交互过程是通过 [`present_event`](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/present/present_priv.h#L226) 完成的
+如果平台的窗口系统(Winsys)是X11, 则送显主要是通过 Present 扩展完成的。Client (代码主要在 UMD) 与 X Server 的交互主要通过 [present_event](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/present/present_priv.h#L226) 完成的， `present_event` 主要有以下 3 个:
+
+- XCB_PRESENT_EVENT_CONFIGURE_NOTIFY
+- XCB_PRESENT_EVENT_COMPLETE_NOTIFY
+  - 这个事件传达的主要信息是 **X Server 是以哪种模式上屏刚才送显的 Back Buffer 的**(注意是**过去完成时**), 主要有 4 种模式
+    - XCB_PRESENT_COMPLETE_MODE_COPY
+      - 几乎所有的 3D 应用(除了像 KWin 这样的 compositor)在绝大多数情况下送显的 Back Buffer 都是以这种模式上屏的。因为一般的应用不是全屏，不可能直接**FLIP (改一下 DC Framebuffer base register)**
+    - XCB_PRESENT_COMPLETE_MODE_FLIP
+      - 像 KWin 合成器合成的**全屏** screen image 上屏一般是这种模式，这种方式显然要比 COPY 快很多
+    - XCB_PRESENT_COMPLETE_MODE_SKIP
+      - 如果 PresentCompleteNotify 传回的是这个模式，不好意思，X Server 并没有把刚才送显的 Back Buffer 上屏，这意味着**丢帧** 
+    - XCB_PRESENT_COMPLETE_MODE_SUBOPTIMAL_COPY
+      - 如果 PresentCompleteNotify 传回的是这个模式，表明如果下次用不同的 **format/modifier** 重新申请一个 Back buffer，X Server 很可能就可以以 **FLIP** 模式上屏 Back buffer
+- XCB_PRESENT_EVENT_IDLE_NOTIFY
 
 ```c
 typedef struct present_event {
@@ -321,12 +334,7 @@ typedef struct present_event {
 
 - 注册事件
     - [`dri3_setup_present_event(struct loader_dri3_drawable *draw)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L1709)
-        - [`xcb_present_select_input()`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-present-c-L398): 告诉Xserver，client 正在监听这几个事件:
-            - XCB_PRESENT_EVENT_CONFIGURE_NOTIFY
-            - XCB_PRESENT_EVENT_COMPLETE_NOTIFY
-            - XCB_PRESENT_EVENT_IDLE_NOTIFY
-
-        (注册时实际上是使用对应事件的 MASK 注册的，因为在向 Xserver 发送的注册消息中，注册的所有消息的MASK ORing 在一个 uint32_t [`event_mask`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-present-c-L416)发送过去的)
+        - [`xcb_present_select_input()`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-present-c-L398): 告诉Xserver，client 正在监听哪些事件。(注册时实际上是使用对应事件的 MASK 注册的，因为在向 Xserver 发送的注册消息中，注册的所有消息的MASK ORing 在一个 uint32_t [`event_mask`](https://gist.github.com/lucmann/2a6e24338cdae55ac359af3d25ddf2da#file-present-c-L416)发送过去的)
 
 - 接收事件
     - [`dri3_setup_present_event(struct loader_dri3_drawable *draw)`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/loader_dri3/loader_dri3_helper.c#L1699)
