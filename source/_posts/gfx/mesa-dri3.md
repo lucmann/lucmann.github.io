@@ -292,18 +292,33 @@ loader_dri3_swap_buffers_msc(struct loader_dri3_drawable *draw,
 ```
 
 ```mermaid
-flowchart TD
-    A[eglSwapBuffers]
-    B[dri3_swap_buffers]
-    C[dri3_swap_buffers_with_damage]
-    D[glXSwapBuffers]
-    E[dri3_swap_buffers]
-    F[loader_dri3_swap_buffers_msc]
-    A -->|platform_x11_dri3.c| B
+flowchart TB
+    A["eglSwapBuffers()"]
+    B["dri3_swap_buffers()"]
+    C["dri3_swap_buffers_with_damage()"]
+    D["glXSwapBuffers()"]
+    E["dri3_swap_buffers()"]
+    subgraph swap ["loader_dri3_swap_buffers_msc()"]
+      G["loader_dri3_vtable->flush_drawable()"]
+      H["dri3_find_back_alloc()"]
+      I["dri3_flush_present_events()"]
+      J["xcb_xfixes_create_region()"]
+      K["xcb_xfixes_set_region()"]
+      L["xcb_present_pixmap()"]
+      M["dri_invalidate_drawable()"]
+    end
+
+    subgraph Note1 ["返回要送显的 back buffer"]
+      direction TB
+      dummy["这里通过 dri3_find_back()<br>确保这里返回的是当前已经渲染好的(flushed) back buffer"]
+    end
+
+    A --> B
     B --> C
-    C -->|rects=NULL,n_rects=0| F
-    D -->|dri3_glx.c| E
-    E --->|rects=NULL,n_rects=0| F
+    C --> swap
+    D --> E ---> swap
+    G --> H --> I --> J --> K --> L --> M
+    Note1 -.-> H
 ```
 
 ## 送显
