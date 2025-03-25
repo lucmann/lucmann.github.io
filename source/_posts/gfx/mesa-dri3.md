@@ -28,8 +28,8 @@ dri3_alloc_render_buffer(struct loader_dri3_drawable *draw,
 ```mermaid
 classDiagram
     direction RL
-    loader_dri3_drawable o-- loader_dri3_buffer : LOADER_DRI3_NUM_BUFFERS
-    class loader_dri3_drawable{
+    m_loader_dri3_buffer o-- loader_dri3_buffer : LOADER_DRI3_NUM_BUFFERS
+    class loader_dri3_drawable {
         +xcb_connection_t * conn
         +xcb_screen_t * screen
         +__DRIdrawable *dri_drawable
@@ -46,14 +46,15 @@ classDiagram
         +uint64_t msc
         +uint64_t notify_ust
         +uint64_t notify_msc
-        +loader_dri3_buffer *buffers[5]
         +int cur_back
         +int cur_num_back
         +int max_num_back
         +int cur_blit_source
         +uint32_t *stamp
     }
-    note for loader_dri3_buffer "bool busy;<br>dri3_swap_buffers() 时设置 busy 为 true<br>收到 X Server 的 XCB_PRESENT_EVENT_IDLE_NOTIFY 时设置 busy 为 false"
+    class m_loader_dri3_buffer {
+        +loader_dri3_buffer *buffers[5]
+    }
     class loader_dri3_buffer{
         +__DRIimage * image
         +uint32_t pixmap
