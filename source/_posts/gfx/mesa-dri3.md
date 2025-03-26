@@ -293,32 +293,54 @@ loader_dri3_swap_buffers_msc(struct loader_dri3_drawable *draw,
 
 ```mermaid
 flowchart TB
-    A["eglSwapBuffers()"]
-    B["dri3_swap_buffers()"]
-    C["dri3_swap_buffers_with_damage()"]
-    D["glXSwapBuffers()"]
-    E["dri3_swap_buffers()"]
-    subgraph swap ["loader_dri3_swap_buffers_msc()"]
-      G["loader_dri3_vtable->flush_drawable()"]
-      H["dri3_find_back_alloc()"]
-      I["dri3_flush_present_events()"]
-      J["xcb_xfixes_create_region()"]
-      K["xcb_xfixes_set_region()"]
-      L["xcb_present_pixmap()"]
-      M["dri_invalidate_drawable()"]
-    end
-
-    subgraph Note1 ["返回要送显的 back buffer"]
+  subgraph Render ["渲染到 back buffer"]
+    direction TB
+    subgraph RenderBufferAlloc ["Allocate/Pick a back buffer"]
       direction TB
-      dummy["这里通过 dri3_find_back()<br>确保这里返回的是当前已经渲染好的(flushed) back buffer"]
+      a1["dri_make_current()"]
+      a2["st_api_make_current()"]
+      a3["st_framebuffer_validate()"]
+      a4["dri_st_framebuffer_validate()"]
+      a5["dri2_allocate_textures()"]
+      a6["dri_image_drawable_get_buffers()"]
+      a7["loader_dri3_get_buffers()"]
+      a8[["dri3_alloc_render_buffer()"]]
     end
+    b["glDraw*()"]
+  end
+  A["eglSwapBuffers()"]
+  B["dri3_swap_buffers()"]
+  C["dri3_swap_buffers_with_damage()"]
+  D["glXSwapBuffers()"]
+  E["dri3_swap_buffers()"]
+  subgraph Swap ["loader_dri3_swap_buffers_msc()"]
+    direction TB
+    G["loader_dri3_vtable->flush_drawable()"]
+    H["dri3_find_back_alloc()"]
+    I["dri3_flush_present_events()"]
+    J["xcb_xfixes_create_region()"]
+    K["xcb_xfixes_set_region()"]
+    L["xcb_present_pixmap()"]
+    M["dri_invalidate_drawable()"]
+  end
+  subgraph Note1 ["返回要送显的 back buffer"]
+    dummy1["这里通过 dri3_find_back()<br>确保这里返回的是当前已经渲染好的(flushed) back buffer"]
+  end
+  subgraph Note2 ["选取或申请 back buffer"]
+    dummy2["loader_dri3_drawable->buffers[]有5个<br>loader_dri3_buffer 的槽位<br>第1帧渲染时需要调用<br>dri3_alloc_render_buffer()<br>来申请新的back buffer"]
+  end
 
-    A --> B
-    B --> C
-    C --> swap
-    D --> E ---> swap
-    G --> H --> I --> J --> K --> L --> M
-    Note1 -.-> H
+  a1 --> a2 --> a3 --> a4 --> a5 --> a6 --> a7 --> a8 --> b
+  b --> A
+  b --> D
+  A --> B
+  B --> C
+  D --> E
+  C --> G
+  E ---> G
+  G --> H --> I --> J --> K --> L --> M
+  Note1 -.-> H
+  Note2 -.-> a8
 ```
 
 ## 送显
