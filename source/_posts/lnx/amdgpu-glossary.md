@@ -25,8 +25,11 @@ categories: linux
 | SDMA| System DMA                 | 多功能 DMA engine, KMD 利用它完成分页，GPU 页表更新，而且它通过 UMD 暴露给用户态使用 |
 | GC  | Graphics and Compute       | GFX/Compute engine, 这是 GPU 上最大的 IP, 它包含 3D pipeline 和 shader cores |
 | VCN | Video Codec Next           | Multi-media engine，它处理视频和图像的编解码，通过 UMD 暴露给用户态使用 |
-| CP  | Command Processor          | 包含 GFX/Compute engine 的前端，一批微控制器，PFP,ME,CE,MEC，它们上面运行固件代码，为驱动提供与 GFX/Compute engine 进行交互的接口 |
-| MEC | MicroEngine Compute        | 微控制器用来控制 GFX/Compute engine 上的 compute queues |
+| CP  | Command Processor          | 包含 GFX/Compute engine 的前端，一批微控制器，包括 PFP,ME,CE,MEC，它们上面运行固件代码，为驱动提供与 GFX/Compute engine 进行交互的接口 |
+| CE  | Constant Engine            | GFX CP 里的一个小处理器，主要用来更新 buffer descriptor 以便异步地将 PFP/ME 使用的 buffer 加载进 cache |
+| PFP | Pre-Fetch Parser           | GFX CP 里的一个小处理器，需要给它加载 µCode 去执行, 从名字能看出来它是预取 packets 的 |
+| ME  | MicroEngine                | GFX CP 里的一个小处理器，它和 PFP 组成一个 Drawing Engine，可以和 CE 异步执行 |
+| MEC | MicroEngine Compute        | 微控制器用来控制 GFX/Compute engine 上的 compute queues, Compute Engine 一般有 2 个 MEC, 而且每个 MEC 支持 32 个 HW ring(queue) |
 | MES | MicroEngine Scheduler      | 一个新的微控制器用来控制 queues, 估计既可以控制 compute queues, 也可以控制 gfx queues, 而且它上面运行的固件可能取代现有的内核 gpu scheduler, 而变成 firmware-based scheduling :) 猜 | 
 | RLC | RunList Controller         | 又一个 GFX/Compute engine 里的微控制器，用来处理 GFX/Compute engine 内部的电源管理，至于名字是历史遗留，与它的功能没有毛关系 |
 
