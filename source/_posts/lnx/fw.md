@@ -6,37 +6,13 @@ categories: linux
 ---
 
 ```
-VCE feature version: 0, firmware version: 0x00000000
 UVD feature version: 0, firmware version: 0x40000d00
 MC feature version: 0, firmware version: 0x00a777d0
 ME feature version: 29, firmware version: 0x00000091
 PFP feature version: 29, firmware version: 0x00000054
 CE feature version: 29, firmware version: 0x0000003d
 RLC feature version: 1, firmware version: 0x00000001
-RLC SRLC feature version: 0, firmware version: 0x00000000
-RLC SRLG feature version: 0, firmware version: 0x00000000
-RLC SRLS feature version: 0, firmware version: 0x00000000
-RLCP feature version: 0, firmware version: 0x00000000
-RLCV feature version: 0, firmware version: 0x00000000
-MEC feature version: 0, firmware version: 0x00000000
-IMU feature version: 0, firmware version: 0x00000000
-SOS feature version: 0, firmware version: 0x00000000
-ASD feature version: 0, firmware version: 0x00000000
-TA XGMI feature version: 0x00000000, firmware version: 0x00000000
-TA RAS feature version: 0x00000000, firmware version: 0x00000000
-TA HDCP feature version: 0x00000000, firmware version: 0x00000000
-TA DTM feature version: 0x00000000, firmware version: 0x00000000
-TA RAP feature version: 0x00000000, firmware version: 0x00000000
-TA SECUREDISPLAY feature version: 0x00000000, firmware version: 0x00000000
 SMC feature version: 0, program: 16, firmware version: 0x10020000 (2.0.0)
-SDMA0 feature version: 0, firmware version: 0x00000000
-SDMA1 feature version: 0, firmware version: 0x00000000
-VCN feature version: 0, firmware version: 0x00000000
-DMCU feature version: 0, firmware version: 0x00000000
-DMCUB feature version: 0, firmware version: 0x00000000
-TOC feature version: 0, firmware version: 0x00000000
-MES_KIQ feature version: 0, firmware version: 0x00000000
-MES feature version: 0, firmware version: 0x00000000
 VBIOS version: 113-xxx-xxx
 ```
 
@@ -53,5 +29,5 @@ for dir in amdgpu radeon; do ls /lib/firmware/$dir | wc; done
 而且 KMD 也提供 sys 文件系统接口允许用户查看固件信息 (需要 root 权限)， 例如，在 AMD R7340 显卡机器上输出本文开头的固件信息
 
 ```bash
-cat /sys/kernel/debug/dri/0/amdgpu_firmware_info
+cat /sys/kernel/debug/dri/0/amdgpu_firmware_info | grep -v 'firmware version: 0x00000000'
 ```
