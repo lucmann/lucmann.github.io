@@ -45,10 +45,9 @@ DMA-BUF 是 Linux 内核驱动中在上下文间，进程间，设备间，子�
 以 glxgears(`PRIME_HANDLE_TO_FD`) 和 Xorg(`PRIME_FD_TO_HANDLE`) 之间的共享过程为例, 主要有两个主要问题：
 
 - 要给 DMA-BUF 套一层匿名文件(Anonymous File), 这样才可以安全地在进程间共享
-- 导入者导入后，新建的 GPU VA 到 GPU PA 的映射要能够映射到与导出者进程里同样的物理显存位置 (GPU VA 倒无所谓)
+- 导入后，导入进程新建的 GPU **虚拟显存地址到物理显存地址**的映射要能够映射到**与导出侧相同的 GPU 物理显存地址** (GPU VA 倒无所谓)
 
-
-为了实现上的优化，内核专门在 drm_file 下搞了一个 dmabuf 和 handle 的红黑树作为 **DMA-BUF 缓存**， 这样在同一设备文件中的导出导入或同一 DMA-BUF 被同一个设备多次导入的情况就会高效一些。DMA-BUF cache 如下：
+内核在 drm_file 下搞了一个 dmabuf 和 handle 的红黑树作为 **DMA-BUF 缓存**， 这样在同一设备文件中的导出导入或同一个 drm_gem_object 被同一个设备多次导入的情况就会高效一些。
 
 ```c
 /**
@@ -64,6 +63,11 @@ struct drm_prime_file_private {
 	struct rb_root handles;
 };
 ```
+
+这个 **import/export caches** 有几个必要的作用：
+- 保证对于任意一个 drm_gem_object 总是有**一个唯一的用户态 handle** (见 [Piglit: ext_image_dma_buf_import-refcount-multithread](https://lucmann.github.io/gfx/piglit/))
+- 可以允许 UMD 去**检测重复的导入**
+
 
 `struct file`, `struct drm_file`, `struct drm_prime_file_private` 三者的关系是
 
@@ -88,6 +92,35 @@ erDiagram
 		rb_root dmabufs
 		rb_root handles
 	}
+```
+
+## 导入/导出的实现
+
+```mermaid
+flowchart LR
+  subgraph export ["Export"]
+    direction TB
+    1a["drmPrimeHandleToFD()"]
+	1b["DRM_IOCTL_PRIME_HANDLE_TO_FD"]
+	1c["drm_prime_handle_to_fd_ioctl()"]
+	1d["drm_gem_prime_handle_to_fd()"]
+	1e["drm_gem_prime_handle_to_dmabuf()"]
+	1f["export_and_register_object()"]
+  end
+  subgraph import ["Import"]
+    direction TB
+    2a["drmPrimeFDToHandle()"]
+	2b["DRM_IOCTL_PRIME_FD_TO_HANDLE"]
+	2c["drm_prime_fd_to_handle_ioctl()"]
+	2d["drm_gem_prime_fd_to_handle()"]
+	2e["drm_prime_lookup_buf_handle()"]
+	2f["drm_gem_prime_import()"]
+  end
+
+  1a --> 1b --> 1c --> 1d --> 1e --> 1f
+  2a --> 2b --> 2c --> 2d --> 2e --> 2f
+
+  export --> import
 ```
 
 `struct file`， `struct dma_buf` 的关系
