@@ -34,13 +34,42 @@ flowchart BT
 
 DMA-BUF 是 Linux 内核驱动中在上下文间，进程间，设备间，子系统间共享 buffer 的一种机制。 大概在[内核 3.2 版本就实现了](https://lwn.net/Articles/473668/)。 按最初的设计文档描述的，该框架大致是这样的:
 
-- 导出者创建一个固定大小的 buffer object, 并将一个 struct file(anon file) 和 allocator 定义的一组操作 (`struct dma_buf_attach_ops`) 与之关联
-- 不同的设备使用 `dma_buf_attach()` 将自己加到 buffer object 的 attachments 列表， 以便这个 buffer 的 backing storage 后面能被访问
+- 导出者创建一个固定大小的 buffer object, 并将一个 struct file(anon file) 和 allocator 定义的一组操作(map/unmap/cache-sync 等等) (`struct dma_buf_ops`) 与之关联
+- 不同的设备调用 `dma_buf_attach()` 将自己加到 buffer object 的 attachments 列表， 因为一个 buffer object 可以供多个设备(importers)使用
 - 这个导出的 buffer object 在各种实体间通过共享文件描述符 fd 来共享
 - 收到 fd 的导入者将重新获取到 buffer object, 使用导出时关联的 `dma_buf_attach_ops` 去访问这个 buffer
 - 导出者和导入者使用 `map_dma_buf()` 和 `unmap_dma_buf()` 来共享 buffer object 的 scatterlist
 
-从用户态传递文件描述符一直到内核底层，最终共享的实际上是 scatter/gather table, 实际上就是那个 buffer 的内存物理地址(或 DMA 物理地址)
+`struct dma_buf` 是一种**胶水结构**， 它将一个 **anonymous file** 和一个 **drm_gem_object** 以及导出者需要实现的一组对这个 buffer 的一组操作 **dma_buf_ops** 等等**粘合在一起**
+
+```c
+struct dma_buf {
+  size_t size; // buffer size,  不变
+  struct file *file; // anonymous file struct
+  struct list_head attachments; // 所有导入者的一个链表
+  const struct dma_buf_ops *ops; // 由导出者负责实现，如 map/unmap
+  unsigned vmapping_counter； // vmaps 的引用计数
+  struct iosys_map vmap_ptr; // 当 vmapping_counter 大于 0 时，指向当前的 vmap
+  const char *exp_name;  // 导出者字符串，debugging
+  const char *name; // accounting & debugging
+  spinlock_t name_lock； // 互斥访问 name 的锁
+  struct module *owner;  // 导出者 module
+  struct list_head list_node; // accounting & debugging
+  void *priv; // 指向 drm_gem_object
+  struct dma_resv *resv;
+  wait_queue_head_t poll; // 允许用户空间 poll()
+  struct dma_buf_poll_cb_t {
+	struct dma_fence_cb cb;
+	wait_queue_head_t *poll;
+
+	__poll_t active;
+  } cb_in, cb_out;
+  struct dma_buf_sysfs_entry {
+	struct kobject kobj;
+	struct dma_buf *dmabuf;
+  } *sysfs_entry;
+}
+```
 
 以 glxgears(`PRIME_HANDLE_TO_FD`) 和 Xorg(`PRIME_FD_TO_HANDLE`) 之间的共享过程为例, 主要有两个主要问题：
 
