@@ -1,5 +1,5 @@
 ---
-title: dri3_alloc_render_buffer
+title: 渲染和送显
 date: 2024-08-13 08:55:45+08:00
 updated: 2024-08-21 10:02:29+08:00
 tags: Mesa
@@ -10,7 +10,9 @@ categories: graphics
 
 <!--more-->
 
-# dri3_alloc_render_buffer
+# 渲染
+
+渲染由显卡(或 SoC)上的 GPU 完成，简单来说就是往后缓冲 (Back Buffer) 里哐哐哐干**像素**，一般要比后面的显示快得多(所以有些像素会被覆盖掉，我们看到的就是撕裂 **Tearing**)
 
 ```c
 static struct loader_dri3_buffer *
@@ -234,7 +236,7 @@ DRI3 与 DRI2 的一个主要区别就是在 DRI3, RenderBuffer 是由 DRI clien
 
 找到解释了，[PRIME Buffer Sharing - Overview and Lifetime Rules](https://www.kernel.org/doc/html/next/gpu/drm-mm.html#overview-and-lifetime-rules), 文件描述符 (file descriptor) 必须通过 **UNIX domain sockets** 在应用之间 send，不可能像全局唯一的 GEM names 一样被猜。 **send over UNIX domain sockets** 应该就是 XCB 库实现的这个函数 `xcb_send_requests_with_fds()`。
 
-# dri3_find_back
+## dri3_find_back
 
 ```c
 /**
@@ -277,7 +279,7 @@ sequenceDiagram
     end
 ```
 
-# loader_dri3_swap_buffers_msc
+## loader_dri3_swap_buffers_msc
 
 ```c
 /**
@@ -343,7 +345,39 @@ flowchart TB
   Note2 -.-> a8
 ```
 
-## 送显
+## DRI2 Throttle
+
+这个扩展原来好像是控制 DRI client 能同时并发地渲染多少个 RenderBuffer (或者说多少帧)的，因为原来 mesa 里有一个 `PIPE_CAP_MAX_FRAMES_IN_FLIGHT`, 因为这个值后来要么是 1， 要么是 0，就被改成 [`PIPE_CAP_THROTTLE`](https://docs.mesa3d.org/gallium/screen.html?highlight=pipe_cap_throttle) 了, 默认是 throttle 的, 按目前的实现，如果节流了，就是说当驱动提交了第 2 帧的渲染命令后，要等第 1 帧渲染完成 (pipe_fence_handle 是 drm_syncobj 的封装)，才能继续准备第 3 帧的渲染命令。
+
+```mermaid
+flowchart LR
+    subgraph "Frame 0"
+        F1["CPU Submit 1"]
+    end
+    subgraph "Frame 1"
+        F2["CPU Submit 2"]
+        R1["GPU Render Done 1 fa:fa-spinner"]
+    end
+    subgraph "Frame 2"
+        F3["CPU Submit 3"]
+        R2["GPU Render Done 2 fa:fa-spinner"]
+    end
+    subgraph "Frame 3"
+        F4["CPU Submit 4"]
+        R3["GPU Render Done 3 fa:fa-spinner"]
+    end
+
+    F1 --> F2
+    F2 --Block until--> R1 --> F3
+    F3 --Block until--> R2 --> F4
+    F4 --Block until--> R3
+```
+
+Throttle 的效果是 CPU 在提交后一帧的渲染命令后，要等(所谓“等”就是主线程调用 `drmSyncobjWait()` 阻塞)前一帧渲染完成后才唤醒继续准备下一帧数据，整个过程实际上是节流 CPU, 是让生产者-消费者中的**生产者(CPU)** 慢一点。所以 DRI2 Throttle 的本意就是在 GPU 渲染任务比较重(延迟大)的时候，CPU 这边没必要“玩命”准备数据，否则反而会导致比如过多消耗显存等其它问题。
+
+Mesa 中对 Throttle 的实现很有技巧性。因为这里“等”的是上一帧数据提交给内核后，drm_gpu_scheduler 为这个 job 创建的一个 `dma_fence`, 在提交时，userspace 会给 kernel 一个 syncobj (当一个 fence 容器用，意思是 gpu scheduler 创建好 fence 后 attach 到这个 syncobj, userspace 就可以通过 `drmSyncobjWait()` 阻塞式地等 syncobj 包含的 fence 是否被 signaled)。 因为 fence 是在渲染命令 push 到 drm_gpu_scheduler 后内核才创建的, 所以提交时带下去的 syncobj 用来装当前产生的 fence，如果你需要在下一帧数据提交后等上一帧的 fence, 你需要在当前帧提交后，创建一个新的 syncobj 来存当前帧的 fence，这样就可以在下一帧提交后， 用这个新的 syncobj 来等上一帧的 fence 了。 **相当于同一个 fence 放在两个不同的容器里用**。
+
+# 送显
 
 如果平台的窗口系统(Winsys)是X11, 则送显主要是通过 Present 扩展完成的。Client (代码主要在 UMD) 与 X Server 的交互主要通过 [present_event](https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/present/present_priv.h#L226) 完成的， `present_event` 主要有以下 3 个:
 
@@ -411,39 +445,23 @@ typedef struct present_event {
 
 以上无论是 `loader_dri3_wait_for_msc()` 还是 `loader_dri3_wait_for_sbc()`, 当所等待的条件满足后，都会更新(`dri3_handle_present_event()`)当前client 的状态(UST, MSC, SBC), 整个过程是一种同步，也是一种协商。
 
-# DRI2 Throttle
+## Vertical Refresh vs Swap Interval
 
-这个扩展原来好像是控制 DRI client 能同时并发地渲染多少个 RenderBuffer (或者说多少帧)的，因为原来 mesa 里有一个 `PIPE_CAP_MAX_FRAMES_IN_FLIGHT`, 因为这个值后来要么是 1， 要么是 0，就被改成 [`PIPE_CAP_THROTTLE`](https://docs.mesa3d.org/gallium/screen.html?highlight=pipe_cap_throttle) 了, 默认是 throttle 的, 按目前的实现，如果节流了，就是说当驱动提交了第 2 帧的渲染命令后，要等第 1 帧渲染完成 (pipe_fence_handle 是 drm_syncobj 的封装)，才能继续准备第 3 帧的渲染命令。
+这两个概念在**渲染**和**送显**这整个过程里很重要。它们俩是两个层次的东西，简单说，前者是硬件层面的，后者是软件层面的。
 
-```mermaid
-flowchart LR
-    subgraph "Frame 0"
-        F1["CPU Submit 1"]
-    end
-    subgraph "Frame 1"
-        F2["CPU Submit 2"]
-        R1["GPU Render Done 1 fa:fa-spinner"]
-    end
-    subgraph "Frame 2"
-        F3["CPU Submit 3"]
-        R2["GPU Render Done 2 fa:fa-spinner"]
-    end
-    subgraph "Frame 3"
-        F4["CPU Submit 4"]
-        R3["GPU Render Done 3 fa:fa-spinner"]
-    end
+Vertical Refresh (又叫 Vertical Refresh Rate, Vsync Rate), 指显示器一秒钟能刷新多少次画面。给定一款显示器，它支持的 Vertical Refresh Rate 就那么几种，比如设置成 60 Hz, 表示每 **16.67ms** 刷新一次。
 
-    F1 --> F2
-    F2 --Block until--> R1 --> F3
-    F3 --Block until--> R2 --> F4
-    F4 --Block until--> R3
-```
+Swap Interval 是图形 API (EGL/GLX) 提供的一个功能 ([GLX_SGI_swap_control](https://registry.khronos.org/OpenGL/extensions/SGI/GLX_SGI_swap_control.txt), [GLX_EXT_swap_control](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_swap_control.txt), [GLX_MESA_swap_control](https://registry.khronos.org/OpenGL/extensions/MESA/GLX_MESA_swap_control.txt))，就是允许应用程序渲染时自己选择**跟不跟显示器这个刷新节奏**，通常 Swap Interval 是一个整数值
 
-Throttle 的效果是 CPU 在提交后一帧的渲染命令后，要等(所谓“等”就是主线程调用 `drmSyncobjWait()` 阻塞)前一帧渲染完成后才唤醒继续准备下一帧数据，整个过程实际上是节流 CPU, 是让生产者-消费者中的**生产者(CPU)** 慢一点。所以 DRI2 Throttle 的本意就是在 GPU 渲染任务比较重(延迟大)的时候，CPU 这边没必要“玩命”准备数据，否则反而会导致比如过多消耗显存等其它问题。
+|  Swap Interval   | 描述                              | 最大 FPS         |
+|:-----------------|:---------------------------------|:-----------------|
+| 0                | 不跟 Vsync, 尽可能提交，但可能撕裂   | 取决于 GPU 性能    |
+| 1                | 每 Vsync 提交一次                  | 等于 vsync rate  |
+| 2                | 每两次 Vsync 提交一次               | vsync rate 的一半 |
 
-Mesa 中对 Throttle 的实现很有技巧性。因为这里“等”的是上一帧数据提交给内核后，drm_gpu_scheduler 为这个 job 创建的一个 `dma_fence`, 在提交时，userspace 会给 kernel 一个 syncobj (当一个 fence 容器用，意思是 gpu scheduler 创建好 fence 后 attach 到这个 syncobj, userspace 就可以通过 `drmSyncobjWait()` 阻塞式地等 syncobj 包含的 fence 是否被 signaled)。 因为 fence 是在渲染命令 push 到 drm_gpu_scheduler 后内核才创建的, 所以提交时带下去的 syncobj 用来装当前产生的 fence，如果你需要在下一帧数据提交后等上一帧的 fence, 你需要在当前帧提交后，创建一个新的 syncobj 来存当前帧的 fence，这样就可以在下一帧提交后， 用这个新的 syncobj 来等上一帧的 fence 了。 **相当于同一个 fence 放在两个不同的容器里用**。
+NOTE: EGL 是通过 `eglSwapInterval()` 设置 Swap Interval 的， Vulkan 不直接设置 interval 值，而是通过 `VkPresentModeKHR`
 
-# Modifiers
+# DRM Modifiers
 
 向 X server 查询并获取显示/渲染设备所支持的 modifiers 是执行 [`__DRIimageExtension::createImage()`](https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/include/mesa_interface.h#L1570) 的一个准备工作。但 `createImage()` 允许modifiers 为空，此情况下让驱动来选一个合适的纹理图像内存布局。
 
