@@ -43,6 +43,15 @@ NOTE:
 - (*) 表示本来不需要的依赖
 - (+) 在 OpenKylin 2.0 的源里没有，需要源码构建
 
+- Ubuntu 22.04
+
+```bash
+sudo apt install -y bison flex libelf-dev libxcb1-dev libxcb-randr0-dev \
+  libx11-dev libxext-dev libxfixes-dev libxcb-glx0-dev libxcb-shm0-dev \
+  libx11-xcb-dev libxcb-dri3-dev libxcb-present-dev libxshmfence-dev \
+  libxrandr-dev
+```
+
 ```bash
 meson build -Dprefix=/usr/local -Dlibdir=lib/x86_64-linux-gnu -Dplatforms=x11 -Dgallium-drivers=nouveau
 ```
