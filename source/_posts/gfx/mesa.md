@@ -46,10 +46,10 @@ NOTE:
 - Ubuntu 22.04
 
 ```bash
-sudo apt install -y bison flex libelf-dev libxcb1-dev libxcb-randr0-dev \
-  libx11-dev libxext-dev libxfixes-dev libxcb-glx0-dev libxcb-shm0-dev \
-  libx11-xcb-dev libxcb-dri3-dev libxcb-present-dev libxshmfence-dev \
-  libxrandr-dev
+sudo apt install -y bison flex libexpat1-dev libelf-dev libglvnd-dev libxcb1-dev \
+  libxcb-randr0-dev libx11-dev libxext-dev libxfixes-dev libxcb-glx0-dev \
+  libxcb-shm0-dev libxxf86vm-dev libx11-xcb-dev libxcb-dri3-dev libxcb-present-dev \
+  libxshmfence-dev libxrandr-dev libxcb-dri2-0-dev libselinux1-dev
 ```
 
 ```bash
