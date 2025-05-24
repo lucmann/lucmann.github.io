@@ -11,7 +11,9 @@ Vulkan 是一个低开销、跨平台的二维和三维图形与计算的应用�
 
 <!--more-->
 
-# VK_ICD_FILENAMES
+# Environment Variables
+
+## VK_ICD_FILENAMES
 
 Vulkan 驱动的探测和加载是通过 ICD (Installable Client Driver) 机制实现的。当环境上同时存在多个 Vulkan 驱动时，使用环境变量 `VK_ICD_FILENAMES` 来选择指定的 vulkan 驱动
 
@@ -22,7 +24,11 @@ Vulkan 驱动的探测和加载是通过 ICD (Installable Client Driver) 机制�
 }
 ```
 
-# MESA_VK_WSI_PRESENT_MODE
+## VK_LOADER_DEBUG=all
+
+## MESA_VK_WSI_PRESENT_MODE
+
+相当于 GL 的 `vblank_mode`, 用来控制 FPS 是否与 VSync 同步
 
 Vulkan 程序的送显由 WSI (Window System Interface) 层实现，支持以下模式
 
@@ -30,6 +36,8 @@ Vulkan 程序的送显由 WSI (Window System Interface) 层实现，支持以下
 - relaxed
 - mailbox
 - immediate
+
+注意：对于 lavapipe (软渲染的 Vulkan 实现)，它只支持 immediate 模式
 
 # Call Stack
 
