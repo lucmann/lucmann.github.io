@@ -14,7 +14,7 @@ categories: linux
 
 DMA-BUF 解决的是 Buffer 在设备之间(GPU 与 DISPLAY)，驱动之间(DRM 与 V4L2)，以及进程之间(Compositor 与 Client)的共享问题。Sync object 与 Sync file 相似，都是解决内核同步原语在进程间传递的问题，它们的区别是前者一个对象只封装**一个** fence, 而后者支持与一个 dma-buf 相关的**多个** fences 的集合。
 
-Sync file 起初是从 Android kernel 引入的， 当 Dave Airlie 和 Faith Ekstrand 分别在 2017 年 和 2022 年提交了 [drm/syncobj: add sync_file interaction. (v1.2)](https://lists.freedesktop.org/archives/dri-devel/2017-June/143204.html) 和 [https://patchwork.freedesktop.org/series/104898/](https://patchwork.freedesktop.org/series/104898/) 两个补丁集后，Sync file 便分别与 DRM Syncobj 和 DMA-BUF 产生了关联，而后者的合入标志着Linux 图形世界已经在 implicit sync 和 explicit sync 之间建起了一座桥梁。
+Sync file 起初是从 Android kernel 引入的， 当 Dave Airlie 和 Faith Ekstrand 分别在 2017 年 和 2022 年提交了 [drm/syncobj: add sync_file interaction. (v1.2)](https://lists.freedesktop.org/archives/dri-devel/2017-June/143204.html) 和 [dma-buf: Add an API for exporting sync files (v15)](https://patchwork.freedesktop.org/series/104898/) 两个补丁集后，Sync file 便分别与 DRM Syncobj 和 DMA-BUF 产生了关联，而后者的合入标志着Linux 图形世界已经在 implicit sync 和 explicit sync 之间建起了一座桥梁。
 
 # Background
 

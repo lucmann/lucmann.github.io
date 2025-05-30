@@ -256,3 +256,16 @@ Zink 不是某个具体 GPU 的驱动，而是一个将OpenGL API 调用翻译�
     ![glxgears on Zink](/images/vk/glxgears-on-zink.gif)
     - glmark2 on Zink
     ![glmark2 on Zink](/images/vk/glmark2-on-zink.gif)
+
+# Appendix: apt install (23.04 Lunar Lobster)
+
+**书到用时方恨少，包到装时不好找**
+
+```bash
+sudo apt install -y cmake ninja-build bison flex g++ git pkg-config python3-setuptools python3-lz4 \
+    python3-jinja2 libssl-dev libelf-dev libboost-dev libglm-dev libtinyobjloader-dev libstb-dev \
+    libpng-dev wayland-protocols libwayland-dev libdecor-0-dev freeglut3-dev libexpat1-dev libglvnd-dev \
+    libx11-dev libxext-dev libxshmfence-dev libxrandr-dev libxxf86vm-dev libxfixes-dev libx11-xcb-dev \
+    libxcb1-dev libxcb-randr0-dev libxcb-glx0-dev libxcb-shm0-dev libxcb-dri3-dev libxcb-dri2-0-dev libxcb-present-dev \
+    libselinux1-dev libvulkan-dev vulkan-tools mesa-utils
+```
