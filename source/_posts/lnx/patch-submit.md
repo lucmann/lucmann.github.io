@@ -44,7 +44,32 @@ git format-patch HEAD^ -o /tmp/   # 将生成的 patch 文件保存在 /tmp 目�
 git format-patch HEAD^ -v 2 -o /tmp/
 ```
 
+## 检查 patch
+
+```bash
+ ./scripts/checkpatch.pl /path/to/patch
+```
+
+`checkpatch.pl` 工具执行各种 codestyle, patch 格式, 社区提交补丁规范的检查，它和测试一样，都是提交补丁前不可缺少的步骤
+
 ## 提交 patch
+
+个人觉得提交补丁比较简单的方式是使用 `git send-email`, 因为内核补丁或补丁集都是以纯文本(plain text)电子邮件形式提交的, 所以提交前需要
+
+- 配置好你的 SMTP (Simple Mail Transfer Protocol)邮件发送服务器
+- 确定好收件人和抄送人(Carbon Copy)
+    - 收件人一般是 subsystem maintainer 或邮件列表，如 dri-devel@lists.freedesktop.org
+    - 抄送人一般使用脚本 `./scripts/get_maintainer.pl /path/to/patch` 来自动获取
+        - `./scripts/get_maintainer.pl` 不加任何选项时输出格式是这样子的(具体内容随补丁而定)
+            ```
+            Maarten Lankhorst <maarten.lankhorst@linux.intel.com> (maintainer:DRM DRIVERS AND MISC GPU PATCHES)
+            Maxime Ripard <mripard@kernel.org> (maintainer:DRM DRIVERS AND MISC GPU PATCHES)
+            Thomas Zimmermann <tzimmermann@suse.de> (maintainer:DRM DRIVERS AND MISC GPU PATCHES)
+            David Airlie <airlied@gmail.com> (maintainer:DRM DRIVERS)
+            Simona Vetter <simona@ffwll.ch> (maintainer:DRM DRIVERS)
+            dri-devel@lists.freedesktop.org (open list:DRM DRIVERS)
+            linux-kernel@vger.kernel.org (open list)
+            ```
 
 ### 使用 mutt 提交 patch
 
@@ -57,7 +82,9 @@ mutt [-Enx] [-e cmd] [-F file] [-H file] [-i file] [-s subj] [-b addr] [-c addr]
 本例中只使用到了 `-H file` 选项，它将包含有邮件头和邮件主体的 patch 文件作为参数创建邮件草稿 (意思是该命令执行后还会让你再编辑邮件，包括收件人，邮件内容增删改等）。本例中 mutt 的唯一参数是后面的收件人列表，它是通过内核源码树里的一个[脚本工具](https://elixir.bootlin.com/linux/latest/source/scripts/get_maintainer.pl)自动获取的。
 
 ```
-mutt -H /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch "`./scripts/get_maintainer.pl --separator , --norolestats /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch`"
+mutt -H /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch \
+    "`./scripts/get_maintainer.pl --separator , --norolestats \
+    /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch`"
 ```
 
 带有 `Fixes:` tag 的patch 应该会被 backport 到以前必要 -stable tree.
