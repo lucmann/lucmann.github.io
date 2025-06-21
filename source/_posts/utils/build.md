@@ -1,22 +1,34 @@
 ---
-title: CC, CXX, CC_LD, CXX_LD & LD_DEBUG
+title: 编译，链接和构建
 date: 2022-09-18 17:02:49
 tags: tools
 categories: utilities
 ---
 
-# 编译器
+《程序员的自我修养--链接，装载与库》这本书是在读研时才看的，印象很深，现在想想这本书讲的都是程序员，尤其是从事系统编程的必备素养。这里我将平时使用的跟编译，链接和构建应用程序及库相关的知识记录下来，希望以后能温故知新。
+
+![](/images/build/execve.svg)
+
+<!--more-->
+
+# 编译与链接
 
 - gcc 
 - [g++](https://gcc.gnu.org/projects/cxx-status.html)
 - clang
 - [clang++](https://clang.llvm.org/cxx_status.html)
 
-<!--more-->
+- bfd (使用 Binary File Descriptor 库构建的 Linker, Ubuntu 上默认的 ld)
+- gold ([**go**ogle **l**oa**d**er](https://android.googlesource.com/toolchain/binutils/+/53b6ed3bceea971857c996b6dcb96de96b99335f/binutils-2.19/gold))
+- mold ([**mo**dern **l**oa**d**er](https://github.com/rui314/mold))
+
+Note:
+  - **ld** 这个名字是历史遗留，实际上面这些 ld 并不负责加载程序或库，它们负责在编译阶段生成可执行程序 ELF 时符号和地址的"拼装"
+  - 负责运行时链接和加载库的是 `/lib32/ld-linux.so.2` 或 `/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2`，它们即是所谓的**动态链接器**
 
 ## gcc 的优化级别
 
--O 和 -O1 是等价的。 -O 会对目标文件大小和执行时间进行优化，但不会进行非常耗时的优化，以下是 -O 打开的优化: (其中红色的是 -Og 关闭的)
+`-O` 和 `-O1` 是等价的。 `-O` 会对目标文件大小和执行时间进行优化，但不会进行非常耗时的优化，以下是 `-O` 打开的优化: (其中红色的是 `-Og` 关闭的)
 
 - -fauto-inc-dec
 - <span style="color:red">-fbranch-count-reg</span>
@@ -65,12 +77,6 @@ categories: utilities
 - -ftree-ter
 - -funit-at-a-time
 
-
-# 链接器
-
-- bfd (使用 Binary File Descriptor 库构建的 Linker)
-- gold (Google linker, faster than bfd, but fewer features)
-- mold ([A modern linker](https://github.com/rui314/mold))
 
 动态链接库 (shared library) 无处不在。使用动态链接库基本上是通过链接器 (linker, generally a program suffixing with "ld")。本文主要回答以下问题:
 

@@ -1,0 +1,32 @@
+digraph G {
+    {node [shape=plaintext] "shell"};
+    {node [shape=plaintext] "execve"};
+    subgraph cluster_elf {
+        label="ELF";
+        fontcolor=blue;
+        style=dashed;
+        color=lightgrey;
+        node [color=blue, fontcolor=blue];
+        edge [color=blue, fontcolor=blue];
+
+        {node [shape=box, label="a.out"] "Executable"};
+    }
+
+    {node [shape=box, label="ld-linux-x86-64.so.2"] "Interpreter"};
+
+    subgraph cluster_dso {
+        label="DSO's";
+        fontcolor=blue;
+        style=dashed;
+        color=lightgrey;
+        node [color=blue, fontcolor=blue];
+        edge [color=blue, fontcolor=blue];
+
+        {node [shape=box, label="libxxx.so.1"] "dso_1"};
+    }
+
+    "shell" -> "execve" [label="system call"];
+    "execve" -> "Executable" [label="ELF::PT_LOAD"];
+    "execve" -> "Interpreter" [label="ELF::PT_INTERP"];
+    "Interpreter" -> "dso_1";
+}
