@@ -5,15 +5,15 @@ tags: tools
 categories: utilities
 ---
 
-《程序员的自我修养--链接，装载与库》这本书是在读研时才看的，印象很深，现在想想这本书讲的都是程序员，尤其是从事系统编程的必备素养。这里我将平时使用的跟编译，链接和构建应用程序及库相关的知识记录下来，希望以后能温故知新。
-
 ![](/images/build/execve.svg)
+
+《程序员的自我修养--链接，装载与库》这本书是在读研时才看的，印象很深，现在想想这本书讲的都是程序员，尤其是从事系统编程的必备素养。这里我将平时使用的跟编译，链接和构建应用程序及库相关的知识记录下来，希望以后能温故知新。
 
 <!--more-->
 
 # 编译与链接
 
-- gcc 
+- gcc
 - [g++](https://gcc.gnu.org/projects/cxx-status.html)
 - clang
 - [clang++](https://clang.llvm.org/cxx_status.html)
@@ -77,18 +77,9 @@ Note:
 - -ftree-ter
 - -funit-at-a-time
 
+## 动态库都去哪儿呢
 
-动态链接库 (shared library) 无处不在。使用动态链接库基本上是通过链接器 (linker, generally a program suffixing with "ld")。本文主要回答以下问题:
-
-- 有哪些链接器?
-- 如何查看一个可执行文件链接哪些动态库?
-- 链接器从哪里找到动态库?
-- GCC 编译器不支持 `CXX_SUPPORTS_CUSTOM_LINKER`
-  - 所以安装 mold 后，如果想在编译 LLVM 时使用 `-DLLVM_USE_LINKER=mold`, 就得把 `CC=clang CXX=clang++` 先设置了
-
-# `pkg-config` vs `ldconfig`
-
-## pkg-config
+- pkg-config
 
 **pkg-config (symbolic link to `/usr/bin/pkgconf`)** 是用来获取系统上安装的库的信息的程序。cmake, meson 这些构建系统底层都是靠它来解析依赖包的。 下面的命令可以查看 pkg-config 工作时所搜索的路径和优先次序， 用户也可以通过环境变量 **`PKG_CONFIG_PATH`** 来指定自己想要优先搜索的路径。
 
@@ -145,7 +136,7 @@ pkg-config --variable pc_path pkg-config | sed 's/:/\n/g'
 ───────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ```
 
-# `lib*-dev` 与 `lib*` 的区别
+- `lib*-dev` 与 `lib*` 的区别
 
 ```
 $ dpkg -L libxcb1
@@ -186,7 +177,7 @@ $ dpkg -L libxcb1-dev
 /usr/share/doc/libxcb1-dev/changelog.Debian.gz
 ```
 
-## `/usr/sbin/ldconfig`
+- `/usr/sbin/ldconfig`
 
 Configure Dynamic Linker Run Time Bindings
 
@@ -209,7 +200,20 @@ fi
 exec /sbin/ldconfig.real "$@"
 ```
 
-# build system
+## GOT, PLT & PIC
+
+- GOT Global Offset Table
+- PLT Procedure Linkage Table
+- PIC Position Independent Code
+
+# 构建系统
+
+- autotools
+- cmake
+- make
+- meson
+- ninja 
+- scons
 
 ## autotools
 
@@ -255,22 +259,30 @@ make
 sudo apt-get install autoconf automake libtool gettext
 ```
 
-## meson & ninja
+## cmake
 
-### [-D buildtype](https://mesonbuild.com/Builtin-options.html#details-for-buildtype)
+- use `gold`
+
+```bash
+cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold
+```
+
+## meson
+
+- [-D buildtype](https://mesonbuild.com/Builtin-options.html#details-for-buildtype)
 
 meson 的 buildtype 是用来设定编译优化级别 (optimization levels: -O0, -O1, -O2, -O3, -Os) 和是否有调试信息 (debug: -g)。 实际上，meson 提供两个分开的选项分别控制编译优化级别和调试信息
 
-- -Doptimization (plain|0|2|3|s, plain 指不设置任何 optimization flags)
-- -Ddebug (true|false)
+  - -Doptimization (plain|0|2|3|s, plain 指不设置任何 optimization flags)
+  - -Ddebug (true|false)
 
-### 只编译某个 target
+- 只编译某个 target
 
 ```
 ninja -C build target
 ```
 
-### meson install --tags tag1,tag2
+- meson install --tags tag1,tag2
 
 Installation tags 是专门为打包 (packaging) 设计的，因为打包时开发文件包(头文件)，文档包 (mannul) 和二进制包 (shared libraries) 一般是分开的 3 个包。所以 `meson install --tags` 可以让用户分 3 次安装，每次只安装这个包所需的文件。meson 有几个预定义的 tags (不用用户自己使用 `install_tag` 关键字去指定 tag 名)
 
@@ -284,80 +296,12 @@ Installation tags 是专门为打包 (packaging) 设计的，因为打包时开�
 | bin       | scripts and executables bundled with a library used by end users             |
 | bin-devel | scripts and executables bundled with  a library used by developers           |
 
-### use `gold`
+- use `gold`
 
 ```bash
 meson build --prefix=/usr -D{c,cpp}_args=-fuse-ld=gold -Dflavors=x11-gl,x11-glesv2
 ```
 
-## cmake
-
-### use `gold`
-
-```bash
-cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold
-```
-
-# 编译 mold
-
-``` under WSL2 Ubuntu 20.04 hosted Windows 11 Dell OptiPlex 3090
-$ cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_EXPORT_COMPILE_COMMANDS=On
-$ time cmake --build build -j 8
-...
-[100%] Linking CXX executable mold
-[100%] Built target mold
-cmake --build build -j 8  844.42s user 94.17s system 674% cpu 2:19.20 total
-```
-
-# 编译 mesa
-
-```
-➜  forked git:(23.1.3) meson build -Dprefix=/usr/local -Dbuildtype=debug -Dplatforms=x11 -Dvulkan-drivers=swrast -Dgallium-drivers=swrast,radeonsi,panfrost -Dglx=dri -Dllvm=enabled -Dcpp_rtti=false
-➜  forked git:(23.1.3) time ninja -C build
-ninja: Entering directory `build'
-[1559/1559] Generating src/gallium/targets/dri/devenv_panfrost_dri.so with a custom command
-ninja -C build  1214.38s user 240.13s system 710% cpu 3:24.62 total
-```
-
-```
-➜  forked git:(23.1.3) ✗ CC=clang CC_LD=mold meson build -Dprefix=/usr/local -Dbuildtype=debug -Dplatforms=x11 -Dvulkan-drivers=swrast -Dgallium-drivers=swrast,radeonsi,panfrost -Dglx=dri -Dllvm=enabled -Dcpp_rtti=false
-➜  forked git:(23.1.3) ✗ time ninja -C build
-2 warnings generated.
-[1559/1559] Generating src/gallium/targets/dri/devenv_mcde_dri.so with a custom command
-ninja -C build  12971.24s user 158.32s system 1146% cpu 19:04.81 total
-```
-
-# 编译 LLVM
-
-## 主要的配置
-
-```
-cmake -S llvm -B build -G Ninja                                     \
-  -DCMAKE_C_COMPILER=gcc-10                                         \
-  -DCMAKE_CXX_COMPILER=g++-10                                       \
-  -DCMAKE_BUILD_TYPE=Release                                        \
-  -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR"                             \
-  -DLLVM_LIBDIR_SUFFIX="64"                                         \
-  -DLLVM_TARGETS_TO_BUILD="host;AMDGPU"                             \
-  -DLLVM_BUILD_LLVM_DYLIB="ON"                                      \
-  -DBUILD_SHARED_LIBS="ON"                                          \
-  -DLLVM_USE_LINKER="gold"                                          \
-  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld"              \
-  -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind"               \
-  -DLLVM_PARALLEL_COMPILE_JOBS="1"                                  \
-  -DLLVM_PARALLEL_LINK_JOBS="1"
-```
-
-## OOM 问题
-
-如果机器内存不够在编译 LLVM 的时候可能会触发 OOM Killer (我在 WSL2 下就100%触发). 可以通过临时添加 swap 分区的方法避免这个问题 （[Linux Add a Swap File Tutorial](https://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/)）
-
-# LD_DEBUG
-
-```bash
-LD_DEBUG=help ls
-```
-
-# Reference
+# 参考
 
 - [C++ compiler support](https://en.cppreference.com/w/cpp/compiler_support)
