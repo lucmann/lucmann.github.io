@@ -11,6 +11,59 @@ categories: linux
 
 <!--more-->
 
+# Realtek RTL8188GU 802.11n WLAN Adapter
+
+系统安转好后第一件事就是联 WiFi, 为此购买了瑞昱的一款无线网卡。但是这款无线网卡在 Linux 上没有得到瑞昱官方的支持(没驱动)， 所以在 Github 上找到了一个[驱动仓库](https://github.com/fastoe/RTL8811CU)，(由于内核版本的问题，稍加改动后) 编译成功，居然可以用
+
+```diff
+diff --git a/os_dep/linux/usb_intf.c b/os_dep/linux/usb_intf.c
+index b8eea5b..1d5d52d 100644
+--- a/os_dep/linux/usb_intf.c
++++ b/os_dep/linux/usb_intf.c
+@@ -281,11 +281,7 @@ struct rtw_usb_drv usb_drv = {
+ 	.usbdrv.supports_autosuspend = 1,
+ #endif
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 19))
+-	.usbdrv.drvwrap.driver.shutdown = rtw_dev_shutdown,
+-#else
+ 	.usbdrv.driver.shutdown = rtw_dev_shutdown,
+-#endif
+ };
+ 
+ static inline int RT_usb_endpoint_dir_in(const struct usb_endpoint_descriptor *epd)
+```
+
+但是驱动安装后，还是无法连接 Wifi, 看到设备信息后面有 **Driver CDROM Mode**, 就想用 [usb_modeswitch](https://www.draisberghof.de/usb_modeswitch/) 改一下 USB Mode 试试
+
+```lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 046d:c534 Logitech, Inc. Unifying Receiver
+Bus 001 Device 008: ID 0bda:1a2b Realtek Semiconductor Corp. RTL8188GU 802.11n WLAN Adapter (Driver CDROM Mode)
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+```
+
+`sudo ./usb_modeswitch -KW -v 0bda -p 1a2b` 后
+
+```lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 046d:c534 Logitech, Inc. Unifying Receiver
+Bus 001 Device 009: ID 0bda:c811 Realtek Semiconductor Corp. 802.11ac NIC
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+```
+
+从内核日志可以看到，在执行 `usb_modeswitch` 命令时，内核重新连接了该无线网卡, 之后无线网卡可以正常工作了， Nice!
+
+```
+usb 1-5: USB disconnect, device number 8
+usb 1-5: new high-speed USB device number 9 using xhci_hcd
+usb 1-5: New USB device found, idVendor=0bda, idProduct=c811, bcdDevice= 2.00
+usb 1-5: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-5: Product: 802.11ac NIC
+usb 1-5: Manufacturer: Realtek
+usb 1-5: SerialNumber: 123456
+```
+
 # Install trace-cmd
 
 还算顺利，大部分依赖包从系统 apt 源里都能安装，但也有一些问题
