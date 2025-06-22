@@ -64,6 +64,74 @@ usb 1-5: Manufacturer: Realtek
 usb 1-5: SerialNumber: 123456
 ```
 
+# OpenSSH
+
+安装 **openssh-server** 后 `sudo systemctl start sshd` 启动失败
+
+```
+Unpacking openssh-server (1:8.2p1-ok3) ...
+Setting up openssh-sftp-server (1:8.2p1-ok3) ...
+Setting up openssh-server (1:8.2p1-ok3) ...
+WARNING: tempfile is deprecated; consider using mktemp instead.
+rescue-ssh.target is a disabled or a static unit, not starting it.
+Job for ssh.service failed because the control process exited with error code.
+See "systemctl status ssh.service" and "journalctl -xeu ssh.service" for details.
+invoke-rc.d: initscript ssh, action "start" failed.
+● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/usr/lib/systemd/system/ssh.service; enabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Sun 2025-06-22 13:51:52 CST; 8ms ago
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+    Process: 8103 ExecStartPre=/usr/sbin/sshd -t (code=exited, status=255/EXCEPTION)
+        CPU: 5ms
+dpkg: error processing package openssh-server (--configure):
+ installed openssh-server package post-installation script subprocess returned error exit status 1
+Processing triggers for man-db (2.9.1-ok3) ...
+Errors were encountered while processing:
+ openssh-server
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+➜  ~ /usr/sbin/sshd -t
+OpenSSL version mismatch. Built against 30000080, you have 30200010
+➜  ~ openssl --version
+OpenSSL 3.2.1 30 Jan 2024 (Library: OpenSSL 3.2.1 30 Jan 2024)
+```
+
+这个报错好像是说 `openssh-server/sshd` 编译时链接的 OpenSSL 版本是 **3.0.8**, 而现在运行时环境上的 OpenSSL 版本是 **3.2.1**。然后查了一下 OpenSSL 的包情况
+
+```
+  Secure Sockets Layer toolkit - shared libraries
+
+libssl1.1/yangtze,now 1.1.1f-ok3 amd64 [installed,automatic]
+  Secure Sockets Layer toolkit - shared libraries
+
+libssl3/yangtze 3.0.8-ok4.1 amd64 [residual-config]
+  Secure Sockets Layer toolkit - shared libraries
+
+libssl3t64/now 3.2.1-ok5 amd64 [installed,local]
+  Secure Sockets Layer toolkit - shared libraries
+```
+
+OpenSSL 按照官方文档，轻松可以编译安装，但切记**不要覆盖系统原来的 OpenSSL, 否则桌面可能进不去**。OpenSSL 安装好后可以
+
+- 将安装目录 `/usr/local/ssl/lib64` 写入 `/etc/ld.so.conf.d/x86_64-linux-gnu.conf`。
+- 将 bin 目录 `/usr/local/ssl/bin` 加入 **PATH**
+- 在编译 OpenSSH 之前 `export PKG_CONFIG_PATH=/usr/local/ssl/lib64/pkgconfig`
+
+OK 2.0 源里的 openssh-server 版本是 8.2p1， 实际上编译时发现这个版本和 OpenSSL 3.2.1 是**不兼容**的， 所以随便把 openssh-server 的版本升了升， 选择了 **V_9_2_P1** 这个版本，可以编译成功
+
+```bash
+./configure --prefix=/usr --without-zlib-version-check --with-ssl-dir=/usr/local/ssl
+```
+
+现在运行 `/usr/sbin/sshd` 不会再报 **OpenSSL version mismatch** 的错误了。Nice
+
+```
+➜  openssh-portable git:(9.2p1) ✗ /usr/sbin/sshd
+sshd: no hostkeys available -- exiting.
+➜  openssh-portable git:(9.2p1) ✗ openssl version
+OpenSSL 3.2.1 30 Jan 2024 (Library: OpenSSL 3.2.1 30 Jan 2024)
+```
+
 # Install trace-cmd
 
 还算顺利，大部分依赖包从系统 apt 源里都能安装，但也有一些问题
