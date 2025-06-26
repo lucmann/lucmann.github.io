@@ -105,7 +105,7 @@ CLR 也支持两个运行时后端：
 
 计算世界的 libdrm
 
-ROCR 提供底层设备驱动用户态封装，它将驱动本身进行抽象，很方便扩展到对新设备驱动的支持，例如，在最近 ROCR 就增加了对 [AMD NPU 驱动 XDNA](https://patchwork.freedesktop.org/series/136294/) 的支持。
+ROCR 是 KMD 的封装(主要是 KMD 实现的 ioctl 和设备,内存管理接口)，类似 libdrm, 但 ROCR 也对驱动动本身(因为KMD可能会有 KFD, AMDGPU, XDNA)进行了抽象，便于扩展到新驱动架构。例如，在最近 ROCR 就增加了对 [AMD NPU 驱动 XDNA](https://patchwork.freedesktop.org/series/136294/) 的支持。
 
 OOC: libhsa-runtime64.so 打开的是 `/dev/kfd`
 
