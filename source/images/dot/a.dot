@@ -1,0 +1,32 @@
+digraph G {
+    // 主节点
+    A [label="外部节点"];
+
+    // 创建集群子图
+    subgraph cluster_mySubgraph {
+        label="我的子图";
+        style="rounded,filled";
+        fillcolor="lightgray";
+        graph [penwidth=0];
+
+        // 虚拟入口节点
+        cluster_entry [shape=point, width=0, height=0, label=""];
+
+        // 实际子图节点
+        B1 [label="节点1"];
+        B2 [label="节点2"];
+        B3 [label="节点3"];
+
+        // 保证入口节点和 B1 同一 rank，并用不可见边连接
+        {rank=same; cluster_entry; B1;}
+        cluster_entry -> B1 [style=invis];
+        B1 -> B2;
+        B2 -> B3;
+    }
+
+    // 外部节点指向 cluster 边框
+    A -> cluster_entry [
+        lhead="cluster_mySubgraph",
+        arrowhead="none"
+    ];
+}

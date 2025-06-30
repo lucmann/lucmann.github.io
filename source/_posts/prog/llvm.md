@@ -33,9 +33,11 @@ llvm-project 是 2003 年开源的。2022 年初，llvm-project 的源码库和 
 - `-DLLVM_BUILD_LLVM_DYLIB=OFF`
     - 如果 ON，将所有 LLVM 组件生成一个单一的共享库 libLLVM, 适用于将 LLVM 嵌入到其它工具中的情况
 - `-DLLVM_ENABLE_PROJECTS="clang;lld"`
-    - 只构建 clang 和 lld (LLVM Linker) 子项目
+    - 只构建 clang 和 lld (LLVM Linker) 子项目, 可选项目包括:
+        - bolt;clang;clang-tools-extra;compiler-rt;cross-project-tests;libc;libclc;lld;lldb;mlir;openmp;polly
 - `-DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi"`
-    - 升级 `libc++.so.1`, 比如要将 clang++ 支持的 c++ 标准库升级到 c++2x (clang-16 以上支持 c++20)
+    - 升级 `libc++.so.1`, 比如要将 clang++ 支持的 c++ 标准库升级到 c++2x (clang-16 以上支持 c++20), 可选 runtime 包括：
+        - libc;libunwind;libcxxabi;libcxx;compiler-rt;openmp;llvm-libgcc;offload
 - `-DLLVM_TARGETS_TO_BUILD="BPF;AMDGPU;host"`
     - 指定支持哪些后端(ISA), 这里如果是为了编译 Mesa Radeon/AMDGPU, `AMDGPU` target 必须指定。`host`是指当前编译机器。另外指定的越多，编译越耗时
     - 安装后可通过 `llvm-config --targets-built` 获取
