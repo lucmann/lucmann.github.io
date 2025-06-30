@@ -1,0 +1,26 @@
+digraph G {
+    rankdir=LR;
+
+    node [shape=box];
+
+    subgraph cluster_xxx {
+        label="XXX";
+        fontcolor=blue;
+        style=dashed;
+        color=lightgrey;
+        node [color=blue, fontcolor=blue];
+        edge [color=blue, fontcolor=blue];
+
+        a [label="a.out"];
+        b [label="ld-linux-x86-64.so.2"];
+        c [shape=note, label="libxxx.so.1"];
+    }
+
+    a1 -> a;
+    a2 -> b;
+    a -> b;
+    b -> c;
+
+
+    {rank=same; a2; b;}
+}
