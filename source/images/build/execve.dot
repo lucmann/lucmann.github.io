@@ -25,8 +25,13 @@ digraph G {
         {node [shape=box, label="libxxx.so.1"] "dso_1"};
     }
 
+    user_ctor [shape=box, label="user-defined\n__attribute__((constructor()))",
+               color=blue, fontcolor=blue];
+
     "shell" -> "execve" [label="system call"];
     "execve" -> "Executable" [label="ELF::PT_LOAD"];
     "execve" -> "Interpreter" [label="ELF::PT_INTERP"];
+    "Interpreter" -> "_dl_start_user()";
+    "_dl_start_user()" -> user_ctor [label="call_init()"];
     "Interpreter" -> "dso_1";
 }
