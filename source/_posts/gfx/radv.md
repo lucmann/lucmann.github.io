@@ -57,3 +57,7 @@ RADV 和其它 Mesa 的 GPU UMD 一样都是使用 libdrm 库与 KMD 打交道�
 | ac_drm_vm_reserve_vmid        | VM                              | RW         |
 | ac_drm_vm_unreserve_vmid      | VM                              | RW         |
 
+关于 libdrm_amdgpu 里的函数，其实还有一类，就是 AMDVLK 用到的，而 RADV 没有用的:
+
+- amdgpu_bo_list_create
+- amdgpu_bo_list_create_raw

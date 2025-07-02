@@ -11,7 +11,7 @@ categories: utilities
 
 <!--more-->
 
-# 编译与链接
+# 编译器与链接器
 
 - gcc
 - [g++](https://gcc.gnu.org/projects/cxx-status.html)
@@ -21,10 +21,6 @@ categories: utilities
 - bfd (使用 Binary File Descriptor 库构建的 Linker, Ubuntu 上默认的 ld)
 - gold ([**go**ogle **l**oa**d**er](https://android.googlesource.com/toolchain/binutils/+/53b6ed3bceea971857c996b6dcb96de96b99335f/binutils-2.19/gold))
 - mold ([**mo**dern **l**oa**d**er](https://github.com/rui314/mold))
-
-Note:
-  - **ld** 这个名字是历史遗留，实际上面这些 ld 并不负责加载程序或库，它们负责在编译阶段生成可执行程序 ELF 时符号和地址的"拼装"
-  - 负责运行时链接和加载库的是 `/lib32/ld-linux.so.2` 或 `/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2`，它们即是所谓的**动态链接器**
 
 ## gcc 的优化级别
 
@@ -76,6 +72,30 @@ Note:
 - <span style="color:red">-ftree-sra</span>
 - -ftree-ter
 - -funit-at-a-time
+
+## 编译器背后做的事
+
+- 当你编译一个 hello world C 程序时，一般并不会指定 `-lc` 链接选项，那为什么会自动链接 libc.so.6 呢？
+
+原因是 gcc 有一套内置的链接规则，通过 `gcc -dumpspecs` 可以看到它，这套规则规定在满足条件时，gcc 会默认为你加上 `-lc` 选项
+
+# 动态链接器(/lib64/ld-linux-x86-64.so.2) vs 静态链接器 (/usr/bin/ld) 
+
+动态链接器是程序运行时调用的，它由操作系统内核通过 execve 类系统调用加载到内存，进而由它加载其它用到的**动态链接库**。它本身是一个静态链接库，不依赖其它库。
+
+静态链接器是编译链接程序时用的，它由编译器(如 gcc)调用, 它本身是一个可执行程序，而且可以读入链接脚本(linker script)来指导它的行为。例如，常见的 **/lib/x86_64-linux-gnu/libc.so** 就是一个链接器脚本文件(纯ASCII text), 而不是共享对象(shared object)文件, 这个链接脚本的内容如下
+
+```
+/* GNU ld script
+   Use the shared library, but some functions are only in
+   the static library, so try that secondarily.  */
+OUTPUT_FORMAT(elf64-x86-64)
+GROUP (
+  /lib/x86_64-linux-gnu/libc.so.6
+  /usr/lib/x86_64-linux-gnu/libc_nonshared.a
+  AS_NEEDED ( /lib64/ld-linux-x86-64.so.2 )
+)
+```
 
 ## 动态库都去哪儿呢
 
