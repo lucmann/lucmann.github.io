@@ -40,7 +40,7 @@ rustc main.rs -o main
 
 当然推荐的方法是使用 `cargo`, 就像编译 C 时大多用 `make` 一样。 `cargo` 是 rust 的包管理工具，帮助管理项目中包的依赖及应用的构建，创建一个 Rust 项目，通常第一步是执行 `cargo init`, 它自动创建一个 **Rust binary (application) package**, 这样的包里会包含一个 **Cargo.toml** 文件(自动生成)， 后面 `cargo build` 就是根据这个文件内容来编译 Rust 项目。(如果要清理构建的结果，使用 `cargo clean`)
 
-# #![no_std]
+# #![no_std] 属性
 
 Rust 的标准库依赖 C 库 libc.so.6。但 Rust 语言允许你禁用标准库，从而不依赖 C 库。要达到这个目的，需要对 Hello world 程序和编译过程做些[修改](https://github.com/lucmann/pmp/blob/master/rust/hello-world-nostd/main.rs)
 
@@ -63,24 +63,30 @@ fn panic(_: &PanicInfo) -> ! {
 }
 
 #[no_mangle]
-pub extern "C" fn _start() {
+#[cfg(target_arch = "x86_64")]
+pub unsafe extern "C" fn _start() {
     let message = b"Hello, world!\n";
     let fd: usize = 1; // File descriptor for stdout
-    let syscall_no: usize = 1; // Syscall number for write in Linux
-    unsafe {
-        // Use inline asm macro to perform the syscall
-        core::arch::asm!(
-            "syscall",
-            in("rax") syscall_no, // syscall number
-            in("rdi") fd,         // file descriptor
-            in("rsi") message.as_ptr(), // pointer to the message
-            in("rdx") message.len(), // length of the message
-            out("rcx") _, out("r11") _,
-        );
-    }
+    let syscall_no: usize = 1; // Syscall number for write in Linux x86_64
+    // Use inline asm macro to perform the syscall
+    core::arch::asm!(
+        "syscall",
+        in("rax") syscall_no, // syscall number
+        in("rdi") fd,         // file descriptor
+        in("rsi") message.as_ptr(), // pointer to the message
+        in("rdx") message.len(), // length of the message
+        out("rcx") _, out("r11") _, // telling compiler these registers will
+                                    // be clobbered by syscalls
+    );
 
-    loop {} // Loop forever to avoid segfault since _start() is expected
-            // to never return in a no_std environment
+    // Exit the program with status code 0
+    core::arch::asm!(
+        "syscall",
+        in("rax") 60, // syscall number for exit
+        in("rdi") 0,  // exit status code
+        out("rcx") _, out("r11") _, // telling compiler these registers will
+                                    // be clobbered by syscalls
+    );
 }
 ```
 
