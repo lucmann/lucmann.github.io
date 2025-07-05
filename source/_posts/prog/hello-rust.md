@@ -47,7 +47,7 @@ Rust 的标准库依赖 C 库 libc.so.6。但 Rust 语言允许你禁用标准�
 - `#![no_std]` 明确告诉 rustc 不要用标准库， 那就意味着不能调用 `println!` 宏在标准输出上打印字符, 可以通过内联汇编调用 `write` 系统调用直接将字符送到标准输出
 - `#![no_main]` 不要 main 函数，那就意味着要写一个名字为 `_start` 的函数作为程序入口点，也意味着需要告诉**静态链接器**不要链接 `__libc_start_main`, `main`这些函数，这一点通过环境变量 `RUSTFLAGS` 可以告诉 cargo
     ```shell
-    RUSTFLAGS="-C link-arg=-nostartfiles" cargo build
+    RUSTFLAGS="-Clink-arg=-nostartfiles -Cpanic=abort" cargo build
     ```
 - 要提供一个 `panic_handler`, 且需要将 `panic` 的触发事件改为 `abort` (默认 `panic=unwind`)
 
@@ -101,3 +101,5 @@ rustup component add rust-src
 ```
 
 这些完成后，在内核源码的根目录下执行 `make rustavailable` 检查编译内核的 Rust 环境是否已经准备 OK.
+
+内核 make 还提供对 VSCode **rust-analyzer** 插件的支持(因为 Rust for Linux 不用 Cargo, 所以默认情况下 rust-analyzer server 是无法正常工作的), 执行 `make rust-analyzer` 会生成 **rust-project.json**。
