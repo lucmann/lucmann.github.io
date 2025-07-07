@@ -322,6 +322,13 @@ Installation tags 是专门为打包 (packaging) 设计的，因为打包时开�
 meson build --prefix=/usr -D{c,cpp}_args=-fuse-ld=gold -Dflavors=x11-gl,x11-glesv2
 ```
 
+# 运行
+
+一个 ELF 可执行文件的真正入口点是 **`_start()`**
+
+![](/images/build/start_main.svg)
+
+
 # 参考
 
 - [C++ compiler support](https://en.cppreference.com/w/cpp/compiler_support)

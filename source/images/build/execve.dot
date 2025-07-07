@@ -9,7 +9,15 @@ digraph G {
         node [color=blue, fontcolor=blue];
         edge [color=blue, fontcolor=blue];
 
-        {node [shape=box, label="a.out"] "Executable"};
+        subgraph cluster_aout {
+            label="a.out";
+            style=filled;
+            fontcolor=blue;
+            node [color=blue, fontcolor=blue];
+            edge [color=blue, fontcolor=blue];
+
+            {node [shape=record, label="{crt1.o::_start()|a.o::main()}"] "obj"};
+        }
     }
 
     {node [shape=box, label="ld-linux-x86-64.so.2"] "Interpreter"};
@@ -29,7 +37,7 @@ digraph G {
                color=blue, fontcolor=blue];
 
     "shell" -> "execve" [label="system call"];
-    "execve" -> "Executable" [label="ELF::PT_LOAD"];
+    "execve" -> "obj" [label="ELF::PT_LOAD"];
     "execve" -> "Interpreter" [label="ELF::PT_INTERP"];
     "Interpreter" -> "_dl_start_user()";
     "_dl_start_user()" -> user_ctor [label="call_init()"];
