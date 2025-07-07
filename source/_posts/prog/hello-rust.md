@@ -44,12 +44,15 @@ rustc main.rs -o main
 
 Rust 的标准库依赖 C 库 libc.so.6。但 Rust 语言允许你禁用标准库，从而不依赖 C 库。要达到这个目的，需要对 Hello world 程序和编译过程做些[修改](https://github.com/lucmann/pmp/blob/master/rust/hello-world-nostd/main.rs)
 
-- `#![no_std]` 明确告诉 rustc 不要用标准库， 那就意味着不能调用 `println!` 宏在标准输出上打印字符, 可以通过内联汇编调用 `write` 系统调用直接将字符送到标准输出
-- `#![no_main]` 不要 main 函数，那就意味着要写一个名字为 `_start` 的函数作为程序入口点，也意味着需要告诉**静态链接器**不要链接 `__libc_start_main`, `main`这些函数，这一点通过环境变量 `RUSTFLAGS` 可以告诉 cargo
-    ```shell
-    RUSTFLAGS="-Clink-arg=-nostartfiles -Cpanic=abort" cargo build
-    ```
+- `#![no_std]` 明确告诉 rustc 不要用标准库， 那就意味着不能调用 `println!` 宏在标准输出上打印字符, 可以通过内联汇编调用 `write` 系统调用直接将字符送到标准输出。不要 rust 标准库，也就不要 C 标准库，那也就调用不了 crt1.o 里的 `_start` 函数， 所以这也意味着要自己实现 `_start`
+- `#![no_main]` 不要 main 函数，因为程序真正的入口点是 `_start` 函数， 既然我们直接实现 `_start()`, 那也就没必要提供 `main` 这个入口了。
 - 要提供一个 `panic_handler`, 且需要将 `panic` 的触发事件改为 `abort` (默认 `panic=unwind`)
+
+`cargo build` 时可以通过环境变量 `RUSTFLAGS` 告诉编译器和静态链接器以上这些信息
+
+```shell
+RUSTFLAGS="-Clink-arg=-nostartfiles -Cpanic=abort" cargo build --bin hello_nostd
+```
 
 ```rust
 #![no_std]
