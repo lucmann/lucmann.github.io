@@ -40,9 +40,23 @@ rustc main.rs -o main
 
 当然推荐的方法是使用 `cargo`, 就像编译 C 时大多用 `make` 一样。 `cargo` 是 rust 的包管理工具，帮助管理项目中包的依赖及应用的构建，创建一个 Rust 项目，通常第一步是执行 `cargo init`, 它自动创建一个 **Rust binary (application) package**, 这样的包里会包含一个 **Cargo.toml** 文件(自动生成)， 后面 `cargo build` 就是根据这个文件内容来编译 Rust 项目。(如果要清理构建的结果，使用 `cargo clean`)
 
+# [cargo](https://doc.rust-lang.org/cargo/index.html)
+
+Rust 的包叫 **crate**, **cargo** 既是包管理器，也是 Rust 项目的构建系统。
+
+## 构建
+
+常用的 cargo 构建命令, 每个命令可能支持若干选项，如 `cargo build --bin hello_world`, 当一个 crate 下存在多个目标时， `--bin` 指定构建某个目标
+
+- `cargo init`
+- `cargo build`
+- `cargo clean`
+- `cargo modules structure --package XXX`
+    - 显示某个 crate 的框架 (如有哪些函数, 类等)
+
 # #![no_std] 属性
 
-Rust 的标准库依赖 C 库 libc.so.6。但 Rust 语言允许你禁用标准库，从而不依赖 C 库。要达到这个目的，需要对 Hello world 程序和编译过程做些[修改](https://github.com/lucmann/pmp/blob/master/rust/hello-world-nostd/main.rs)
+Rust 的标准库依赖 C 库 libc.so.6。但 Rust 语言允许你禁用标准库，从而不依赖 C 库。要达到这个目的，需要对 Hello world 程序和编译过程做些[修改](https://github.com/lucmann/pmp/tree/master/rust)
 
 - `#![no_std]` 明确告诉 rustc 不要用标准库， 那就意味着不能调用 `println!` 宏在标准输出上打印字符, 可以通过内联汇编调用 `write` 系统调用直接将字符送到标准输出。不要 rust 标准库，也就不要 C 标准库，那也就调用不了 crt1.o 里的 `_start` 函数， 所以这也意味着要自己实现 `_start`
 - `#![no_main]` 不要 main 函数，因为程序真正的入口点是 `_start` 函数， 既然我们直接实现 `_start()`, 那也就没必要提供 `main` 这个入口了。
@@ -106,3 +120,6 @@ rustup component add rust-src
 这些完成后，在内核源码的根目录下执行 `make rustavailable` 检查编译内核的 Rust 环境是否已经准备 OK.
 
 内核 make 还提供对 VSCode **rust-analyzer** 插件的支持(因为 Rust for Linux 不用 Cargo, 所以默认情况下 rust-analyzer server 是无法正常工作的), 执行 `make rust-analyzer` 会生成 **rust-project.json**。
+
+# 参考
+- [The Cargo Book](https://doc.rust-lang.org/cargo/index.html)
