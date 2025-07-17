@@ -1,19 +1,22 @@
 ---
-title: TexLive
+title: TeX/LaTex
 date: 2022-04-17 08:00:02
 tags: [tools]
 categories: utilities
 ---
 
-# Markdown to PDF
+# TeX/LaTeX
 
-Highly recommended 3 utilities:
+TeX 是高德纳(Donald Knuth)发明的编程式排版语言，而 LaTeX 是莱斯利·兰波特(Leslie Lamport)在 TeX 的基础上开发的 TeX 的扩展宏集。
+
+## 生成 PDF 的工具
 
 - [pandoc](https://github.com/jgm/pandoc) 标记语言转换领域的"瑞士军刀"
+  * 将 Markdown 生成 PDF
 - [TexLive](https://ftp.ntou.edu.tw/ctan/systems/texlive/Images/) 开发最为活跃的 TeX 发行版之一
+  * TexLive 是跨平台的，但一般在 Linux 下安装，MacOS 下是 MacTeX, Windows 下是 MiKTeX.
 - [eisvogel](https://github.com/Wandmalfarbe/pandoc-latex-template) 简洁的 pandoc LaTex 模板
-
-eisvogel 要求一个完整的 TexLive 的安装环境，但通常像 CentOS 这样的 Linux 发行版自带的 TexLive 并不完整。
+  * eisvogel 要求一个完整的 TexLive 的安装环境，但通常像 CentOS 这样的 Linux 发行版自带的 TexLive 并不完整。
 
 # How to Install [`texlive.iso`](https://www.tug.org/texlive/acquire-iso.html)
 
@@ -28,6 +31,12 @@ eisvogel 要求一个完整的 TexLive 的安装环境，但通常像 CentOS 这
 ```bash
 mkdir -p /mnt/iso
 mount /path/to/texlive.iso /mnt/iso -o loop
+```
+因为 ISO 文件系统是只读文件系统，所以如果想在 `/mnt/iso` 写入时，还需要借助 Linux 的 **OverlayFS** 进行再次挂载，之后在目录 `/mnt/merged` 里就有一份可写版的镜像了
+
+```bash
+mkdir -p /mnt/{upper,work,merged}
+mount -t overlay overlay -o lowerdir=/mnt/iso,upperdir=/mnt/upper,workdir=/mnt/work /mnt/merged
 ```
 
 ## run installer
@@ -86,6 +95,9 @@ Actions:
 Enter command:
 ```
 
+- **`D`**: 设置安装路径，相当于指定 `--prefix`
+- **`P`**: 保存安装的配置到文件 `texlive.profile`, 之后可以直接编辑这个文件，运行 `install-tl` 时通过 `--profile` 可以直接读取这个文件中的安装配置
+
 ## create symlinks to standard directories
 
 ```
@@ -105,6 +117,14 @@ Options customization:
 ```
 
 最好勾选此选项，避免使用 TexLive 时各种 `Not Found`, 原因是 TexLive 默认安装路径并不是标准 Linux 可执行程序的路径(如 `/usr/bin`), 而是 `/usr/local/texlive`, 如在 x86_64 安装 `texlive2022.iso`, 则可执行程序被安装在 `/usr/local/texlive/2022/bin/x86_64-linux`. 假如不想因为该路径没有在 `PATH` 里，最好就是在安装时直接在 `/usr/bin` 下创建相应符号链接。
+
+## Non-interactive Installation
+
+当你有一份 `texlive.profile` 时，就可以执行非交互式安装，`install-tl` 会直接按照 `texlive.profile` 文件里的配置安装，无需干预
+
+```bash
+./install-tl --no-interaction --profile=texlive.profile
+```
 
 # texlive-full
 
