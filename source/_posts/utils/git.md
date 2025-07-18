@@ -83,6 +83,13 @@ gitGraph
   - 在主仓库初始化一个子仓库
 - `git submodule update`
   - 更新所有子仓库
+    - `git submodule update --recursive`
+      - 递归地更新所有子仓库，有时候子仓库里又有子仓库，如
+        ```
+        Submodule path 'thirdparty/snappy': checked out '6af9287fbdb913f0794d0148c6aa43b58e63c8e3'
+        Submodule path 'thirdparty/snappy/third_party/benchmark': checked out 'd572f4777349d43653b21d6c2fc63020ab326db2'
+        Submodule path 'thirdparty/snappy/third_party/googletest': checked out 'b796f7d44681514f58a683a3a71ff17c94edb0c1'
+        ```
 - `fatal: remote error: upload-pack: not our ref e15ab44e64c70b54fc375c019c95bddc066a84cf
 fatal: Fetched in submodule path 'submodules/ImGuiScope', but it did not contain e15ab44e64c70b54fc375c019c95bddc066a84cf. Direct fetching of that commit failed`
   - 如果你需要在一个 submodule 仓库里添加自己的修改，那么可能需要将 `.gitmodules` 文件里对应仓库的 `url` 变成你自己的**远程可写**仓库的 URL
