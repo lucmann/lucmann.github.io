@@ -119,6 +119,16 @@ echo "Hello, world!" | xclip
 
     * 与上面的表达式功能相反，即将 `\1` 匹配的结果中的所有字母都换成大写 (**U**ppercase)
 
+## expression register
+
+假如你在 markdown 文件里编辑一个 Table, table 的第1列是 `find` 的输出：一个很长的文件列表，且文件名长短不一(假如最长的文件名是 100 个字符)，你如何在 100 列插入 vertical bar (|)?
+
+- `N,Ms/.*/\=printf('%-101s|', submatch(0))/`
+
+    * `N,M` 指定替换的范围
+    * `\=` 表示使用 expression register, 这里相当于把 `printf()` 函数的输出导入到这里
+
+
 # TOhtml
 
 **vim** 有一个内置的扩展 **TOhtml**, 可以将 vim 的 buffer 自动转成 html 文件，这个功能对于 **vimdiff** 时尤其有用。
