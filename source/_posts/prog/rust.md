@@ -117,26 +117,9 @@ Rust 是 2022 年 10 月随 Linux 6.1-rc1 进入内核主线的。Linux 内核�
 rustup component add rust-src
 ```
 
-这些完成后，在内核源码树根目录下运行
+这些完成后，在内核源码的根目录下执行 `make rustavailable` 检查编译内核的 Rust 环境是否已经准备 OK.
 
-```
-make rustavailable
-```
-
-检查编译内核的 Rust 环境是否已经准备 OK.
-
-内核 Rust 构建系统提供对 VSCode **rust-analyzer** 插件的支持(因为 Rust for Linux 不用 Cargo, 所以默认情况下 rust-analyzer server 是无法正常工作的), 运行
-
-```
-make rust-analyzer
-```
-会生成 **rust-project.json**, 有了这个文件，rust-ananlyzer 插件可以运行。
-
-编译内核第一步，是得到 `.config` 配置文件, 配置项 `Rust support` 的位置在 `General setup` -> `Rust support`
-
-```
-make menuconfig
-```
+内核 make 还提供对 VSCode **rust-analyzer** 插件的支持(因为 Rust for Linux 不用 Cargo, 所以默认情况下 rust-analyzer server 是无法正常工作的), 执行 `make rust-analyzer` 会生成 **rust-project.json**。
 
 # 参考
 - [The Cargo Book](https://doc.rust-lang.org/cargo/index.html)
