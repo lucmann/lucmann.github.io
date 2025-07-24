@@ -176,3 +176,29 @@ drivers/gpu/drm/omapdrm/omap_drv.c                  #define DRIVER_NAME MODULE_N
 ```
 
 crontab 是每用户的， 就是说当前用户设定的任务，只有当前用户的权限，所以如果有些情况下任务执行需要 root 权限，就需要切换到 root 用户后 `crontab -e`
+
+# exec
+
+`exec` 命令有 2 个特点：
+- 直接覆盖当前进程，就是说进程 PID 不变，但执行的代码被更换了
+- 原来的 shell 环境被销毁，这样当前的代码结束后，也就不会返回原 shell(没得返回)， 直接退出
+
+下面是 linux kernel 安装 bzImage 的一段代码，其中就使用了 `exec`, 保证列出的 4 个安装脚本中，只执行第 1 个存在的，不会重复安装
+
+```shell
+# User/arch may have a custom install script
+for file in "${HOME}/bin/${INSTALLKERNEL}"		\
+	    "/sbin/${INSTALLKERNEL}"			\
+	    "${srctree}/arch/${SRCARCH}/install.sh"	\
+	    "${srctree}/arch/${SRCARCH}/boot/install.sh"
+do
+	if [ ! -x "${file}" ]; then
+		continue
+	fi
+
+	# installkernel(8) says the parameters are like follows:
+	#
+	#   installkernel version zImage System.map [directory]
+	exec "${file}" "${KERNELRELEASE}" "${KBUILD_IMAGE}" System.map "${INSTALL_PATH}"
+done
+```
