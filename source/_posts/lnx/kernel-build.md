@@ -25,7 +25,7 @@ categories: linux
 
 - Compilation Errors 
 
-|  Errors                                                        | Resolution                                             |
+|  Errors                                                        | Need to do                                             |
 |:---------------------------------------------------------------|:-------------------------------------------------------|
 | gelf.h: No such file or directory                              | apt install libelf-dev                                 |
 | <openssl/opensslv.h>: No such file or directory                | apt install libssl-dev                                 |
