@@ -61,7 +61,7 @@ make KCONFIG_CONFIG=Microsoft/config-wsl
     - `make install` 最终要么调用用户自定义的安装脚本，要么调用内核源码树里的 `install.sh` 脚本
       ![](/images/kernel-build/install.png)
 - 安装 modules, `make modules_install`
-- 制作 initramdisk (或者叫 initramfs) 初始系统镜像，它里面会包含 modules 
+- 制作 initramdisk (或者叫 initramfs) 初始化内存盘，它里面会包含必要的 modules 
 - 更新 grub, 以便启动时可以选择新内核
 
 ## Ubuntu
