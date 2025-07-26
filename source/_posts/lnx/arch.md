@@ -5,5 +5,5 @@ tags: [distro]
 categories: linux
 ---
 
-
+![](/images/arch/arch-linux.png)
 <!--more-->
