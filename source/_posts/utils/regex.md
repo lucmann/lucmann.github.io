@@ -52,3 +52,16 @@ categories: utilities
 
     - `rg -U 'struct file_operations .*? = ?\{(?s).*?\.mmap = (?s).*?\};' -tc drivers/gpu`
         这个例子找出内核 GPU 驱动中所有重写了 `mmap` file operation 方法的c文件
+        
+# Lookarounds: Lookahead, Lookbehind
+
+| 语法    | 名称              | 含义         |
+|:--------|:-----------------|:------------|
+| (?=foo) | 正向先行断言 Positive Lookahead | 向前(右) 字符串里必须有 foo|
+| (?!foo) | 负向先行断言 Negative Lookahead | 向前(右) 字符串里不能有 foo|
+| (?<=foo)| 正向后行断言 Positive Lookbehind| 向后(左) 字符串里必须有 foo|
+| (?<!foo)| 负向后行断言 Negative Lookbehind| 向后(左) 字符串里不能有 foo|
+
+- 它们只是**检查是否匹配，不作为最终匹配结果的一部分**，即所谓"断言"
+- 它们可以解决 Non greedy 匹配有时解决不了的问题
+- `rg` ([ripgrep](https://github.com/BurntSushi/ripgrep)) 默认不支持 lookahead, lookbehind, 需要加 `-P` 或 `--pcre2` 选项

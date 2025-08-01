@@ -7,6 +7,24 @@ categories: utilities
 
 
 <!--more-->
+# Make 常用参数
+
+## -d, --debug=FLAGS
+
+- 所有支持的 FLAGS (多个 flags 用`,` 分开)
+
+| 标志 |名称	|功能描述|
+|:----|:-----|:------|
+| a	| All	     |启用所有调试输出（等效于单独使用 -d）|
+| b	| Basic	   |基本调试：显示目标重建决策、过期检查等核心信息|
+| v	| Verbose	 |详细模式：比 b 更详细的执行信息|
+| i	| Implicit |隐式规则：显示隐式规则搜索/应用过程|
+| j	| Jobs	   |作业控制：输出子进程执行细节（命令/PID/退出码）|
+| m	| Makefile |Makefile 处理：跟踪 include/重解析过程|
+| p	| Printing |打印数据库：在读取后输出完整的变量/规则数据库|
+| r	| Remaking |重制检查：显示 makefile 自身的重制决策|
+| n	| None	   |禁用所有调试（特殊用途） |
+
 
 # Make 常用变量
 
@@ -28,6 +46,7 @@ categories: utilities
   * `$(info text...)` 相当于 `printf()`
   * `$(error text...)` 相当于 `assert(0)`
   * info 和 warning 的区别是前者打印在 **stdout**, 后者打印在 **stderr**
+  * 原样打印，不支持转义字符如 `\n`
   * info, warning, error 函数打印调试 makefile 之所以比在规则里使用 `echo` 方便，是因为它们作为内置函数可以在 makefile 的任何地方单独出现，而不像 echo 只能在规则里出现
   * make 里的函数也会**展开 expansion**, 相当于 make 函数都有返回值，info, warning 函数展开后都是空字串
 
@@ -52,3 +71,18 @@ categories: utilities
   * `list` 是一个空白分隔的字符串
   * `text` 的多次展开也被**空白**连接成一整个长字符串
 
+## if
+
+- 原型
+  ```
+  $(if condition, then-part[, else-part])
+  ```
+  * 如果 *condition* 展开后是 non-empty string, 那么条件为真
+  * *then-part* 和 *else-part* 永远只能有一个被求值 (evaluated)
+  * if 函数同样有返回值，条件真时，返回 *then-part* 的求值结果; 条件假时，返回 *else-part* 的求值结果, 如果没有 *else-part*, 返回空字串
+
+## or, and
+
+- 原型
+  ```
+  ```
