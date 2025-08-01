@@ -5,7 +5,7 @@ tags: shell
 categories: utilities
 ---
 
-# $SHELL - 日常操作 
+# 基础知识 - 变量和函数
 
 Linux 下的 Shell 有很多， sh, bash, csh, zsh 等, 这里主要记录一下 bash 和 zsh 的一些不同之处
 
@@ -39,149 +39,12 @@ ${var@Q}
 
 带 `@Q` 指变量展开后的值被单引号引起来，例如 `export ABC=abc`, `echo "ABC=${ABC@Q}"` 的结果是 `ABC='abc'`
 
-# awk - 文本处理
-
-Linux 下的文本处理三剑客: grep, sed, awk, 除了它们其实还有一些小巧的命令，如 `tr`, `cut` 也可以帮助我们快速处理和格式化文本。
-下面以一个例子为例。
-
-**在 Linux 内核源码目录下，搜索 `drivers/gpu/drm` 下所有的 `DRIVER_NAME` 定义，并排序后格式化输出**
-
-命令如下:
-
-```bash
-rg '#define DRIVER_NAME' drivers/gpu/drm --no-heading \
-    | tr -s '\t' | tr '\t' ' ' | tr -s ' ' \
-    | awk -F':' '{printf("%-52s%-40s\n",$1,$2)}' \
-    | sort -k4
-```
-
-- `rg` ([ripgrep](https://github.com/BurntSushi/ripgrep)) 比 grep 更快，更强大
-- `tr` 在不带任何选项时，默认执行替换，例子是中将 tab 替换成 空格, `-s` 表示 `squeeze-repeats`, 就是去掉重复的字符，例如多个空格只保留一个
-- `awk` 天生支持 C-Style printf
-
-输出结果:
-
-- 格式化之前:
-
-```
-drivers/gpu/drm/solomon/ssd130x.c:#define DRIVER_NAME	"ssd130x"
-drivers/gpu/drm/solomon/ssd130x-i2c.c:#define DRIVER_NAME	"ssd130x-i2c"
-drivers/gpu/drm/solomon/ssd130x-spi.c:#define DRIVER_NAME	"ssd130x-spi"
-drivers/gpu/drm/exynos/exynos_drm_drv.c:#define DRIVER_NAME	"exynos"
-drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c:#define DRIVER_NAME		"imx8qxp-display-pixel-link"
-drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c:#define DRIVER_NAME	"imx8qxp-pxl2dpi"
-drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c:#define DRIVER_NAME			"imx8qxp-pixel-combiner"
-drivers/gpu/drm/bridge/imx/imx8qxp-ldb-drv.c:#define DRIVER_NAME		"imx8qxp-ldb"
-drivers/gpu/drm/bridge/imx/imx8qm-ldb-drv.c:#define DRIVER_NAME			"imx8qm-ldb"
-drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c:#define DRIVER_NAME "dw-hdmi-gp-audio"
-drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c:#define DRIVER_NAME "dw-hdmi-ahb-audio"
-drivers/gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c:#define DRIVER_NAME "dw-hdmi-i2s-audio"
-drivers/gpu/drm/meson/meson_dw_hdmi.c:#define DRIVER_NAME "meson-dw-hdmi"
-drivers/gpu/drm/meson/meson_drv.c:#define DRIVER_NAME "meson"
-drivers/gpu/drm/omapdrm/omap_drv.c:#define DRIVER_NAME		MODULE_NAME
-drivers/gpu/drm/sprd/sprd_drm.c:#define DRIVER_NAME	"sprd"
-drivers/gpu/drm/savage/savage_drv.h:#define DRIVER_NAME	"savage"
-drivers/gpu/drm/i810/i810_drv.h:#define DRIVER_NAME		"i810"
-drivers/gpu/drm/mediatek/mtk_drm_drv.c:#define DRIVER_NAME "mediatek"
-drivers/gpu/drm/mga/mga_drv.h:#define DRIVER_NAME		"mga"
-drivers/gpu/drm/amd/amdgpu/amdgpu_drv.h:#define DRIVER_NAME		"amdgpu"
-drivers/gpu/drm/vboxvideo/vbox_drv.h:#define DRIVER_NAME         "vboxvideo"
-drivers/gpu/drm/vkms/vkms_drv.c:#define DRIVER_NAME	"vkms"
-drivers/gpu/drm/via/via_dri1.c:#define DRIVER_NAME		"via"
-drivers/gpu/drm/sti/sti_drv.c:#define DRIVER_NAME	"sti"
-drivers/gpu/drm/imx/ipuv3/imx-ldb.c:#define DRIVER_NAME "imx-ldb"
-drivers/gpu/drm/udl/udl_drv.h:#define DRIVER_NAME		"udl"
-drivers/gpu/drm/nouveau/nouveau_drv.h:#define DRIVER_NAME		"nouveau"
-drivers/gpu/drm/mgag200/mgag200_drv.h:#define DRIVER_NAME		"mgag200"
-drivers/gpu/drm/vgem/vgem_drv.c:#define DRIVER_NAME	"vgem"
-drivers/gpu/drm/qxl/qxl_drv.h:#define DRIVER_NAME		"qxl"
-drivers/gpu/drm/radeon/radeon_drv.h:#define DRIVER_NAME		"radeon"
-drivers/gpu/drm/rockchip/rockchip_drm_drv.c:#define DRIVER_NAME	"rockchip"
-drivers/gpu/drm/virtio/virtgpu_drv.h:#define DRIVER_NAME "virtio_gpu"
-drivers/gpu/drm/tiny/gm12u320.c:#define DRIVER_NAME		"gm12u320"
-drivers/gpu/drm/tiny/simpledrm.c:#define DRIVER_NAME	"simpledrm"
-drivers/gpu/drm/tiny/ofdrm.c:#define DRIVER_NAME	"ofdrm"
-drivers/gpu/drm/v3d/v3d_drv.c:#define DRIVER_NAME "v3d"
-drivers/gpu/drm/gma500/psb_drv.h:#define DRIVER_NAME "gma500"
-drivers/gpu/drm/hyperv/hyperv_drm_drv.c:#define DRIVER_NAME "hyperv_drm"
-drivers/gpu/drm/sis/sis_drv.h:#define DRIVER_NAME		"sis"
-drivers/gpu/drm/tdfx/tdfx_drv.h:#define DRIVER_NAME		"tdfx"
-drivers/gpu/drm/i915/i915_driver.h:#define DRIVER_NAME		"i915"
-drivers/gpu/drm/r128/r128_drv.h:#define DRIVER_NAME		"r128"
-drivers/gpu/drm/tiny/cirrus.c:#define DRIVER_NAME "cirrus"
-drivers/gpu/drm/tegra/drm.c:#define DRIVER_NAME "tegra"
-drivers/gpu/drm/ast/ast_drv.h:#define DRIVER_NAME		"ast"
-drivers/gpu/drm/vc4/vc4_drv.c:#define DRIVER_NAME "vc4"
-```
-
-- 格式化之后:
-
-```
-drivers/gpu/drm/amd/amdgpu/amdgpu_drv.h             #define DRIVER_NAME "amdgpu"            
-drivers/gpu/drm/ast/ast_drv.h                       #define DRIVER_NAME "ast"               
-drivers/gpu/drm/tiny/cirrus.c                       #define DRIVER_NAME "cirrus"            
-drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c #define DRIVER_NAME "dw-hdmi-ahb-audio" 
-drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c  #define DRIVER_NAME "dw-hdmi-gp-audio"  
-drivers/gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c #define DRIVER_NAME "dw-hdmi-i2s-audio" 
-drivers/gpu/drm/exynos/exynos_drm_drv.c             #define DRIVER_NAME "exynos"            
-drivers/gpu/drm/tiny/gm12u320.c                     #define DRIVER_NAME "gm12u320"          
-drivers/gpu/drm/gma500/psb_drv.h                    #define DRIVER_NAME "gma500"            
-drivers/gpu/drm/hyperv/hyperv_drm_drv.c             #define DRIVER_NAME "hyperv_drm"        
-drivers/gpu/drm/i810/i810_drv.h                     #define DRIVER_NAME "i810"              
-drivers/gpu/drm/i915/i915_driver.h                  #define DRIVER_NAME "i915"              
-drivers/gpu/drm/imx/ipuv3/imx-ldb.c                 #define DRIVER_NAME "imx-ldb"           
-drivers/gpu/drm/bridge/imx/imx8qm-ldb-drv.c         #define DRIVER_NAME "imx8qm-ldb"        
-drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c     #define DRIVER_NAME "imx8qxp-display-pixel-link"
-drivers/gpu/drm/bridge/imx/imx8qxp-ldb-drv.c        #define DRIVER_NAME "imx8qxp-ldb"       
-drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c #define DRIVER_NAME "imx8qxp-pixel-combiner"
-drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c        #define DRIVER_NAME "imx8qxp-pxl2dpi"   
-drivers/gpu/drm/mediatek/mtk_drm_drv.c              #define DRIVER_NAME "mediatek"          
-drivers/gpu/drm/meson/meson_drv.c                   #define DRIVER_NAME "meson"             
-drivers/gpu/drm/meson/meson_dw_hdmi.c               #define DRIVER_NAME "meson-dw-hdmi"     
-drivers/gpu/drm/mga/mga_drv.h                       #define DRIVER_NAME "mga"               
-drivers/gpu/drm/mgag200/mgag200_drv.h               #define DRIVER_NAME "mgag200"           
-drivers/gpu/drm/nouveau/nouveau_drv.h               #define DRIVER_NAME "nouveau"           
-drivers/gpu/drm/tiny/ofdrm.c                        #define DRIVER_NAME "ofdrm"             
-drivers/gpu/drm/qxl/qxl_drv.h                       #define DRIVER_NAME "qxl"               
-drivers/gpu/drm/r128/r128_drv.h                     #define DRIVER_NAME "r128"              
-drivers/gpu/drm/radeon/radeon_drv.h                 #define DRIVER_NAME "radeon"            
-drivers/gpu/drm/rockchip/rockchip_drm_drv.c         #define DRIVER_NAME "rockchip"          
-drivers/gpu/drm/savage/savage_drv.h                 #define DRIVER_NAME "savage"            
-drivers/gpu/drm/tiny/simpledrm.c                    #define DRIVER_NAME "simpledrm"         
-drivers/gpu/drm/sis/sis_drv.h                       #define DRIVER_NAME "sis"               
-drivers/gpu/drm/sprd/sprd_drm.c                     #define DRIVER_NAME "sprd"              
-drivers/gpu/drm/solomon/ssd130x.c                   #define DRIVER_NAME "ssd130x"           
-drivers/gpu/drm/solomon/ssd130x-i2c.c               #define DRIVER_NAME "ssd130x-i2c"       
-drivers/gpu/drm/solomon/ssd130x-spi.c               #define DRIVER_NAME "ssd130x-spi"       
-drivers/gpu/drm/sti/sti_drv.c                       #define DRIVER_NAME "sti"               
-drivers/gpu/drm/tdfx/tdfx_drv.h                     #define DRIVER_NAME "tdfx"              
-drivers/gpu/drm/tegra/drm.c                         #define DRIVER_NAME "tegra"             
-drivers/gpu/drm/udl/udl_drv.h                       #define DRIVER_NAME "udl"               
-drivers/gpu/drm/v3d/v3d_drv.c                       #define DRIVER_NAME "v3d"               
-drivers/gpu/drm/vboxvideo/vbox_drv.h                #define DRIVER_NAME "vboxvideo"         
-drivers/gpu/drm/vc4/vc4_drv.c                       #define DRIVER_NAME "vc4"               
-drivers/gpu/drm/vgem/vgem_drv.c                     #define DRIVER_NAME "vgem"              
-drivers/gpu/drm/via/via_dri1.c                      #define DRIVER_NAME "via"               
-drivers/gpu/drm/virtio/virtgpu_drv.h                #define DRIVER_NAME "virtio_gpu"        
-drivers/gpu/drm/vkms/vkms_drv.c                     #define DRIVER_NAME "vkms"              
-drivers/gpu/drm/omapdrm/omap_drv.c                  #define DRIVER_NAME MODULE_NAME         
-```
-
-# crontab - 定时任务
-
-`crontab -e` (添加定时任务)， 不光可以添加周期性的定时任务，也可以添加开机时一次性任务
-
-```bash
-@reboot /home/luc/mystart.sh
-```
-
-crontab 是每用户的， 就是说当前用户设定的任务，只有当前用户的权限，所以如果有些情况下任务执行需要 root 权限，就需要切换到 root 用户后 `crontab -e`
-
-# exec
+## exec
 
 `exec` 命令有 2 个特点：
 - 直接覆盖当前进程，就是说进程 PID 不变，但执行的代码被更换了
 - 原来的 shell 环境被销毁，这样当前的代码结束后，也就不会返回原 shell(没得返回)， 直接退出
+- 可以把它想像成系统调用 `execve()`
 
 下面是 linux kernel 安装 bzImage 的一段代码，其中就使用了 `exec`, 保证列出的 4 个安装脚本中，只执行第 1 个存在的，不会重复安装
 
@@ -202,3 +65,60 @@ do
 	exec "${file}" "${KERNELRELEASE}" "${KBUILD_IMAGE}" System.map "${INSTALL_PATH}"
 done
 ```
+
+# 文本处理 - awk, sed, grep(rg) 三剑客
+
+Linux 下的文本处理三剑客: grep, sed, awk, 除了它们其实还有一些小巧的命令，如 `tr`, `cut` 也可以帮助我们快速处理和格式化文本。
+下面以一个例子为例。
+
+## awk
+
+
+## sed
+
+sed 和 awk 一样，都是按行处理文本的。
+
+- `sed -n '2 {s/^/#/; p; q}' file`
+	* sed 默认会将每一行都打印出来， `-n` 取消这一行为
+	* sed 可以在操作的前面指定位置和范围， 如
+		- 行号
+		- 正则表达式 `/^foo/`
+		- 两个正则表达式锁定范围 `/^foo/, /bar$/`
+	* 如果 `-n` 后，完全都不打印了，但如果又想将处理后的行打印出来，使用 `p` 命令
+	* `q` 命令的作用是**立即即出**，sed 的默认行为是对第2行处理完后，虽然后面的行都不需要处理，但 sed 仍然会继续将后面的每行往**模式空间**加载。
+
+## grep(rg)
+
+**在 Linux 内核源码目录下，搜索 `drivers/gpu/drm` 下所有的 `DRIVER_NAME` 定义，并排序后格式化输出**
+
+命令如下:
+
+```bash
+rg '#define DRIVER_NAME' drivers/gpu/drm --no-heading \
+    | tr -s '\t' | tr '\t' ' ' | tr -s ' ' \
+    | awk -F':' '{printf("%-52s%-40s\n",$1,$2)}' \
+    | sort -k4
+```
+
+- `rg` ([ripgrep](https://github.com/BurntSushi/ripgrep)) 比 grep 更快，更强大
+- `tr` 在不带任何选项时，默认执行替换，例子是中将 tab 替换成 空格, `-s` 表示 `squeeze-repeats`, 就是去掉重复的字符，例如多个空格只保留一个
+- `awk` 天生支持 C-Style printf
+	
+## 引号
+
+当混合使用 awk 和 sed 时，比较便利地处理引号的方法是定义 awk 变量 `-v Q="'"`
+
+- awk 的 `printf()` 函数第一个参数必须使用双引号 `printf("%s: %s%d%s\n", $1, Q, $2, Q)`
+	* awk 中的用户自定义变量和内置变量，使用时都不需要加 `$`， 如 `NR`, `NF`
+- awk 和 sed 的命令字串必须用引号括起来，当用 awk 生成 sed 命令时，将单引号定义为 awk 变量尤其方便，可读性也强
+
+
+# 定时任务 - crontab
+
+`crontab -e` (添加定时任务)， 不光可以添加周期性的定时任务，也可以添加开机时一次性任务
+
+```bash
+@reboot /home/luc/mystart.sh
+```
+
+crontab 是每用户的， 就是说当前用户设定的任务，只有当前用户的权限，所以如果有些情况下任务执行需要 root 权限，就需要切换到 root 用户后 `crontab -e`

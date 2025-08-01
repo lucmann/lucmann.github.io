@@ -58,8 +58,8 @@ categories: utilities
   $(notdir names...)
   ```
   * 这两个内置函数被放在 GNU Make 官方文档 [8.3 Functions for File Names](https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html) 章节的头两个，可见它们的使用之多。这一章节的函数都是专门用来**拆分**文件路径的。
-  * `$(dir names...)` 只取出后面文件路径(或文件路径列表)的目录部分
-  * `$(notdir names...)` 只取出后面文件路径(或文件路径列表)的文件名部分
+  * `$(dir names...)` 只取出后面文件路径(或文件路径列表)的目录部分, 相当于 shell 里的 `dirname`
+  * `$(notdir names...)` 只取出后面文件路径(或文件路径列表)的文件名部分, 相当于 shell 里的 `basename`
 
 ## foreach
 
