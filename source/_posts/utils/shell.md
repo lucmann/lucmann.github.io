@@ -43,7 +43,7 @@ ${var@Q}
 
 `exec` 命令有 2 个特点：
 - 直接覆盖当前进程，就是说进程 PID 不变，但执行的代码被更换了
-- 原来的 shell 环境被销毁，这样当前的代码结束后，也就不会返回原 shell(没得返回)， 直接退出
+- 原来的 shell 环境被销毁，这样当前的代码结束后，也就不会返回原 shell(没得返回)， 直接退出, 所以**循环中慎用 exec**
 - 可以把它想像成系统调用 `execve()`
 
 下面是 linux kernel 安装 bzImage 的一段代码，其中就使用了 `exec`, 保证列出的 4 个安装脚本中，只执行第 1 个存在的，不会重复安装
@@ -65,6 +65,10 @@ do
 	exec "${file}" "${KERNELRELEASE}" "${KBUILD_IMAGE}" System.map "${INSTALL_PATH}"
 done
 ```
+
+## 反斜杠 backslash \
+
+`\` 在 shell 中是用来转义字符的，就是说 `echo "\\\\"` 显示的实际只有一个 `\`, 而且 `while read var` 时要注意加 `-r` 选项，读入原始字串
 
 # 文本处理 - awk, sed, grep(rg) 三剑客
 
