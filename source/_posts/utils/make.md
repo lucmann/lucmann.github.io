@@ -12,6 +12,7 @@ categories: utilities
 ## -d, --debug=FLAGS
 
 - 所有支持的 FLAGS (多个 flags 用`,` 分开)
+- Debug Level Specification (GNU Make 4.3)
 
 | 标志 |名称	|功能描述|
 |:----|:-----|:------|
@@ -21,10 +22,8 @@ categories: utilities
 | i	| Implicit |隐式规则：显示隐式规则搜索/应用过程|
 | j	| Jobs	   |作业控制：输出子进程执行细节（命令/PID/退出码）|
 | m	| Makefile |Makefile 处理：跟踪 include/重解析过程|
-| p	| Printing |打印数据库：在读取后输出完整的变量/规则数据库|
 | r	| Remaking |重制检查：显示 makefile 自身的重制决策|
 | n	| None	   |禁用所有调试（特殊用途） |
-
 
 # Make 常用变量
 
@@ -85,4 +84,31 @@ categories: utilities
 
 - 原型
   ```
+  $(or condition1[,condition2[,condition3...]]）
+  $(and condition1[,condition2[,condition3...]]）
   ```
+  * **短路或(short-circuiting OR)**(不是骂人🐶), 即一个挨一个展开 *condition*, 只要遇到一个展开为**非空字串**，就停止，这个函数返回的就是展开的那个字串，如果所有 *condition* 展开都是空，则返回空字串
+  * **短路与(short-circuiting AND)**, 即一个挨一个展开 *condition*, 只要遇到一个展开为**空字串**，就停止，这个函数返回的就是空字串，如果所有 *condition* 展开都是非空字串，返回**最后一个字串**
+  * *condition* 可以有 1 到 n 个
+      
+## origin
+
+- 原型
+  ```
+  $(origin variable)
+  ```
+  * *variable* 不需要加 `$` 符号
+  * 它的功能类似 shell 里的 `which` 或 `type` (告诉你一个命令是不是 shell 内置命令)
+  * 它的返回值有以下这些(都是字串)
+    - undefined
+    - default
+    - environment
+    - environment override
+    - file
+    - command line
+    - override
+    - automatic
+  
+# Make 用户手册
+
+- [Make Manual](https://www.gnu.org/software/make/manual/make.html)
