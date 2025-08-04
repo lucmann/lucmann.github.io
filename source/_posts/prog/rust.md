@@ -146,16 +146,49 @@ make menuconfig
 
 ## Macros
 
-### Declarative Macros 声明式宏
+Rust 中的宏虽说是强大，但也非常复杂，单看它文档里的**声明宏**的语法定义就头大了，更不用说过程宏了。但 Rust 的宏强大就强大在**过程宏**，声明宏只是减少代码量，而过程宏能让编译器**自动生成代码**。
 
-内核中的 `dev_dbg` 就是一个声明式宏，实际上 `crate::dev_printk` 还是一个声明式宏
+- [https://doc.rust-lang.org/reference/macros-by-example.html](https://doc.rust-lang.org/reference/macros-by-example.html)
 
+### Declarative Macros 声明宏
+
+Rust 声明宏给人的感觉就好像是把编译器前端的**词法分析(Lexical)**, **语法分析(Syntactic)** 开放给了用户，用户根据这套语法分析逻辑自己定义代码。内核中的 `dev_dbg` 就是一个声明式宏，实际上 `crate::dev_printk` 还是一个声明式宏
+
+- dev_dbg 宏定义
 ```rust
 #[macro_export]
 macro_rules! dev_dbg {
     ($($f:tt)*) => { $crate::dev_printk!(pr_dbg, $($f)*); }
 }
 ```
+
+- dev_printk 宏定义
+```rust
+#[doc(hidden)]
+#[macro_export]
+macro_rules! dev_printk {
+    ($method:ident, $dev:expr, $($f:tt)*) => {
+        {
+            ($dev).$method(::core::format_args!($($f)*));
+        }
+    }
+}
+```
+
+- dev_dbg 宏使用
+```rust
+dev_dbg!(dev, "GPU instance built\n");
+```
+
+从上面3段代码看，Rust 声明宏与 C 宏本质上差不多，形式上差得多。从 `dev_dbg` 的定义看，这个宏的参数是一个 **TokenTree (tt)**, 这个参数的名字就是 `$f`, 它的展开就是以 `pr_dbg` 这个**Identifier (ident)** 作为第一个参数调用 `dev_printk` 宏，其它参数透传过去。
+
+而 `dev_printk` 宏有3个参数：
+
+- 第1个是一个 **Identifier**, 参数名是 `$method`
+- 第2个是一个 **Expression**, 参数名是 `$dev`
+- 第3个是一个 **TokenTree**,  参数名是 `$f`
+
+`dev_dbg!(dev, "GPU instance built\n")` 最终展开后就是 `dev.pr_dbg(::core::format_args!("GPU instance built\n"))`
 
 ### Procedural Macros 过程宏
 
