@@ -54,7 +54,9 @@ Rust 的包叫 **crate**, **cargo** 既是包管理器，也是 Rust 项目的�
 - `cargo modules structure --package XXX`
     - 显示某个 crate 的框架 (如有哪些函数, 类等)
 
-# #![no_std] 属性
+# Rust Hello World
+
+Rust 相对于 C 是复杂的，那我们也来一个 Non-trivial 版本的 Hello world。这个 Hello World 不使用标准库，而是通过**汇编指令(x86)** 直接调用操作系统的系统调用 (write), 来将"Hello world",送到标准输出。
 
 Rust 的标准库依赖 C 库 libc.so.6。但 Rust 语言允许你禁用标准库，从而不依赖 C 库。要达到这个目的，需要对 Hello world 程序和编译过程做些[修改](https://github.com/lucmann/pmp/tree/master/rust)
 
@@ -138,5 +140,42 @@ make rust-analyzer
 make menuconfig
 ```
 
+# Learn Rust from Rust for Linux
+
+就像之前的 [Learn Makefile from Linux Build System](https://lucmann.github.io/utils/make/) 一样，这次我想一边阅读 Linux 内核中的 Rust 驱动代码，一边学习 Rust 语言，好处是可以了解一个实际的项目中，像 Rust 这样的语言的最佳实践是怎样的，这里就当是学习笔记吧
+
+## Macros
+
+### Declarative Macros 声明式宏
+
+内核中的 `dev_dbg` 就是一个声明式宏，实际上 `crate::dev_printk` 还是一个声明式宏
+
+```rust
+#[macro_export]
+macro_rules! dev_dbg {
+    ($($f:tt)*) => { $crate::dev_printk!(pr_dbg, $($f)*); }
+}
+```
+
+### Procedural Macros 过程宏
+
+- 函数式过程宏
+
+- 属性宏
+
+- 派生宏
+
+## Attribute
+
+- Outer attribute
+    * `#[...]`
+        - 仅修饰紧跟着它的项 (fn, struct, trait)
+- Inner attribute
+    * `#![...]`
+        - 修饰它所在的整个项 (crate, mod)
+
 # 参考
 - [The Cargo Book](https://doc.rust-lang.org/cargo/index.html)
+- [Rust 语言圣经](https://course.rs/basic/variable.html)👍
+- [Rust for Linux](https://rust-for-linux.com/)👀
+- [rust.docs.kernel.org](https://rust.docs.kernel.org/kernel/)
