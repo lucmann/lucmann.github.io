@@ -9,9 +9,32 @@ categories: linux
 
 <!--more-->
 
-# GNOME Display Manager
+# 安装 Arch Linux
 
-## Ephemeral gdm-x-session
+## iwctl
+
+## pacman
+
+## arch-chroot
+
+# 编译内核
+
+## vmlinuz
+
+## initramfs
+
+## mkinitcpio
+
+# 截屏 Greeter
+
+## GNOME Display Manager
+
+## "阅后即焚"式生成 Greeter
 
 ![](/images/arch/gdm-x-session-oneshot.png)
 
+# 参考
+
+- [Arch Linux 详细安装教程](https://zhuanlan.zhihu.com/p/596227524)
+- [Arch Linux User Repository](https://aur.archlinux.org/)
+- [GNOME Display Manager Reference Manual](https://help.gnome.org/admin/gdm/stable/)
