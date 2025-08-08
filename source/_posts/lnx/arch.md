@@ -5,5 +5,8 @@ tags: [distro]
 categories: linux
 ---
 
-![](/images/arch/arch-linux.png)
+![](/images/arch/gdm-screenshot.png)
+
 <!--more-->
+
+![](/images/arch/arch-linux.png)
