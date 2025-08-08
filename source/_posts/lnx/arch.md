@@ -10,3 +10,11 @@ categories: linux
 <!--more-->
 
 ![](/images/arch/arch-linux.png)
+
+
+# GNOME Display Manager
+
+## Ephemeral gdm-x-session
+
+![](/images/arch/gdm-x-session-oneshot.png)
+
