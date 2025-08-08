@@ -108,6 +108,26 @@ categories: utilities
     - command line
     - override
     - automatic
+        
+## 用户自定义函数
+
+像其它语言一样，在 Makefile 里也可以自己定义函数， 例如
+
+```makefile
+rust_exports = $(NM) -p --defined-only $(1) | awk '$$2~/(T|R|D|B)/ && $$3!~/__(pfx|cfi|odr_asan)/ { printf $(2),$$3 }'
+```
+- Makefile 里定义函数，感觉还是在**定义变量**
+- 函数名是 `rust_exports`
+- 函数接受两个参数 `$(1)`, `$(2)`
+- 函数中可以使用 Makefile 变量，如 `$(NM)`
+
+如何调用它
+
+```makefile
+$(call rust_exports,$<,"EXPORT_SYMBOL_RUST_GPL(%s);\n")
+```
+- 调用自定义函数使用 Make 内置函数 `$(call variable,param,param,...)`
+- 在这个例子里，第1个实参是 `$<`, 第2个实参是一个字符串，实际上是 awk printf 函数接受的**格式字符串(format string)** 
   
 # Make 用户手册
 
