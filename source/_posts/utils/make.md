@@ -27,6 +27,19 @@ categories: utilities
 
 # Make 常用变量
 
+## Make 变量赋值操作符
+
+```
+immediate = deferred
+immediate ?= deferred
+immediate := immediate
+immediate ::= immediate
+immediate :::= immediate-with-escape
+immediate += deferred or immediate
+immediate != immediate
+```
+- `!=` 用于将 shell 命令执行的结果赋给变量，等价于 `variable := $(shell shell_cmd)`
+
 ## MAKECMDGOALS
 
 表示执行 make 命令时用户给入的 targets, 这里*执行 make 命令时* 不仅包括从终端命令行执行 make, 也包括在 Makefile 规则里执行 `make -f ...`
@@ -120,6 +133,7 @@ rust_exports = $(NM) -p --defined-only $(1) | awk '$$2~/(T|R|D|B)/ && $$3!~/__(p
 - 函数名是 `rust_exports`
 - 函数接受两个参数 `$(1)`, `$(2)`
 - 函数中可以使用 Makefile 变量，如 `$(NM)`
+- [当函数中的参数时，必须使用 `=`，而不是 `:=`, 因为有参数时需要将**参数延迟展开**](https://gist.github.com/lucmann/3a30f9cc06bb8773a77aa5ccc945c3e5)
 
 如何调用它
 

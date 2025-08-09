@@ -25,7 +25,7 @@ gitGraph
 - `git am foo.patch`
   - 应用补丁 foo.patch (注意与 `git apply` 的区别，`git am` 同时会将commit log 也应用上去)
 - `git am -i -3 /tmp/patches/*`
-  - `-i`：交互式地 apply patch, 即每个 Patch 都询问 *Apply? [y]es/[n]o/[e]dit/[v]iew patch/[a]ceept all:*
+  - `-i`：交互式地 apply patch, 即每个 Patch 都询问 *Apply? [y]es/[n]o/[e]dit/[v]iew patch/[a]ccept all:*
   - `-3`: 当有冲突时进入 3way merge 模式，即允许你手动解决冲突(如果 git 自动解决不了)，然后 `git am -i --continue`
 
 # git bisect
