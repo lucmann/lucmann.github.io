@@ -39,6 +39,12 @@ ${var@Q}
 
 带 `@Q` 指变量展开后的值被单引号引起来，例如 `export ABC=abc`, `echo "ABC=${ABC@Q}"` 的结果是 `ABC='abc'`
 
+## 反斜杠 backslash \
+
+`\` 在 shell 中是用来转义字符的，就是说 `echo "\\\\"` 显示的实际只有一个 `\`, 而且 `while read var` 时要注意加 `-r` 选项，读入原始字串
+
+# 经典命令 
+
 ## exec
 
 `exec` 命令有 2 个特点：
@@ -66,6 +72,15 @@ do
 done
 ```
 
+## timeout
+
+`timeout` 命令用来给一个 *COMMAND* 设定一个 *DURATION*， 这在自动化中很有用，比如
+
+```shell
+for i in `fd --type x`; do timeout -k 0.1 10 ./$i; done
+```
+假如当前在 [VulkanExamples](https://github.com/SaschaWillems/Vulkan) 的 bin 目录下，上面的命令表示让每个 demo 执行 **10s** 后结束(`timeout` 给它发 `TERM` 信号), 如果发了 `TERM` 信号后，又经过 **0.1s (`-k 0.1`)**，这个 demo 还未能退出，就再发 `KILL` 信号，强制结束它
+
 ## tree
 
 `tree` 像一个简单的文件浏览器，但它并不是 shell 内置的命令，`apt install tree` 或 `pacman -S tree` 都可以安装。有时一个目录中包含太多的文件，tree 的默认输出就不太好浏览，这时可以只打印目录，并限制搜索深度
@@ -74,9 +89,15 @@ done
 tree -L 2 -d
 ```
 
-## 反斜杠 backslash \
+## crontab
 
-`\` 在 shell 中是用来转义字符的，就是说 `echo "\\\\"` 显示的实际只有一个 `\`, 而且 `while read var` 时要注意加 `-r` 选项，读入原始字串
+`crontab -e` (添加定时任务)， 不光可以添加周期性的定时任务，也可以添加开机时一次性任务
+
+```bash
+@reboot /home/luc/mystart.sh
+```
+
+crontab 是每用户的， 就是说当前用户设定的任务，只有当前用户的权限，所以如果有些情况下任务执行需要 root 权限，就需要切换到 root 用户后 `crontab -e`
 
 # 文本处理 - awk, sed, grep(rg) 三剑客
 
@@ -179,13 +200,3 @@ awk '$0~/foo/ {print $0}'
 awk '$1~/foo/ && $3!~/bar/ {print}'
 ```
 它意思是当前这条记录，如果第1个字段包含 `foo` **且** 第3个字段**不包含** `bar`, 那么就打印整条记录
-
-# 定时任务 - crontab
-
-`crontab -e` (添加定时任务)， 不光可以添加周期性的定时任务，也可以添加开机时一次性任务
-
-```bash
-@reboot /home/luc/mystart.sh
-```
-
-crontab 是每用户的， 就是说当前用户设定的任务，只有当前用户的权限，所以如果有些情况下任务执行需要 root 权限，就需要切换到 root 用户后 `crontab -e`
