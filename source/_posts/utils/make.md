@@ -128,6 +128,8 @@ $(call rust_exports,$<,"EXPORT_SYMBOL_RUST_GPL(%s);\n")
 ```
 - 调用自定义函数使用 Make 内置函数 `$(call variable,param,param,...)`
 - 在这个例子里，第1个实参是 `$<`, 第2个实参是一个字符串，实际上是 awk printf 函数接受的**格式字符串(format string)** 
+    
+# @ 禁止回显
   
 # Make 用户手册
 
