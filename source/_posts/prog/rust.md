@@ -144,6 +144,16 @@ make menuconfig
 
 就像之前的 [Learn Makefile from Linux Build System](https://lucmann.github.io/utils/make/) 一样，这次我想一边阅读 Linux 内核中的 Rust 驱动代码，一边学习 Rust 语言，好处是可以了解一个实际的项目中，像 Rust 这样的语言的最佳实践是怎样的，这里就当是学习笔记吧
 
+## 使用 Nightly rustc
+
+Nightly rustc 对于构建 Rust for Linux 不是必需的，但因为一些编译器的调试功能，包括编译过程中更详细的信息只在 Nightly 版本中才可用，所以最好使用 Nightly rustc
+
+- `rustup install nightly`
+    - `nightly-x86_64-unknown-linux-gnu installed - rustc 1.91.0-nightly (1ebbd87a6 2025-08-11)`
+- `rustup default nightly`
+    - `nightly-x86_64-unknown-linux-gnu unchanged - rustc 1.91.0-nightly (1ebbd87a6 2025-08-11)`
+- `rustc --version`
+
 ## Macros
 
 Rust 中的宏虽说是强大，但也非常复杂，单看它文档里的**声明宏**的语法定义就头大了，更不用说过程宏了。但 Rust 的宏强大就强大在**过程宏**，声明宏只是减少代码量，而过程宏能让编译器**自动生成代码**。
