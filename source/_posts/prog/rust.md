@@ -152,7 +152,12 @@ Nightly rustc 对于构建 Rust for Linux 不是必需的，但因为一些编�
     - `nightly-x86_64-unknown-linux-gnu installed - rustc 1.91.0-nightly (1ebbd87a6 2025-08-11)`
 - `rustup default nightly`
     - `nightly-x86_64-unknown-linux-gnu unchanged - rustc 1.91.0-nightly (1ebbd87a6 2025-08-11)`
-- `rustc --version`
+    - `rustc --version`
+- `rustup component add rust-src`
+    - `make rustavailable`
+    - 安装 rustc nightly 后同样必须安装 nightly rust-src,否则 `make rustavailable` 会失败
+- `rustup default nightly` or `rustup default stable`
+    - 在 nightly 和 stable 之间切换
 
 ## Macros
 
