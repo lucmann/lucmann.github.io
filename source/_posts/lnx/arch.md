@@ -44,6 +44,12 @@ cd yay-git
 makepkg -si
 ```
 
+### 中文字体
+
+```bash
+pacman -S noto-fonts noto-fonts-cjk
+```
+
 ### 中文输入法
 
 ```bash
