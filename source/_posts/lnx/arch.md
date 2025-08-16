@@ -11,11 +11,47 @@ categories: linux
 
 # 安装 Arch Linux
 
-## iwctl
+安装 Arch Linux 可以分为两个阶段：
 
-## pacman
+- CLI：系统可以从 console 登录
+- GUI：安装图形桌面环境，可以从 login greeter 登录
+    * 这里就体现出 Arch Linux 的特点，你可以自由安装喜欢的桌面环境: KDE Plasma, GNOME
+    * 桌面环境安装后，还有就是各种图形应用，包括 google-chrome, fcitx5-configtool, vscode 等等，有些没有在 pacman 的源里，需要使用 yay (Yet Another Yogurt, Yogurt 是早期的 AUR 助手) 安装
+    * pacman 的源可以自己配成国内源，但 yay 的好多下载地址都XX了，所以这个阶段可能需要梯子，否则很难进行下去
 
-## arch-chroot
+## CLI boot
+
+### iwctl
+
+### pacman
+
+### arch-chroot
+
+## GUI boot
+
+### DE
+
+```bash
+pacman -S gnome gnome-extra
+```
+
+### yay
+
+```bash
+git clone https://aur.archlinux.org/yay-git.git
+pacman -S --needed base-devel
+cd yay-git
+makepkg -si
+```
+
+### 中文输入法
+
+```bash
+pacman -S fcitx5 fcitx5-gtk fcitx5-chinese-addons fcitx5-configtool
+yay -S fcitx5-sogou
+```
+
+安装后启动 fcitx5-configtool，添加搜狗输入法即可
 
 # 编译内核
 
