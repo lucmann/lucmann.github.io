@@ -89,6 +89,35 @@ sudo -u gdm DISPLAY=:0 XAUTHORITY=/run/user/120/gdm/Xauthority import -display :
 
 ![](/images/arch/gdm-x-session-oneshot.png)
 
+# 选 GPU
+
+当 Linux 系统中同时存在多个 GPU 时，有多种方法可以指定使用哪一个。
+
+## kernel boot parameter
+
+通过内核启动参数，如 `modprobe.blacklist=i915`，将相应 GPU 的内核驱动屏蔽，但有时可能有副作用，例如我的 Dell Vostro 5390，如果将 `i915` 驱动屏蔽掉，Audio Subsystem 会出问题
+
+```
+00:1c.0 PCI bridge [0604]: Intel Corporation Cannon Point-LP PCI Express Root Port #5 [8086:9dbc] (rev f0)
+00:1d.0 PCI bridge [0604]: Intel Corporation Cannon Point-LP PCI Express Root Port #13 [8086:9db4] (rev f0)
+00:1f.3 Audio device [0403]: Intel Corporation Cannon Point-LP High Definition Audio Controller [8086:9dc8] (rev 30)
+```
+
+由于Vostro 使用的 Audio interface 就是 Intel HDA, 所以当 `i915` 被屏蔽后，由于某种原因，Intel HDA 设备没有初始化成功，而它又没有连接其它独显的音频接口(如 Nvidia HDA)，导致系统的声音不能正常工作
+
+```
+pci 0000:00:1f.3: deferred probe pending: snd_hda_intel: couldn't bind with audio component
+nouveau 0000:01:00.0: Enabling HDA controller
+```
+
+基本上只有内核启动日志里有下面一行，intel audio 才能正常工作
+
+```
+snd_hda_intel 0000:00:1f.3: bound 0000:00:02.0 (ops intel_audio_component_bind_ops [i915])
+```
+
+更保险的启动参数是 `i915.modeset=0`，即不禁用整个 i915 驱动，只禁用 graphics 功能。但 [snd_hda_intel 和 i915 好像有些耦合问题](https://bbs.archlinux.org/viewtopic.php?id=292453)，必须再使用 `snd_hda_core.gpu_bind=0` 才能只禁用 Intel graphics, 不影响 Intel audio
+
 # 参考
 
 - [Arch Linux 详细安装教程](https://zhuanlan.zhihu.com/p/596227524)
