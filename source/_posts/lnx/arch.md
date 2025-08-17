@@ -73,11 +73,16 @@ yay -S fcitx5-sogou
 
 ```bash
 make
-sudo make modules_installsudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo make modules_install
 sudo make install
 ```
 
-内核配置 .config 可以通过 `zcat /proc/config.gz > .config` 得到一个基础配置，然后 `make menuconfig` 在此基础上修改保存。
+- 内核配置 .config 可以通过 `zcat /proc/config.gz > .config` 得到一个基础配置，然后 `make menuconfig` 在此基础上修改保存。
+- vmlinuz 的安装脚本有一个搜索顺序 `scripts/install.sh -> (1) ~/bin/installkernel; (2) /sbin/installkernel; (3) arch/x86/boot/install.sh`, 而且默认的安装名总是 `vmlinuz`, 为了更好地区分多个 `vmlinuz`, 最好将 `kernel version` 加到 `vmlinuz` 后面。如果使用第一搜索顺序，在 `sudo make install` 时，需要
+
+```
+sudo --preserve-env=HOME make install
+```
 
 ## initramfs
 

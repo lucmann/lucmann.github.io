@@ -113,6 +113,10 @@ pub unsafe extern "C" fn _start() {
 
 Rust 是 2022 年 10 月随 Linux 6.1-rc1 进入内核主线的。Linux 内核从此就变成了一个双语言项目，首先要解决的问题之一就是 C 和 Rust 函数互相调用的问题，这就需要一个自动生成 **Rust FFI bindings to C** 的工具 [bindgen](https://github.com/rust-lang/rust-bindgen), 所以 bindgen 也是构建内核中 Rust 代码的依赖之一。
 
+```
+sudo pacman -S rust-bindgen
+```
+
 内核有个特殊之处就是它不能链接 C 标准库，所以它自然也不能链接 Rust 标准库，所以编译开启 Rust (`CONFIG_RUST`) 内核需要安装 Rust 标准库的源码，这步可以通过 rustup 完成
 
 ```
