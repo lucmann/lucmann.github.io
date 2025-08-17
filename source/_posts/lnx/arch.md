@@ -61,11 +61,37 @@ yay -S fcitx5-sogou
 
 # 编译内核
 
+要制作一个可启动的内核，涉及到 3 个步骤
+
+- 编译内核，生成内核 ELF 可执行文件 vmlinuz (压缩格式)，安装内核模块
+- 生成初始内存文件系统 initramfs
+- 更新 grub.cfg
+    
+总的来说，在 Arch Linux 上制作一个可启动的新内核，让系统能够用新内核正常工作，是相对比较简单的，这也是我放弃 openKylin，转向 Arch Linux 的主要原因，在 openKylin 上，光是找到目前正在运行的内核源码都费半天劲儿，包括内核源码库，整个发行版的软件包源码仓库，软件版本管理都有点混乱。
+
 ## vmlinuz
+
+```bash
+make
+sudo make modules_installsudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo make install
+```
+
+内核配置 .config 可以通过 `zcat /proc/config.gz > .config` 得到一个基础配置，然后 `make menuconfig` 在此基础上修改保存。
 
 ## initramfs
 
-## mkinitcpio
+```bash
+sudo mkinitcpio --generate /boot/initramfs-6.16.1-arch1.img --kernel 6.16.1-arch1
+```
+
+## grub.cfg
+
+```bash
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+如果修改了默认的 grub 配置 (`/etc/default/grub`)，同样需要 `grub-mkconfig -o /boot/grub/grub.cfg`, 让新配置(如 kernel cmd parameters)生效。
 
 # 截屏 Greeter
 
