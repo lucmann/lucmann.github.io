@@ -44,6 +44,25 @@ immediate != immediate
 
 表示执行 make 命令时用户给入的 targets, 这里*执行 make 命令时* 不仅包括从终端命令行执行 make, 也包括在 Makefile 规则里执行 `make -f ...`
 
+```
+$(info $(MAKECMDGOALS))
+```
+
+如果执行 `make`, 它不会打印任何东西，但如果执行 `make all`, 它的输出是 `all`
+
+## MAKEFILE_LIST
+
+被 make 解析过的所有 Makefile 文件名列表，按照解析的先后顺序由左到右罗列。如果当前的 Makefile 里使用了 `include`, 如 `include inc.mk`, 那么 `inc.mk` 就会成为这个列表的最后一个。注意它是**文件名**列表，不是文件路径列表 
+
+## CURDIR
+
+Makefile 所在的目录的**绝对路径**
+
+```make
+$(info $(CURDIR))
+```
+如果这个 Makefile 位于 `/home/luc/gh/Makefile`, 它打印的就是 `/home/luc/gh`
+
 # Make 常用函数
 
 ## info, error, warning
