@@ -6,7 +6,6 @@ categories: utilities
 ---
 
 
-<!--more-->
 # Make 常用参数
 
 ## -d, --debug=FLAGS
@@ -25,11 +24,13 @@ categories: utilities
 | r	| Remaking |重制检查：显示 makefile 自身的重制决策|
 | n	| None	   |禁用所有调试（特殊用途） |
 
+<!--more-->
+
 # Make 常用变量
 
 ## Make 变量赋值操作符
 
-```
+```make
 immediate = deferred
 immediate ?= deferred
 immediate := immediate
@@ -44,7 +45,7 @@ immediate != immediate
 
 表示执行 make 命令时用户给入的 targets, 这里*执行 make 命令时* 不仅包括从终端命令行执行 make, 也包括在 Makefile 规则里执行 `make -f ...`
 
-```
+```make
 $(info $(MAKECMDGOALS))
 ```
 
