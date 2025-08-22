@@ -100,7 +100,7 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 # 截屏 Greeter
 
-截屏系统登录界面(Login Greeter) 并不那么容易，因为它和用户登录之后的 Display Manager 会话通常是两个独立的 Session, 它们背后是两个 Xorg 进程(如果 `XDG_SESSION_TYPE` 是 *wayland*, 则是 Xwayland), 而且通过在 GDM 环境下的观察，负责渲染 Greeter 会话的 Xorg 进程是反复创建和销毁的，当你切换到登录界面时，这个 Xorg (或 Xwayland) 进程才被 `gdm-x-session`(或 `gdm-wayland-session`) 拉起，一旦登录后进入桌面，这个进程又会被很快销毁。
+截屏系统登录界面(Login Greeter) 并不那么容易，因为它和用户登录之后的 Display Manager 会话通常是两个独立的 Session, 它们各自由一个独立的 Xorg 进程渲染(如果当前会话类型 `XDG_SESSION_TYPE` 是 *wayland*, 这两个 X 服务则变成 `Xwayland`), 而且通过在 GDM 环境下的观察，负责渲染 Greeter 的进程(Xorg 或 Xwayland)是反复创建和销毁的，当你切换到登录界面时，它们才被 `gdm-x-session`(或 `gdm-wayland-session`) 拉起(创建)，一旦登录后进入桌面，这个进程又会被很快销毁。
 
 ![](/images/arch/gdm-wayland-session.png)
 
