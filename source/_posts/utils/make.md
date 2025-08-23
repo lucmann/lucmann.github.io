@@ -92,6 +92,20 @@ $(info $(CURDIR))
   * 这两个内置函数被放在 GNU Make 官方文档 [8.3 Functions for File Names](https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html) 章节的头两个，可见它们的使用之多。这一章节的函数都是专门用来**拆分**文件路径的。
   * `$(dir names...)` 只取出后面文件路径(或文件路径列表)的目录部分, 相当于 shell 里的 `dirname`
   * `$(notdir names...)` 只取出后面文件路径(或文件路径列表)的文件名部分, 相当于 shell 里的 `basename`
+  * 举个例子 Linux kernel `scripts/Kbuild.include` 中 `dot-target` 定义的例子:
+    * `dot-target = $(dir $@).$(notdir $@)
+    * 这个 dot-target 其实就是把 `foo/bar.o` 变成 `foo/.bar.o`
+      
+## filter, filter-out
+
+- 原型
+  ```
+  $(filter pattern...,text)
+  $(filter-out pattern...,text)
+  ```
+  * filter 函数返回 `text` 中所有**匹配** `pattern...` 的单词
+  * `pattern...` 表示可以提供多个用**空白分隔**的 pattern
+  * filter-out 是返回那些**不匹配**的，即它的结果与 filter 正好相反
 
 ## foreach
 
