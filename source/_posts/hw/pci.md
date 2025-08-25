@@ -97,7 +97,7 @@ pci 0000:00:02.0: config space:
 00000034: 40 00 00 00 <- Capability Pointer : 40h
 00000038: 00 00 00 00
 0000003c: ff 01 00 00
-00000040: 09 70 0c 01 <- Capability Next : 70h, ID: 09h
+00000040: 09 70 0c 01 <- Capability Next : 70h, ID: 09h (Vendor Specific)
 00000044: c1 60 61 7a
 00000048: 8c 80 11 94
 0000004c: 00 00 00 00
