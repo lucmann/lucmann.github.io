@@ -94,10 +94,10 @@ pci 0000:00:02.0: config space:
 00000028: 00 00 00 00
 0000002c: 28 10 20 09
 00000030: 00 00 00 00
-00000034: 40 00 00 00
+00000034: 40 00 00 00 <- Capability Pointer : 40h
 00000038: 00 00 00 00
 0000003c: ff 01 00 00
-00000040: 09 70 0c 01
+00000040: 09 70 0c 01 <- Capability Next : 70h, ID: 09h
 00000044: c1 60 61 7a
 00000048: 8c 80 11 94
 0000004c: 00 00 00 00
@@ -109,7 +109,7 @@ pci 0000:00:02.0: config space:
 00000064: 00 00 00 00
 00000068: 00 00 00 00
 0000006c: 00 00 00 00
-00000070: 10 ac 92 00
+00000070: 10 ac 92 00 <- Capability Next : ach, ID: 10h (PCI Express)
 00000074: 00 80 00 10
 00000078: 00 00 00 00
 0000007c: 00 00 00 00
@@ -124,7 +124,7 @@ pci 0000:00:02.0: config space:
 000000a0: 00 00 00 00
 000000a4: 00 00 00 00
 000000a8: 00 00 00 00
-000000ac: 05 d0 00 00
+000000ac: 05 d0 00 00 <- Capability Next : d0h, ID: 05h (Message Signaled Interrupts)
 000000b0: 00 00 00 00
 000000b4: 00 00 00 00
 000000b8: 00 00 00 00
@@ -133,7 +133,7 @@ pci 0000:00:02.0: config space:
 000000c4: 00 00 00 00
 000000c8: 00 00 00 00
 000000cc: 00 00 00 00
-000000d0: 01 00 22 00
+000000d0: 01 00 22 00 <- Capability Last : 00h, ID: 01h (PCI Power Management Interface)
 000000d4: 00 00 00 00
 000000d8: 00 00 00 00
 000000dc: 00 00 00 00
@@ -165,7 +165,7 @@ pci 0000:01:00.0: config space:
 00000028: 00 00 00 00
 0000002c: 28 10 20 09
 00000030: 00 00 f8 ff
-00000034: 60 00 00 00
+00000034: 60 00 00 00 <- Capability Pointer : 60h
 00000038: 00 00 00 00
 0000003c: ff 01 00 00
 00000040: 28 10 20 09
@@ -176,13 +176,13 @@ pci 0000:01:00.0: config space:
 00000054: 01 00 00 00
 00000058: ce d6 23 00
 0000005c: 00 00 00 00
-00000060: 01 68 03 00
+00000060: 01 68 03 00 <- Capability Next : 68h, ID: 01h (PCI Power Management Interface)
 00000064: 08 00 00 00
-00000068: 05 78 80 00
+00000068: 05 78 80 00 <- Capability Next : 78h, ID: 05h (Message Signaled Interrupts)
 0000006c: 00 00 00 00
 00000070: 00 00 00 00
 00000074: 00 00 00 00
-00000078: 10 00 02 00
+00000078: 10 00 02 00 <- Capability Last : 00h, ID: 10h (PCI Express)
 0000007c: e1 8d e8 07
 00000080: 30 29 09 00
 00000084: 43 4c 45 00
@@ -236,3 +236,4 @@ int pci_read_config_byte(const struct pci_dev *dev, int where, u8 *val);
 # 参考
 
 - [osdev.org: PCI](https://wiki.osdev.org/PCI)
+- [PCI Code and ID Assignment Specification,Rev. 1.11](https://pcisig.com/sites/default/files/files/PCI_Code-ID_r_1_11__v24_Jan_2019.pdf)
