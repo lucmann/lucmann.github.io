@@ -233,6 +233,10 @@ pci 0000:01:00.0: ROM [mem 0xfff80000-0xffffffff pref]
 int pci_read_config_byte(const struct pci_dev *dev, int where, u8 *val);
 ```
 
+# 消失的南桥和北桥
+
+![](/images/pci/modern-computer.png)
+
 # 参考
 
 - [osdev.org: PCI](https://wiki.osdev.org/PCI)
