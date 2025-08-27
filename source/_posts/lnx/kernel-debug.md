@@ -102,6 +102,10 @@ trace-cmd list -e
 
 # CONFIG_DYNAMIC_DEBUG
 
+打开 **Dynamic Debug** 有好几种，但前提都是 `CONFIG_DYNAMIC_DEBUG=y`
+
+## 方法一：运行时打开
+
 Dynamic Debug 就通过 `/sys/kernel/debug/dynamic_debug/control` 文件打开或关闭特定文件的某行或函数里的打印，但它只对使用
 
 - `pr_debug()`
@@ -110,6 +114,16 @@ Dynamic Debug 就通过 `/sys/kernel/debug/dynamic_debug/control` 文件打开�
 - `print_hex_dump_bytes()`
 
 这 4 个函数的打印来有用。
+
+## 方法二：内核启动参数
+
+<span style="background-color: yellow; padding: 4px;">dyndbg="file arch/x86/pci +p"</span>
+
+这个启动参数会打开 `arch/x86/pci` 目录下所有 dynamic debug 打印，如果通过修改 `/etc/default/grub` 里的 `GRUB_CMDLINE_LINUX`, 需要对双引号进行转义
+
+```
+GRUB_CMDLINE_LINUX="dyndbg=\"file arch/x86/pci +p\""
+```
 
 # `CONFIG_DRM_USE_DYNAMIC_DEBUG`
 
