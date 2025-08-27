@@ -223,7 +223,19 @@ pci 0000:01:00.0: BAR 3 [mem 0xa0000000-0xa1ffffff 64bit pref]
 pci 0000:01:00.0: BAR 5 [io  0x3000-0x307f]
 pci 0000:01:00.0: ROM [mem 0xfff80000-0xffffffff pref]
 ```
-上面的 PCI config space dump 可以通过内核启动参数 <span style="background-color: yellow; padding: 4px;">pci=earlydump</span> 开启打印
+上面的 PCI config space dump 可以通过内核启动参数 <span style="background-color: yellow; padding: 4px;">pci=earlydump</span> 开启打印。所谓 **earlydump** 是指打印的是内核**未经修改的** config space, 也就是说是 UEFI 初始化过的 config space, 像 BAR 里的物理地址一般不会是这个设备最终的物理内存起始地址，内核一般都会**重新规划** PCI 设备的物理内存地址空间，由内核重新填入的 BAR 值，可以通过
+
+```bash
+lspci -vvv -s <Bus:Dev.Func>
+```
+
+或
+
+```bash
+lspci -xxx -s <Bus:Dev.Func>
+```
+
+来查看。
 
 ## Access to config space
 
