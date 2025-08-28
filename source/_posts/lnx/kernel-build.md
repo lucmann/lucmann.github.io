@@ -5,6 +5,13 @@ tags: [build]
 categories: linux
 ---
 
+| Distro      | Ubuntu                        | Arch Linux                    |
+|:------------|:------------------------------|:------------------------------|
+| Source      |[git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy](git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy) |[git@github.com:archlinux/linux.git](git@github.com:archlinux/linux.git) |
+| Initrd      |                               | `sudo mkinitcpio --generate <initrd-name> --kernel <kernel-version>` |
+
+<!--more-->
+
 # 编译内核
 
 - 配置内核最简单的方法是 `make olddefconfig`
@@ -29,7 +36,7 @@ categories: linux
 |:---------------------------------------------------------------|:-------------------------------------------------------|
 | gelf.h: No such file or directory                              | apt install libelf-dev                                 |
 | <openssl/opensslv.h>: No such file or directory                | apt install libssl-dev                                 |
-| No rule to make target 'debian/canonical-certs.pem'            | scripts/config --disable SYSTEM_TRUSTED_KEYS           |
+| No rule to make target 'debian/canonical-certs.pem'            | scripts/config --disable SYSTEM_TRUSTED_KEYRING        |
 | No rule to make target 'debian/canonical-revoked-certs.pem'    | scripts/config --disable SYSTEM_REVOCATION_KEYS        |
 
 ## Windows Subsytem for Linux
@@ -86,3 +93,8 @@ kernel=C:\\Users\\luc\\bzImage
 ```
 wsl --shutdown Ubuntu-20.04
 ```
+
+# 参考
+
+- [https://wiki.ubuntu.com/Kernel/SourceCode](https://wiki.ubuntu.com/Kernel/SourceCode)
+- [https://wiki.archlinux.org/title/Installation_guide](https://wiki.archlinux.org/title/Installation_guide)

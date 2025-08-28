@@ -100,6 +100,10 @@ mount -t tracefs none /sys/kernel/tracing
 trace-cmd list -e
 ```
 
+# CONFIG_IKCONFIG_PROC
+
+这个配置决定 `/proc/config.gz` 是否存在。Ubuntu 似乎默认关闭此配置，而是将内核 config 保存在 `/boot/config-$(uname -r)`
+
 # CONFIG_DYNAMIC_DEBUG
 
 打开 **Dynamic Debug** 有好几种，但前提都是 `CONFIG_DYNAMIC_DEBUG=y`
