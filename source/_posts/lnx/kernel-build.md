@@ -8,8 +8,10 @@ categories: linux
 | Distro      | Ubuntu                        | Arch Linux                    |
 |:------------|:------------------------------|:------------------------------|
 | source      |[git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy](git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy) |[git@github.com:archlinux/linux.git](git@github.com:archlinux/linux.git) |
-| initrd      | `sudo mkinitramfs -o /boot/initrd.img-KERNELVERSION KERNELVERSION` | `sudo mkinitcpio --generate <initrd-name> --kernel <kernel-version>` |
-| grub        | `sudo update-grub`            | `sudo update-grub`            |
+| initrd      | `sudo mkinitramfs -o /boot/initrd.img-KERNELVERSION KERNELVERSION` | `sudo mkinitcpio --generate /boot/initramfs-KERNELVERSION.img --kernel KERNELVERSION` |
+| grub        | `sudo update-grub`            | `sudo grub-mkconfig -o /boot/grub/grub.cfg`            |
+
+- `KERNELVERSION` 是 `make kernelrelease` 的输出，同时也是 `sudo make modules_install` 时在 `/lib/modules` 创建的目录名
 
 <!--more-->
 
