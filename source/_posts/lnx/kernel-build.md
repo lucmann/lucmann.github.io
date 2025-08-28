@@ -7,8 +7,9 @@ categories: linux
 
 | Distro      | Ubuntu                        | Arch Linux                    |
 |:------------|:------------------------------|:------------------------------|
-| Source      |[git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy](git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy) |[git@github.com:archlinux/linux.git](git@github.com:archlinux/linux.git) |
-| Initrd      |                               | `sudo mkinitcpio --generate <initrd-name> --kernel <kernel-version>` |
+| source      |[git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy](git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy) |[git@github.com:archlinux/linux.git](git@github.com:archlinux/linux.git) |
+| initrd      | `sudo mkinitramfs -o /boot/initrd.img-KERNELVERSION KERNELVERSION` | `sudo mkinitcpio --generate <initrd-name> --kernel <kernel-version>` |
+| grub        | `sudo update-grub`            | `sudo update-grub`            |
 
 <!--more-->
 
@@ -36,8 +37,8 @@ categories: linux
 |:---------------------------------------------------------------|:-------------------------------------------------------|
 | gelf.h: No such file or directory                              | apt install libelf-dev                                 |
 | <openssl/opensslv.h>: No such file or directory                | apt install libssl-dev                                 |
-| No rule to make target 'debian/canonical-certs.pem'            | scripts/config --disable SYSTEM_TRUSTED_KEYRING        |
-| No rule to make target 'debian/canonical-revoked-certs.pem'    | scripts/config --disable SYSTEM_REVOCATION_KEYS        |
+| No rule to make target 'debian/canonical-certs.pem'            | ./scripts/config --set-str SYSTEM_TRUSTED_KEYS ""      |
+| No rule to make target 'debian/canonical-revoked-certs.pem'    | ./scripts/config --set-str SYSTEM_REVOCATION_KEYS ""   |
 
 ## Windows Subsytem for Linux
 
