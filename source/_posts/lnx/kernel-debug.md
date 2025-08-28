@@ -117,13 +117,23 @@ Dynamic Debug 就通过 `/sys/kernel/debug/dynamic_debug/control` 文件打开�
 
 ## 方法二：内核启动参数
 
-<span style="background-color: yellow; padding: 4px;">dyndbg="file arch/x86/pci +p"</span>
+- 按 `file` 打开 dynamic debug
+
+<span style="background-color: yellow; padding: 4px;">dyndbg="file arch/x86/pci/* +p"</span>
 
 这个启动参数会打开 `arch/x86/pci` 目录下所有 dynamic debug 打印，如果通过修改 `/etc/default/grub` 里的 `GRUB_CMDLINE_LINUX`, 需要对双引号进行转义
 
 ```
-GRUB_CMDLINE_LINUX="dyndbg=\"file arch/x86/pci +p\""
+GRUB_CMDLINE_LINUX="dyndbg=\"file arch/x86/pci/* +p\""
 ```
+
+- 按 `module` 打开 dynamic debug
+
+<span style="background-color: yellow; padding: 4px;">dyndbg="module i915 +p"</span>
+
+如果要同时将 `arch/x86/pci/` 目录下所有文件和内核模块 `i915` 的 dynamic debug 都打开
+
+<span style="background-color: yellow; padding: 4px;">dyndbg="file arch/x86/pci/* +p;module i915 +p"</span>
 
 # `CONFIG_DRM_USE_DYNAMIC_DEBUG`
 
