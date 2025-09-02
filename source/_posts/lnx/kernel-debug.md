@@ -198,6 +198,14 @@ GRUB_CMDLINE_LINUX="dyndbg=\"file arch/x86/pci/* +p\""
 
 <span style="background-color: yellow; padding: 4px;">dyndbg=\"file arch/x86/pci/* +p;module i915 +p\"</span>
 
+#### 方法三：/etc/modprobe.d/xxx.conf
+
+由于 `dyndbg=` 内核参数一般在内核模块加载前就解析了，所以对于按模块打开 dynamic debug 来说，在 `/etc/modprobe.d/i915-debug.conf` 文件中设置更保险
+
+```
+options i915 dyndbg=+p
+```
+
 ### `CONFIG_DRM_USE_DYNAMIC_DEBUG`
 
 这是内核 6.1 (2022-12-11) 才引入的专门控制 `drm_dbg()` 是否用 **Dynamic Debug** 来实现的可配置选项。
