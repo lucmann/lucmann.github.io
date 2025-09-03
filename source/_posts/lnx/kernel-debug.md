@@ -96,6 +96,18 @@ kernel=C:\\Users\\luc\\bzImage
 ```
 wsl --shutdown Ubuntu-20.04
 ```
+
+# 编译工具
+
+内核源码树中 `tools` 目录下包含了相当有用的工具，像 perf, objtool 等等，可以通过 `make tools/help` 查看完整工具列表。以构建安装 perf 为例
+
+```bash
+make tools/perf
+sudo make -C tools/perf install prefix=/usr
+```
+
+对于修改安装路径, `prefix` 和 `DESTDIR` 变量都可以，但 PREFIX 不行。
+
 # 调试内核
 ## 与调试相关的内核配置
 
