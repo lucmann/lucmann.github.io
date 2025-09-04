@@ -80,7 +80,7 @@ Notes:
 
 - 每个 scheduler 对应多个不同优先级(`enum drm_sched_priority`)的 scheduler run queue (sw run queue)
 
-但似乎对于未来的硬件，尤其那些通过 FW/HW 调度 job 的 GPU, 更希望的拓扑结构是 scheduler : run queue : entity 是 1:1:1. 这样的 `drm_gpu_scheduler` 已经退化成一个 **dependency tracker**, 没有了实质的~~调度~~的作用。
+但似乎对于未来的硬件，尤其那些通过 FW/HW 调度 job 的 GPU, 更希望的拓扑结构是 [scheduler : run queue : entity 是 1:1:1](https://patchwork.freedesktop.org/patch/567300/). 这样的 `drm_gpu_scheduler` 已经退化成一个 **dependency tracker/resolver**, 没有了实质的~~调度~~的作用。
 
 ```mermaid
 flowchart TD
@@ -332,8 +332,15 @@ sequenceDiagram
 ```
 
 Note:
-- `drm_sched_free_job_work()` 和 `drm_sched_run_job_work()` 是分开的两个 work item, 但它俩都会被扔到同一个 workqueue 上 `submit_wq` (workqueue 的实现很有意思，异步执行的单位是函数 (work_struct)，而这些函数会被加入一个队列 (workqueue) 里推迟执行 (deferred)，只要队列不为空，后台线程们就把它们拿出来**并发地**执行 (CMWQ). 后台线程是一个由内核自动管理的线程池，唤醒和睡眠不用驱动管，驱动只需要 `queue_work_on()`)
--  gpu scheduler 里的 `submit_wq` 是一个 **Ordered Workqueue**, 意思就是加到这个 wq 上的函数保证是顺序执行的，这就天然地解决了 **run_job** 和 **free_job** 的依赖问题 (mutual exclusive)
+- `drm_sched_free_job_work()` 和 `drm_sched_run_job_work()` 是分开的两个 work item, 但它俩都会被扔到同一个 workqueue 上 `submit_wq` (workqueue 的实现很有意思，异步执行的单位是函数 (`work_struct`)，而这些函数会被加入一个内核工作队列 (`workqueue_struct`) 里**延迟执行** (deferred)，只要队列不为空，后台线程们就把它们拿出来**并发地**执行 (CMWQ). 后台线程是一个由内核自动管理的线程池，唤醒和睡眠不需要使用者干预，使用者(比方 GPU Scheduler)只需要调用 `queue_work(&workqueue_struct, &work_struct)` 将 work 加到相应的 workqueue 就行了
+- 内核 workqueue API 提供两个 work 入队函数 (enqueue):
+  ```c
+  static inline bool queue_work(struct workqueue_struct *wq, struct work_struct *work);
+  static inline bool schedule_work(struct work_struct *work);
+  ```
+  - 前者是将 workitem 放到用户自定义的 workqueue; 后者是将 workitem 放入一个全局 workqueue `system_wq`。
+  - 因为 GPU scheduler 的 `submit_wq` 是一个自定义的 workqueue, 所以它调用的是 `queue_work()`，而实际上有很多驱动会将一些 workitems 直接放入全局 workqueue `system_wq`
+- gpu scheduler 里的 `submit_wq` 是一个 **Ordered Workqueue**, 意思就是加到这个 wq 上的函数保证是顺序执行的，这就天然地解决了 **run_job** 和 **free_job** 的依赖问题 (mutual exclusive)
 
 # 参考资料
 
