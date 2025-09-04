@@ -340,6 +340,9 @@ Note:
   ```
   - 前者是将 workitem 放到用户自定义的 workqueue; 后者是将 workitem 放入一个全局 workqueue `system_wq`。
   - 因为 GPU scheduler 的 `submit_wq` 是一个自定义的 workqueue, 所以它调用的是 `queue_work()`，而实际上有很多驱动会将一些 workitems 直接放入全局 workqueue `system_wq`
+- `drm_sched_{run,free}_job_work()` 在哪个 **kworker** 上运行可以[通过 debugfs 来查看](https://www.kernel.org/doc/html/v4.14/core-api/workqueue.html#debugging)
+  - `echo workqueue:workqueue_queue_work > /sys/kernel/debug/tracing/set_event`
+  - `cat /sys/kernel/debug/tracing/trace_pipe > out.txt`
 - gpu scheduler 里的 `submit_wq` 是一个 **Ordered Workqueue**, 意思就是加到这个 wq 上的函数保证是顺序执行的，这就天然地解决了 **run_job** 和 **free_job** 的依赖问题 (mutual exclusive)
 
 # 参考资料
