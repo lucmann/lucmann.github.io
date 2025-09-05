@@ -151,6 +151,20 @@ Linux DRM 子系统的 `drm_gpu_scheduler` 负责提交和调度 GPU job，以�
 
 实际上，自从内核 v6.8-rc1 [a6149f039369 ("drm/sched: Convert drm scheduler to use a work queue rather than kthread")](https://lore.kernel.org/all/20231031032439.1558703-3-matthew.brost@intel.com/) `drm_gpu_scheduler` 的实现已经从 kthread 变成 work queue 了。 这个修改与 Intel Gen9+ 引入的 microcontrollers (μC) 之一 [GuC](https://igor-blue.github.io/2021/02/10/graphics-part1.html#the-guc) 有关。
 
+## `drm_sched_backend_ops`
+
+这个结构体定义一组回调函数，一般需要驱动实现， 并在 `drm_sched_init()` 时传入。
+
+- struct dma_fence *(*prepare_job)(struct drm_sched_job *job, struct drm_sched_entity *ent);
+* `struct dma_fence *(*run_job)(struct drm_sched_job *job);`
+- enum drm_gpu_sched_stat (*timedout_job)(struct drm_sched_job *job);
+* `void (*free_job)(struct drm_sched_job *job);`
+- void (*cancel_job)(struct drm_sched_job *job);
+    
+**NOTE:**
+- run_job() 和 free_job() 驱动必须实现
+- 这两个函数是由 kworker 异步执行的, 也就是在两个 CPU 核心上同时执行，就有发生**死锁**的可能。
+
 ## `drm_sched_rq`
 
 若干个 `drm_sched_entity` (list) 的封装。一个 scheduler 实例最多可以有 `DRM_SCHED_PRIORITY_COUNT` 个 `drm_sched_rq`。调度器调度的其实就是一个个 entity。 这么多个 entity 按什么顺序提交给 GPU 由具体的 **调度策略 (Scheduling Policy)** 决定，而**调度优先级 (Scheduling Priority)** 由 `drm_sched_rq` 实现，有多少个优先级，一个 `drm_gpu_scheduler` 里就有多少个 `drm_sched_rq`，每个优先级对应一个 `drm_sched_rq`。 
@@ -332,7 +346,7 @@ sequenceDiagram
 ```
 
 Note:
-- `drm_sched_free_job_work()` 和 `drm_sched_run_job_work()` 是分开的两个 work item, 但它俩都会被扔到同一个 workqueue 上 `submit_wq` (workqueue 的实现很有意思，异步执行的单位是函数 (`work_struct`)，而这些函数会被加入一个内核工作队列 (`workqueue_struct`) 里**延迟执行** (deferred)，只要队列不为空，后台线程们就把它们拿出来**并发地**执行 (CMWQ). 后台线程是一个由内核自动管理的线程池，唤醒和睡眠不需要使用者干预，使用者(比方 GPU Scheduler)只需要调用 `queue_work(&workqueue_struct, &work_struct)` 将 work 加到相应的 workqueue 就行了
+- `drm_sched_free_job_work()` 和 `drm_sched_run_job_work()` 是分开的两个 work item, 但它俩都会被扔到同一个 workqueue 上 `submit_wq` (workqueue 的实现很有意思，异步执行的单位是函数 (`work_struct`)，而这些函数会被加入一个内核工作队列 (`workqueue_struct`) 里**异步执行** (由 kworker 内核线程执行)，只要队列不为空，后台线程们就把它们拿出来**并发地**执行 (CMWQ). 后台线程是一个由内核自动管理的线程池，唤醒和睡眠不需要使用者干预，使用者(比方 GPU Scheduler)只需要调用 `queue_work(&workqueue_struct, &work_struct)` 将 work 加到相应的 workqueue 就行了
 - 内核 workqueue API 提供两个 work 入队函数 (enqueue):
   ```c
   static inline bool queue_work(struct workqueue_struct *wq, struct work_struct *work);
