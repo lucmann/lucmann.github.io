@@ -353,6 +353,11 @@ Note:
   static inline bool schedule_work(struct work_struct *work);
   ```
   - 前者是将 workitem 放到用户自定义的 workqueue; 后者是将 workitem 放入一个全局 workqueue `system_wq`。
+  - `system_wq` 等全局 workqueue 的 kworker 名是 `kworker/CPU#:POOL#[FLAG]-events`
+    ```
+    root          64      64       2  0 Sep02 ?        00:00:00 [kworker/7:0H-events_highpri]
+    root        3264    3264       2  0 Sep04 ?        00:00:06 [kworker/2:0-events]
+    ```
   - 因为 GPU scheduler 的 `submit_wq` 是一个自定义的 workqueue, 所以它调用的是 `queue_work()`，而实际上有很多驱动会将一些 workitems 直接放入全局 workqueue `system_wq`
 - `drm_sched_{run,free}_job_work()` 在哪个 **kworker** 上运行可以[通过 debugfs 来查看](https://www.kernel.org/doc/html/v4.14/core-api/workqueue.html#debugging)
   - `echo workqueue:workqueue_queue_work > /sys/kernel/debug/tracing/set_event`
