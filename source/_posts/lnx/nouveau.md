@@ -11,7 +11,7 @@ config:
     theme: 'forest'
 ---
 timeline
-    title NVIDIA Hardware History
+    title NVIDIA Desktop GPUs History
     section 前期 NVxx 时代
         1999 : NV04
         2004 : NV40
@@ -25,9 +25,12 @@ timeline
         2017 : GV1xx : Volta
         2018 : TU1xx : Turing : GPU System Processor support
         2020 : GA1xx : Ampere
+        2022 : AD1xx : Ada Lovelace
+        2025 : GB2xx : Blackwell
 ```
 <!--more-->
 
 # Reference
 
 - [LWN: NVIDIA GPU 和 Nouveau](https://blog.csdn.net/Linux_Everything/article/details/127780944)
+- [List of Nvidia GPUs](https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units)
