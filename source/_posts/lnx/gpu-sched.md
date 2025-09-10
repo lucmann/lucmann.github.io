@@ -209,9 +209,13 @@ struct drm_sched_fence {
 ```
 
 
-# 初始化 Scheduler 实例
+# GPU Scheduler 中的关键组件
 
-## v6.8
+- Entity
+- Workqueue
+
+## drm_sched 初始化
+- v6.8
 
 ```c
 int drm_sched_init(
@@ -263,7 +267,7 @@ int drm_sched_entity_init(
   atomic_t *guilty
 );
 
-## v5.4
+- v5.4
 
 ```c
 int drm_sched_init(
@@ -283,7 +287,7 @@ Note:
 - 5.4 没有让驱动提供一个 timeout_wq, 而是固定使用 delayable workqueue 去执行 [drm_sched_job_timedout()](https://elixir.bootlin.com/linux/v5.19.17/source/drivers/gpu/drm/scheduler/sched_main.c#L1016)
 - 参数中的 `timeout` 是以 jiffies 计算的，如果设置成 `MAX_SCHEDULE_TIMEOUT`， 表示由驱动自己处理超时
 
-# Entity - Jobs 的容器
+## Entity - GPU job 的容器
 
 ```mermaid
 sequenceDiagram
@@ -316,6 +320,13 @@ sequenceDiagram
     Kworker ->> Kworker : drm_sched_run_job_queue()
   end
 ```
+
+## Workqueue - 任务异步执行
+
+一个 `drm_gpu_scheduler` 里包括两个 workqueues ([`struct workqueue_struct`](https://elixir.bootlin.com/linux/v6.17-rc5/source/kernel/workqueue.c#L335)):
+
+- `timeout_wq`
+- `submit_wq`
 
 # Scheduler 如何工作
 
@@ -362,7 +373,7 @@ Note:
 - `drm_sched_{run,free}_job_work()` 在哪个 **kworker** 上运行可以[通过 debugfs 来查看](https://www.kernel.org/doc/html/v4.14/core-api/workqueue.html#debugging)
   - `echo workqueue:workqueue_queue_work > /sys/kernel/debug/tracing/set_event`
   - `cat /sys/kernel/debug/tracing/trace_pipe > out.txt`
-- gpu scheduler 里的 `submit_wq` 是一个 **Ordered Workqueue**, 意思就是加到这个 wq 上的函数保证是顺序执行的，这就天然地解决了 **run_job** 和 **free_job** 的依赖问题 (mutual exclusive)
+- 如果用户在初始化 `drm_gpu_scheduler` 时没有传入自己创建的 WQ, 那么内核会默认创建一个 **ordered workqueue** 并将其赋给 `drm_gpu_scheduler::submit_wq`, 这个保证了先挂到这个 WQ 的函数一定先执行, 通常 `drm_sched_run_job_work()` 会先挂到 `submit_wq` workqueue, 而 `drm_sched_free_job_work()` 后挂到 `submit_wq`
 
 # 参考资料
 
