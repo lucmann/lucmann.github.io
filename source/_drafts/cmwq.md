@@ -19,7 +19,12 @@ categories: linux
 typedef void (*work_func_t)(struct work_struct *work);
 ```
 
+# shared workqueue vs non-shared workqueue
+
+shared workqueue 和 non-shared workqueue 的主要区别点是看这个workqueue 里的work item 的执行者，也就是 **kworker 是共享的还是专属的**。如果一个 workqueue 的执行者 kworker 只执行这个 workqueue 上的 work item, 那这个 workqueue 就是 **non-shared**
+
 # 参考
 
+- [工作队列](https://docs.kernel.org/translations/zh_CN/core-api/workqueue.html)
 - [Concurrency Managed Workqueue之（一）：workqueue的基本概念](http://www.wowotech.net/irq_subsystem/workqueue.html)
 - [The end of tasklets](https://lwn.net/Articles/960041/)

@@ -346,14 +346,20 @@ sequenceDiagram
   KMD ->> KMD : drm_sched_job_arm()
   KMD ->> KMD : drm_sched_entity_push_job()
   KMD ->> KMD : drm_sched_waitup()
-  note right of KMD : 将 work item 扔到 submit_wq 上去
-  KMD ->> KMD : drm_sched_run_job_queue()
-  note right of KMD : 一旦 workqueue 上有了 work,<br>空闲的 kworker 就会执行 work item
-  KMD ->> Kworker : wakeup
-  Kworker ->> Kworker : drm_sched_run_job_work()
-  Kworker ->> Kworker : drm_sched_entity_pop_job()
-  Kworker ->> Kworker : sched->ops->run_job()
-  note left of Kworker : writel(jc, dev->iomem + reg)<br>Go!
+  rect rgb(193, 255, 37)
+    note left of Kworker : drm_sched_run_job_work<br>即submit_wq 上的 work item<br>每次 queue_work() 入队，<br>执行线程 kworker 都会异步执行这个函数
+    note right of Kworker : 根据优先级和调度策略选实体
+    Kworker ->> Kworker : drm_sched_select_entity()
+    note right of Kworker : 弹出一个 job
+    Kworker ->> Kworker : drm_sched_entity_pop_job()
+    note right of Kworker : 执行驱动的回调函数
+    Kworker ->> Kworker : sched->ops->run_job()
+    note right of Kworker : 唤醒 drm_sched_entity_flush() 时,<br>被睡眠的那些进程<br>被唤醒的进程重新检测<br>drm_sched_entity_is_idle()<br>如果不idle就继续睡
+    Kworker ->> Kworker : wake_up(wait_queue_head_t)
+    note right of Kworker : 入队
+    Kworker ->> Kworker : drm_sched_run_job_queue()
+    note left of Kworker : writel(jc, dev->iomem + reg)<br>Go!
+  end
 ```
 
 Note:
