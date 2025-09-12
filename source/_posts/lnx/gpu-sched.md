@@ -346,7 +346,7 @@ sequenceDiagram
   KMD ->> KMD : drm_sched_job_arm()
   KMD ->> KMD : drm_sched_entity_push_job()
   KMD ->> KMD : drm_sched_waitup()
-  rect rgb(193, 255, 37)
+  rect rgb(205, 228, 152)
     note left of Kworker : drm_sched_run_job_work<br>即submit_wq 上的 work item<br>每次 queue_work() 入队，<br>执行线程 kworker 都会异步执行这个函数
     note right of Kworker : 根据优先级和调度策略选实体
     Kworker ->> Kworker : drm_sched_select_entity()
