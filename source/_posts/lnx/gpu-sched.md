@@ -370,7 +370,7 @@ Note:
   static inline bool schedule_work(struct work_struct *work);
   ```
   - 前者是将 workitem 放到用户自定义的 workqueue; 后者是将 workitem 放入一个全局 workqueue `system_wq`。
-  - `system_wq` 等全局 workqueue 的 kworker 名是 `kworker/CPU#:POOL#[FLAG]-events`
+  - `system_wq` 等全局 workqueue 的执行线程 kworker 的命名一般是 `kworker/CPU#:POOL#[FLAG]-events`
     ```
     root          64      64       2  0 Sep02 ?        00:00:00 [kworker/7:0H-events_highpri]
     root        3264    3264       2  0 Sep04 ?        00:00:06 [kworker/2:0-events]
