@@ -373,7 +373,7 @@ Note:
 - `drm_sched_{run,free}_job_work()` 在哪个 **kworker** 上运行可以[通过 debugfs 来查看](https://www.kernel.org/doc/html/v4.14/core-api/workqueue.html#debugging)
   - `echo workqueue:workqueue_queue_work > /sys/kernel/debug/tracing/set_event`
   - `cat /sys/kernel/debug/tracing/trace_pipe > out.txt`
-- 如果用户在初始化 `drm_gpu_scheduler` 时没有传入自己创建的 WQ, 那么内核会默认创建一个 **ordered workqueue** 并将其赋给 `drm_gpu_scheduler::submit_wq`, 这个保证了先挂到这个 WQ 的函数一定先执行, 通常 `drm_sched_run_job_work()` 会先挂到 `submit_wq` workqueue, 而 `drm_sched_free_job_work()` 后挂到 `submit_wq`
+- 如果用户在初始化 `drm_gpu_scheduler` 时没有传入自己创建的 WQ, 那么内核会默认创建一个 **ordered workqueue** 并将其赋给 `drm_gpu_scheduler::submit_wq`, ordered workqueue 保证了先入队的函数一定先执行, 通常 `drm_sched_run_job_work()` 会先入队, 而 `drm_sched_free_job_work()` 后入队，这也正好符合正常的执行逻辑。
 
 # 参考资料
 
