@@ -18,7 +18,7 @@ timeline
         2006 : NV50 : Tesla : Introduction of per context VMA
     section GeForce GX1xx 时代
         2010 : GF1xx : NVC0 - Fermi
-        2012 : GK1xx : NVE0 - Kepler : Vulkan support
+        2012 : GK1xx : NVE0 - Kepler : Vulkan support : nouveau start support reclocking
         2014 : GM1xx : Maxwell
         2014 : GM2xx : Maxwell 2 : Start of signed firmware
         2016 : GP1xx : Pascal
