@@ -118,7 +118,7 @@ sudo -u gdm DISPLAY=:0 XAUTHORITY=/run/user/120/gdm/Xauthority import -display :
 
 ## GNOME Display Manager
 
-## "阅后即焚"式生成 Greeter
+## [Observer Effect](https://en.wikipedia.org/wiki/Observer_effect_(physics))-style `/usr/lib/gdm-x-session`
 
 ![](/images/arch/gdm-x-session-oneshot.png)
 
