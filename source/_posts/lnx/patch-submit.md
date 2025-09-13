@@ -71,7 +71,7 @@ git format-patch HEAD^ -v 2 -o /tmp/
             linux-kernel@vger.kernel.org (open list)
             ```
 
-### 使用 mutt 提交 patch
+### 使用 mutt
 
 提交 Linux kernel patch 实际上就是用邮件客户端将生成好的 patch 文件发送给相关的 maintainers 和 maillists. `git send-email` 也可以做同样的事，这里使用的是 mutt. mutt 的基本命令行格式是
 
@@ -81,7 +81,7 @@ mutt [-Enx] [-e cmd] [-F file] [-H file] [-i file] [-s subj] [-b addr] [-c addr]
 
 本例中只使用到了 `-H file` 选项，它将包含有邮件头和邮件主体的 patch 文件作为参数创建邮件草稿 (意思是该命令执行后还会让你再编辑邮件，包括收件人，邮件内容增删改等）。本例中 mutt 的唯一参数是后面的收件人列表，它是通过内核源码树里的一个[脚本工具](https://elixir.bootlin.com/linux/latest/source/scripts/get_maintainer.pl)自动获取的。
 
-```
+```shell
 mutt -H /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch \
     "`./scripts/get_maintainer.pl --separator , --norolestats \
     /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch`"
@@ -91,36 +91,23 @@ mutt -H /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch \
 
 ![patch-backport](/images/patch-submit/patch-backport.png)
 
-### 使用 git-send-email 提交 patch
+### 使用 git send-email
 
-git-send-email 配置 stmp.gmail 和使用都相较于 mutt 简单些。
+```shell
+git send-email --to dri-devel@lists.freedesktop.org --cc-cmd "./scripts/get_maintainer.pl --nogit-fallback --norolestats" /tmp/0001-drm-doc-Fix-doc-in-drm_file.patch
+```
+
+`git send-email` 同样需要配置发送邮件服务器 stmp
 
 - 将 user@stmp.gmail.com 的密码配置在 ~/.gitconfig 的 sendemail 段
 
     ```
     [sendemail]
+        smtpserver = smtp.gmail.com
+        smtpencryption = tls
+        smtpserverport = 587
+        smtpuser = onion0709@gmail.com
         smtppass = <16 characters Google App Password>
-    ```
-
-    ```
-    ➜  drm git:(drm-misc-next) git send-email --to luc@sietium.com --no-cc /tmp/v5-1-1-drm-doc-Document-DRM-device-reset-expectations.patch
-    /tmp/v5-1-1-drm-doc-Document-DRM-device-reset-expectations.patch
-    OK. Log says:
-    Server: smtp.gmail.com
-    MAIL FROM:<onion0709@gmail.com>
-    RCPT TO:<luc@sietium.com>
-    From: Luc Ma <onion0709@gmail.com>
-    To: luc@sietium.com
-    Subject: [v5,1/1] drm/doc: Document DRM device reset expectations
-    Date: Tue, 18 Jul 2023 22:18:19 +0800
-    Message-Id: <20230627132323.115440-1-andrealmeid@igalia.com>
-    X-Mailer: git-send-email 2.25.1
-    Content-Type: text/plain; charset="utf-8"
-    MIME-Version: 1.0
-    X-Patchwork-Id: 544431
-    Content-Transfer-Encoding: 8bit
-
-    Result: 250
     ```
 
 ## 注意事项
