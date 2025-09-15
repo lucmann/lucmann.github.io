@@ -9,7 +9,7 @@ categories: hardware
 
 <!--more-->
 
-# PCI config space (<span style="color: red;">256 Bytes per Device</span>)
+# PCI Config Space (<span style="color: red;">256 Bytes per Device</span>)
 
 PCI config space 本质上是 64 个 32-bit 寄存器
 
@@ -226,23 +226,38 @@ pci 0000:01:00.0: ROM [mem 0xfff80000-0xffffffff pref]
 上面的 PCI config space dump 可以通过内核启动参数 <span style="background-color: yellow; padding: 4px;">pci=earlydump</span> 开启打印。所谓 **earlydump** 是指打印的是内核**未经修改的** config space, 也就是说是 UEFI 初始化过的 config space, 像 BAR 里的物理地址一般不会是这个设备最终的物理内存起始地址，内核一般都会**重新规划** PCI 设备的物理内存地址空间，由内核重新填入的 BAR 值，可以通过
 
 ```bash
-lspci -vvv -s <Bus:Dev.Func>
+lspci -xxx -s <Bus:Dev.Func>
 ```
 
 或
 
 ```bash
-lspci -xxx -s <Bus:Dev.Func>
+xxd /sys/bus/pci/devices/<Domain:Bus:Dev.Func>/config
 ```
 
 来查看。
 
-## Access to config space
+# PCI Extended Config Space (<span style="color: red;">0x100 ~ 0xFFF</span>)
 
-内核访问 PCI config space 的 API 都定义在 `drivers/pci/access.c` 中
+PCI 的 Capability 有 Base 和 Extended 之分，Base Capability List 在 PCI Config Space, 而 Extended Capability List 在 Extended Config Space，即在整个配置空间 0x100 的位置。
 
+查看方法同上
+
+```bash
+lspci -xxxx -s <Bus:Dev.Func>
 ```
-int pci_read_config_byte(const struct pci_dev *dev, int where, u8 *val);
+
+或
+
+```bash
+xxd /sys/bus/pci/devices/<Domain:Bus:Dev.Func>/config
+```
+
+以上都是纯数据形式打印，如果想以 Human-readable 形式看到，请使用
+
+
+```bash
+lspci -vv -s <Domain:Bus:Dev.Func>
 ```
 
 # 消失的南桥和北桥
