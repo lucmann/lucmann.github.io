@@ -85,6 +85,8 @@ mutt -H /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch \
 git send-email --to dri-devel@lists.freedesktop.org --cc-cmd "./scripts/get_maintainer.pl --nogit-fallback --norolestats" /tmp/0001-drm-doc-Fix-doc-in-drm_file.patch
 ```
 
+## 注意事项
+
 `git send-email` 同样需要配置发送邮件服务器 stmp
 
 - 将 user@stmp.gmail.com 的密码配置在 ~/.gitconfig 的 sendemail 段
@@ -97,13 +99,15 @@ git send-email --to dri-devel@lists.freedesktop.org --cc-cmd "./scripts/get_main
         smtpuser = onion0709@gmail.com
         smtppass = <16 characters Google App Password>
     ```
-
-## 注意事项
-
 - mutt 需要配置 IMAP/SMTP, 即邮件收发协议配置 (这是整个过程中最费劲的)
     mutt 的配置文件默认路径是 `$HOME/.mutt/muttrc`
 - git 需要配置完整的 `user.name`, `user.email`.
 - `git commit` 时需要加 `-s` (`--signoff`) 来自动增加 Signed-off-by 标签 (如果你 Signed-off-by 标签的邮件地址和发送 patch 的邮箱地址不同的话，还需要在邮件主体的第一行手动添加 `From: Zhang San <xxx@yourmail.com>`, xxx@yourmail.com 是你的 Signed-off-by 邮件地址) 
+- 如果 patch 邮件发出后2,3周，甚至一个月都没有收到任何回应，在确认收件地址没问题的情况下，可以再次 `git send-email` 原来的patch, 同时**在邮件主题手动加上 RESEND** 标识
+
+    ```
+    [PATCH RESEND] sub/sys: Condensed patch summary
+    ```
 
 # 参考
 
