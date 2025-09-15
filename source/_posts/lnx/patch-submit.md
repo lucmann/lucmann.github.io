@@ -14,31 +14,19 @@ Linux 内核的 patch 是以纯文本的邮件形式进行提交和代码走查�
 - Windows Subsystem for Linux, Ubuntu 20.04 LTS (Focal Fossa)
 - 邮件客户端 mutt 1.13.2 (`apt install mutt`)
 - git 2.25.1
-- 内核 DRM 子系统 git tree [drm-misc](https://cgit.freedesktop.org/drm/drm-misc/)
-
-    ```
-    drm     git://anongit.freedesktop.org/drm/drm (fetch)
-    drm     git://anongit.freedesktop.org/drm/drm (push)
-    drm-misc        git://anongit.freedesktop.org/drm/drm-misc (fetch)
-    drm-misc        git://anongit.freedesktop.org/drm/drm-misc (push)
-    origin  git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git (fetch)
-    origin  git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git (push)
-    stable  git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git (fetch)
-    stable  git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git (push)
-
-    ```
+- kernel git tree (mainly DRM) [https://gitlab.freedesktop.org/drm](https://gitlab.freedesktop.org/drm)
 
 # 过程
 
 ## 准备 patch
 
-当你的 commit 已经在源码树上提交好后，只需使用 `git format-patch` 命令即可轻松生成一个内核 patch (假设 patch 里只包含一个 commit)
+- 当你的 commit 已经在源码树上提交好后，只需使用 `git format-patch` 命令即可轻松生成一个内核 patch (假设 patch 里只包含一个 commit)
 
 ```
 git format-patch HEAD^ -o /tmp/   # 将生成的 patch 文件保存在 /tmp 目录
 ```
 
-当你的 patch 被开发者 review 后，如果需要修改，修改后可通过增加 `-v N` 选项生成下一个版本的 patch
+- 当你的 patch 被开发者 review 后，如果需要修改，修改后可通过增加 `-v N` 选项生成下一个版本的 patch
 
 ```
 git format-patch HEAD^ -v 2 -o /tmp/
@@ -117,4 +105,7 @@ git send-email --to dri-devel@lists.freedesktop.org --cc-cmd "./scripts/get_main
 - git 需要配置完整的 `user.name`, `user.email`.
 - `git commit` 时需要加 `-s` (`--signoff`) 来自动增加 Signed-off-by 标签 (如果你 Signed-off-by 标签的邮件地址和发送 patch 的邮箱地址不同的话，还需要在邮件主体的第一行手动添加 `From: Zhang San <xxx@yourmail.com>`, xxx@yourmail.com 是你的 Signed-off-by 邮件地址) 
 
+# 参考
+
+- [Submitting patches: the essential guide to getting your code into the kernel](https://www.kernel.org/doc/html/latest/process/submitting-patches.html)
 
