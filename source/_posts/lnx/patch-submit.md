@@ -108,6 +108,7 @@ git send-email --to dri-devel@lists.freedesktop.org --cc-cmd "./scripts/get_main
     ```
     [PATCH RESEND] sub/sys: Condensed patch summary
     ```
+- `git send-email -v 2 --in-reply-to="<v1-message-id> ..."` 避免因提供补丁的下一个版本而中断线程。
 
 # 参考
 
