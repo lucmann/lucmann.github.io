@@ -5,13 +5,22 @@ tags: [Hardware]
 categories: hardware
 ---
 
-![PCIe Type 0 (Non-Bridge) Configuration Space Header](/images/pci/Pci-config-space.svg)
 
+![pci-configuration-space-memory-map](/images/pci/pci-configuration-space-memory-map.png)
 <!--more-->
 
 # PCI Config Space (<span style="color: red;">256 Bytes per Device</span>)
 
 PCI config space 本质上是 64 个 32-bit 寄存器
+
+![Type 0 / 1 PCI Configuration Space Header](/images/pci/pci-configuration-space-headers.png)
+## PCI 3.0 Type 0 Configuration Space Header
+
+**Type 0 Configuration Space Header** 用于最终的实际功能设备，也就是 **Endpoint Device**
+
+## PCI 3.0 Type 1 Configuration Space Header
+
+**Type 1 Configuration Space Header** 用于连接两条总线的设备，也就是 **Bridge Device**
 
 ```
 pci 0000:00:00.0: config space:
