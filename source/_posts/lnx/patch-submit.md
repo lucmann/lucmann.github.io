@@ -109,6 +109,17 @@ git send-email --to dri-devel@lists.freedesktop.org --cc-cmd "./scripts/get_main
     [PATCH RESEND] sub/sys: Condensed patch summary
     ```
 - `git send-email -v 2 --in-reply-to="<v1-message-id> ..."` 避免因提供补丁的下一个版本而中断线程。
+- 关于补丁的 Changelog, 一般在 maintainer 应用补丁时是忽略的，这就需要在 commit message 时，在 `Signed-off-by` 后面空一行，手动加上 `---`, 然后再空一行，开始写 Changelog
+
+    ```
+    Signed-off-by: Zhang San <zhang.san@gmail.com>
+
+    ---
+
+    v2:
+    - blablabla
+    - asdfasdfasdf
+    ```
 
 # 参考
 
