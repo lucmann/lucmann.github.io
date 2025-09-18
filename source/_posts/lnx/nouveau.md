@@ -30,6 +30,8 @@ timeline
 ```
 <!--more-->
 
+![](/images/nouveau/benchmarks-on-gp108.png)
+
 # Reference
 
 - [GPU Architecture Overview](https://insujang.github.io/2017-04-27/gpu-architecture-overview/)
