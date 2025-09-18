@@ -163,6 +163,23 @@ mount -t tracefs none /sys/kernel/tracing
 
 #### ftrace
 
+ftrace 常用的有两种：**基于 function 的**和**基于 event 的**
+
+- 基于 function
+  * `cat available_tracers` 查看有哪些 tracers
+  * `echo function_graph > current_tracer` 从 `available_tracers` 中选择一个 tracer
+  * `echo xxxxx > set_graph_function` 从 `available_filter_functions` 中选择几个 functions
+  * `echo 1 > tracing_on` 启动 trace
+  * `cat trace` 或 `cat trace_pipe` 查看结果
+- 基于 event
+  * `cat available_events` 查看有哪些 events
+  * `echo amdgpu:amdgpu_sched_run_job > set_event` 添加 event
+    * `echo amdgpu:amdgpu_device_wreg >> set_event` 继续追加 event
+  * `echo 1 > tracing_on` 启动 trace
+  * `cat trace` 或 `cat trace_pipe` 查看结果
+
+以上操作均需要 **root 权限**， 在目录 **`/sys/kernel/debug/tracing`** 下执行
+
 #### trace-cmd
 
 **trace-cmd** 实际上是为了方便使用 **ftrace**, 比方下面的 trace-cmd 命令与直接 `cat /sys/kernel/tracing/available_events` 是等价的
