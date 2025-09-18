@@ -109,7 +109,7 @@ git send-email --to dri-devel@lists.freedesktop.org --cc-cmd "./scripts/get_main
     [PATCH RESEND] sub/sys: Condensed patch summary
     ```
 - `git send-email -v 2 --in-reply-to="<v1-message-id> ..."` 避免因提供补丁的下一个版本而中断线程。
-- 对于补丁集 (Patch Series), 一般 Changelog 会写在补丁集的 cover letter 里。对于单个补丁，如果不想让 Changelog 出现在 commit message 里，但又想给 Maintainer 提供补丁迭代的信息，可以在 `Signed-off-by` 后面**手动加上 `---`**, 然后开始写 Changelog(如下), 这样 Changelog 就不会出现在最终的 Commit message 里，
+- 对于补丁集 (Patch Series), 一般 Changelog 会写在补丁集的 cover letter 里。对于单个补丁，如果不想让 Changelog 出现在 commit message 里，但又想给 Maintainer 提供补丁迭代的信息，可以在 `Signed-off-by` 后面**手动加上 `---`**, 然后开始写 Changelog(如下), 这样 Changelog 就不会出现在最终的 Commit message 里， **修改的时机**可以在 `git commit -s` 写提交日志时，也可以在 `git send-email --to ...` 发送邮件时选择 `[e]dit`
 
     ```
     ...
