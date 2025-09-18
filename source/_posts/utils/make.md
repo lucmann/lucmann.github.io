@@ -150,7 +150,7 @@ $(info $(CURDIR))
   ```
   $(if condition, then-part[, else-part])
   ```
-  * 如果 *condition* 展开后是 non-empty string, 那么条件为真
+  * 如果 *condition* 展开后是 **非空字串**non-empty string, 则为真，如果是**空字串**，则执行 `else-part`(如果有的话)
   * *then-part* 和 *else-part* 永远只能有一个被求值 (evaluated)
   * if 函数同样有返回值，条件真时，返回 *then-part* 的求值结果; 条件假时，返回 *else-part* 的求值结果, 如果没有 *else-part*, 返回空字串
 
@@ -203,7 +203,20 @@ $(call rust_exports,$<,"EXPORT_SYMBOL_RUST_GPL(%s);\n")
 ```
 - 调用自定义函数使用 Make 内置函数 `$(call variable,param,param,...)`
 - 在这个例子里，第1个实参是 `$<`, 第2个实参是一个字符串，实际上是 awk printf 函数接受的**格式字符串(format string)** 
-    
+
+### 函数 例2
+
+```makefile
+if_makefile_exists = $(if $(if-exist-cond),$(cmd),@：)
+if-exist-cond = $(wildcard $(1)/Makefile)
+cmd = make -C $(1) $(2)
+```
+
+- `if_makefile_exists` 函数接受两个参数，
+  * 参数1：目录名
+  * 参数2：Target
+- 功能是如果**参数1**指定的目录下存在 Makefile, 则构建**参数2**指定的目标，否则什么都不做(`@:`)
+- 调用方法：`$(call if_makefile_exists,images/dot,all)`
   
 # Make 用户手册
 
