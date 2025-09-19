@@ -27,7 +27,7 @@ timeline
         2010 : GF1xx : NVC0 - Fermi
         2012 : GK1xx : NVE0 - Kepler : Vulkan support : nouveau start support reclocking
         2014 : GM1xx : Maxwell
-        2014 : GM2xx : Maxwell 2 : Start of signed firmware
+        2014 : GM2xx : Maxwell 2 : Start of signed firmware thus little chance to reclock
         2016 : GP1xx : Pascal
         2017 : GV1xx : Volta
     section New era for open source (GSP)
