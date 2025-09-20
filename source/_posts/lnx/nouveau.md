@@ -23,7 +23,7 @@ timeline
         1999 : NV04
         2004 : NV40
         2006 : NV50 : Tesla : Introduction of per context VMA
-    section pre-Turing era (no reclocking)
+    section pre-Turing era
         2010 : GF1xx : NVC0 - Fermi
         2012 : GK1xx : NVE0 - Kepler : Vulkan support : nouveau start support reclocking
         2014 : GM1xx : Maxwell
