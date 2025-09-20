@@ -254,6 +254,41 @@ pub fn foo_bar(input: TokenStream) -> TokenStream {
 
 # Closures 闭包(匿名函数)
 
+Rust closure 和 C++ 的 lambda 类似，都是实现**匿名函数**，都是一种语法糖，也都是**零开销抽象**。Rust closure 的一般语法是
+
+```rust
+let a_closure = || { .... };
+// now you can call it
+a_closure();
+```
+- 当函数体只有一个表达式时，花括号都可以省略
+- Rust closure 的变量捕获相对简单，因为它是由编译器隐式地自动完成的(根据你使用变量的方式)
+- 下面是一个使用 closure 的例子
+
+    ```rust
+    let _: Result = util::wait_on(Delta::from_micros(10), || None);
+    ```
+    - `util::wait_on()` 的第2个参数的类型 `F`, 是一个实现了 `Fn()` trait 且返回值类型是 `Option<R>` 的类型
+    - 第2个实参： `|| None` (这个闭包够简单吧) 符合这个类型的要求
+    - `Option<T>` 是个泛型枚举类型，`None` 就是它的一个枚举值
+    - [`util::wait_on()`](https://elixir.bootlin.com/linux/v6.17-rc6/source/drivers/gpu/nova-core/util.rs#L35)的实现如下
+
+        ```rust
+        pub(crate) fn wait_on<R, F: Fn() -> Option<R>>(timeout: Delta, cond: F) -> Result<R> {
+            let start_time = Instant::<Monotonic>::now();
+
+            loop {
+                if let Some(ret) = cond() {
+                    return Ok(ret);
+                }
+
+                if start_time.elapsed().as_nanos() > timeout.as_nanos() {
+                    return Err(ETIMEDOUT);
+                }
+            }
+        }
+        ```
+
 # 参考
 - [The Cargo Book](https://doc.rust-lang.org/cargo/index.html)
 - [Rust 语言圣经](https://course.rs/basic/variable.html)👍
