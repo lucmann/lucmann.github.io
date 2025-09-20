@@ -163,15 +163,27 @@ Nightly rustc 对于构建 Rust for Linux 不是必需的，但因为一些编�
 - `rustup default nightly` or `rustup default stable`
     - 在 nightly 和 stable 之间切换
 
-## Macros
+# Macros
 
 Rust 中的宏虽说是强大，但也非常复杂，单看它文档里的**声明宏**的语法定义就头大了，更不用说过程宏了。但 Rust 的宏强大就强大在**过程宏**，声明宏只是减少代码量，而过程宏能让编译器**自动生成代码**。
 
 - [https://doc.rust-lang.org/reference/macros-by-example.html](https://doc.rust-lang.org/reference/macros-by-example.html)
 
-### Declarative Macros 声明宏
+## Declarative Macros 声明式宏 `macro_rules!`
 
-Rust 声明宏给人的感觉就好像是把编译器前端的**词法分析(Lexical)**, **语法分析(Syntactic)** 开放给了用户，用户根据这套语法分析逻辑自己定义代码。内核中的 `dev_dbg` 就是一个声明式宏，实际上 `crate::dev_printk` 还是一个声明式宏
+Rust 声明式宏给人的感觉就好像是把编译器前端的**词法分析(Lexical)**, **语法分析(Syntactic)** 开放给了用户，用户根据这套语法分析逻辑自己定义代码。定义一个声明式宏的一般语法是
+
+```rust
+macro_rules! MACRO_NAME {
+    ( PATTERN ) => {
+        .....
+    }
+}
+```
+
+声明式宏有点像**模式匹配**(至少它们都用到 `=>`🐶), 调用宏时传入的**那段字串**会与 **PATTERN** 的结构匹配，一旦匹配就会按**展开规则**进行展开，这里的**展开规则**本身的写法很复杂，但也很强大。
+
+内核中的 `dev_dbg` 就是一个声明式宏，实际上 `crate::dev_printk` 还是一个声明式宏
 
 - dev_dbg 宏定义
 ```rust
@@ -209,15 +221,27 @@ dev_dbg!(dev, "GPU instance built\n");
 
 `dev_dbg!(dev, "GPU instance built\n")` 最终展开后就是 `dev.pr_dbg(::core::format_args!("GPU instance built\n"))`
 
-### Procedural Macros 过程宏
+## Procedural Macros 过程宏
 
 - 函数式过程宏
+
+函数式过程宏的一般语法是
+
+```rust
+mod foo;
+
+#[proc_macro_derive(Name)]
+pub fn foo_bar(input: TokenStream) -> TokenStream {
+    foo::foo_bar(input.into())).into()
+}
+```
+具体的宏的实现(如何把input TokenStream 变成结果 TokenStream) 一般在一个单独的 rust mod 里。
 
 - 属性宏
 
 - 派生宏
 
-## Attribute
+### Attribute
 
 - Outer attribute
     * `#[...]`
@@ -225,9 +249,15 @@ dev_dbg!(dev, "GPU instance built\n");
 - Inner attribute
     * `#![...]`
         - 修饰它所在的整个项 (crate, mod)
+            
+# Traits
+
+# Closures 闭包(匿名函数)
 
 # 参考
 - [The Cargo Book](https://doc.rust-lang.org/cargo/index.html)
 - [Rust 语言圣经](https://course.rs/basic/variable.html)👍
 - [Rust for Linux](https://rust-for-linux.com/)👀
 - [rust.docs.kernel.org](https://rust.docs.kernel.org/kernel/)
+- [The Rust Programming Language - Macros](https://doc.rust-lang.org/book/ch20-05-macros.html)
+- [The Rust Programming Language - Closures: Anonymous Functions That Capture Their Environment](https://doc.rust-lang.org/book/ch13-01-closures.html)
