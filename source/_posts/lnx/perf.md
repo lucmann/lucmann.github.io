@@ -9,6 +9,10 @@ categories: linux
 
 <!--more-->
 
+# 原理
+
+perf 使用的是采样(Sampling)技术
+
 # 环境 & 版本
 
 - Linux 5.10.16.3-microsoft-standard-WSL2 x86_64 x86_64
@@ -63,6 +67,12 @@ root@sie-luc:~# cat /sys/kernel/debug/tracing/events/dma_fence/dma_fence_enable_
 
 - `perf script | /path/to/FlameGraph/stackcollapse-perf.pl | /path/to/FlameGraph/framegraph.pl > result.svg`
     - 生成火焰图需要这个脚本工具 [FlameGraph](https://github.com/brendangregg/FlameGraph)，而且如果想看到详细的调用栈需要编译跟踪对象为 **Debug** 版本
+    - 最近有一个 Rust 写的 [flamegraph-rs/flamegraph](https://github.com/flamegraph-rs/flamegraph) 项目，用 `flamegraph` 二进制可执行程序代替了原来的 Perl 脚本，而且把原来分别执行 `perf record` 和 `perf script` 这两步合成一步，即可生成火焰图
+
+        ```shell
+        flamegraph -- vkgears
+        ```
+        ![flamegraph-rs/flamegraph](/images/perf/flamegraph.svg)
 
 # References
 
