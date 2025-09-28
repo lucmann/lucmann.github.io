@@ -221,9 +221,13 @@ dev_dbg!(dev, "GPU instance built\n");
 
 `dev_dbg!(dev, "GPU instance built\n")` 最终展开后就是 `dev.pr_dbg(::core::format_args!("GPU instance built\n"))`
 
-## Procedural Macros 过程宏
+## Procedural Macros 过程宏 Rust code that generates rust code
 
-- 函数式过程宏
+- Function-like macros
+- derive macros
+- attribute macros
+
+### Function-like macros
 
 函数式过程宏的一般语法是
 
@@ -237,11 +241,9 @@ pub fn foo_bar(input: TokenStream) -> TokenStream {
 ```
 具体的宏的实现(如何把input TokenStream 变成结果 TokenStream) 一般在一个单独的 rust mod 里。
 
-- 属性宏
+### derive macros `#[derive(Debug)]`
 
-- 派生宏
-
-### Attribute
+### attribute macros `#[bitfield]`
 
 - Outer attribute
     * `#[...]`
@@ -294,5 +296,6 @@ a_closure();
 - [Rust 语言圣经](https://course.rs/basic/variable.html)👍
 - [Rust for Linux](https://rust-for-linux.com/)👀
 - [rust.docs.kernel.org](https://rust.docs.kernel.org/kernel/)
+- [The best way to learn procedural macros is by writing them](https://github.com/dtolnay/proc-macro-workshop)
 - [The Rust Programming Language - Macros](https://doc.rust-lang.org/book/ch20-05-macros.html)
 - [The Rust Programming Language - Closures: Anonymous Functions That Capture Their Environment](https://doc.rust-lang.org/book/ch13-01-closures.html)
