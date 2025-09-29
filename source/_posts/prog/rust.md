@@ -148,9 +148,9 @@ make menuconfig
 
 就像之前的 [Learn Makefile from Linux Build System](https://lucmann.github.io/utils/make/) 一样，这次我想一边阅读 Linux 内核中的 Rust 驱动代码，一边学习 Rust 语言，好处是可以了解一个实际的项目中，像 Rust 这样的语言的最佳实践是怎样的，这里就当是学习笔记吧
 
-## 使用 Nightly rustc
+# Nightly vs. Stable rustc
 
-Nightly rustc 对于构建 Rust for Linux 不是必需的，但因为一些编译器的调试功能，包括编译过程中更详细的信息只在 Nightly 版本中才可用，所以最好使用 Nightly rustc
+Nightly rustc 每日自动构建，包含了所有最新的语言功能和标准库功能，所以稳定性也低，有可能有Bug。Rust for Linux 的官方文档虽然没有明确说构建内核 Rust 使用 Stable 编译器还是 Nightly 编译器，但最好使用 Stable
 
 - `rustup install nightly`
     - `nightly-x86_64-unknown-linux-gnu installed - rustc 1.91.0-nightly (1ebbd87a6 2025-08-11)`
@@ -162,6 +162,8 @@ Nightly rustc 对于构建 Rust for Linux 不是必需的，但因为一些编�
     - 安装 rustc nightly 后同样必须安装 nightly rust-src,否则 `make rustavailable` 会失败
 - `rustup default nightly` or `rustup default stable`
     - 在 nightly 和 stable 之间切换
+- `rustup override set stable`
+    - 只改变 current working directory 的编译器版本，不影响系统的编译器版本配置 
 
 # Macros
 
