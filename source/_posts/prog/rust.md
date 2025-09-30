@@ -309,6 +309,31 @@ a_closure();
             }
         }
         ```
+# 概念区分
+
+## `None` vs `()`
+
+`None` 是一个值，`enum Option<T>` 中的一个枚举值，表示一个**不存在的值**
+
+```rust
+enum Option<T> {
+    Some(T),
+    None,
+}
+```
+
+而 `()` 是一个类型，在泛型中有时被用作**占位符**，表示这里需要一个类型，但并不关心具体是什么类型
+
+```rust $srctree/drivers/gpu/nova-core/falcon.rs
+        let _ = util::wait_on(Delta::from_micros(150), || {
+            let r = regs::NV_PFALCON_FALCON_HWCFG2::read(bar, E::BASE);
+            if r.reset_ready() {
+                Some(())
+            } else {
+                None
+            }
+        });
+```
 
 # 参考
 - [The Cargo Book](https://doc.rust-lang.org/cargo/index.html)
