@@ -150,10 +150,27 @@ make menuconfig
 
 # Nightly vs. Stable rustc
 
-Nightly rustc 每日自动构建，包含了所有最新的语言功能和标准库功能，所以稳定性也低，有可能有Bug。Rust for Linux 的官方文档虽然没有明确说构建内核 Rust 使用 Stable 编译器还是 Nightly 编译器，但最好使用 Stable
+Nightly rustc 每日自动构建，包含了所有最新的语言功能和标准库功能，所以稳定性也低，有可能有Bug。Rust for Linux 的官方文档虽然没有明确说构建内核 Rust 使用 Stable 编译器还是 Nightly 编译器，但最好使用 Stable, 原因是 Nightly 每天可能都有更新，Rust for Linux 也每天都在更新，如果使用 Nightly 版本的编译器，就需要二者同时都是最新，否则可能出现像下面的情况，编译器的版本号已经是 `1.91.0` 了，但相应的功能还没更新上(对于 Nightly 版本来说，所有的新功能不是在一天内更新进去的)
+
+```rust $srctree/scripts/generate_rust_target.rs
+        if cfg.rustc_version_atleast(1, 91, 0) {
+            ts.push("target-pointer-width", 64);
+        } else {
+            ts.push("target-pointer-width", "64");
+        }
+```
 
 - `rustup install nightly`
     - `nightly-x86_64-unknown-linux-gnu installed - rustc 1.91.0-nightly (1ebbd87a6 2025-08-11)`
+- `rustup update nightly`
+    - 更新 nightly 版本的 rustc
+        ```
+        info: syncing channel updates for 'nightly-x86_64-unknown-linux-gnu'
+
+            nightly-x86_64-unknown-linux-gnu unchanged - rustc 1.92.0-nightly (c8905eaa6 2025-09-28)
+
+        info: checking for self-update
+        ```
 - `rustup default nightly`
     - `nightly-x86_64-unknown-linux-gnu unchanged - rustc 1.91.0-nightly (1ebbd87a6 2025-08-11)`
     - `rustc --version`
@@ -296,6 +313,7 @@ a_closure();
 # 参考
 - [The Cargo Book](https://doc.rust-lang.org/cargo/index.html)
 - [Rust 语言圣经](https://course.rs/basic/variable.html)👍
+- [Rustling](https://github.com/rust-lang/rustlings)🦀
 - [Rust for Linux](https://rust-for-linux.com/)👀
 - [rust.docs.kernel.org](https://rust.docs.kernel.org/kernel/)
 - [The best way to learn procedural macros is by writing them](https://github.com/dtolnay/proc-macro-workshop)
