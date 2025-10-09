@@ -56,6 +56,23 @@ gitGraph
     - `v6.8-rc1~111^2~23^2~81`
   - 它和不加 `--contains` 的区别是，`git describe` 仅仅是**离得最近**，从前往后都算，而 `git describe --contains` 是 **包含**，上面例子中命令的输出 `v6.8-rc1~111^2~23^2~81`， 表示在 v6.8 中一定包含 `a6149f03` 这个 commit, 而且它指出了具体的位置：从 `v6.8-rc1` 这个 tag 的 commit 往后第 111 个 commit (`^2` 表示它是一个 **merge commit**), 从这个 merge commit 再往后第 23 个 commit (仍然是一个 merge commit), 从这个 commit 再往后第 81 个 commit， 就是 `a6149f03`
 
+# git for-each-ref
+
+- `git for-each-ref --sort=taggerdate --format='%(align:12)%(refname:short)%(end) | %(taggerdate:short)' 'refs/tags/v6.17*'
+  - 格式化输出所有以 `v6.17` 开头的 tags
+
+    ```
+    v6.17-rc1    | 2025-08-10
+    v6.17-rc2    | 2025-08-17
+    v6.17-rc3    | 2025-08-24
+    v6.17-rc4    | 2025-08-31
+    v6.17-rc5    | 2025-09-07
+    v6.17-rc6    | 2025-09-14
+    v6.17-rc7    | 2025-09-21
+    v6.17        | 2025-09-28
+    ```
+  - git 的 `--format` 想要达到 C printf 的 `%-12s` 的效果需要使用 `%(align:N)%(fieldname:short)%(end)`
+
 # git log
 - `git log -S<regex> --pickaxe-regex /path/to/a/file`
   - 查找匹配的字串在这个文件中出现的次数发生变化的 commit
@@ -72,6 +89,11 @@ gitGraph
   - 当 filters 使用小写时，表示**不包含**这些变更类型
 - `git log --oneline --grep "fix:"`
   - tig 类似的参数是 `--grep="fix:"`
+      
+# git ls-remote
+
+- `git ls-remote upstream`
+  - 当有多个 remote 同时存在时，指定查看某个 remote 的 refs
 
 # git remote
 - `git remote prune <remote>`
