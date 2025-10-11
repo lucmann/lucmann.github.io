@@ -311,6 +311,32 @@ a_closure();
         ```
 # 概念区分
 
+## `String` vs `str` vs `&str`
+
+- `str` 是 rust 语言级别的字符串类型， `String` 是 rust 标准库里实现的众多字符串类型之一, `&str` 是字符串切片
+    - 除了 `std::string::String` 之外，标准库还定义了这些字符串类型
+        - `std::ffi::OsString`, `std::ffi::OsStr`
+        - `std::ffi::CString`, `std::ffi::CStr`
+        - `std::path::PathBuf`, `std::path::Path`
+- `str` 类型的字符串是硬编码进可执行文件，且不可修改，`String`是一个可增长、可修改且具有所有权的 UTF-8 编码的字符串
+- `&str` 和 `String` 之间的转换
+    - `&str` => `String`
+        - `String::from("hello,world")`
+        - `"hello,world".to_string()`
+    - `String` => `&str`
+        ```rust
+        fn main () {
+            let s = String::from("hello,world!");
+            say_hello(&s);
+            say_hello(&s[..]);
+            say_hello(s.as_str());
+        }
+
+        fn say_hello(s: &str) {
+            println!("{}" ,s);
+        }
+        ```
+
 ## `None` vs `()`
 
 `None` 是一个值，`enum Option<T>` 中的一个枚举值，表示一个**不存在的值**
