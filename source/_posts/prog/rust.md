@@ -48,11 +48,16 @@ Rust 的包叫 **crate**, **cargo** 既是包管理器，也是 Rust 项目的�
 
 常用的 cargo 构建命令, 每个命令可能支持若干选项，如 `cargo build --bin hello_world`, 当一个 crate 下存在多个目标时， `--bin` 指定构建某个目标
 
+- `cargo new`
 - `cargo init`
 - `cargo build`
 - `cargo clean`
 - `cargo modules structure --package XXX`
     - 显示某个 crate 的框架 (如有哪些函数, 类等)
+- `cargo doc`
+    - `cargo doc --open --manifest-path=/path/to/Cargo.toml`
+        - 生成指定 crate (以及依赖) 的文档，并启动浏览器打开
+          ![cargo doc --open](/images/rust/rustlings-doc.png)
 
 # Rust Hello World
 
