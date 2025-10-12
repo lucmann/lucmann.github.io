@@ -52,7 +52,7 @@ rustup install 1.82.0
 - 设置当前工具链为 1.82.0
     - `rustup default 1.82.0`
 - 如果存在多个版本的工具链，为 cargo 指定特定工具链
-    - `cargo +1.82.0 install --path .`
+    - `cargo +1.82.0 install --path /some/rust/project/dir`
 
 当然推荐的方法是使用 `cargo`, 就像编译 C 时大多用 `make` 一样。 `cargo` 是 rust 的包管理工具，帮助管理项目中包的依赖及应用的构建，创建一个 Rust 项目，通常第一步是执行 `cargo init`, 它自动创建一个 **Rust binary (application) package**, 这样的包里会包含一个 **Cargo.toml** 文件(自动生成)， 后面 `cargo build` 就是根据这个文件内容来编译 Rust 项目。(如果要清理构建的结果，使用 `cargo clean`)
 
@@ -331,6 +331,10 @@ a_closure();
         }
         ```
 # 概念区分
+
+## 引用和借用
+
+[**获取变量引用的过程叫借用(Borrowing)**](https://course.rs/basic/ownership/borrowing.html)。借用这一概念是 Rust 所有权的核心。
 
 ## `String` vs `str` vs `&str`
 
