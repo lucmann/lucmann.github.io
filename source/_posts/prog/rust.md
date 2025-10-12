@@ -8,15 +8,15 @@ categories: programming
 {% asset_img cargo-build.png %}
 
 <!--more-->
-# Rust Startup
+# Hello world
 
-安装 rust 的方式有好几种，但最方便的应该是通过 **rustup** 脚本
+安装 rust 的方式有好几种，但最方便的应该是通过 **rustup** 脚本。
 
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-它会安装最新的 rust 到 `$HOME/.cargo` 目录下，安装的组件包括
+rustup 默认安装最新的 stable 工具链到 `$HOME/.cargo` 目录下，安装的组件包括
 
 - Rust 构建系统和包管理器 `cargo`
 - Rust 静态代码分析工具 `clippy`
@@ -37,6 +37,22 @@ fn main() {
 ```shell
 rustc main.rs -o main
 ```
+
+# rustup
+rustup 是一个 rust 工具链管理工具，可以轻松在一个机器上部署多个版本的 rust 工具链，并在它们之间轻松切换。例如安装 stable, nightly, 1.82.0
+
+```bash
+rustup install stable
+rustup install nightly
+rustup install 1.82.0
+```
+
+- 查看当前工具链版本
+    - `rustup default`
+- 设置当前工具链为 1.82.0
+    - `rustup default 1.82.0`
+- 如果存在多个版本的工具链，为 cargo 指定特定工具链
+    - `cargo +1.82.0 install --path .`
 
 当然推荐的方法是使用 `cargo`, 就像编译 C 时大多用 `make` 一样。 `cargo` 是 rust 的包管理工具，帮助管理项目中包的依赖及应用的构建，创建一个 Rust 项目，通常第一步是执行 `cargo init`, 它自动创建一个 **Rust binary (application) package**, 这样的包里会包含一个 **Cargo.toml** 文件(自动生成)， 后面 `cargo build` 就是根据这个文件内容来编译 Rust 项目。(如果要清理构建的结果，使用 `cargo clean`)
 
