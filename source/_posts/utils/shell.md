@@ -131,22 +131,21 @@ sed 和 awk 一样，都是按行处理文本的。
 	* 如果 `-n` 后，完全都不打印了，但如果又想将处理后的行打印出来，使用 `p` 命令
 	* `q` 命令的作用是**立即退出**，sed 的默认行为是对第2行处理完后，虽然后面的行都不需要处理，但 sed 仍然会继续将后面的每行往**模式空间**加载。
 
-## grep(rg)
+## grep/ripgrep
 
-**在 Linux 内核源码目录下，搜索 `drivers/gpu/drm` 下所有的 `DRIVER_NAME` 定义，并排序后格式化输出**
-
-命令如下:
-
-```bash
-rg '#define DRIVER_NAME' drivers/gpu/drm --no-heading \
-    | tr -s '\t' | tr '\t' ' ' | tr -s ' ' \
-    | awk -F':' '{printf("%-52s%-40s\n",$1,$2)}' \
-    | sort -k4
-```
-
-- `rg` ([ripgrep](https://github.com/BurntSushi/ripgrep)) 比 grep 更快，更强大
-- `tr` 在不带任何选项时，默认执行替换，例子是中将 tab 替换成 空格, `-s` 表示 `squeeze-repeats`, 就是去掉重复的字符，例如多个空格只保留一个
-- `awk` 天生支持 C-Style printf
+- **在 Linux 内核源码目录下，搜索 `drivers/gpu/drm` 下所有的 `DRIVER_NAME` 定义，并排序后格式化输出**
+	```bash
+	rg '#define DRIVER_NAME' drivers/gpu/drm --no-heading \
+		| tr -s '\t' | tr '\t' ' ' | tr -s ' ' \
+		| awk -F':' '{printf("%-52s%-40s\n",$1,$2)}' \
+		| sort -k4
+	```
+	- `rg` ([ripgrep](https://github.com/BurntSushi/ripgrep)) 比 grep 更快，更强大
+	- `tr` 在不带任何选项时，默认执行替换，例子是中将 tab 替换成 空格, `-s` 表示 `squeeze-repeats`, 就是去掉重复的字符，例如多个空格只保留一个
+	- `awk` 天生支持 C-Style printf
+	
+- `rg '\[package\]' -ttoml --glob '!Cargo.lock'`
+	- 在一个 rust 项目顶层目录，只搜索 .toml 文件中的 `[package]`, 而忽略所有 Cargo.lock 文件
 	
 ## 引号
 
