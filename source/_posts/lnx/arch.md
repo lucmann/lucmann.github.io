@@ -69,6 +69,12 @@ yay -S fcitx5-sogou
     
 总的来说，在 Arch Linux 上制作一个可启动的新内核，让系统能够用新内核正常工作，是相对比较简单的，这也是我放弃 openKylin，转向 Arch Linux 的主要原因，在 openKylin 上，光是找到目前正在运行的内核源码都费半天劲儿，包括内核源码库，整个发行版的软件包源码仓库，软件版本管理都有点混乱。
 
+## 配置内核
+
+### CONFIG_MODULE_COMPRESS_ALL
+
+控制 `make modules_install` 时是否压缩 `.ko` 文件，它依赖 `CONFIG_MODULE_COMPRESS`。
+
 ## 内核可执行文件
 
 ```bash
@@ -89,6 +95,8 @@ sudo --preserve-env=HOME make install
 ```bash
 sudo mkinitcpio --generate /boot/initramfs-6.16.1-arch1.img --kernel 6.16.1-arch1
 ```
+
+其中 `--kernel` 参数来自 `make kernelrelease`, 它也是 `sudo make modules_install` 后在 `/lib/modules` 下创建的目录名. 同时新内核安装重启后有 **`make kernelrelease ≡ uname -r`**
 
 ## 更新 bootloader 配置
 
