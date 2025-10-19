@@ -159,6 +159,23 @@ snd_hda_intel 0000:00:1f.3: bound 0000:00:02.0 (ops intel_audio_component_bind_o
 
 更保险的启动参数是 `i915.modeset=0`，即不禁用整个 i915 驱动，只禁用 graphics 功能。但 [snd_hda_intel 和 i915 好像有些耦合问题](https://bbs.archlinux.org/viewtopic.php?id=292453)，必须再使用 `snd_hda_core.gpu_bind=0` 才能只禁用 Intel graphics, 不影响 Intel audio
 
+# 更换 boot partition
+
+需要使用 USB 启动盘和 **parted** 命令， **parted** 的只能改变原有分区的 end (分区的 start,end), 如果你的当前分区是这样的
+
+```
+Number  Start   End     Size    File system  Name  Flags
+ 1      17.4kB  1074MB  1074MB  fat32              boot, esp
+ 2      1074MB  1000GB  999GB   ext4
+```
+
+是无法直接扩大 boot 分区的，可行的方案是先缩小 root 分区，然后用释放的空间重新创建 boot 的分区，再将原 boot 分区的内容整个 copy 到新的 boot 分区
+
+1. `resize2fs /dev/nvme0n1p2 990G`
+2. `(parted) resizepart 2 991GiB`
+3. `resizepart /dev/nvme0n1 2 1931503615 (in 512-bytes sectors)`
+4. `(parted) mkpart "EFI system partition" ext4 991GiB 100%`
+
 # 参考
 
 - [Arch Linux 详细安装教程](https://zhuanlan.zhihu.com/p/596227524)
