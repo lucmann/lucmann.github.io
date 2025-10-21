@@ -21,6 +21,11 @@ categories: linux
 
 ## CLI boot
 
+### 基于 UEFI/GPT 的硬盘分区
+
+- boot 分区 (EFI System Partition, ESP) 必须是 **FAT32** 文件系统
+- boot 分区除了放 bootloader (GRUB) 的配置文件外，还会放 vmlinuz, initrd 这些，最好弄到 5G ~ 10G, 以容纳多个内核版本的 elf 和 initrd
+
 ### iwctl
 
 ### pacman
@@ -29,7 +34,7 @@ categories: linux
 
 ## GUI boot
 
-### DE
+### GNOME Desktop Environment
 
 ```bash
 pacman -S gnome gnome-extra
