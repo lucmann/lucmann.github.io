@@ -14,6 +14,14 @@ target ... : prerequisites ...
 
 <!--more-->
 
+- **target ...** 说明在一条规则里 target 可以有多个
+- **prerequisites** 可以为空
+- **recipe** 可以为空, 这时 make 相应的 target 会提示
+  - `Nothing to be done for 'target'.`
+  - 可以通过 `;` 分号显示地指出 recipe 是空
+    - `target: ;`
+- 如果 make 命令行没有指定任何目标，make 会将 Makefile 里解析出来的**第一个目标**作为默认目标
+
 # Make 基本原理
 
 ## Static Pattern Rules
@@ -30,8 +38,6 @@ target-pattern : prereq-patterns
   recipe
   ...
 ```
-
-
 
 # Make 常用参数
 
