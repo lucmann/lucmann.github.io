@@ -69,7 +69,21 @@ yay -S fcitx5-sogou
 安装后启动 fcitx5-configtool，添加搜狗输入法即可
 
 ```bash All-In-One
-pacman -S gnome gnome-extra noto-fonts noto-fonts-cjk fcitx5 fcitx5-gtk fcitx5-chinese-addons fcitx5-configtool tig htop autojump fzf
+pacman -S \
+autojump \
+bc \
+gnome \
+gnome-extra \
+fcitx5 \
+fcitx5-gtk \
+fcitx5-chinese-addons \
+fcitx5-configtool \
+fd \
+fzf \
+htop \
+noto-fonts \
+noto-fonts-cjk \
+tig
 ```
 
 # 编译内核
