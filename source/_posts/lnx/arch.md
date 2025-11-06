@@ -55,20 +55,22 @@ makepkg -si
 yay -S visual-studio-code-bin oh-my-zsh-git autojump
 ```
 
-### 中文字体
+### 中文字体及输入法
 
-```bash
-pacman -S noto-fonts noto-fonts-cjk
+
+```bash 安装 fcitx5
+pacman -S noto-fonts noto-fonts-cjk fcitx5 fcitx5-gtk fcitx5-chinese-addons fcitx5-configtool
 ```
 
-### 中文输入法
-
-```bash
-pacman -S fcitx5 fcitx5-gtk fcitx5-chinese-addons fcitx5-configtool
+```bash 安装 sogou
 yay -S fcitx5-sogou
 ```
 
 安装后启动 fcitx5-configtool，添加搜狗输入法即可
+
+```bash All-In-One
+pacman -S gnome gnome-extra noto-fonts noto-fonts-cjk fcitx5 fcitx5-gtk fcitx5-chinese-addons fcitx5-configtool tig htop autojump fzf
+```
 
 # 编译内核
 
