@@ -49,6 +49,12 @@ cd yay-git
 makepkg -si
 ```
 
+`yay` 主要是用来安装那些托管在 [AUR](https://aur.archlinux.org/packages/visual-studio-code-bin) (Archlinux User Repository) 的软件包的，作为 `pacman` 的补充。
+
+```bash
+yay -S visual-studio-code-bin oh-my-zsh-git autojump
+```
+
 ### 中文字体
 
 ```bash
