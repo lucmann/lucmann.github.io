@@ -9,6 +9,13 @@ categories: utilities
 
 Linux 下的 Shell 有很多， sh, bash, csh, zsh 等, 这里主要记录一下 bash 和 zsh 的一些不同之处
 
+## 特殊变量
+
+- `$!` 最后一个后台命令的 PID
+	* `(glmark2 & PID=$!; echo "PID: $PID")`
+		* 在子 Shell 中启动 glmark2, 并打印 glmark2 进程的 PID
+		* `(...)` 用来在新的子 Shell 里执行命令
+
 ## Parameter Expansion
 
 ### Use an alternate value
