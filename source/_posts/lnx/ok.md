@@ -660,7 +660,7 @@ ukui-session(3768)-+-KylinTreasureBo(4259)-+-{KylinTreasureBo}(4279)
                    `-{pool-spawner}(3810)
 ```
 
-# [Hyprland](git@github.com:hyprwm/Hyprland.git)
+# [Hyprland](https://hypr.land/)
 
 ## Dependencies
 

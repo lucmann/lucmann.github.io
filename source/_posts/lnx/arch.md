@@ -83,6 +83,7 @@ fzf \
 htop \
 noto-fonts \
 noto-fonts-cjk \
+otf-firamono-nerd \
 tig
 ```
 
