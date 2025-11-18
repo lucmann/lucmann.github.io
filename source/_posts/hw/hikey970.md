@@ -75,6 +75,7 @@ flowchart LR
 # 参考
 
 - [HiKey970 官方文档](https://www.96boards.org/documentation/consumer/hikey/hikey970/installation/board-recovery.md.html)
+- [HiKey970 GitHub](https://github.com/96boards/documentation/tree/master/consumer/hikey/hikey970)
 - [DRM driver for HiKey 970](https://lore.kernel.org/bpf/20200820100440.2d30dc02@coco.lan/T/)
 - [usbipd-win github issues](https://github.com/dorssel/usbipd-win/issues/59)
 
