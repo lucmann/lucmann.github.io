@@ -72,6 +72,7 @@ yay -S fcitx5-sogou
 pacman -S \
 autojump \
 bc \
+cscope \
 gnome \
 gnome-extra \
 fcitx5 \
@@ -84,7 +85,14 @@ htop \
 noto-fonts \
 noto-fonts-cjk \
 otf-firamono-nerd \
-tig
+rsync \
+tig \
+rsync
+```
+
+```bash All-in-One
+yay -S \
+android-sdk-platform-tools
 ```
 
 # 编译内核
@@ -124,7 +132,11 @@ sudo --preserve-env=HOME make install
 sudo mkinitcpio --generate /boot/initramfs-6.16.1-arch1.img --kernel 6.16.1-arch1
 ```
 
-其中 `--kernel` 参数来自 `make kernelrelease`, 它也是 `sudo make modules_install` 后在 `/lib/modules` 下创建的目录名. 同时新内核安装重启后有 **`make kernelrelease ≡ uname -r`**
+其中 `--kernel` 参数来自 `make kernelrelease`, 它也是 `sudo make modules_install` 后在 `/lib/modules` 下创建的目录名. 同时新内核安装重启后有 **`make kernelrelease ≡ uname -r`**。所以最好是在内核源码目录下
+
+```bash
+sudo mkinitcpio --generate /boot/initramfs-`make kernelrelease`.img --kernel `make kernelrelease`
+```
 
 ## 更新 bootloader 配置
 
