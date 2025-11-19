@@ -20,6 +20,7 @@ categories: utilities
 # Command Options
 - cmake -B build
   - Build的工作主要包括解决依赖关系，构建目标(库,应用,测试用例)。`cmake`命令有很多选项可以帮助我们灵活有效地构建目标， 例如：Out-of-source构建，意思是不污染源代码目录，在指定的单独的目录下生成构建系统, 如果build不存在，cmake会创建它
+  - `-B`，`-S` 选项是从 CMake **3.13** 版本引入的
 
 - cmake -B build --graphviz=file.dot
   - 将构建目标间的依赖关系输出Graphivz dot, 生成的`file.dot`可以用dot命令生成图片`dot -Tpng -o file.png file.dot`
