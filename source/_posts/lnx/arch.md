@@ -86,8 +86,7 @@ noto-fonts \
 noto-fonts-cjk \
 otf-firamono-nerd \
 rsync \
-tig \
-rsync
+tig
 ```
 
 ```bash All-in-One

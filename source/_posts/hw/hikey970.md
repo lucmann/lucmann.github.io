@@ -54,7 +54,27 @@ HiKey970 有两个 Type-C 接口，而且当板子被设置为 Recovery 模式�
 - 后者(J1801)：
     `Bus 001 Device 002: ID 12d1:3609 Huawei Technologies Co., Ltd. USB SER`
 
-![Select CONFIG_USB_SERIAL_OPTION on WSL2 Kernal config](/images/hikey970/huawei-USB-SER-driver.png)
+![Select CONFIG_USB_SERIAL_OPTION on WSL2 Kernel config](/images/hikey970/huawei-USB-SER-driver.png)
+
+# fastboot
+
+fastboot 是用来从 Host 向开发板烧写固件和镜像的常用工具之一，在 Arch Linux 上它可以通过以下命令安装
+
+```install fastboot
+yay -S android-sdk-platform-tools
+```
+
+fastboot 常用的命令有
+
+```fastboot 常用命令
+fastboot devices
+fastboot flash ptable 64gtoendprm_ptable.img
+fastboot flash xloader sec_xloader.img
+fastboot flash fastboot l-loader.bin
+fastboot flash fip fip.bin
+fastboot flash boot boot2grub.uefi.img
+fastboot -S 8M flash system rootfs.sparse.img
+```
 
 # 显示
 
