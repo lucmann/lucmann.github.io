@@ -64,15 +64,25 @@ fastboot 是用来从 Host 向开发板烧写固件和镜像的常用工具之�
 yay -S android-sdk-platform-tools
 ```
 
-fastboot 常用的命令有
+## fastboot 常用命令
 
-```fastboot 常用命令
+```从设备的 bootloader 获取各种信息，如 version, partition
+fastboot getvar all
+```
+
+```列出已连接设备的 ID, 可以用来判断设备是否已与 Host 正常连接就绪
 fastboot devices
+```
+
+```在指定分区刷写指定镜像
 fastboot flash ptable 64gtoendprm_ptable.img
 fastboot flash xloader sec_xloader.img
 fastboot flash fastboot l-loader.bin
 fastboot flash fip fip.bin
 fastboot flash boot boot2grub.uefi.img
+```
+
+```对于比较大的 Sparse 镜像，指定传输块大小，每 8M 传输
 fastboot -S 8M flash system rootfs.sparse.img
 ```
 
