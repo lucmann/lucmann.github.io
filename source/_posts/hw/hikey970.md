@@ -103,7 +103,7 @@ fastboot -S 8M flash system rootfs.sparse.img
 
 吃灰5,6年的板子又再一次亮了
 
-！[Hikey970 xfce4](/images/hikey970/hikey970-xfce4.jpg)
+![Hikey970 xfce4](/images/hikey970/hikey970-xfce4.jpg)
 
 # 显示
 
