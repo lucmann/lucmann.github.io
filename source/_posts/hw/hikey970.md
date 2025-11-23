@@ -86,6 +86,25 @@ fastboot flash boot boot2grub.uefi.img
 fastboot -S 8M flash system rootfs.sparse.img
 ```
 
+# 启动
+
+![Hikey970 boot ubuntu bionic](/images/hikey970/hikey970-boot.png)
+
+> **NOTE:**
+> HiKey970 的输入电压要求在 8V ~ 18V 之间，但最好使用 **12V 以上接近 18V**的输入电压，否则可能出现 `fastboot flash` 时出现板子自己重启的怪现象
+
+## 连接 WiFi
+
+![Hikey970 wifi](/images/hikey970/wifi-connect.png)
+
+![Hikey970 WiFi LED indicator](/images/hikey970/hikey970-wifi-led.jpg)
+
+## xfce4 桌面
+
+吃灰5,6年的板子又再一次亮了
+
+！[Hikey970 xfce4](/images/hikey970/hikey970-xfce4.jpg)
+
 # 显示
 
 ```mermaid
@@ -100,7 +119,6 @@ flowchart LR
 
     DSI --> HDMI
 ```
-
 
 # 参考
 
