@@ -92,6 +92,7 @@ fastboot -S 8M flash system rootfs.sparse.img
 
 > **NOTE:**
 > HiKey970 的输入电压要求在 8V ~ 18V 之间，但最好使用 **12V 以上接近 18V**的输入电压，否则可能出现 `fastboot flash` 时出现板子自己重启的怪现象
+> ![Hikey970 Input Power Voltage](/images/hikey970/hikey970-power.jpg)
 
 ## 连接 WiFi
 
