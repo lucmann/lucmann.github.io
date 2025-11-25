@@ -56,6 +56,21 @@ HiKey970 有两个 Type-C 接口，而且当板子被设置为 Recovery 模式�
 
 ![Select CONFIG_USB_SERIAL_OPTION on WSL2 Kernel config](/images/hikey970/huawei-USB-SER-driver.png)
 
+# Build rootfs.img and boot.img
+
+## boot.img
+ 
+`boot.img` 主要提供 bootloader, 所以它可以只包含 **grub.efi**, Hikey970 使用的 boot.img 是 64M 大小
+
+## rootfs.img
+
+`rootfs.img` 就是整个系统了(根文件系统)，内核可执行文件(Image)和设备树二进制文件(.dtb) 都包含在它的 boot 目录里，Hikey970 使用的 rootfs.img 原始大小是 4.0GB, 但经过 android-tools 工具包里的 `img2simg` 处理后只有 716M
+
+```Sparse image 与 Raw image 大小对比
+-rw-r--r-- 1 luc luc 4.0G 11月26日 06:48 rootfs.img
+-rw-r--r-- 1 luc luc 716M 11月18日 21:47 rootfs.sparse.img
+```
+
 # fastboot
 
 fastboot 是用来从 Host 向开发板烧写固件和镜像的常用工具之一，在 Arch Linux 上它可以通过以下命令安装
@@ -87,6 +102,37 @@ fastboot -S 8M flash system rootfs.sparse.img
 ```
 
 # 启动
+
+## Bootloader
+
+```sudo mount -o loop boot2grub.uefi.img /mnt
+➜  /mnt ls -lh /mnt/EFI/BOOT
+总计 881K
+-rwxr-xr-x 1 root root  29K 2018年 2月14日 fastboot.efi
+-rwxr-xr-x 1 root root 852K 2018年 2月14日 grubaa64.efi
+```
+
+```启动后的 /boot 目录
+hikey970% ls -lhR /boot
+/boot:
+total 23M
+drwxr-xr-x 3 root root 4.0K Jun 12  2018 EFI
+-rw-r--r-- 1 root root  23M Jun 12  2018 Image
+drwxr-xr-x 2 root root 4.0K Jun 12  2018 grub
+-rw-r--r-- 1 root root  68K Jun 12  2018 kirin970-hikey970.dtb
+
+/boot/EFI:
+total 4.0K
+drwxr-xr-x 2 root root 4.0K Jun 12  2018 BOOT
+
+/boot/EFI/BOOT:
+total 32K
+-rw-r--r-- 1 root root 29K Jun 12  2018 fastboot.efi
+
+/boot/grub:
+total 4.0K
+-rw-r--r-- 1 root root 462 Jun 12  2018 grub.cfg
+```
 
 ![Hikey970 boot ubuntu bionic](/images/hikey970/hikey970-boot.png)
 

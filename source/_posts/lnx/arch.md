@@ -91,7 +91,8 @@ tig
 
 ```bash All-in-One
 yay -S \
-android-sdk-platform-tools
+android-sdk-platform-tools \
+android-tools
 ```
 
 # 编译内核
