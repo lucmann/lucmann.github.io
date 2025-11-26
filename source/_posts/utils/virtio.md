@@ -15,3 +15,9 @@ categories: utilities
 | **硬件需求** | 无特殊需求         | 无特殊需求     | 需要**硬件支持** |
 
 <!--more-->
+
+# vfio
+
+# 参考资料
+
+- [[RFC v2 00/14] Introduce NVIDIA GPU Virtualization (vGPU) Support](https://lore.kernel.org/all/20250903221111.3866249-1-zhiw@nvidia.com/)
