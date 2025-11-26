@@ -70,6 +70,7 @@ yay -S fcitx5-sogou
 
 ```bash All-In-One
 pacman -S \
+aarch64-linux-gnu-gcc \
 autojump \
 bc \
 cscope \
