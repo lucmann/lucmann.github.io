@@ -71,6 +71,13 @@ HiKey970 有两个 Type-C 接口，而且当板子被设置为 Recovery 模式�
 -rw-r--r-- 1 luc luc 716M 11月18日 21:47 rootfs.sparse.img
 ```
 
+## debootstrap
+
+- `/usr/sbin/qemu-debootstrap`
+- `/usr/sbin/debootstrap`
+
+是两个 **Shell 脚本**, 主要就是通过下载相应平台的 binaries，通过 **chroot** 来制作根文件系统
+
 # fastboot
 
 fastboot 是用来从 Host 向开发板烧写固件和镜像的常用工具之一，在 Arch Linux 上它可以通过以下命令安装
@@ -174,3 +181,4 @@ flowchart LR
 - [Linaro uefi-staging](https://snapshots.linaro.org/reference-platform/components/uefi-staging/)
 - [DRM driver for HiKey 970](https://lore.kernel.org/bpf/20200820100440.2d30dc02@coco.lan/T/)
 - [usbipd-win github issues](https://github.com/dorssel/usbipd-win/issues/59)
+- [跨平台更新制作 rootfs](https://notes.leconiot.com/debootstrap.html)
