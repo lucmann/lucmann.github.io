@@ -174,6 +174,8 @@ flowchart LR
     DSI --> HDMI
 ```
 
+# Tyr on HiKey970
+
 # 参考
 
 - [HiKey970 官方文档](https://www.96boards.org/documentation/consumer/hikey/hikey970/installation/board-recovery.md.html)
@@ -182,3 +184,4 @@ flowchart LR
 - [DRM driver for HiKey 970](https://lore.kernel.org/bpf/20200820100440.2d30dc02@coco.lan/T/)
 - [usbipd-win github issues](https://github.com/dorssel/usbipd-win/issues/59)
 - [跨平台更新制作 rootfs](https://notes.leconiot.com/debootstrap.html)
+- [为 Tyr 重启 HiKey970](https://www.phoronix.com/news/Tyr-Begins-Handling-Work)
