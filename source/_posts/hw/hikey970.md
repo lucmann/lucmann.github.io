@@ -159,6 +159,12 @@ total 4.0K
 
 ![Hikey970 xfce4](/images/hikey970/hikey970-xfce4.jpg)
 
+# 制作 rootfs, initramfs
+
+环境是 qemu-system-aarch64 Debian 13 Trixie, 折腾了一圈，最后还是发现 Ubuntu, Debian, Arch Linux 这3个，还是 Debian 对 Aarch64 支持最好，Ubuntu 甚至还一个桌面版的 Arm 安装镜像都没有(Arm架构的安装镜像似乎都是服务器版的)。
+
+![Debian vs. Ubuntu](/images/hikey970/debian-vs-ubuntu.png)
+
 # 显示
 
 ```mermaid
@@ -185,3 +191,4 @@ flowchart LR
 - [usbipd-win github issues](https://github.com/dorssel/usbipd-win/issues/59)
 - [跨平台更新制作 rootfs](https://notes.leconiot.com/debootstrap.html)
 - [为 Tyr 重启 HiKey970](https://www.phoronix.com/news/Tyr-Begins-Handling-Work)
+- [制作 Hikey970 的 rootfs](https://github.com/lucmann/hikey970-ubuntu-image)
