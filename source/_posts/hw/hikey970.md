@@ -165,6 +165,57 @@ total 4.0K
 
 ![Debian vs. Ubuntu](/images/hikey970/debian-vs-ubuntu.png)
 
+## NetworkManager vs wpasupplicant
+
+点亮吹灰 Hikey970 用的是 [hikey970-ubuntu-image](https://github.com/mengzhuo/hikey970-ubuntu-image), 它的 rootfs 里安装的是 NetworkManager, 当我试着将 hikey970-ubuntu-image 转换成 hikey970-debian-image 时，发现 debootstrap 会因为奇怪的包依赖问题，无法安装 NetworkManager， 而且了解到 wpasupplicant 可以完成同样的事情(连接 WiFi,让板子联网), 而且体量更小，更适合这种开发板。
+
+所以这个 Debian 12 rootfs 网络这块使用了 **wpasupplicant**, **iw**, **iproute2**, **dhcpcd5** 四剑客
+
+- wpasupplicant
+
+```rootfs/etc/systemd/system/wpa_supplicant@.service
+[Unit]
+Description=WPA supplicant daemon (interface %i)
+After=sys-subsystem-net-devices-%i.device
+Wants=sys-subsystem-net-devices-%i.device
+
+[Service]
+Type=simple
+ExecStart=/sbin/wpa_supplicant -c /etc/wpa_supplicant/wpa_supplicant.conf -i %i
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Note:
+
+1. 当 `systemctl enable wpa_supplicant@wlan0.service` 时 systemd 会自动创建一个符号链接文件到 `/etc/systemd/system/wpa_supplicant@.service`, 而文件里的 `%i` 是无线网络设备接口名，即 **wlan0**.
+2. 手动创建 `/etc/wpa_supplicant/wpa_supplicant.conf`
+    ```
+    wpa_passphrase <SSID> <PASSWORD> >/etc/wpa_supplicant/wpa_supplicant.conf
+    ```
+
+- iw
+
+```/sbin/iw
+iw dev wlan0 scan | grep 'SSID:'
+iw dev wlan0 connect <SSID>
+```
+- iproute2
+
+```/bin/ip
+ip link show wlan0
+ip addr wlan0
+```
+
+- dhcpcd5
+
+```
+systemctl enable dhcpcd.service
+systemctl start dhcpcd.service
+```
+
 # 显示
 
 ```mermaid
