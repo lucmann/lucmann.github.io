@@ -241,5 +241,5 @@ flowchart LR
 - [DRM driver for HiKey 970](https://lore.kernel.org/bpf/20200820100440.2d30dc02@coco.lan/T/)
 - [usbipd-win github issues](https://github.com/dorssel/usbipd-win/issues/59)
 - [跨平台更新制作 rootfs](https://notes.leconiot.com/debootstrap.html)
-- [为 Tyr 重启 HiKey970](https://www.phoronix.com/news/Tyr-Begins-Handling-Work)
+- [Racing karts on a Rust GPU kernel driver](https://www.collabora.com/news-and-blog/news-and-events/racing-karts-on-a-rust-gpu-kernel-driver.html)
 - [制作 Hikey970 的 rootfs](https://github.com/lucmann/hikey970-ubuntu-image)
