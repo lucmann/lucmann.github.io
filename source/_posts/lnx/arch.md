@@ -74,6 +74,7 @@ aarch64-linux-gnu-gcc \
 autojump \
 bc \
 cscope \
+dnsmasq \
 gnome \
 gnome-extra \
 fcitx5 \
@@ -83,11 +84,14 @@ fcitx5-configtool \
 fd \
 fzf \
 htop \
+net-tools \
 noto-fonts \
 noto-fonts-cjk \
 otf-firamono-nerd \
+qemu-system-aarch64 \
 rsync \
-tig
+tig \
+virt-manager
 ```
 
 ```bash All-in-One
