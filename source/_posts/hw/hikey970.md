@@ -232,7 +232,10 @@ flowchart LR
 ```
 
 # 新内核
+- kernel + dtb
 ![Try latest kernel on hikey970](/images/hikey970/try-latest-kernel-on-hikey970.png)
+- kernel only
+![Try latest kernel on hikey970](/images/hikey970/try-latest-kernel-on-hikey970-2.png)
 
 # Tyr on HiKey970
 
