@@ -231,6 +231,9 @@ flowchart LR
     DSI --> HDMI
 ```
 
+# 新内核
+![Try latest kernel on hikey970](/images/hikey970/try-latest-kernel-on-hikey970.png)
+
 # Tyr on HiKey970
 
 # 参考
