@@ -231,13 +231,41 @@ flowchart LR
     DSI --> HDMI
 ```
 
-# 新内核
+# Panfrost on HiKey970
+
+Pathor(Written in C) 和 Tyr(Written in Rust) 都只用于 Valhall 以上的 Mali GPUs. HiKey 970 (HI3670 SoC) 搭载的是 Mali G72 MP12 (Bifrost)，所以只能使用 Panfrost 驱动。上面可以启动的内核是 v4.19, 当时的 GPU 驱动还是 lima.
+
+HiKey 970 开发板对应的 devicetree 源文件 **hi3670-hikey970.dts**， 在 v4.19 时也合入了主线。
+
+> commit 5510ee99c0deb0c0235acee6498a6745c8317df1
+> Refs: v4.19-rc1-6-g5510ee99c0de
+> Author:     Manivannan Sadhasivam <mani@kernel.org>
+> AuthorDate: Fri Aug 10 23:23:39 2018 +0530
+> Commit:     Wei Xu <xuwei5@hisilicon.com>
+> CommitDate: Wed Sep 19 16:15:25 2018 +0100
+> 
+>     arm64: dts: Add devicetree support for HiKey970 board
+> 
+>     Add devicetree support for HiKey970 development board which
+>     based on Hi3670 SoC and is also one of the 96Boards Consumer
+>     Edition and AI platform.
+> 
+>     Only UART6 is enabled which is the default console required
+>     by the 96Boards Consumer Edition Specification.
+> 
+>     This patch has been tested on HiKey970 Board.
+> 
+>     Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>     Signed-off-by: Wei Xu <xuwei5@hisilicon.com>
+> ---
+>  arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts | 35 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+
+## 新内核
 - kernel + dtb
 ![Try latest kernel on hikey970](/images/hikey970/try-latest-kernel-on-hikey970.png)
 - kernel only
 ![Try latest kernel on hikey970](/images/hikey970/try-latest-kernel-on-hikey970-2.png)
-
-# Tyr on HiKey970
 
 # 参考
 
