@@ -261,11 +261,31 @@ HiKey 970 开发板对应的 devicetree 源文件 **hi3670-hikey970.dts**， 在
 >  arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts | 35 +++++++++++++++++++++++++++++++++++
 >  1 file changed, 35 insertions(+)
 
-## 新内核
+## v6.19
+
+到目前为止，使用 [@mengzhuo/hikey970-ubuntu-image](https://github.com/mengzhuo/hikey970-ubuntu-image) 可以正常启动 HiKey970，而且安装了 Xfce，所以我 fork 了这个仓库，将其更名为 [hikey970-debian-image](https://github.com/lucmann/hikey970-debian-image)，将基于 Ubuntu bionic (18.04 LTS) 的 rootfs.img 移植到基于 Debian bookworm (12) 的 rootfs.img，并成功启动。之后准备将这块 2018 年 3 月发布的板子作为学习和测试内核最新驱动的平台，所以现在就看看主线编译的设备树 (arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dtb) 和内核 (arch/arm64/boot/Image.gz) 是否能正常启动。 
+
 - kernel + dtb
 ![Try latest kernel on hikey970](/images/hikey970/try-latest-kernel-on-hikey970.png)
 - kernel only
 ![Try latest kernel on hikey970](/images/hikey970/try-latest-kernel-on-hikey970-2.png)
+
+### `random: crng init done` took **70** minutes
+
+```
+[    5.201987] random: perl: uninitialized urandom read (4 bytes read)
+[    5.202263] random: perl: uninitialized urandom read (4 bytes read)
+[FAILED] Failed to start systemd-ra…rvice - Load/Save Random Seed.
+See 'systemctl status systemd-random-seed.service' for details.
+         Starting systemd-tmpfiles-…leanup of Temporary Directories...
+[  OK  ] Finished systemd-tmpfiles-… Cleanup of Temporary Directories.
+         Starting dpkg-db-backup.se…ly dpkg database backup service...
+         Starting logrotate.service - Rotate log files...
+[  OK  ] Finished dpkg-db-backup.se…aily dpkg database backup service.
+[  OK  ] Finished logrotate.service - Rotate log files.
+[ 4396.712657] random: crng init done
+[ 4396.712674] random: 4 urandom warning(s) missed due to ratelimiting
+```
 
 # 参考
 
