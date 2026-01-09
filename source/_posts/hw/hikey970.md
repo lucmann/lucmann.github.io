@@ -216,6 +216,12 @@ systemctl enable dhcpcd.service
 systemctl start dhcpcd.service
 ```
 
+- ntpdate
+
+```
+/sbin/ntpdate ntp.aliyun.com
+```
+
 # 显示
 
 ```mermaid
@@ -286,6 +292,8 @@ See 'systemctl status systemd-random-seed.service' for details.
 [ 4396.712657] random: crng init done
 [ 4396.712674] random: 4 urandom warning(s) missed due to ratelimiting
 ```
+
+crng init 花这么长时间的原因是系统 entropy sources 不足，内核一直在填充 entropy pool, 这种情况只发生在刷写系统后第一次启动，之后 entropy pool 应该固化在 UFS 存储里了，启动时间就正常了。但因为需要频繁刷写系统，所以还是得解决这个问题。尝试了 rng-tools5 和 haveged 后，发现 haveged 可以解决这个问题。理论上 rng-tools5/rng-tools 也可以借助 `/dev/hwrng` 解决这个问题，但不知为何 rngd 服务始终[不能正常工作](https://gist.githubusercontent.com/lucmann/bfabaac6a2c904877629dd3ce97229eb/raw/ceb01cbe992a09d8e1c20a944ea272c8145c7a67/rngd.log)，怀疑可能是 Hi3670 SoC 的 TRNG 驱动有问题。
 
 # 参考
 
