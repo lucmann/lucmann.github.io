@@ -300,7 +300,7 @@ crng init 花这么长时间的原因是系统 entropy sources 不足，内核�
 - [HiKey970 官方文档](https://www.96boards.org/documentation/consumer/hikey/hikey970/installation/board-recovery.md.html)
 - [HiKey970 GitHub](https://github.com/96boards/documentation/tree/master/consumer/hikey/hikey970)
 - [Create a Bootable SD Card for HiKey](https://www.96boards.org/documentation/consumer/hikey/hikey620/installation/linux-sd-boot.md.html)
-- [Linaro uefi-staging](https://snapshots.linaro.org/reference-platform/components/uefi-staging/)
+- [Linaro downloads](https://releases.linaro.org/96boards/reference-platform/debian/hikey/)
 - [DRM driver for HiKey 970](https://lore.kernel.org/bpf/20200820100440.2d30dc02@coco.lan/T/)
 - [usbipd-win github issues](https://github.com/dorssel/usbipd-win/issues/59)
 - [跨平台更新制作 rootfs](https://notes.leconiot.com/debootstrap.html)
