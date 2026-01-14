@@ -222,6 +222,11 @@ systemctl start dhcpcd.service
 /sbin/ntpdate ntp.aliyun.com
 ```
 
+# SD 卡启动
+
+```
+```
+
 # 显示
 
 ```mermaid
@@ -302,6 +307,8 @@ crng init 花这么长时间的原因是系统 entropy sources 不足，内核�
 使用原来的 [hikey970-ubuntu-image (@mengzhuo)](https://github.com/mengzhuo/hikey970-ubuntu-image) 镜像，SD 卡是正常识别的，这就说明电源和卡本身没有问题(之前因为使用 12V 的电源, fastboot flash 总是失败的教训很深刻🐶)。
 
 将下来主要排查设备树和内核配置的问题，在这里和 ChatGPT/DeepSeek 交流了很多，总体感觉 ChatGPT 在这方面比 DeepSeek 靠谱一点。了解到了 HI3670 SoC 的 MMC 控制器使用的是 Synopsis DesignWare MMC, 它是一种不遵循 SD Host Controller Interface 规范的厂家自定义接口。
+
+![Hikey970 BootManager](/images/hikey970/BootManager.png)
 
 # 参考
 
