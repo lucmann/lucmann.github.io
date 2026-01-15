@@ -309,6 +309,9 @@ crng init 花这么长时间的原因是系统 entropy sources 不足，内核�
 将下来主要排查设备树和内核配置的问题，在这里和 ChatGPT/DeepSeek 交流了很多，总体感觉 ChatGPT 在这方面比 DeepSeek 靠谱一点。了解到了 HI3670 SoC 的 MMC 控制器使用的是 Synopsis DesignWare MMC, 它是一种不遵循 SD Host Controller Interface 规范的厂家自定义接口。
 
 ![Hikey970 BootManager](/images/hikey970/BootManager.png)
+![Hikey970 BootManager](/images/hikey970/DevicesList.png)
+![Hikey970 BootManager](/images/hikey970/BootFromFile.png)
+![Hikey970 BootManager](/images/hikey970/boot_sdcard_0x30a7d232_0x3f_0x7ffc1.png)
 
 # 参考
 
