@@ -312,6 +312,7 @@ crng init 花这么长时间的原因是系统 entropy sources 不足，内核�
 ![Hikey970 BootManager](/images/hikey970/DevicesList.png)
 ![Hikey970 BootManager](/images/hikey970/BootFromFile.png)
 ![Hikey970 BootManager](/images/hikey970/boot_sdcard_0x30a7d232_0x3f_0x7ffc1.png)
+![Hikey970 BootManager](/images/hikey970/grub.png)
 
 # 参考
 
