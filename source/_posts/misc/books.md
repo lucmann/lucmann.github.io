@@ -7,7 +7,7 @@ categories: misc
 
 ![The pleasure of finding things out](/images/books/The_pleasure_of_finding_things_out.jpg)
 <!--more-->
-= 发现的乐趣 The Pleasure of Finding Things Out
+# 发现的乐趣 The Pleasure of Finding Things Out
 
 - [Los Alamos From Below: Reminiscences](https://calteches.library.caltech.edu/34/3/FeynmanLosAlamos.htm)
 - [Plenty of Room at the Bottom](https://web.pa.msu.edu/people/yang/RFeynman_plentySpace.pdf)

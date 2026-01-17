@@ -308,6 +308,13 @@ crng init 花这么长时间的原因是系统 entropy sources 不足，内核�
 
 将下来主要排查设备树和内核配置的问题，在这里和 ChatGPT/DeepSeek 交流了很多，总体感觉 ChatGPT 在这方面比 DeepSeek 靠谱一点。了解到了 HI3670 SoC 的 MMC 控制器使用的是 Synopsis DesignWare MMC, 它是一种不遵循 SD Host Controller Interface 规范的厂家自定义接口。
 
+### SD 卡启动
+
+SD 卡启动有两个主要问题:
+
+- [准备好 sdcard.img](https://github.com/lucmann/hikey970-debian-image/blob/hikey970-debian-image/hikey970_dual_boot_builder.sh)
+- 让 UEFI 能够识别 sdcard 上的 boot 分区
+
 ![Hikey970 BootManager](/images/hikey970/BootManager.png)
 ![Hikey970 BootManager](/images/hikey970/DevicesList.png)
 ![Hikey970 BootManager](/images/hikey970/BootFromFile.png)
@@ -326,3 +333,4 @@ crng init 花这么长时间的原因是系统 entropy sources 不足，内核�
 - [跨平台更新制作 rootfs](https://notes.leconiot.com/debootstrap.html)
 - [Racing karts on a Rust GPU kernel driver](https://www.collabora.com/news-and-blog/news-and-events/racing-karts-on-a-rust-gpu-kernel-driver.html)
 - [制作 Hikey970 的 rootfs](https://github.com/lucmann/hikey970-ubuntu-image)
+- [UEFI Shell Specification](https://uefi.org/sites/default/files/resources/UEFI_Shell_Spec_2_0_Errata_A.pdf)
