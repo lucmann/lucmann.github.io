@@ -13,3 +13,4 @@ categories: misc
 - [Plenty of Room at the Bottom](https://web.pa.msu.edu/people/yang/RFeynman_plentySpace.pdf)
 - [Cargo Cult Science](https://calteches.library.caltech.edu/51/2/CargoCult.htm)
 - [Feynman's Challenger Investigation Insights](https://calteches.library.caltech.edu/3570/1/Feynman.pdf)
+- [The Value of Science](https://calteches.library.caltech.edu/1575/1/Science.pdf)
