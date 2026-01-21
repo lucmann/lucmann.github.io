@@ -13,10 +13,11 @@ digraph nvidia_gpus {
             <tr>                                                                    <td BGCOLOR="#a6a6a6">2014</td><td BGCOLOR="#a6a6a6">GM2xx  </td><td BGCOLOR="#a6a6a6">Maxwell2     </td></tr>
             <tr>                                                                    <td BGCOLOR="#a6a6a6">2016</td><td BGCOLOR="#a6a6a6">GP1xx  </td><td BGCOLOR="#a6a6a6">Pascal       </td></tr>
             <tr>                                                                    <td BGCOLOR="#a6a6a6">2017</td><td BGCOLOR="#a6a6a6">GV1xx  </td><td BGCOLOR="#a6a6a6">Volta        </td></tr>
-            <tr><td ROWSPAN="4" BGCOLOR="#76b900"><b>post-Turing<br/>(GSP)</b></td><td BGCOLOR="#76b900">2018</td><td BGCOLOR="#76b900">TU1xx  </td><td BGCOLOR="#76b900">Turing       </td></tr>
+            <tr><td ROWSPAN="5" BGCOLOR="#76b900"><b>post-Turing<br/>(GSP)</b></td> <td BGCOLOR="#76b900">2018</td><td BGCOLOR="#76b900">TU1xx  </td><td BGCOLOR="#76b900">Turing       </td></tr>
             <tr>                                                                    <td BGCOLOR="#76b900">2020</td><td BGCOLOR="#76b900">GA1xx  </td><td BGCOLOR="#76b900">Ampere       </td></tr>
             <tr>                                                                    <td BGCOLOR="#76b900">2022</td><td BGCOLOR="#76b900">AD1xx  </td><td BGCOLOR="#76b900">Ada Lovelace </td></tr>
             <tr>                                                                    <td BGCOLOR="#76b900">2025</td><td BGCOLOR="#76b900">GB2xx  </td><td BGCOLOR="#76b900">Blackwell    </td></tr>
+            <tr>                                                                    <td BGCOLOR="#76b900">2026</td><td BGCOLOR="#76b900">       </td><td BGCOLOR="#76b900">Rubin        </td></tr>
         </table>
     >]
 }
