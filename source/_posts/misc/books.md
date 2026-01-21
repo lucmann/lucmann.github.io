@@ -14,3 +14,5 @@ categories: misc
 - [Cargo Cult Science](https://calteches.library.caltech.edu/51/2/CargoCult.htm)
 - [Feynman's Challenger Investigation Insights](https://calteches.library.caltech.edu/3570/1/Feynman.pdf)
 - [The Value of Science](https://calteches.library.caltech.edu/1575/1/Science.pdf)
+- [What is Science](https://www.fotuva.org/feynman/what_is_science.html)
+- [The Relation of Science and Religion](https://calteches.library.caltech.edu/49/2/Religion.htm)
