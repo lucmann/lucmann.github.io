@@ -222,25 +222,9 @@ systemctl start dhcpcd.service
 /sbin/ntpdate ntp.aliyun.com
 ```
 
-# SD 卡启动
+# Display on HiKey970
 
-```
-```
-
-# 显示
-
-```mermaid
-flowchart LR
-    DPE["Display Engine<br>(display controller)"]
-    DSI["Display Serial Interface"]
-    HDMI["external HDMI converter"]
-
-    subgraph in-chip
-      DPE -- RGB timing --> DSI
-    end
-
-    DSI --> HDMI
-```
+![From claude.ai](/images/hikey970/hikey970-display.svg)
 
 # Panfrost on HiKey970
 
