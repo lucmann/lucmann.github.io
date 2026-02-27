@@ -226,6 +226,31 @@ systemctl start dhcpcd.service
 
 ![From claude.ai](/images/hikey970/hikey970-display.svg)
 
+## [DSI bridge probe](https://lore.kernel.org/dri-devel/e5ec9763-37fe-6cd8-6eca-52792afbdb94@samsung.com/T/)
+
+DSI bridge driver probe [陷入死循环](https://gist.github.com/lucmann/7ae4bf26d49807a4d951db2e989a271c)
+
+> [    3.270639] [drm] the bridge node is adv7533
+> [    3.270645] [drm] wait for external HDMI bridge driver.
+> [    3.270832] of_irq_parse_raw:  /soc/gpio@e8a0c000:00000001,00000002
+> [    3.270905] adv7511_probe dev->of_node (____ptrval____)
+> [    3.270909] __devm_drm_bridge_alloc
+> [    3.271426] adv7511_init_regulators
+> [    3.330257] [drm] the bridge node is adv7533
+> [    3.330264] [drm] wait for external HDMI bridge driver.
+> [    3.330449] of_irq_parse_raw:  /soc/gpio@e8a0c000:00000001,00000002
+> [    3.330522] adv7511_probe dev->of_node (____ptrval____)
+> [    3.330526] __devm_drm_bridge_alloc
+> [    3.331015] adv7511_init_regulators
+> [    3.390209] [drm] the bridge node is adv7533
+> [    3.390215] [drm] wait for external HDMI bridge driver.
+> [    3.390397] of_irq_parse_raw:  /soc/gpio@e8a0c000:00000001,00000002
+> [    3.390464] adv7511_probe dev->of_node (____ptrval____)
+> [    3.390468] __devm_drm_bridge_alloc
+> [    3.390937] adv7511_init_regulators
+> [    3.446194] [drm] the bridge node is adv7533
+> [    3.446200] [drm] wait for external HDMI bridge driver.
+
 # Panfrost on HiKey970
 
 Pathor(C) 和 Tyr(Rust) 都是为 Valhall 架构以上的 Mali GPU (即基于 Command Stream Frontend 的 GPU) 而写的驱动, HiKey 970 (HI3670 SoC) 搭载的是 Mali G72 MP12 (Bifrost)，所以只能使用 Panfrost 驱动。上面可以启动的内核是 v4.19, 当时的 GPU 驱动还是 lima.
