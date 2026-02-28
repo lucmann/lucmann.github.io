@@ -253,6 +253,10 @@ DSI bridge driver probe [陷入死循环](https://gist.github.com/lucmann/7ae4bf
 [    3.446200] [drm] wait for external HDMI bridge driver.
 ```
 
+按照上游对 hisilicon/kirin/dw_drm_dsi.c 的[修改](https://lists.freedesktop.org/archives/freedreno/2021-October/012892.html)，将 hikey9xx/gpu/kirin9xx_dw_drm_dsi.c 中的 `dsi_probe()` 在 probe ordering 调整后可解决此问题
+
+![From claude.ai](/images/hikey970/dsi_probe_ordering_comparison.svg)
+
 # Panfrost on HiKey970
 
 Pathor(C) 和 Tyr(Rust) 都是为 Valhall 架构以上的 Mali GPU (即基于 Command Stream Frontend 的 GPU) 而写的驱动, HiKey 970 (HI3670 SoC) 搭载的是 Mali G72 MP12 (Bifrost)，所以只能使用 Panfrost 驱动。上面可以启动的内核是 v4.19, 当时的 GPU 驱动还是 lima.
