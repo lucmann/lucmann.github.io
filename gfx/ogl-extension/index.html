@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Talk About  OpenGL Extensions有哪些分类？ Conformant OpenGL implementation是什么? OpenGL Extensions和OpenGL Versions有什么关系？ OpenGL Extensions和conformant OpenGL implementation有什么关系？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGL Extensions和Version">
+<meta property="og:url" content="https://lucmann.github.io/gfx/ogl-extension/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="Talk About  OpenGL Extensions有哪些分类？ Conformant OpenGL implementation是什么? OpenGL Extensions和OpenGL Versions有什么关系？ OpenGL Extensions和conformant OpenGL implementation有什么关系？">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/gfx/ogl-extension/extensions.png">
+<meta property="og:image" content="https://lucmann.github.io/images/extension2version.png">
+<meta property="article:published_time" content="2021-04-22T02:47:45.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.256Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="OpenGL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/gfx/ogl-extension/extensions.png">
+
+
+<link rel="canonical" href="https://lucmann.github.io/gfx/ogl-extension/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/gfx/ogl-extension/","path":"gfx/ogl-extension/","title":"OpenGL Extensions和Version"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>OpenGL Extensions和Version | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#talk-about"><span class="nav-number">1.</span> <span class="nav-text"> Talk About</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#opengl-extensions-category"><span class="nav-number">1.1.</span> <span class="nav-text"> OpenGL Extensions Category</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%8C%89%E7%85%A7khronos%E7%9A%84extensions-name-convention%E5%8F%AF%E4%BB%A5%E5%88%86%E4%B8%BA%E4%BB%A5%E4%B8%8B%E4%B8%89%E7%B1%BB"><span class="nav-number">1.1.1.</span> <span class="nav-text"> 如果按照Khronos的Extensions Name Convention可以分为以下三类：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%8C%89%E7%85%A7khronos%E7%9A%84opengl-registry-extension-specifications%E5%8F%AF%E4%BB%A5%E5%88%86%E4%B8%BA%E4%BB%A5%E4%B8%8B%E4%B8%A4%E7%B1%BB"><span class="nav-number">1.1.2.</span> <span class="nav-text"> 如果按照Khronos的OpenGL Registry Extension Specifications可以分为以下两类:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#khronos-approved-extensions"><span class="nav-number">1.1.3.</span> <span class="nav-text"> Khronos-approved Extensions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#k3-arb-and-khronos-extensions"><span class="nav-number">1.1.3.1.</span> <span class="nav-text"> K.3 ARB and Khronos Extensions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#k31-naming-conventions"><span class="nav-number">1.1.3.2.</span> <span class="nav-text"> K.3.1 Naming Conventions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#k32-promoting-extensions-to-core-features"><span class="nav-number">1.1.3.3.</span> <span class="nav-text"> K.3.2 Promoting Extensions to Core Features</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-the-relationship-between-opengl-extensions-and-opengl-versions"><span class="nav-number">1.2.</span> <span class="nav-text"> What Is The Relationship Between OpenGL Extensions And OpenGL Versions?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#opengl-es-and-glsl-es-version"><span class="nav-number">2.</span> <span class="nav-text"> OpenGL (ES) and GLSL (ES) Version</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#khronos%E5%8F%91%E5%B8%83opengles%E5%8F%8Aglsles%E7%9A%84%E6%97%B6%E9%97%B4"><span class="nav-number">2.1.</span> <span class="nav-text"> Khronos发布OpenGL(ES)及GLSL(ES)的时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#opengl-version"><span class="nav-number">2.2.</span> <span class="nav-text"> OpenGL Version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#opengl-shading-language-es-version"><span class="nav-number">2.3.</span> <span class="nav-text"> OpenGL (Shading Language) ES Version</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pipe_cap_-vs-extensions-in-mesa"><span class="nav-number">3.</span> <span class="nav-text"> PIPE_CAP_* vs Extensions in Mesa</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#faq"><span class="nav-number">4.</span> <span class="nav-text"> FAQ</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/gfx/ogl-extension/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="OpenGL Extensions和Version | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenGL Extensions和Version
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-04-22 10:47:45" itemprop="dateCreated datePublished" datetime="2021-04-22T10:47:45+08:00">2021-04-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/graphics/" itemprop="url" rel="index"><span itemprop="name">graphics</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/gfx/ogl-extension/" class="post-meta-item leancloud_visitors" data-flag-title="OpenGL Extensions和Version" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/gfx/ogl-extension/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="gfx/ogl-extension/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="talk-about"><a class="markdownIt-Anchor" href="#talk-about"></a> Talk About</h1>
+<ul>
+<li>OpenGL Extensions有哪些分类？</li>
+<li>Conformant OpenGL implementation是什么?</li>
+<li>OpenGL Extensions和OpenGL Versions有什么关系？</li>
+<li>OpenGL Extensions和conformant OpenGL implementation有什么关系？</li>
+</ul>
+<span id="more"></span>
+<h2 id="opengl-extensions-category"><a class="markdownIt-Anchor" href="#opengl-extensions-category"></a> OpenGL Extensions Category</h2>
+<p>严格来说，OpenGL Extensions可以分为三类，但也可以分为两类。</p>
+<h3 id="如果按照khronos的extensions-name-convention可以分为以下三类"><a class="markdownIt-Anchor" href="#如果按照khronos的extensions-name-convention可以分为以下三类"></a> 如果按照Khronos的<a target="_blank" rel="noopener" href="https://www.khronos.org/registry/OpenGL/docs/rules.html#spec_naming">Extensions Name Convention</a>可以分为以下三类：</h3>
+<ul>
+<li>vendor-specific (“NV”, “ATI”, etc)</li>
+<li>multivendor (EXT)</li>
+<li>Khronos-approved (“ARB”, “OES”, “OML”)</li>
+</ul>
+<p>具体说， Khronos的Extension命名规则是<code>api_category_name</code>, 对于<strong>OpenGL</strong> API来说<code>api</code>就是<code>GL</code>, <code>category</code>就是上面的三类，对于第三类<strong>Khronos-approved</strong> Extensions, <code>category</code>还会细分</p>
+<ul>
+<li>&quot;ARB&quot;或&quot;KHR&quot;专门指<strong>OpenGL</strong> Extensions</li>
+<li>&quot;OES&quot;专门指<strong>OpenGL ES</strong> Extensions</li>
+<li>&quot;OML&quot;专门指<strong>OpenML</strong> Extensions</li>
+</ul>
+<h3 id="如果按照khronos的opengl-registry-extension-specifications可以分为以下两类"><a class="markdownIt-Anchor" href="#如果按照khronos的opengl-registry-extension-specifications可以分为以下两类"></a> 如果按照Khronos的<a target="_blank" rel="noopener" href="https://www.khronos.org/registry/OpenGL/index_gl.php">OpenGL Registry Extension Specifications</a>可以分为以下两类:</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.khronos.org/registry/OpenGL/index_gl.php#arbextspecs">OpenGL ARB Extensions Specifications</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.khronos.org/registry/OpenGL/index_gl.php#arbextspecs">OpenGL Vendor and EXT Extension Specifications</a></li>
+</ul>
+<h3 id="khronos-approved-extensions"><a class="markdownIt-Anchor" href="#khronos-approved-extensions"></a> Khronos-approved Extensions</h3>
+<p>这里重点理一下<strong>Khronos-approved</strong> Extensions(或者**“GL_ARB_<em>&quot;<strong>和</strong>&quot;GL_KHR_</em>”**), 因为Khronos-approved Extensions与下面两个问题密切相关：</p>
+<ul>
+<li>OpenGL Extensions和OpenGL Versions有什么关系？</li>
+<li>OpenGL Extensions和conformant OpenGL implementation有什么关系？</li>
+</ul>
+<p>先看一下<a target="_blank" rel="noopener" href="https://www.khronos.org/registry/OpenGL/specs/gl/glspec46.core.pdf">OpenGL 4.6 Core Profile Specification</a></p>
+<h4 id="k3-arb-and-khronos-extensions"><a class="markdownIt-Anchor" href="#k3-arb-and-khronos-extensions"></a> K.3 ARB and Khronos Extensions</h4>
+<blockquote><p>OpenGL extensions that have been approved by the Khronos OpenGL Architectural Review Board Working Group(ARB), or jointly approved by the ARB and the Khronos OpenGL ES Working Group(KHR), are summarized in this section. ARB and KHR extensions are NOT required to be supported by a CONFORMANT OpenGL implementation, but are expected to be widely available; they define functionality that is likely to move into the REQUIRED feature set in a future revision of the specification.</p>
+</blockquote>
+<p>所有被ARB批准的，或者被ARB和KHR联合批准的OpenGL Extensions被罗列在本章节。这些Extensions不是一个<strong>Conformant</strong> OpenGL实现所必须支持的，但它们应该被大多数OpenGL实现都支持；它们所定义的功能很有可能在未来的OpenGL Specification里加到<strong>必须支持的特性集</strong>中。</p>
+<h4 id="k31-naming-conventions"><a class="markdownIt-Anchor" href="#k31-naming-conventions"></a> K.3.1 Naming Conventions</h4>
+<p>为了区分<strong>ARB</strong>和<strong>KHR</strong> extensions和core OpenGL extensions(required core features), 以及vendor-specific extensions, 有以下extension命名规范：</p>
+<ul>
+<li>每个Khronos-approved extension都有一个唯一的名字字符串&quot;GL_ARB_name&quot;或&quot;GL_KHR_name&quot;, 如果某个OpenGL实现支持某个extension,那么这个extension的名字字符串就要出现在调用<code>glGetStringi(EXTENSIONS);</code>的返回值里。</li>
+<li>所有在这个extension里定义的函数，函数名都以<code>FunctionARB</code>或<code>FunctionKHR</code>命名。</li>
+<li>所有在这个extension里定义的枚举，枚举名都以<code>NAME_ARB</code>或<code>NAME_KHR</code>命名。</li>
+</ul>
+<h4 id="k32-promoting-extensions-to-core-features"><a class="markdownIt-Anchor" href="#k32-promoting-extensions-to-core-features"></a> K.3.2 Promoting Extensions to Core Features</h4>
+<p>Khronos-approved, multivendor, 以及vendor-specific extensions都可以被_晋升_(<em>promoted</em>)加入到OpenGL核心特性集(required core features). 一旦被加入，相应的extension specification将被合入到core specification. 在这个extension里定义的函数和枚举也将_删除_它们的<strong>ARB</strong>, <strong>KHR</strong>, <strong>EXT</strong>, 或者<strong>vendor后缀</strong>。而且支持这些被_晋升_的extension的OpenGL实现应该继续支持带后缀的函数名和枚举名。</p>
+<h2 id="what-is-the-relationship-between-opengl-extensions-and-opengl-versions"><a class="markdownIt-Anchor" href="#what-is-the-relationship-between-opengl-extensions-and-opengl-versions"></a> What Is The Relationship Between OpenGL Extensions And OpenGL Versions?</h2>
+<p>下面这张图展示各种OpenGL extensions集合的关系。只有那些<strong>Required Core Features(Extensions)<strong>才会被纳入到各个</strong>OpenGL Core Profile Specification</strong>， 也即OpenGL versions是通过不断加入新的Required Core Features来升级的。</p>
+<div align=center><img src="/gfx/ogl-extension/extensions.png" class="" title="venn diagram of extensions"></div>
+<h1 id="opengl-es-and-glsl-es-version"><a class="markdownIt-Anchor" href="#opengl-es-and-glsl-es-version"></a> OpenGL (ES) and GLSL (ES) Version</h1>
+<h2 id="khronos发布opengles及glsles的时间"><a class="markdownIt-Anchor" href="#khronos发布opengles及glsles的时间"></a> Khronos发布OpenGL(ES)及GLSL(ES)的时间</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Standard</th>
+<th style="text-align:center">Birth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">OpenGL</td>
+<td style="text-align:center">1992</td>
+</tr>
+<tr>
+<td style="text-align:left">OpenGL ES</td>
+<td style="text-align:center">2003</td>
+</tr>
+<tr>
+<td style="text-align:left">GLSL</td>
+<td style="text-align:center">2004</td>
+</tr>
+<tr>
+<td style="text-align:left">GLSL ES</td>
+<td style="text-align:center">2007</td>
+</tr>
+</tbody>
+</table>
+<h2 id="opengl-version"><a class="markdownIt-Anchor" href="#opengl-version"></a> OpenGL Version</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">GL Version</th>
+<th style="text-align:center">Release</th>
+<th style="text-align:center">GLSL Version</th>
+<th style="text-align:left">Preprocessor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1.0</td>
+<td style="text-align:center">1992</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">1.1</td>
+<td style="text-align:center">1997</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">1.2</td>
+<td style="text-align:center">1998</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">1.3</td>
+<td style="text-align:center">2001</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">1.4</td>
+<td style="text-align:center">2002</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">1.5</td>
+<td style="text-align:center">2003</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">2.0</td>
+<td style="text-align:center">2004</td>
+<td style="text-align:center">1.10</td>
+<td style="text-align:left">#version 110</td>
+</tr>
+<tr>
+<td style="text-align:center">2.1</td>
+<td style="text-align:center">2006</td>
+<td style="text-align:center">1.20</td>
+<td style="text-align:left">#version 120</td>
+</tr>
+<tr>
+<td style="text-align:center">3.0</td>
+<td style="text-align:center">2008</td>
+<td style="text-align:center">1.30</td>
+<td style="text-align:left">#version 130</td>
+</tr>
+<tr>
+<td style="text-align:center">3.1</td>
+<td style="text-align:center">2009</td>
+<td style="text-align:center">1.40</td>
+<td style="text-align:left">#version 140</td>
+</tr>
+<tr>
+<td style="text-align:center">3.2</td>
+<td style="text-align:center">2009</td>
+<td style="text-align:center">1.50</td>
+<td style="text-align:left">#version 150</td>
+</tr>
+<tr>
+<td style="text-align:center">3.3</td>
+<td style="text-align:center">2010</td>
+<td style="text-align:center">3.30</td>
+<td style="text-align:left">#version 330</td>
+</tr>
+<tr>
+<td style="text-align:center">4.0</td>
+<td style="text-align:center">2010</td>
+<td style="text-align:center">4.00</td>
+<td style="text-align:left">#version 400</td>
+</tr>
+<tr>
+<td style="text-align:center">4.1</td>
+<td style="text-align:center">2010</td>
+<td style="text-align:center">4.10</td>
+<td style="text-align:left">#version 410</td>
+</tr>
+<tr>
+<td style="text-align:center">4.2</td>
+<td style="text-align:center">2011</td>
+<td style="text-align:center">4.20</td>
+<td style="text-align:left">#version 420</td>
+</tr>
+<tr>
+<td style="text-align:center">4.3</td>
+<td style="text-align:center">2012</td>
+<td style="text-align:center">4.30</td>
+<td style="text-align:left">#version 430</td>
+</tr>
+<tr>
+<td style="text-align:center">4.4</td>
+<td style="text-align:center">2013</td>
+<td style="text-align:center">4.40</td>
+<td style="text-align:left">#version 440</td>
+</tr>
+<tr>
+<td style="text-align:center">4.5</td>
+<td style="text-align:center">2014</td>
+<td style="text-align:center">4.50</td>
+<td style="text-align:left">#version 450</td>
+</tr>
+<tr>
+<td style="text-align:center">4.6</td>
+<td style="text-align:center">2017</td>
+<td style="text-align:center">4.60</td>
+<td style="text-align:left">#version 460</td>
+</tr>
+</tbody>
+</table>
+<h2 id="opengl-shading-language-es-version"><a class="markdownIt-Anchor" href="#opengl-shading-language-es-version"></a> OpenGL (Shading Language) ES Version</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">OpenGL ES</th>
+<th style="text-align:center">Release</th>
+<th style="text-align:center">GLSL ES (ESSL)</th>
+<th style="text-align:left">Directive</th>
+<th style="text-align:center">GLSL based</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1.0</td>
+<td style="text-align:center">2003</td>
+<td style="text-align:center">N/A</td>
+<td style="text-align:left">N/A</td>
+<td style="text-align:center">N/A</td>
+</tr>
+<tr>
+<td style="text-align:center">1.1</td>
+<td style="text-align:center">2004</td>
+<td style="text-align:center">N/A</td>
+<td style="text-align:left">N/A</td>
+<td style="text-align:center">N/A</td>
+</tr>
+<tr>
+<td style="text-align:center">2.0</td>
+<td style="text-align:center">2007</td>
+<td style="text-align:center">1.00</td>
+<td style="text-align:left"><code>#version 100</code></td>
+<td style="text-align:center">1.20</td>
+</tr>
+<tr>
+<td style="text-align:center">3.0</td>
+<td style="text-align:center">2012</td>
+<td style="text-align:center">3.00</td>
+<td style="text-align:left"><code>#version 300 es</code></td>
+<td style="text-align:center">3.30</td>
+</tr>
+<tr>
+<td style="text-align:center">3.1</td>
+<td style="text-align:center">2014</td>
+<td style="text-align:center">3.10</td>
+<td style="text-align:left"><code>#version 310 es</code></td>
+<td style="text-align:center">3.30</td>
+</tr>
+<tr>
+<td style="text-align:center">3.2</td>
+<td style="text-align:center">2015</td>
+<td style="text-align:center">3.20</td>
+<td style="text-align:left"><code>#version 320 es</code></td>
+<td style="text-align:center">3.30</td>
+</tr>
+</tbody>
+</table>
+<h1 id="pipe_cap_-vs-extensions-in-mesa"><a class="markdownIt-Anchor" href="#pipe_cap_-vs-extensions-in-mesa"></a> <code>PIPE_CAP_*</code> vs Extensions in Mesa</h1>
+<p><img src="/images/extension2version.png" alt="determination of gl version" /></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Use pipe_screen::get_param() to query PIPE_CAP_ values to determine</span></span><br><span class="line"><span class="comment"> * which GL extensions are supported.</span></span><br><span class="line"><span class="comment"> * Quite a few extensions are always supported because they are standard</span></span><br><span class="line"><span class="comment"> * features or can be built on top of other gallium features.</span></span><br><span class="line"><span class="comment"> * Some fine tuning may still be needed.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">st_init_extensions</span><span class="params">(<span class="keyword">struct</span> pipe_screen *screen,</span></span><br><span class="line"><span class="params">                        <span class="keyword">struct</span> gl_constants *consts,</span></span><br><span class="line"><span class="params">                        <span class="keyword">struct</span> gl_extensions *extensions,</span></span><br><span class="line"><span class="params">                        <span class="keyword">struct</span> st_config_options *options,</span></span><br><span class="line"><span class="params">                        gl_api api)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Examine enabled GL extensions to determine GL version.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">static</span> GLuint</span><br><span class="line"><span class="title function_">compute_version</span><span class="params">(<span class="type">const</span> <span class="keyword">struct</span> gl_extensions *extensions,</span></span><br><span class="line"><span class="params">                <span class="type">const</span> <span class="keyword">struct</span> gl_constants *consts, gl_api api)</span></span><br></pre></td></tr></table></figure>
+<h1 id="faq"><a class="markdownIt-Anchor" href="#faq"></a> FAQ</h1>
+<ol>
+<li>为什么GLSL ES 1.00后面是3.00版本？</li>
+</ol>
+<p>在GLSL ES 3.00 Spec里有这样一段说明：</p>
+<blockquote><p>This version of the language is based on version 3.30 of the desktop GLSL. However it includes a number of features that are in version 4.20 but not 3.30. The previous version of GLSL ES was version 1.00 so this version could be called version 2.00.</p>
+<p>RESOLUTION: Follow the desktop GLSL convention so that the language version matches the API version. Hence this version will be called 3.00</p>
+</blockquote>
+<p>GLSL ES 3.10 &amp; 3.20里同样有这段说明，所以，3.00主要是为了对应OpenGL ES API的版本号，3.10, 3.20同样是。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OpenGL/" rel="tag"># OpenGL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/utils/gcc/" rel="prev" title="GNU Compiler Collection - gcc/g++">
+                  <i class="fa fa-angle-left"></i> GNU Compiler Collection - gcc/g++
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/gfx/opengl-objects/" rel="next" title="OpenGL Objects">
+                  OpenGL Objects <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

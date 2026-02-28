@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="X窗口系统 X窗口系统诞生于1984年MIT的研究，后来成为Unix, 类UNIX等操作系统所一致适用的标准化软件工具包及显示架构的运作协议。目前使用最普遍最受欢迎的一个实现是X.Org，它所用的协议版本是X11, 所以Xorg也经常被叫做X11。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="X11中的Display, Screen, Depth和Visual">
+<meta property="og:url" content="https://lucmann.github.io/gfx/X/x-display/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="X窗口系统 X窗口系统诞生于1984年MIT的研究，后来成为Unix, 类UNIX等操作系统所一致适用的标准化软件工具包及显示架构的运作协议。目前使用最普遍最受欢迎的一个实现是X.Org，它所用的协议版本是X11, 所以Xorg也经常被叫做X11。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-09-03T08:49:16.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.166Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="X11">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lucmann.github.io/gfx/X/x-display/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/gfx/X/x-display/","path":"gfx/X/x-display/","title":"X11中的Display, Screen, Depth和Visual"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>X11中的Display, Screen, Depth和Visual | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#x%E7%AA%97%E5%8F%A3%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text"> X窗口系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%83%E4%BB%AC%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text"> 它们是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#display"><span class="nav-number">2.1.</span> <span class="nav-text"> Display</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#screen"><span class="nav-number">2.2.</span> <span class="nav-text"> Screen</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#depth"><span class="nav-number">2.3.</span> <span class="nav-text"> Depth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#visual"><span class="nav-number">2.4.</span> <span class="nav-text"> Visual</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%83%E4%BB%AC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%B1%82%E7%BA%A7%E5%85%B3%E7%B3%BB"><span class="nav-number">3.</span> <span class="nav-text"> 它们之间的层级关系</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#xdpyinfo"><span class="nav-number">4.</span> <span class="nav-text"> xdpyinfo</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/gfx/X/x-display/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="X11中的Display, Screen, Depth和Visual | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          X11中的Display, Screen, Depth和Visual
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-09-03 16:49:16" itemprop="dateCreated datePublished" datetime="2020-09-03T16:49:16+08:00">2020-09-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/graphics/" itemprop="url" rel="index"><span itemprop="name">graphics</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/gfx/X/x-display/" class="post-meta-item leancloud_visitors" data-flag-title="X11中的Display, Screen, Depth和Visual" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/gfx/X/x-display/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="gfx/X/x-display/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="x窗口系统"><a class="markdownIt-Anchor" href="#x窗口系统"></a> X窗口系统</h1>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/X_Window_System">X窗口系统</a>诞生于1984年MIT的研究，后来成为Unix, 类UNIX等操作系统所一致适用的标准化软件工具包及显示架构的运作协议。目前使用最普遍最受欢迎的一个实现是<a target="_blank" rel="noopener" href="https://www.x.org/wiki/">X.Org</a>，它所用的协议版本是<strong>X11</strong>, 所以Xorg也经常被叫做X11。</p>
+<span id="more"></span>
+<h1 id="它们是什么"><a class="markdownIt-Anchor" href="#它们是什么"></a> 它们是什么</h1>
+<h2 id="display"><a class="markdownIt-Anchor" href="#display"></a> Display</h2>
+<p>Display datatype maintaining display specific data. The contents of this structure are implementation dependent. A Display should be treated as oqaque by application code.</p>
+<h2 id="screen"><a class="markdownIt-Anchor" href="#screen"></a> Screen</h2>
+<pre><code>Information about the screen. The contents of this structure are implementation dependent. A Screen should be treated as opaque by application code.
+</code></pre>
+<h2 id="depth"><a class="markdownIt-Anchor" href="#depth"></a> Depth</h2>
+<pre><code>Depth structure; contains information for each possible depth.
+</code></pre>
+<h2 id="visual"><a class="markdownIt-Anchor" href="#visual"></a> Visual</h2>
+<pre><code>Visual structure; contains information about colormapping possible.
+</code></pre>
+<p>以上4个结构体都被定义在<a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/include/X11/Xlib.h">Xlib.h</a>,它们四者之间的关系是前者包含多个后者，依次类推。这里注意区分两组概念:</p>
+<table>
+<caption><em>Comparison between Display and DISPLAY</em></caption>
+<tr><th><th>Display<th>DISPLAY
+<tr><th>Category<td>struct<td>env var
+<tr><th>Usage<td>Display *dpy<br>as most Xlib API's first argument<td>e.g. export DISPLAY=:0
+</table>
+<h1 id="它们之间的层级关系"><a class="markdownIt-Anchor" href="#它们之间的层级关系"></a> 它们之间的层级关系</h1>
+<pre><code class="highlight mermaid">graph TD
+    D[Display]
+    D --&gt; s0(Screen0)
+    D --&gt; s1(Screen1)
+    D --&gt; sN(ScreenN)
+    subgraph Screen0
+    s0 --&gt; d0(Depth0)
+    s0 --&gt; d1(Depth1)
+    s0 --&gt; d2(Depth2)
+    s0 --&gt; d3(Depth3)
+    s0 --&gt; dN(DepthN)
+    end
+    subgraph Depth0
+    d0 --&gt; v0(Visual0)
+    d0 --&gt; v1(Visual1)
+    d0 --&gt; v2(Visual2)
+    d0 --&gt; v3(Visual3)
+    d0 --&gt; v4(Visual4)
+    d0 --&gt; v5(Visual5)
+    d0 --&gt; vN(VisualN)
+    end</code></pre>
+<h1 id="xdpyinfo"><a class="markdownIt-Anchor" href="#xdpyinfo"></a> <code>xdpyinfo</code></h1>
+<p><code>xdpyinfo</code>来自X11的工具包<code>x11-utils</code>, 它可以打印当前<code>DISPLAY</code>的Display, Screen, Depth, Visual信息，当然和其它的X的工具一样，使用前要确保环境变量<code>DISPLAY</code>已经为有效值。下面是在Xorg作为X Server时查看到的系统X11 Window的相关信息。(只截取前面部分)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">name of display:    :18.0</span><br><span class="line">version number:    11.0</span><br><span class="line">vendor string:    The X.Org Foundation</span><br><span class="line">vendor release number:    12008000</span><br><span class="line">X.Org version: 1.20.8</span><br><span class="line">maximum request size:  16777212 bytes</span><br><span class="line">motion buffer size:  256</span><br><span class="line">bitmap unit, bit order, padding:    32, LSBFirst, 32</span><br><span class="line">image byte order:    LSBFirst</span><br><span class="line">number of supported pixmap formats:    7</span><br><span class="line">supported pixmap formats:</span><br><span class="line">    depth 1, bits_per_pixel 1, scanline_pad 32</span><br><span class="line">    depth 4, bits_per_pixel 8, scanline_pad 32</span><br><span class="line">    depth 8, bits_per_pixel 8, scanline_pad 32</span><br><span class="line">    depth 15, bits_per_pixel 16, scanline_pad 32</span><br><span class="line">    depth 16, bits_per_pixel 16, scanline_pad 32</span><br><span class="line">    depth 24, bits_per_pixel 32, scanline_pad 32</span><br><span class="line">    depth 32, bits_per_pixel 32, scanline_pad 32</span><br><span class="line">keycode range:    minimum 8, maximum 255</span><br><span class="line">focus:  window 0x300000f, revert to PointerRoot</span><br><span class="line">number of extensions:    25</span><br><span class="line">    BIG-REQUESTS</span><br><span class="line">    DAMAGE</span><br><span class="line">    DOUBLE-BUFFER</span><br><span class="line">    DRI2</span><br><span class="line">    GLX</span><br><span class="line">    Generic Event Extension</span><br><span class="line">    MIT-SCREEN-SAVER</span><br><span class="line">    MIT-SHM</span><br><span class="line">    Present</span><br><span class="line">    RANDR</span><br><span class="line">    RECORD</span><br><span class="line">    RENDER</span><br><span class="line">    SECURITY</span><br><span class="line">    SHAPE</span><br><span class="line">    SYNC</span><br><span class="line">    X-Resource</span><br><span class="line">    XC-MISC</span><br><span class="line">    XFIXES</span><br><span class="line">    XFree86-DGA</span><br><span class="line">    XFree86-VidModeExtension</span><br><span class="line">    XINERAMA</span><br><span class="line">    XInputExtension</span><br><span class="line">    XKEYBOARD</span><br><span class="line">    XTEST</span><br><span class="line">    XVideo</span><br><span class="line">default screen number:    0</span><br><span class="line">number of screens:    1</span><br><span class="line"></span><br><span class="line">screen #0:</span><br><span class="line">  dimensions:    1920x1080 pixels (508x286 millimeters)</span><br><span class="line">  resolution:    96x96 dots per inch</span><br><span class="line">  depths (7):    24, 1, 4, 8, 15, 16, 32</span><br><span class="line">  root window id:    0x34d</span><br><span class="line">  depth of root window:    24 planes</span><br><span class="line">  number of colormaps:    minimum 1, maximum 1</span><br><span class="line">  default colormap:    0x20</span><br><span class="line">  default number of colormap cells:    256</span><br><span class="line">  preallocated pixels:    black 0, white 16777215</span><br><span class="line">  options:    backing-store NO, save-unders NO</span><br><span class="line">  largest cursor:    1920x1080</span><br><span class="line">  current input event mask:    0xfa800f</span><br><span class="line">    KeyPressMask             KeyReleaseMask           ButtonPressMask          </span><br><span class="line">    ButtonReleaseMask        ExposureMask             StructureNotifyMask      </span><br><span class="line">    SubstructureNotifyMask   SubstructureRedirectMask FocusChangeMask          </span><br><span class="line">    PropertyChangeMask       ColormapChangeMask       </span><br><span class="line">  number of visuals:    240</span><br><span class="line">  default visual id:  0x21</span><br><span class="line">  visual:</span><br><span class="line">    visual id:    0x21</span><br><span class="line">    class:    TrueColor</span><br><span class="line">    depth:    24 planes</span><br><span class="line">    available colormap entries:    256 per subfield</span><br><span class="line">    red, green, blue masks:    0xff0000, 0xff00, 0xff</span><br><span class="line">    significant bits in color specification:    8 bits</span><br><span class="line">  visual:</span><br><span class="line">    visual id:    0x22</span><br><span class="line">    class:    DirectColor</span><br><span class="line">    depth:    24 planes</span><br><span class="line">    available colormap entries:    256 per subfield</span><br><span class="line">    red, green, blue masks:    0xff0000, 0xff00, 0xff</span><br><span class="line">    significant bits in color specification:    8 bits</span><br><span class="line">  visual:</span><br><span class="line">    visual id:    0x25e</span><br><span class="line">    class:    TrueColor</span><br><span class="line">    depth:    24 planes</span><br><span class="line">    available colormap entries:    256 per subfield</span><br><span class="line">    red, green, blue masks:    0xff0000, 0xff00, 0xff</span><br><span class="line">    significant bits in color specification:    8 bits</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/X11/" rel="tag"># X11</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/prog/cpp-faqs/" rel="prev" title="关于C++应该知道的那些事">
+                  <i class="fa fa-angle-left"></i> 关于C++应该知道的那些事
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/gfx/ARB/ARB_multi_draw_indirect/" rel="next" title="OpenGL Draw 命令">
+                  OpenGL Draw 命令 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

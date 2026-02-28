@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="DMA-BUF flowchart BT 	App@&#123; img: &quot;&#x2F;images&#x2F;dma-buf&#x2F;window-content.png&quot;, label: &quot;vram for rendering&quot;, pos: &quot;d&quot;, w: 60, h: 60, constraint: &quot;on&quot; &#125; 	Windo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Buffer Sharing and Synchronization">
+<meta property="og:url" content="https://lucmann.github.io/lnx/dma-buf/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="DMA-BUF flowchart BT 	App@&#123; img: &quot;&#x2F;images&#x2F;dma-buf&#x2F;window-content.png&quot;, label: &quot;vram for rendering&quot;, pos: &quot;d&quot;, w: 60, h: 60, constraint: &quot;on&quot; &#125; 	Windo">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/images/dma-buf/cpuva-cpupa-dma-addr.gif">
+<meta property="article:published_time" content="2021-09-15T10:30:15.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.375Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="kernel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/images/dma-buf/cpuva-cpupa-dma-addr.gif">
+
+
+<link rel="canonical" href="https://lucmann.github.io/lnx/dma-buf/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/lnx/dma-buf/","path":"lnx/dma-buf/","title":"Buffer Sharing and Synchronization"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Buffer Sharing and Synchronization | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#dma-buf"><span class="nav-number">1.</span> <span class="nav-text"> DMA-BUF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.</span> <span class="nav-text"> 导入&#x2F;导出的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dynamic-dma-buf-mapping-%E5%92%8C-cached-sg-table"><span class="nav-number">1.2.</span> <span class="nav-text"> Dynamic DMA-BUF Mapping 和 Cached Sg Table</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dma_fence"><span class="nav-number">1.3.</span> <span class="nav-text"> dma_fence</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dma_resv"><span class="nav-number">1.4.</span> <span class="nav-text"> dma_resv</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#synchronization"><span class="nav-number">2.</span> <span class="nav-text"> Synchronization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#implicit-synchronization"><span class="nav-number">2.1.</span> <span class="nav-text"> Implicit Synchronization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#explicit-synchronization"><span class="nav-number">2.2.</span> <span class="nav-text"> Explicit Synchronization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fd-to-handle-convert"><span class="nav-number">2.3.</span> <span class="nav-text"> FD to Handle Convert</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sync-file-transfer"><span class="nav-number">2.4.</span> <span class="nav-text"> Sync File Transfer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#questions"><span class="nav-number">3.</span> <span class="nav-text"> Questions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#references"><span class="nav-number">4.</span> <span class="nav-text"> References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/lnx/dma-buf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Buffer Sharing and Synchronization | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Buffer Sharing and Synchronization
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-09-15 18:30:15" itemprop="dateCreated datePublished" datetime="2021-09-15T18:30:15+08:00">2021-09-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/lnx/dma-buf/" class="post-meta-item leancloud_visitors" data-flag-title="Buffer Sharing and Synchronization" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/lnx/dma-buf/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="lnx/dma-buf/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="dma-buf"><a class="markdownIt-Anchor" href="#dma-buf"></a> DMA-BUF</h1>
+<pre><code class="highlight mermaid">flowchart BT
+	App@&#123; img: &quot;/images/dma-buf/window-content.png&quot;, label: &quot;vram for rendering&quot;, pos: &quot;d&quot;, w: 60, h: 60, constraint: &quot;on&quot; &#125;
+	Window@&#123; img: &quot;/images/dma-buf/window-frame.png&quot;, label: &quot;vram for window frame&quot;, pos: &quot;d&quot;, w: 60, h: 60, constraint: &quot;on&quot; &#125;
+
+	subgraph app [glxgears]
+		BO_10
+	end
+	subgraph x11 [Xorg]
+		BO_20
+		BO_11
+	end
+	subgraph compositor [kwin_x11]
+		BO_21
+	end
+
+	App ~~~ BO_10 --Exporter--&gt; App
+	App --Importer--&gt; BO_11
+
+	Window ~~~ BO_20 --Exporter--&gt; Window
+	Window --Importer--&gt; BO_21</code></pre>
+<span id="more"></span>
+<p>DMA-BUF 是 Linux 内核驱动中在上下文间，进程间，设备间，子系统间共享 buffer 的一种机制。 大概在<a target="_blank" rel="noopener" href="https://lwn.net/Articles/473668/">内核 3.2 版本就实现了</a>。 按最初的设计文档描述的，该框架大致是这样的:</p>
+<ul>
+<li>导出者创建一个固定大小的 buffer object, 并将一个 struct file(anon file) 和 allocator 定义的一组操作(map/unmap/cache-sync 等等) (<code>struct dma_buf_ops</code>) 与之关联</li>
+<li>不同的设备调用 <code>dma_buf_attach()</code> 将自己加到 buffer object 的 attachments 列表， 因为一个 buffer object 可以供多个设备(importers)使用</li>
+<li>这个导出的 buffer object 在各种实体间通过共享文件描述符 fd 来共享</li>
+<li>收到 fd 的导入者将重新获取到 buffer object, 使用导出时关联的 <code>dma_buf_attach_ops</code> 去访问这个 buffer</li>
+<li>导出者和导入者使用 <code>map_dma_buf()</code> 和 <code>unmap_dma_buf()</code> 来共享 buffer object 的 scatterlist</li>
+</ul>
+<p><code>struct dma_buf</code> 是一种<strong>胶水结构</strong>， 它将一个 <strong>anonymous file</strong> 和一个 <strong>drm_gem_object</strong> 以及导出者需要实现的一组对这个 buffer 的一组操作 <strong>dma_buf_ops</strong> 等等<strong>粘合在一起</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">dma_buf</span> &#123;</span></span><br><span class="line">  <span class="type">size_t</span> size; <span class="comment">// buffer size,  不变</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">file</span>;</span> <span class="comment">// anonymous file struct</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">attachments</span>;</span> <span class="comment">// 所有导入者的一个链表</span></span><br><span class="line">  <span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">dma_buf_ops</span> *<span class="title">ops</span>;</span> <span class="comment">// 由导出者负责实现，如 map/unmap</span></span><br><span class="line">  <span class="type">unsigned</span> vmapping_counter； <span class="comment">// vmaps 的引用计数</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">iosys_map</span> <span class="title">vmap_ptr</span>;</span> <span class="comment">// 当 vmapping_counter 大于 0 时，指向当前的 vmap</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> *exp_name;  <span class="comment">// 导出者字符串，debugging</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> *name; <span class="comment">// accounting &amp; debugging</span></span><br><span class="line">  <span class="type">spinlock_t</span> name_lock； <span class="comment">// 互斥访问 name 的锁</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">module</span> *<span class="title">owner</span>;</span>  <span class="comment">// 导出者 module</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">list_node</span>;</span> <span class="comment">// accounting &amp; debugging</span></span><br><span class="line">  <span class="type">void</span> *priv; <span class="comment">// 指向 drm_gem_object</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dma_resv</span> *<span class="title">resv</span>;</span></span><br><span class="line">  <span class="type">wait_queue_head_t</span> poll; <span class="comment">// 允许用户空间 poll()</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dma_buf_poll_cb_t</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">dma_fence_cb</span> <span class="title">cb</span>;</span></span><br><span class="line">	<span class="type">wait_queue_head_t</span> *poll;</span><br><span class="line"></span><br><span class="line">	<span class="type">__poll_t</span> active;</span><br><span class="line">  &#125; cb_in, cb_out;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dma_buf_sysfs_entry</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">kobject</span> <span class="title">kobj</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">dma_buf</span> *<span class="title">dmabuf</span>;</span></span><br><span class="line">  &#125; *sysfs_entry;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以 glxgears(<code>PRIME_HANDLE_TO_FD</code>) 和 Xorg(<code>PRIME_FD_TO_HANDLE</code>) 之间的共享过程为例, 主要有两个主要问题：</p>
+<ul>
+<li>要给 DMA-BUF 套一层匿名文件(Anonymous File), 这样才可以安全地在进程间共享</li>
+<li>导入后，导入进程新建的 GPU <strong>虚拟显存地址到物理显存地址</strong>的映射要能够映射到<strong>与导出侧相同的 GPU 物理显存地址</strong> (GPU VA 倒无所谓)</li>
+</ul>
+<p>内核在 drm_file 下搞了一个 dmabuf 和 handle 的红黑树作为 <strong>DMA-BUF 缓存</strong>， 这样在同一设备文件中的导出导入或同一个 drm_gem_object 被同一个设备多次导入的情况就会高效一些。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * struct drm_prime_file_private - per-file tracking for PRIME</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This just contains the internal &amp;struct dma_buf and handle caches for each</span></span><br><span class="line"><span class="comment"> * &amp;struct drm_file used by the PRIME core code.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">drm_prime_file_private</span> &#123;</span></span><br><span class="line"><span class="comment">/* private: */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">mutex</span> <span class="title">lock</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">dmabufs</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">handles</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这个 <strong>import/export caches</strong> 有几个必要的作用：</p>
+<ul>
+<li>保证对于任意一个 drm_gem_object 总是有<strong>一个唯一的用户态 handle</strong> (见 <a href="https://lucmann.github.io/gfx/piglit/">Piglit: ext_image_dma_buf_import-refcount-multithread</a>)</li>
+<li>可以允许 UMD 去<strong>检测重复的导入</strong></li>
+</ul>
+<p><code>struct file</code>, <code>struct drm_file</code>, <code>struct drm_prime_file_private</code> 三者的关系是</p>
+<pre><code class="highlight mermaid">erDiagram
+	file ||--|| drm_file : contains
+	file &#123;
+		atomic_long_t	f_count
+		spinlock_t		f_lock
+		fmode_t			f_mode
+		file_operations	*f_op
+		address_space	*f_mapping
+		void			*private_data
+	&#125;
+	drm_file ||--|| drm_prime_file_private : contains
+	drm_file &#123;
+		TYPES					others
+		drm_prime_file_private	prime
+	&#125;
+	drm_prime_file_private &#123;
+		mutex lock
+		rb_root dmabufs
+		rb_root handles
+	&#125;</code></pre>
+<h2 id="导入导出的实现"><a class="markdownIt-Anchor" href="#导入导出的实现"></a> 导入/导出的实现</h2>
+<pre><code class="highlight mermaid">flowchart LR
+  subgraph export [&quot;Export&quot;]
+    direction TB
+    1a[&quot;drmPrimeHandleToFD()&quot;]
+	1b[&quot;DRM_IOCTL_PRIME_HANDLE_TO_FD&quot;]
+	1c[&quot;drm_prime_handle_to_fd_ioctl()&quot;]
+	1d[&quot;drm_gem_prime_handle_to_fd()&quot;]
+	1e[&quot;drm_gem_prime_handle_to_dmabuf()&quot;]
+	1f[&quot;export_and_register_object()&quot;]
+  end
+  subgraph import [&quot;Import&quot;]
+    direction TB
+    2a[&quot;drmPrimeFDToHandle()&quot;]
+	2b[&quot;DRM_IOCTL_PRIME_FD_TO_HANDLE&quot;]
+	2c[&quot;drm_prime_fd_to_handle_ioctl()&quot;]
+	2d[&quot;drm_gem_prime_fd_to_handle()&quot;]
+	2e[&quot;drm_prime_lookup_buf_handle()&quot;]
+	2f[&quot;drm_gem_prime_import()&quot;]
+  end
+
+  1a --&gt; 1b --&gt; 1c --&gt; 1d --&gt; 1e --&gt; 1f
+  2a --&gt; 2b --&gt; 2c --&gt; 2d --&gt; 2e --&gt; 2f
+
+  export --&gt; import</code></pre>
+<p><code>struct file</code>， <code>struct dma_buf</code> 的关系</p>
+<ul>
+<li>导出者 <code>DRM_IOCTL_PRIME_HANDLE_TO_FD</code></li>
+</ul>
+<p>先拿这个 gem_handle 去红黑树里找 dma_buf (<strong><code>drm_prime_lookup_buf_by_handle()</code></strong>), 如果有就返回这个 dma_buf，如果没有就调用 <code>export_and_register_object()</code> 给对应的 drm_gem_object 新申请一个 <code>struct dma_buf</code>，再由内核把这个 gem_handle 和 dma_buf 都缓存到红黑树中 (<strong><code>drm_prime_add_buf_handle()</code></strong>)， 最后 <code>fd_install(fd, dmabuf-&gt;file);</code> 把 fd 返回用户态的导出者。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * dma_buf_export - Creates a new dma_buf, and associates an anon file</span></span><br><span class="line"><span class="comment"> * with this buffer, so it can be exported.</span></span><br><span class="line"><span class="comment"> * Also connect the allocator specific data and ops to the buffer.</span></span><br><span class="line"><span class="comment"> * Additionally, provide a name string for exporter; useful in debugging.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @exp_info:	[in]	holds all the export related information provided</span></span><br><span class="line"><span class="comment"> *			by the exporter. see &amp;struct dma_buf_export_info</span></span><br><span class="line"><span class="comment"> *			for further details.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Returns, on success, a newly created struct dma_buf object, which wraps the</span></span><br><span class="line"><span class="comment"> * supplied private data and operations for struct dma_buf_ops. On either</span></span><br><span class="line"><span class="comment"> * missing ops, or error in allocating struct dma_buf, will return negative</span></span><br><span class="line"><span class="comment"> * error.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * For most cases the easiest way to create @exp_info is through the</span></span><br><span class="line"><span class="comment"> * %DEFINE_DMA_BUF_EXPORT_INFO macro.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">struct</span> dma_buf *<span class="title function_">dma_buf_export</span><span class="params">(<span class="type">const</span> <span class="keyword">struct</span> dma_buf_export_info *exp_info)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">dma_buf</span> *<span class="title">dmabuf</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">dma_resv</span> *<span class="title">resv</span> =</span> exp_info-&gt;resv;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">file</span>;</span></span><br><span class="line">	<span class="type">size_t</span> alloc_size = <span class="keyword">sizeof</span>(<span class="keyword">struct</span> dma_buf);</span><br><span class="line">	<span class="type">int</span> ret;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (WARN_ON(!exp_info-&gt;priv || !exp_info-&gt;ops</span><br><span class="line">		    || !exp_info-&gt;ops-&gt;map_dma_buf</span><br><span class="line">		    || !exp_info-&gt;ops-&gt;unmap_dma_buf</span><br><span class="line">		    || !exp_info-&gt;ops-&gt;release))</span><br><span class="line">		<span class="keyword">return</span> ERR_PTR(-EINVAL);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (WARN_ON(exp_info-&gt;ops-&gt;cache_sgt_mapping &amp;&amp;</span><br><span class="line">		    (exp_info-&gt;ops-&gt;pin || exp_info-&gt;ops-&gt;unpin)))</span><br><span class="line">		<span class="keyword">return</span> ERR_PTR(-EINVAL);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (WARN_ON(!exp_info-&gt;ops-&gt;pin != !exp_info-&gt;ops-&gt;unpin))</span><br><span class="line">		<span class="keyword">return</span> ERR_PTR(-EINVAL);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!try_module_get(exp_info-&gt;owner))</span><br><span class="line">		<span class="keyword">return</span> ERR_PTR(-ENOENT);</span><br><span class="line"></span><br><span class="line">	file = dma_buf_getfile(exp_info-&gt;size, exp_info-&gt;flags);</span><br><span class="line">	<span class="keyword">if</span> (IS_ERR(file)) &#123;</span><br><span class="line">		ret = PTR_ERR(file);</span><br><span class="line">		<span class="keyword">goto</span> err_module;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!exp_info-&gt;resv)</span><br><span class="line">		alloc_size += <span class="keyword">sizeof</span>(<span class="keyword">struct</span> dma_resv);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="comment">/* prevent &amp;dma_buf[1] == dma_buf-&gt;resv */</span></span><br><span class="line">		alloc_size += <span class="number">1</span>;</span><br><span class="line">	dmabuf = kzalloc(alloc_size, GFP_KERNEL);</span><br><span class="line">	<span class="keyword">if</span> (!dmabuf) &#123;</span><br><span class="line">		ret = -ENOMEM;</span><br><span class="line">		<span class="keyword">goto</span> err_file;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	dmabuf-&gt;priv = exp_info-&gt;priv;</span><br><span class="line">	dmabuf-&gt;ops = exp_info-&gt;ops;</span><br><span class="line">	dmabuf-&gt;size = exp_info-&gt;size;</span><br><span class="line">	dmabuf-&gt;exp_name = exp_info-&gt;exp_name;</span><br><span class="line">	dmabuf-&gt;owner = exp_info-&gt;owner;</span><br><span class="line">	spin_lock_init(&amp;dmabuf-&gt;name_lock);</span><br><span class="line">	init_waitqueue_head(&amp;dmabuf-&gt;poll);</span><br><span class="line">	dmabuf-&gt;cb_in.poll = dmabuf-&gt;cb_out.poll = &amp;dmabuf-&gt;poll;</span><br><span class="line">	dmabuf-&gt;cb_in.active = dmabuf-&gt;cb_out.active = <span class="number">0</span>;</span><br><span class="line">	INIT_LIST_HEAD(&amp;dmabuf-&gt;attachments);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!resv) &#123;</span><br><span class="line">		dmabuf-&gt;resv = (<span class="keyword">struct</span> dma_resv *)&amp;dmabuf[<span class="number">1</span>];</span><br><span class="line">		dma_resv_init(dmabuf-&gt;resv);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		dmabuf-&gt;resv = resv;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ret = dma_buf_stats_setup(dmabuf, file);</span><br><span class="line">	<span class="keyword">if</span> (ret)</span><br><span class="line">		<span class="keyword">goto</span> err_dmabuf;</span><br><span class="line"></span><br><span class="line">	file-&gt;private_data = dmabuf;</span><br><span class="line">	file-&gt;f_path.dentry-&gt;d_fsdata = dmabuf;</span><br><span class="line">	dmabuf-&gt;file = file;</span><br><span class="line"></span><br><span class="line">	__dma_buf_debugfs_list_add(dmabuf);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> dmabuf;</span><br><span class="line"></span><br><span class="line">err_dmabuf:</span><br><span class="line">	<span class="keyword">if</span> (!resv)</span><br><span class="line">		dma_resv_fini(dmabuf-&gt;resv);</span><br><span class="line">	kfree(dmabuf);</span><br><span class="line">err_file:</span><br><span class="line">	fput(file);</span><br><span class="line">err_module:</span><br><span class="line">	module_put(exp_info-&gt;owner);</span><br><span class="line">	<span class="keyword">return</span> ERR_PTR(ret);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>导入者 <code>DRM_IOCTL_PRIME_FD_TO_HANDLE</code></li>
+</ul>
+<p>导入者接收到底层透过 UNIX domain socket 传来的 prime_fd 后 (如 Xorg 通过 <code>proc_dri3_pixmap_from_buffers()</code> 接收)，通过 <code>DRM_IOCTL_PRIME_FD_TO_HANDLE</code> IOCTL 陷入内核态，内核通过 <code>dma_buf_get(prime_fd)</code> 直接找到对应的 DMA-BUF, 然后先去 DMA-BUF 缓存中找 (<code>drm_prime_lookup_buf_handle()</code>)，如果命中就直接将 handle 返回给导入者， 如果不命中，就调用 <code>drm_gem_prime_import_dev()</code> 来完成 DMA-BUF Sharing 中最最关键的操作：<strong>当 Buffer 导入另外一个进程后，这个 Buffer 的 GPU Mappings (GPU pagetables) 怎么复制过来</strong>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * drm_gem_prime_import_dev - core implementation of the import callback</span></span><br><span class="line"><span class="comment"> * @dev: drm_device to import into</span></span><br><span class="line"><span class="comment"> * @dma_buf: dma-buf object to import</span></span><br><span class="line"><span class="comment"> * @attach_dev: struct device to dma_buf attach</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This is the core of drm_gem_prime_import(). It&#x27;s designed to be called by</span></span><br><span class="line"><span class="comment"> * drivers who want to use a different device structure than &amp;drm_device.dev for</span></span><br><span class="line"><span class="comment"> * attaching via dma_buf. This function calls</span></span><br><span class="line"><span class="comment"> * &amp;drm_driver.gem_prime_import_sg_table internally.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Drivers must arrange to call drm_prime_gem_destroy() from their</span></span><br><span class="line"><span class="comment"> * &amp;drm_gem_object_funcs.free hook when using this function.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">struct</span> drm_gem_object *<span class="title function_">drm_gem_prime_import_dev</span><span class="params">(<span class="keyword">struct</span> drm_device *dev,</span></span><br><span class="line"><span class="params">					    <span class="keyword">struct</span> dma_buf *dma_buf,</span></span><br><span class="line"><span class="params">					    <span class="keyword">struct</span> device *attach_dev)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">dma_buf_attachment</span> *<span class="title">attach</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sg_table</span> *<span class="title">sgt</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">drm_gem_object</span> *<span class="title">obj</span>;</span></span><br><span class="line">	<span class="type">int</span> ret;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (dma_buf-&gt;ops == &amp;drm_gem_prime_dmabuf_ops) &#123;</span><br><span class="line">		obj = dma_buf-&gt;priv;</span><br><span class="line">		<span class="keyword">if</span> (obj-&gt;dev == dev) &#123;</span><br><span class="line">			<span class="comment">/*</span></span><br><span class="line"><span class="comment">			 * Importing dmabuf exported from our own gem increases</span></span><br><span class="line"><span class="comment">			 * refcount on gem itself instead of f_count of dmabuf.</span></span><br><span class="line"><span class="comment">			 */</span></span><br><span class="line">			drm_gem_object_get(obj);</span><br><span class="line">			<span class="keyword">return</span> obj;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!dev-&gt;driver-&gt;gem_prime_import_sg_table)</span><br><span class="line">		<span class="keyword">return</span> ERR_PTR(-EINVAL);</span><br><span class="line"></span><br><span class="line">	attach = dma_buf_attach(dma_buf, attach_dev);</span><br><span class="line">	<span class="keyword">if</span> (IS_ERR(attach))</span><br><span class="line">		<span class="keyword">return</span> ERR_CAST(attach);</span><br><span class="line"></span><br><span class="line">	get_dma_buf(dma_buf);</span><br><span class="line"></span><br><span class="line">	sgt = dma_buf_map_attachment_unlocked(attach, DMA_BIDIRECTIONAL);</span><br><span class="line">	<span class="keyword">if</span> (IS_ERR(sgt)) &#123;</span><br><span class="line">		ret = PTR_ERR(sgt);</span><br><span class="line">		<span class="keyword">goto</span> fail_detach;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	obj = dev-&gt;driver-&gt;gem_prime_import_sg_table(dev, attach, sgt);</span><br><span class="line">	<span class="keyword">if</span> (IS_ERR(obj)) &#123;</span><br><span class="line">		ret = PTR_ERR(obj);</span><br><span class="line">		<span class="keyword">goto</span> fail_unmap;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	obj-&gt;import_attach = attach;</span><br><span class="line">	obj-&gt;resv = dma_buf-&gt;resv;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> obj;</span><br><span class="line"></span><br><span class="line">fail_unmap:</span><br><span class="line">	dma_buf_unmap_attachment_unlocked(attach, sgt, DMA_BIDIRECTIONAL);</span><br><span class="line">fail_detach:</span><br><span class="line">	dma_buf_detach(dma_buf, attach);</span><br><span class="line">	dma_buf_put(dma_buf);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> ERR_PTR(ret);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="dynamic-dma-buf-mapping-和-cached-sg-table"><a class="markdownIt-Anchor" href="#dynamic-dma-buf-mapping-和-cached-sg-table"></a> Dynamic DMA-BUF Mapping 和 Cached Sg Table</h2>
+<p>sg_table 是描述<strong>不连续的物理内存块</strong>(这个内存块是以物理页为单位的)的表结构，就是 scatterlist 的数组。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">scatterlist</span> &#123;</span></span><br><span class="line">		<span class="type">unsigned</span> <span class="type">long</span> 	page_link;</span><br><span class="line">		<span class="type">unsigned</span> <span class="type">int</span> 	offset;</span><br><span class="line">		<span class="type">unsigned</span> <span class="type">int</span> 	length;</span><br><span class="line">		<span class="type">dma_addr_t</span>		dma_address;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>page_link</code> 保存的是 <code>struct page *</code>, 即物理页的结构体指针再加最低两位的两个标识位</li>
+<li><code>dma_address</code> 在有 IOMMU 的系统中是一个 I/O 虚拟地址(下图中的 Z)，在没有 IOMMU 的系统中就是设备地址空间(或 DMA 地址空间)的物理地址(下图中的 Y)</li>
+</ul>
+<p><img src="/images/dma-buf/cpuva-cpupa-dma-addr.gif" alt="本图来自蜗窝科技" /></p>
+<ul>
+<li><code>dma_direct_map_sg()</code></li>
+</ul>
+<p><code>dma_direct_map_sg()</code> 是由一个 scatterlist 对应的物理页得到对应的 <code>dma_address</code>, 就是上图中 <strong>Y 到 Z 的映射</strong></p>
+<pre><code class="highlight mermaid">flowchart LR
+	A[&quot;struct scatterlist *&quot;]
+	B[&quot;struct page *&quot;]
+	C[&quot;phys_addr_t phys&quot;]
+	D[&quot;sg-&gt;dma_address&quot;]
+
+	A -- sg_page() --&gt; B -- page_to_phys() --&gt; C -- phys_to_dma() --&gt; D</code></pre>
+<h2 id="dma_fence"><a class="markdownIt-Anchor" href="#dma_fence"></a> dma_fence</h2>
+<p><code>struct dma_fence</code> 是一个类似 <code>struct completion</code> 的结构体，用来跟踪 GPU 任务，当一个 GPU 任务结束时，对应的 dma_fence 被 signaled.</p>
+<p><code>dma_fence_default_wait</code> 是 dma-fence 默认的 wait 操作。该函数会让当前进程(task) 进入睡眠状态 (可中断睡眠或不可中断睡眠，取决于调用者传入的参数 <code>intr</code>）, 直到 dma-fence 被 signaled 或者设置的超时时间到。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cb.base.func = dma_fence_default_wait_cb;</span><br><span class="line">cb.task = current;</span><br><span class="line">list_add(&amp;cb.base.node, &amp;fence-&gt;cb_list);</span><br></pre></td></tr></table></figure>
+<h2 id="dma_resv"><a class="markdownIt-Anchor" href="#dma_resv"></a> dma_resv</h2>
+<p><code>dma_resv</code> (reservation object) 是一组 dma_fence + 一个锁，当调用者通过 <code>dma_resv_add_fence()</code> 向 dma_resv 里加入新的 dma_fence 时需要持有这个锁。</p>
+<ul>
+<li>描述对 <code>dma_resv</code> 不同的使用场景</li>
+<li>在调用 <code>dma_resv_get_fences()</code> 时，决定哪些 fences 被返回</li>
+</ul>
+<pre><code class="highlight mermaid">flowchart TD
+    subgraph gem [drm_gem_object]
+        D[dma_buf]
+        subgraph _resv [&quot;struct dma_resv _resv&quot;]
+            _F@&#123; shape: docs, label: &quot;dma_fence&quot;&#125;
+        end
+        RP[&quot;struct dma_resv *resv&quot;]
+    end
+    B@&#123; shape: lin-cyl, label: &quot;dma_buf&quot;&#125;
+    subgraph resv [dma_resv]
+        F@&#123; shape: docs, label: &quot;dma_fence&quot;&#125;
+    end
+    D --&gt; B --&gt; resv
+    RP --except for imported GEM objects--&gt; _resv</code></pre>
+<ul>
+<li>为什么同一个 <code>dma_buf</code> 会有那么多 <code>dma_fence</code> 与之关联呢？</li>
+</ul>
+<p>因为同一个 Buffer 会有多个<strong>使用者</strong>， 有的读，有的写，有的等，这个 Buffer 的所有使用者的每个操作，理论上都有一个 <code>dma_fence</code>, 这些 <code>dma_fence</code> 在这整个机制下“有条不紊”地被 signaled, 才能保证所有访问都是按预期的顺序发生，这就是同步(每个使用者都可能是并发的进程)。</p>
+<h1 id="synchronization"><a class="markdownIt-Anchor" href="#synchronization"></a> Synchronization</h1>
+<p>隐式还是显式同步的主要区别在于同步是否由应用 (Applications) 直接控制，Vulkan 以前的图形 API，同步是由内核驱动或用户驱动完成的，应用完全不参与，这就是所谓的 “Implicit Synchronization”, Vulkan 中，同步完全是由应用控制的，哪个渲染任务等哪个渲染任务，CPU 什么时候等 GPU, 都是由应用直接控制，从这一点也说明 Vulkan 应用是比较难写的，但 Vulkan 驱动(尤其用户驱动) 相对简单一些。但是问题是，不是所有的图形应用都是 Vulkan 写的 (Xorg, Wayland compositor 都不是 Vulkan 写的，而好多 Wayland client 可能是 Vulkan 写的)，所以目前还需要一些其它方案解决这种隐式同步和显式同步共存的场景。<a target="_blank" rel="noopener" href="https://zamundaaa.github.io/wayland/2024/04/05/explicit-sync.html">Explicit sync</a> 这篇博文关于这两者的概念讲得很清楚，这里主要是从实现的角度，做一下自己学习理解<strong>隐式同步和显式同步</strong>的记录。</p>
+<h2 id="implicit-synchronization"><a class="markdownIt-Anchor" href="#implicit-synchronization"></a> Implicit Synchronization</h2>
+<p>所谓<strong>隐式同步</strong>，就是驱动 (KMD) 会在每个 dmabuf 以及 buffer object 上附加一个 <code>dma_fence</code>, 以确保渲染命令的<strong>有序</strong>执行，以及 buffer 是否已经准备就绪后才可让<strong>消费者</strong>进行读取，所有这些工作基本上在内核完成，完全不需要应用程序的干预。这种方案虽然简单（对于应用开发者）来说，但会有<strong>过度同步 (Over-Synchronization)</strong> 的问题。</p>
+<h2 id="explicit-synchronization"><a class="markdownIt-Anchor" href="#explicit-synchronization"></a> Explicit Synchronization</h2>
+<ul>
+<li>sync_file</li>
+</ul>
+<p><code>CONFIG_SYNC_FILE</code> 是内核 3.10 引入的一个可配置的 (configurable) 配置选项， 它控制的是 Linux 内核 Explicit Synchronization Framework 的编译。Sync File Framework 增加了由用户空间控制的显式同步, 它提供了通过用户空间组件 (Wayland, Vulkan 等)在驱动之间以 Sync File 文件描述符形式的 <code>struct dma_fence</code> 向用户空间的收发能力。Sync File 的主要使用者是 GPU 和 V4L 驱动, 它们通常会将一个 <code>dma_fence</code> 关联到一个 dmabuf, 这是<strong>隐式同步</strong>的做法,  而现在驱动会将与 dmabuf 相关的这个 <code>dma_fence</code> 以 <strong>Sync File FD</strong>传送到用户空间。</p>
+<p><em>NOTE: sync file 最初是先在 Android kernel 内实现的</em></p>
+<p>这里我们可以将 <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.13.5/source/include/drm/drm_syncobj.h#L39"><code>struct drm_syncobj</code></a> 和 <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.13.5/source/include/drm/drm_gem.h#L273"><code>struct drm_gem_object</code></a> 做个对比, 何其相似！</p>
+<ul>
+<li>drm_syncobj</li>
+</ul>
+<pre><code class="highlight mermaid">flowchart LR
+  A[file descriptor]
+  B[dma_fence]
+
+  A -- SYNCOBJ_FD_TO_HANDLE&lt;br&gt;drmSyncobjFDToHandle() --&gt; B
+  A &lt;-- drm_syncobj --&gt; B
+  B -- SYNCOBJ_HANDLE_TO_FD&lt;br&gt;drmSyncobjHandleToFD() --&gt; A</code></pre>
+<ul>
+<li>drm_gem_object</li>
+</ul>
+<pre><code class="highlight mermaid">flowchart LR
+  A[file descriptor]
+  B[dma_buf]
+
+  A -- PRIME_FD_TO_HANDLE&lt;br&gt;drmPrimeFDToHandle() --&gt; B
+  A &lt;-- drm_gem_object --&gt; B
+  B -- PRIME_HANDLE_TO_FD&lt;br&gt;drmPrimeHandleToFD() --&gt; A</code></pre>
+<ul>
+<li>drmSyncobjCreate()</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">drmSyncobjCreate</span><span class="params">(<span class="type">int</span> fd, <span class="type">uint32_t</span> flags, <span class="type">uint32_t</span> *handle)</span>;</span><br></pre></td></tr></table></figure>
+<p>drm_syncobj 在用户空间只是一个 32 位整数 (handle), 创建它的用户态接口接受两个入参，一个出参:</p>
+<ul>
+<li>fd: drm 设备节点打开后的文件描述符</li>
+<li>flags: 要么 0， 要么 <code>DRM_SYNCOBJ_CREATE_SIGNALED</code></li>
+<li>handle: 由内核返回的代表新创建的 drm_syncobj 的 ID 存放在 handle 这个地址</li>
+</ul>
+<p>再看看创建 syncobj 的内核态接口，它里面有两步:</p>
+<ul>
+<li>drm_syncobj_create()</li>
+</ul>
+<p>仅仅是申请 <code>struct drm_syncobj</code> 的内存, 初始化它的数据成员, 而且最关键的成员 <code>dma_fence</code> 还是空的，当用户传入 <code>DRM_SYNCOBJ_CREATE_SIGNALED</code> 标志时，<code>drm_syncobj_create()</code> 会自己创建一个 <strong>stub fence</strong> 赋给这个 syncobj, 如果创建时标志是 0， 则由用户后面绑定相关的 <code>dma_fence</code> (当然还是通过 syncobj 的形式，因为 <code>dma_fence</code> 对用户态不可见， 一般是用 <code>drmSyncobjExportSyncFile()</code>, <code>drmSyncobjCreate()</code>, <code>drmSyncobjImportSyncFile()</code> 来完成的。)</p>
+<ul>
+<li>drm_syncobj_get_handle()</li>
+</ul>
+<p>返回的这个 32 位整数代表的就是 drm_syncobj, 但它仍然不是文件描述符 fd, 最终要让 drm_syncobj 能有一个真正的文件描述符还需要两个 IOCTL:</p>
+<ul>
+<li><code>DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD</code></li>
+<li><code>DRM_IOCTL_SYNCOBJ_FD_TO_HANDLE</code></li>
+</ul>
+<p>感觉为了让用户空间能够直接操作 <code>dma_fence</code> 这个内核的同步原语，费了“好大劲”，这背后应该有系统设计层面的考虑，后面有时间再琢磨。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * drm_syncobj_get_handle - get a handle from a syncobj</span></span><br><span class="line"><span class="comment"> * @file_private: drm file private pointer</span></span><br><span class="line"><span class="comment"> * @syncobj: Sync object to export</span></span><br><span class="line"><span class="comment"> * @handle: out parameter with the new handle</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Exports a sync object created with drm_syncobj_create() as a handle on</span></span><br><span class="line"><span class="comment"> * @file_private to userspace.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Returns 0 on success or a negative error value on failure.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">drm_syncobj_get_handle</span><span class="params">(<span class="keyword">struct</span> drm_file *file_private,</span></span><br><span class="line"><span class="params">			   <span class="keyword">struct</span> drm_syncobj *syncobj, u32 *handle)</span></span><br></pre></td></tr></table></figure>
+<h2 id="fd-to-handle-convert"><a class="markdownIt-Anchor" href="#fd-to-handle-convert"></a> FD to Handle Convert</h2>
+<ul>
+<li><code>int drmSyncobjFDToHandle(int fd, int obj_fd, uint32_t *handle);</code></li>
+<li><code>int drmSyncobjHandleToFD(int fd, uint32_t handle, int *obj_fd);</code></li>
+</ul>
+<h2 id="sync-file-transfer"><a class="markdownIt-Anchor" href="#sync-file-transfer"></a> Sync File Transfer</h2>
+<ul>
+<li><code>int drmSyncobjImportSyncFile(int fd, uint32_t handle, int sync_file_fd);</code></li>
+<li><code>int drmSyncobjExportSyncFile(int fd, uint32_t handle, int *sync_file_fd);</code></li>
+</ul>
+<p><code>drmSyncobjFDToHandle()</code> 和 <code>drmSyncobjImportSyncFile()</code> 的区别仅仅是后者设置了 <code>DRM_SYNCOBJ_FD_TO_HANDLE_FLAGS_IMPORT_SYNC_FILE</code> 这个 flags。<code>drmSyncobjHandleToFD()</code> 和 <code>drmSyncobjExportSyncFile()</code> 也是类似。</p>
+<p><code>drmSyncobjExportSyncFile()</code> 通过 ioctl 将用户给定的 syncobj ID 转换成一个文件描述符返回给用户。而 SyncobjExport/ImportSyncFile 这对操作和 SyncobjFDToHandle/HandleToFD 这对操作的区别是后者是给<strong>同一个 drm_syncobj</strong> 提供<strong>两个不同的 ID</strong> 而已。</p>
+<p>而前者通过和 <code>drmSyncobjCreate()</code> 配合，会产生另外一个<strong>新的 drm_syncobj</strong></p>
+<h1 id="questions"><a class="markdownIt-Anchor" href="#questions"></a> Questions</h1>
+<ul>
+<li>syncobj 的 handle 可以是 0 吗？</li>
+</ul>
+<p><strong>不会是 0</strong></p>
+<p><code>drm_syncobj_get_handle()</code> 和 <code>drm_gem_handle_create_tail()</code> 一样，是通过 <code>idr_alloc()</code> 申请的一个给定范围内的 32 位整数，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ret = idr_alloc(&amp;file_private-&gt;syncobj_idr, syncobj, <span class="number">1</span>, <span class="number">0</span>, GFP_NOWAIT);</span><br></pre></td></tr></table></figure>
+<p>它申请范围在最小值是 1 (包含)和最大值是 0 (不包含，实际上最大值是 0xffffffff) 之间的一个整数。</p>
+<p>这里主要根据<a target="_blank" rel="noopener" href="https://patchwork.kernel.org/project/kvm/patch/20250107142719.179636-2-yilun.xu@linux.intel.com/">内核邮件列表里的一个讨论</a>来更好的理解 dma-buf 的设计思路和使用原则。</p>
+<ul>
+<li>
+<p>对于 dma-buf 来说， 什么是 <strong>static attach</strong> ？ 什么是 <strong>dynamic attach</strong> ?</p>
+<ul>
+<li>static attach 应该是指 dma-buf 对应的 page 不会在内存中移动 (move), 而 dynamic attach 相反<strong>有可能移动</strong></li>
+</ul>
+</li>
+<li>
+<p>用户为什么不直接将 dma-buf 的 PFN (物理页帧号) 共享给 importer, 让 importer 自己去创建 mappings ？</p>
+<ul>
+<li>dma-buf 设计的就是不把 <code>struct page</code> 或 pfn 暴露给 importer, 本质上, dma-buf 只传送 dma_addr。所以 mappings 总是由 exporter 创建，而不是由 importer。</li>
+<li>exported buffer 未必一定是内存 (有 <code>struct page</code>), 也可能是 MMIO</li>
+</ul>
+</li>
+<li>
+<p>但为什么一定要让 exporter 去 map 呢？</p>
+</li>
+<li>
+<p>Exporter mapping 存在问题的场景:</p>
+<ul>
+<li>Private address space</li>
+<li>Multi-path PCI</li>
+<li>Importing devices need to do things like turn on ATS on their DMA</li>
+<li>TPH bits needs to be programmed into importer device</li>
+<li>iommufd and KVM</li>
+</ul>
+</li>
+<li>
+<p>为什么把 dma-buf 的 backing storage 信息暴露给 importer 是一个坏主意？</p>
+</li>
+<li>
+<p>exporter 会获取 importer 的 <code>struct device</code></p>
+</li>
+<li>
+<p>multipath 总是需要在 importer 侧有额外的元信息去告诉 device 选择哪个 path</p>
+</li>
+</ul>
+<p>😦 这5个场景目前一个都不知道是干什么的 😦</p>
+<h1 id="references"><a class="markdownIt-Anchor" href="#references"></a> References</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.kernel.org/driver-api/dma-buf.html">kdoc: Buffer Sharing and Synchronization</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.kernel.org/driver-api/sync_file.html">Sync File API Guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://lwn.net/Articles/454389/">Sharing buffers between devices</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/hexiaolong2009/article/details/105961192">PRIME</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/hexiaolong2009/category_10838100.html">何小龙的 DMA-BUF 系列文章</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.wowotech.net/memory_management/DMA-Mapping-api.html">Dynamic DMA Mapping Guide</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.wowotech.net/memory_management/scatterlist.html">Linux kernel scatterlist API 介绍</a></li>
+<li><a target="_blank" rel="noopener" href="https://kernelnote.com/deep-dive-iommu-hardware-driver.html">深入理解 iommu 系列一：iommu 硬件架构和驱动初始化</a></li>
+<li><a target="_blank" rel="noopener" href="https://zamundaaa.github.io/wayland/2024/04/05/explicit-sync.html">Explicit sync</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.collabora.com/news-and-blog/blog/2022/06/09/bridging-the-synchronization-gap-on-linux/">Bridging the synchronization gap on Linux</a></li>
+<li><a target="_blank" rel="noopener" href="https://royhunter.github.io/2016/03/13/kvm-mmu-virtualization/">KVM 之内存虚拟化</a></li>
+<li><a target="_blank" rel="noopener" href="https://lwn.net/Articles/997563/">Dancing the DMA two-step</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kernel/" rel="tag"># kernel</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/lnx/kms/" rel="prev" title="Atomic Mode Setting 设计概要 第一部分 （译）">
+                  <i class="fa fa-angle-left"></i> Atomic Mode Setting 设计概要 第一部分 （译）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/lnx/sched/" rel="next" title="Scheduler">
+                  Scheduler <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

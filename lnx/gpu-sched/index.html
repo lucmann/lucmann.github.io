@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="flowchart TD   subgraph GPU     slot-0[HW Run Queue]     slot-1[HW Run Queue]     slot-2[HW Run Queue]   end    sched0[drm_gpu_scheduler]   sched1[drm_gpu_scheduler]   sched2[drm_gpu_scheduler]    run">
+<meta property="og:type" content="article">
+<meta property="og:title" content="drm_gpu_scheduler">
+<meta property="og:url" content="https://lucmann.github.io/lnx/gpu-sched/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="flowchart TD   subgraph GPU     slot-0[HW Run Queue]     slot-1[HW Run Queue]     slot-2[HW Run Queue]   end    sched0[drm_gpu_scheduler]   sched1[drm_gpu_scheduler]   sched2[drm_gpu_scheduler]    run">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-02-26T23:38:43.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.376Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="DRM&#x2F;KMS">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lucmann.github.io/lnx/gpu-sched/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/lnx/gpu-sched/","path":"lnx/gpu-sched/","title":"drm_gpu_scheduler"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>drm_gpu_scheduler | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text"> 数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#drm_gpu_scheduler"><span class="nav-number">1.1.</span> <span class="nav-text"> drm_gpu_scheduler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drm_sched_backend_ops"><span class="nav-number">1.2.</span> <span class="nav-text"> drm_sched_backend_ops</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drm_sched_rq"><span class="nav-number">1.3.</span> <span class="nav-text"> drm_sched_rq</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drm_sched_entity"><span class="nav-number">1.4.</span> <span class="nav-text"> drm_sched_entity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drm_sched_job"><span class="nav-number">1.5.</span> <span class="nav-text"> drm_sched_job</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drm_sched_fence"><span class="nav-number">1.6.</span> <span class="nav-text"> drm_sched_fence</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gpu-scheduler-%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E7%BB%84%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text"> GPU Scheduler 中的关键组件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#drm_sched-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.1.</span> <span class="nav-text"> drm_sched 初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#entity-gpu-job-%E7%9A%84%E5%AE%B9%E5%99%A8"><span class="nav-number">2.2.</span> <span class="nav-text"> Entity - GPU job 的容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#workqueue-%E4%BB%BB%E5%8A%A1%E5%BC%82%E6%AD%A5%E6%89%A7%E8%A1%8C"><span class="nav-number">2.3.</span> <span class="nav-text"> Workqueue - 任务异步执行</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scheduler-%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text"> Scheduler 如何工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">4.</span> <span class="nav-text"> 参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/lnx/gpu-sched/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="drm_gpu_scheduler | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          drm_gpu_scheduler
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-02-27 07:38:43" itemprop="dateCreated datePublished" datetime="2025-02-27T07:38:43+08:00">2025-02-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/lnx/gpu-sched/" class="post-meta-item leancloud_visitors" data-flag-title="drm_gpu_scheduler" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/lnx/gpu-sched/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="lnx/gpu-sched/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><pre><code class="highlight mermaid">flowchart TD
+  subgraph GPU
+    slot-0[HW Run Queue]
+    slot-1[HW Run Queue]
+    slot-2[HW Run Queue]
+  end
+
+  sched0[drm_gpu_scheduler]
+  sched1[drm_gpu_scheduler]
+  sched2[drm_gpu_scheduler]
+
+  runq00[drm_sched_rq&lt;br&gt;KERNEL]
+  runq01[drm_sched_rq&lt;br&gt;HIGH]
+  runq02[drm_sched_rq&lt;br&gt;NORMAL]
+  runq03[drm_sched_rq&lt;br&gt;LOW]
+
+  runq10[drm_sched_rq&lt;br&gt;KERNEL]
+  runq11[drm_sched_rq&lt;br&gt;HIGH]
+
+  runq20[drm_sched_rq&lt;br&gt;KERNEL]
+  runq21[drm_sched_rq&lt;br&gt;HIGH]
+  runq22[drm_sched_rq&lt;br&gt;NORMAL]
+
+  entity00@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+  entity01@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+  entity02@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+  entity03@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+
+  entity10@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+  entity11@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+  entity12@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+
+
+  entity20@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+  entity21@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+  entity22@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+
+  entity00 --&gt; entity01 --&gt; entity02 --&gt; entity03 --&gt; runq00
+  entity10 --&gt; entity11 --&gt; entity12 --&gt; runq10
+  entity20 --&gt; entity21 --&gt; entity22 --&gt; runq02
+
+  runq00 --&gt; sched0
+  runq01 --&gt; sched0
+  runq02 --&gt; sched0
+  runq03 --&gt; sched0
+
+  runq10 --&gt; sched1
+  runq11 --&gt; sched1
+
+  runq20 --&gt; sched2
+  runq21 --&gt; sched2
+  runq22 --&gt; sched2
+
+  sched0 --&gt; slot-0
+  sched1 --&gt; slot-1
+  sched2 --&gt; slot-2</code></pre>
+<span id="more"></span>
+<p>Notes:</p>
+<ul>
+<li>每个 hw run queue (hw ring) 对应一个 <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.13.4/source/drivers/gpu/drm/panfrost/panfrost_job.c#L36">drm_gpu_scheduler</a></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">DRIVER</th>
+<th style="text-align:left">MAX_HW_RINGS</th>
+<th style="text-align:left">VALUE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">amdgpu</td>
+<td style="text-align:left">AMDGPU_MAX_RINGS</td>
+<td style="text-align:left">124</td>
+</tr>
+<tr>
+<td style="text-align:left">etnaviv</td>
+<td style="text-align:left">ETNA_MAX_PIPES</td>
+<td style="text-align:left">4</td>
+</tr>
+<tr>
+<td style="text-align:left">powervr</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">4</td>
+</tr>
+<tr>
+<td style="text-align:left">panfrost</td>
+<td style="text-align:left">NUM_JOB_SLOTS</td>
+<td style="text-align:left">3</td>
+</tr>
+<tr>
+<td style="text-align:left">v3d</td>
+<td style="text-align:left">V3D_MAX_QUEUES</td>
+<td style="text-align:left">6</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>每个 scheduler 对应多个不同优先级(<code>enum drm_sched_priority</code>)的 scheduler run queue (sw run queue)</li>
+</ul>
+<p>但似乎对于未来的硬件，尤其那些通过 FW/HW 调度 job 的 GPU, 更希望的拓扑结构是 <a target="_blank" rel="noopener" href="https://patchwork.freedesktop.org/patch/567300/">scheduler : run queue : entity 是 1:1:1</a>. 这样的 <code>drm_gpu_scheduler</code> 已经退化成一个 <strong>dependency tracker/resolver</strong>, 没有了实质的<s>调度</s>的作用。</p>
+<pre><code class="highlight mermaid">flowchart TD
+  subgraph GPU
+    GuC[FW/HW scheduler]
+    slot-0[HW Run Queue]
+    slot-1[HW Run Queue]
+    slot-2[HW Run Queue]
+  end
+
+  sched0[drm_gpu_scheduler]
+  sched1[drm_gpu_scheduler]
+  sched2[drm_gpu_scheduler]
+
+  runq00[drm_sched_rq&lt;br&gt;KERNEL]
+  runq10[drm_sched_rq&lt;br&gt;KERNEL]
+  runq20[drm_sched_rq&lt;br&gt;KERNEL]
+
+  entity00@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+  entity10@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+  entity20@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+
+  entity00 --&gt; runq00 --&gt; sched0 --&gt; GuC --&gt; slot-0
+  entity10 --&gt; runq10 --&gt; sched1 --&gt; GuC --&gt; slot-1
+  entity20 --&gt; runq20 --&gt; sched2 --&gt; GuC --&gt; slot-2</code></pre>
+<ul>
+<li>每个 scheduler run queue 是一个将被调度的 entity 队列</li>
+<li><code>drm_sched_entity.sched_list</code>, 一个 entity 上的 jobs 可以被调度到这个 <strong>sched_list</strong> 上的任意一个 scheduler 上, 实现这个过程是通过 <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.13.5/source/drivers/gpu/drm/scheduler/sched_entity.c#L539"><code>drm_sched_entity_select_rq()</code></a> 完成的。</li>
+</ul>
+<pre><code class="highlight mermaid">flowchart TD
+  subgraph GPU
+    slot-0[HW Run Queue]
+    slot-1[HW Run Queue]
+    slot-2[HW Run Queue]
+  end
+
+  sched0[drm_gpu_scheduler]
+  sched1[drm_gpu_scheduler]
+  sched2[drm_gpu_scheduler]
+
+  runq00[drm_sched_rq&lt;br&gt;KERNEL]
+  runq10[drm_sched_rq&lt;br&gt;KERNEL]
+  runq20[drm_sched_rq&lt;br&gt;KERNEL]
+
+  entity00@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+  entity10@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+  entity20@&#123;shape: docs, label: &quot;drm_sched_entity&lt;br&gt;job chain&quot;&#125;
+
+  entity00 --&gt; runq00 --&gt; sched0 --&gt; slot-0
+  entity00 -.-&gt; runq10
+  entity10 --&gt; runq10 --&gt; sched1 --&gt; slot-1
+  entity10 -.-&gt; runq00
+  entity20 --&gt; runq20 --&gt; sched2 --&gt; slot-2</code></pre>
+<ul>
+<li>每个 entity 由包含若干个 gpu job 的链表组成</li>
+</ul>
+<h1 id="数据结构"><a class="markdownIt-Anchor" href="#数据结构"></a> 数据结构</h1>
+<p>Linux DRM 子系统的 <code>drm_gpu_scheduler</code> 负责提交和调度 GPU job，以一个单独的内核模块(<code>gpu-sched</code>) 的形式存在。</p>
+<h2 id="drm_gpu_scheduler"><a class="markdownIt-Anchor" href="#drm_gpu_scheduler"></a> <code>drm_gpu_scheduler</code></h2>
+<p>调度器实例 (instance)，运行时实际上是一个内核线程 (kthread), 这个线程启动是在 <code>drm_sched_init()</code>。</p>
+<p>实际上，自从内核 v6.8-rc1 <a target="_blank" rel="noopener" href="https://lore.kernel.org/all/20231031032439.1558703-3-matthew.brost@intel.com/">a6149f039369 (“drm/sched: Convert drm scheduler to use a work queue rather than kthread”)</a> <code>drm_gpu_scheduler</code> 的实现已经从 kthread 变成 work queue 了。 这个修改与 Intel Gen9+ 引入的 microcontrollers (μC) 之一 <a target="_blank" rel="noopener" href="https://igor-blue.github.io/2021/02/10/graphics-part1.html#the-guc">GuC</a> 有关。</p>
+<h2 id="drm_sched_backend_ops"><a class="markdownIt-Anchor" href="#drm_sched_backend_ops"></a> <code>drm_sched_backend_ops</code></h2>
+<p>这个结构体定义一组回调函数，一般需要驱动实现， 并在 <code>drm_sched_init()</code> 时传入。</p>
+<ul>
+<li>struct dma_fence *(*prepare_job)(struct drm_sched_job *job, struct drm_sched_entity *ent);</li>
+</ul>
+<ul>
+<li><code>struct dma_fence *(*run_job)(struct drm_sched_job *job);</code></li>
+</ul>
+<ul>
+<li>enum drm_gpu_sched_stat (*timedout_job)(struct drm_sched_job *job);</li>
+</ul>
+<ul>
+<li><code>void (*free_job)(struct drm_sched_job *job);</code></li>
+</ul>
+<ul>
+<li>void (*cancel_job)(struct drm_sched_job *job);</li>
+</ul>
+<p><strong>NOTE:</strong></p>
+<ul>
+<li>run_job() 和 free_job() 驱动必须实现</li>
+<li>这两个函数是由 kworker 异步执行的, 也就是在两个 CPU 核心上同时执行，就有发生<strong>死锁</strong>的可能。</li>
+</ul>
+<h2 id="drm_sched_rq"><a class="markdownIt-Anchor" href="#drm_sched_rq"></a> <code>drm_sched_rq</code></h2>
+<p>若干个 <code>drm_sched_entity</code> (list) 的封装。一个 scheduler 实例最多可以有 <code>DRM_SCHED_PRIORITY_COUNT</code> 个 <code>drm_sched_rq</code>。调度器调度的其实就是一个个 entity。 这么多个 entity 按什么顺序提交给 GPU 由具体的 <strong>调度策略 (Scheduling Policy)</strong> 决定，而<strong>调度优先级 (Scheduling Priority)</strong> 由 <code>drm_sched_rq</code> 实现，有多少个优先级，一个 <code>drm_gpu_scheduler</code> 里就有多少个 <code>drm_sched_rq</code>，每个优先级对应一个 <code>drm_sched_rq</code>。</p>
+<h2 id="drm_sched_entity"><a class="markdownIt-Anchor" href="#drm_sched_entity"></a> <code>drm_sched_entity</code></h2>
+<p>若干个 <code>drm_sched_job</code> (list) 的封装</p>
+<h2 id="drm_sched_job"><a class="markdownIt-Anchor" href="#drm_sched_job"></a> <code>drm_sched_job</code></h2>
+<p>被 entity 运行的一个 job, 一个 job 总是属于某一个 entity</p>
+<h2 id="drm_sched_fence"><a class="markdownIt-Anchor" href="#drm_sched_fence"></a> <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.13.5/source/include/drm/gpu_scheduler.h#L267"><code>drm_sched_fence</code></a></h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">drm_sched_fence</span> &#123;</span></span><br><span class="line">  <span class="comment">// job 一旦被调度了，就 signal 这个 fence</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dma_fence</span> <span class="title">scheduled</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// job 被硬件完成了， 就 signal 这个 fence</span></span><br><span class="line">  <span class="comment">// 当一个 job 完成时，硬件一般会上报一个中断 interrupt</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dma_fence</span> <span class="title">finished</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">  <span class="type">ktime_t</span> deadline;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 由驱动提供的 run_job() 回调函数返回的 fence,</span></span><br><span class="line">  <span class="comment">// 硬件上 finished/done 中断后，会先 signal 这个 fence</span></span><br><span class="line">  <span class="comment">// scheduler signal @scheduled fence 时，会将 sched-&gt;ops-&gt;run_job() 的</span></span><br><span class="line">  <span class="comment">// 返回值赋给 parent</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dma_fence</span> *<span class="title">parent</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">drm_gpu_scheduler</span> *<span class="title">sched</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">  <span class="type">spinlock_t</span> lock;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">  <span class="type">void</span> *owner;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="gpu-scheduler-中的关键组件"><a class="markdownIt-Anchor" href="#gpu-scheduler-中的关键组件"></a> GPU Scheduler 中的关键组件</h1>
+<ul>
+<li>Entity</li>
+<li>Workqueue</li>
+</ul>
+<h2 id="drm_sched-初始化"><a class="markdownIt-Anchor" href="#drm_sched-初始化"></a> drm_sched 初始化</h2>
+<ul>
+<li>v6.8</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">drm_sched_init</span><span class="params">(</span></span><br><span class="line"><span class="params">  <span class="keyword">struct</span> drm_gpu_scheduler *sched,</span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// 需要由驱动实现的一组回调函数, 有</span></span></span><br><span class="line"><span class="params">  <span class="comment">// prepare_job(), run_job(), timedout_job(), free_job()</span></span></span><br><span class="line"><span class="params">  <span class="type">const</span> <span class="keyword">struct</span> drm_sched_backend_ops *ops,</span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// 一个 workqueue(6.8 之前是 kthread) 用来向 hw run queue 提交 job</span></span></span><br><span class="line"><span class="params">  <span class="comment">// 如果驱动没有提供，默认是一个 ordered workqueue</span></span></span><br><span class="line"><span class="params">  <span class="keyword">struct</span> workqueue_struct *submit_wq, </span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// 这个 sched 下的 drm_sched_rq 的个数，最多 4 个，分别对应</span></span></span><br><span class="line"><span class="params">  <span class="comment">// LOW, NORMAL, HIGH, KERNEL 4 个优先级</span></span></span><br><span class="line"><span class="params">  u32 num_rqs,</span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// 用来 job flow control, sched 最多能提交多少个 job(chain) 给 hw,</span></span></span><br><span class="line"><span class="params">  <span class="comment">// 防止 ring buffer overflow</span></span></span><br><span class="line"><span class="params">  <span class="comment">// 这里的每个job 的概念因不同 GPU 而异</span></span></span><br><span class="line"><span class="params">  u32 credit_limit,</span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// 允许一个 job 在被丢弃前 hang 多少次</span></span></span><br><span class="line"><span class="params">  <span class="type">unsigned</span> <span class="type">int</span> hang_limit,</span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// job 超时时长 (jiffies)</span></span></span><br><span class="line"><span class="params">  <span class="type">long</span> timeout,</span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// 另外一个 workqueue 用来执行超时之后的逻辑。驱动可以不指定，</span></span></span><br><span class="line"><span class="params">  <span class="comment">// 默认是 system_wq (让这个 workqueue 执行的任务不要太长)</span></span></span><br><span class="line"><span class="params">  <span class="keyword">struct</span> workqueue_struct *timeout_wq,</span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params">  <span class="type">atomic_t</span> *score, <span class="comment">// 与其它 sched 共享的原子整型的 score</span></span></span><br><span class="line"><span class="params">  <span class="type">const</span> <span class="type">char</span> *name, <span class="comment">// 用来调试</span></span></span><br><span class="line"><span class="params">  <span class="keyword">struct</span> device *dev <span class="comment">// 所属 struct device</span></span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">drm_sched_entity_init</span><span class="params">(</span></span><br><span class="line"><span class="params">  <span class="keyword">struct</span> drm_sched_entity *entity,</span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// 一个 priority 对应一个 run queue</span></span></span><br><span class="line"><span class="params">  <span class="keyword">enum</span> drm_sched_priority priority,</span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// 这个 entity 上的 jobs 可以在这组 schedulers 中的任意一个 scheduler 上调度</span></span></span><br><span class="line"><span class="params">  <span class="keyword">struct</span> drm_gpu_scheduler **sched_list,</span></span><br><span class="line"><span class="params">  <span class="type">unsigned</span> <span class="type">int</span> num_sched_list,</span></span><br><span class="line"><span class="params">  <span class="type">atomic_t</span> *guilty</span></span><br><span class="line"><span class="params">)</span>;</span><br><span class="line"></span><br><span class="line">- v5<span class="number">.4</span></span><br><span class="line"></span><br><span class="line">```c</span><br><span class="line"><span class="type">int</span> <span class="title function_">drm_sched_init</span><span class="params">(</span></span><br><span class="line"><span class="params">  <span class="keyword">struct</span> drm_gpu_scheduler *sched,</span></span><br><span class="line"><span class="params">  <span class="comment">// 需要由驱动实现的一组回调函数，有</span></span></span><br><span class="line"><span class="params">  <span class="comment">// dependency(), run_job(), timedout_job(), free_job()</span></span></span><br><span class="line"><span class="params">  <span class="type">const</span> <span class="keyword">struct</span> drm_sched_backend_ops *ops,</span></span><br><span class="line"><span class="params">  <span class="type">unsigned</span> hw_submission, <span class="comment">// 允许有多少个 hw 提交同时存在</span></span></span><br><span class="line"><span class="params">  <span class="type">unsigned</span> hang_limit, <span class="comment">// 允许一个 job 在被丢弃前 hang 多少次</span></span></span><br><span class="line"><span class="params">  <span class="type">long</span> timeout, <span class="comment">// job 超时时长 (jiffies)</span></span></span><br><span class="line"><span class="params">  <span class="type">const</span> <span class="type">char</span> *name <span class="comment">// 用来调试</span></span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
+<p>Note:</p>
+<ul>
+<li>5.4 没有让驱动提供一个 timeout_wq, 而是固定使用 delayable workqueue 去执行 <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v5.19.17/source/drivers/gpu/drm/scheduler/sched_main.c#L1016">drm_sched_job_timedout()</a></li>
+<li>参数中的 <code>timeout</code> 是以 jiffies 计算的，如果设置成 <code>MAX_SCHEDULE_TIMEOUT</code>， 表示由驱动自己处理超时</li>
+</ul>
+<h2 id="entity-gpu-job-的容器"><a class="markdownIt-Anchor" href="#entity-gpu-job-的容器"></a> Entity - GPU job 的容器</h2>
+<pre><code class="highlight mermaid">sequenceDiagram
+  participant Driver
+  participant Scheduler
+  participant Kworker
+
+  Driver -&gt;&gt; Scheduler : drm_sched_job_init()
+  Driver -&gt;&gt; Scheduler : drm_sched_job_arm(job)
+  note right of Scheduler : 给定一个优先级，那么 runqueue 也就确定了&lt;br&gt;那么 sched 实例也就确定了,&lt;br&gt;那么在哪个硬件 slot 上执行也就确定了
+  Scheduler -&gt;&gt; Scheduler : drm_sched_entity_select_rq(entity)
+  note right of Driver : 一旦把 job push 到 entity queue,&lt;br&gt;这个 job 就可能在任何时间点完成被释放，&lt;br&gt;所以在这个时间点后，&lt;br&gt;驱动就不能再读写 job 的任何字段
+  Driver -&gt;&gt; Scheduler : drm_sched_entity_push_job(job)
+  Scheduler -&gt;&gt; Scheduler : drm_sched_rq_add_entity(rq, entity)
+  opt DRM_SCHED_POLICY_FIFO
+    Scheduler -&gt;&gt; Scheduler : drm_sched_rq_update_fifo_locked(entity, rq, submit_timestamp)
+  end
+  note right of Scheduler : 唤醒 sched kworker 线程&lt;br&gt;queue_work(submit_wq, &amp;work_run_job)
+  Scheduler -&gt;&gt; Kworker : drm_sched_wakup()
+  rect rgb(200, 150, 255)
+    note left of Kworker : drm_sched_run_job_work()
+    Kworker -&gt;&gt; Kworker : drm_sched_select_entity(sched)
+    Kworker -&gt;&gt; Kworker : drm_sched_entity_pop_job(entity)
+    Kworker -&gt;&gt; Kworker : sched-&gt;ops-&gt;run_job()
+    Kworker -&gt;&gt; Kworker : complete_all(entity-&gt;idle)
+    Kworker -&gt;&gt; Kworker : drm_sched_fence_scheduled(s_fence, fence)
+    Kworker -&gt;&gt; Kworker : drm_sched_job_done(job, result)
+    Kworker -&gt;&gt; Kworker : wake_up(&amp;sched-&gt;job_scheduled)
+    note right of Kworker : 再次唤醒 sched kwoker 线程&lt;br&gt;queue_work(submit_wq, &amp;work_run_job)
+    Kworker -&gt;&gt; Kworker : drm_sched_run_job_queue()
+  end</code></pre>
+<h2 id="workqueue-任务异步执行"><a class="markdownIt-Anchor" href="#workqueue-任务异步执行"></a> Workqueue - 任务异步执行</h2>
+<p>一个 <code>drm_gpu_scheduler</code> 里包括两个 workqueues (<a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.17-rc5/source/kernel/workqueue.c#L335"><code>struct workqueue_struct</code></a>):</p>
+<ul>
+<li><code>timeout_wq</code></li>
+<li><code>submit_wq</code></li>
+</ul>
+<h1 id="scheduler-如何工作"><a class="markdownIt-Anchor" href="#scheduler-如何工作"></a> Scheduler 如何工作</h1>
+<p>Job 提交一般由用户驱动通过 <strong>IOCTL_SUBMIT</strong> 命令触发，将 job 下发给 hw, 所谓下发就是将 64 位的 job(chain) 的起始地址写入 MMIO 寄存器或 ringbuffer, 然后再触发 doorbell, hw 就开始执行</p>
+<pre><code class="highlight mermaid">sequenceDiagram
+  participant UMD
+  participant KMD
+  participant Kworker
+
+  KMD -&gt;&gt; KMD : drm_sched_init()
+  note right of KMD : 创建一个 work item
+  KMD -&gt;&gt; KMD : INIT_WORK(&amp;sched-&gt;work_run_job,&lt;br&gt;drm_sched_run_job_work)
+  UMD -&gt;&gt; KMD : ioctl(SUBMIT)
+  KMD -&gt;&gt; KMD : drm_sched_job_init()
+  KMD -&gt;&gt; KMD : drm_sched_job_arm()
+  KMD -&gt;&gt; KMD : drm_sched_entity_push_job()
+  KMD -&gt;&gt; KMD : drm_sched_waitup()
+  rect rgb(205, 228, 152)
+    note left of Kworker : drm_sched_run_job_work&lt;br&gt;即submit_wq 上的 work item&lt;br&gt;每次 queue_work() 入队，&lt;br&gt;执行线程 kworker 都会异步执行这个函数
+    note right of Kworker : 根据优先级和调度策略选实体
+    Kworker -&gt;&gt; Kworker : drm_sched_select_entity()
+    note right of Kworker : 弹出一个 job
+    Kworker -&gt;&gt; Kworker : drm_sched_entity_pop_job()
+    note right of Kworker : 执行驱动的回调函数
+    Kworker -&gt;&gt; Kworker : sched-&gt;ops-&gt;run_job()
+    note right of Kworker : 唤醒 drm_sched_entity_flush() 时,&lt;br&gt;被睡眠的那些进程&lt;br&gt;被唤醒的进程重新检测&lt;br&gt;drm_sched_entity_is_idle()&lt;br&gt;如果不idle就继续睡
+    Kworker -&gt;&gt; Kworker : wake_up(wait_queue_head_t)
+    note right of Kworker : 入队
+    Kworker -&gt;&gt; Kworker : drm_sched_run_job_queue()
+    note left of Kworker : writel(jc, dev-&gt;iomem + reg)&lt;br&gt;Go!
+  end</code></pre>
+<p>Note:</p>
+<ul>
+<li><code>drm_sched_free_job_work()</code> 和 <code>drm_sched_run_job_work()</code> 是分开的两个 work item, 但它俩都会被扔到同一个 workqueue 上 <code>submit_wq</code> (workqueue 的实现很有意思，异步执行的单位是函数 (<code>work_struct</code>)，而这些函数会被加入一个内核工作队列 (<code>workqueue_struct</code>) 里<strong>异步执行</strong> (由 kworker 内核线程执行)，只要队列不为空，后台线程们就把它们拿出来<strong>并发地</strong>执行 (CMWQ). 后台线程是一个由内核自动管理的线程池，唤醒和睡眠不需要使用者干预，使用者(比方 GPU Scheduler)只需要调用 <code>queue_work(&amp;workqueue_struct, &amp;work_struct)</code> 将 work 加到相应的 workqueue 就行了</li>
+<li>内核 workqueue API 提供两个 work 入队函数 (enqueue):<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="keyword">inline</span> <span class="type">bool</span> <span class="title function_">queue_work</span><span class="params">(<span class="keyword">struct</span> workqueue_struct *wq, <span class="keyword">struct</span> work_struct *work)</span>;</span><br><span class="line"><span class="type">static</span> <span class="keyword">inline</span> <span class="type">bool</span> <span class="title function_">schedule_work</span><span class="params">(<span class="keyword">struct</span> work_struct *work)</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>前者是将 workitem 放到用户自定义的 workqueue; 后者是将 workitem 放入一个全局 workqueue <code>system_wq</code>。</li>
+<li><code>system_wq</code> 等全局 workqueue 的执行线程 kworker 的命名一般是 <code>kworker/CPU#:POOL#[FLAG]-events</code><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root          64      64       2  0 Sep02 ?        00:00:00 [kworker/7:0H-events_highpri]</span><br><span class="line">root        3264    3264       2  0 Sep04 ?        00:00:06 [kworker/2:0-events]</span><br></pre></td></tr></table></figure>
+</li>
+<li>因为 GPU scheduler 的 <code>submit_wq</code> 是一个自定义的 workqueue, 所以它调用的是 <code>queue_work()</code>，而实际上有很多驱动会将一些 workitems 直接放入全局 workqueue <code>system_wq</code></li>
+</ul>
+</li>
+<li><code>drm_sched_&#123;run,free&#125;_job_work()</code> 在哪个 <strong>kworker</strong> 上运行可以<a target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/v4.14/core-api/workqueue.html#debugging">通过 debugfs 来查看</a>
+<ul>
+<li><code>echo workqueue:workqueue_queue_work &gt; /sys/kernel/debug/tracing/set_event</code></li>
+<li><code>cat /sys/kernel/debug/tracing/trace_pipe &gt; out.txt</code></li>
+</ul>
+</li>
+<li>如果用户在初始化 <code>drm_gpu_scheduler</code> 时没有传入自己创建的 WQ, 那么内核会默认创建一个 <strong>ordered workqueue</strong> 并将其赋给 <code>drm_gpu_scheduler::submit_wq</code>, ordered workqueue 保证了先入队的函数一定先执行, 通常 <code>drm_sched_run_job_work()</code> 会先入队, 而 <code>drm_sched_free_job_work()</code> 后入队，这也正好符合正常的执行逻辑。</li>
+</ul>
+<h1 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://patchwork.freedesktop.org/patch/567839/">drm/scheduler: improve GPU scheduler documentation v2</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yaongtime/p/14305463.html">linux DRM GPU scheduler 笔记</a></li>
+<li><a target="_blank" rel="noopener" href="https://patchwork.freedesktop.org/patch/297644/">drm/panfrost: Add initial panfrost driver</a></li>
+<li><a target="_blank" rel="noopener" href="https://pastebin.com/MssJk6Ky">drivers/gpu 下的 <code>drm_sched_backend_ops</code></a></li>
+<li><a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/f8d2b42ae65c2f16f36a43e0ae39d288431e4263/src/imagination/csbgen/rogue_kmd_stream.xml">PowerVR Rogue Command Stream format</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/jimbo17/p/8885814.html">Linux kernel workqueue 机制分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2441413">异步处理的强力助手：Linux Workqueue 机制详解</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.wowotech.net/irq_subsystem/workqueue.html">Concurrency Managed Workqueue之（一）：workqueue的基本概念</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/DRM-KMS/" rel="tag"># DRM/KMS</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/misc/chuer/" rel="prev" title="这年初二">
+                  <i class="fa fa-angle-left"></i> 这年初二
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/gfx/gbm/" rel="next" title="Generic Buffer Manager">
+                  Generic Buffer Manager <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

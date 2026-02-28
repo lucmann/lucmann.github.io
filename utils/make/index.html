@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1234target ... : prerequisites ...  recipe  ...  ...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Make Cheatsheet">
+<meta property="og:url" content="https://lucmann.github.io/utils/make/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="1234target ... : prerequisites ...  recipe  ...  ...">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-07-31T15:59:05.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.446Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="tools">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lucmann.github.io/utils/make/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/utils/make/","path":"utils/make/","title":"Make Cheatsheet"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Make Cheatsheet | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#make-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text"> Make 基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#static-pattern-rules"><span class="nav-number">1.1.</span> <span class="nav-text"> Static Pattern Rules</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#static-pattern-rules-vs-implicit-rules"><span class="nav-number">1.2.</span> <span class="nav-text"> Static Pattern Rules vs. Implicit Rules</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#make-%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text"> Make 常用参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#-d-debugflags"><span class="nav-number">2.1.</span> <span class="nav-text"> -d, --debug&#x3D;FLAGS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#make-%E5%B8%B8%E7%94%A8%E5%8F%98%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text"> Make 常用变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#make-%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">3.1.</span> <span class="nav-text"> Make 变量赋值操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#makecmdgoals"><span class="nav-number">3.2.</span> <span class="nav-text"> MAKECMDGOALS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#makefile_list"><span class="nav-number">3.3.</span> <span class="nav-text"> MAKEFILE_LIST</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#curdir"><span class="nav-number">3.4.</span> <span class="nav-text"> CURDIR</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#make-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text"> Make 常用函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#info-error-warning"><span class="nav-number">4.1.</span> <span class="nav-text"> info, error, warning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dir-notdir"><span class="nav-number">4.2.</span> <span class="nav-text"> dir, notdir</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#filter-filter-out"><span class="nav-number">4.3.</span> <span class="nav-text"> filter, filter-out</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#foreach"><span class="nav-number">4.4.</span> <span class="nav-text"> foreach</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#if"><span class="nav-number">4.5.</span> <span class="nav-text"> if</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#or-and"><span class="nav-number">4.6.</span> <span class="nav-text"> or, and</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#origin"><span class="nav-number">4.7.</span> <span class="nav-text"> origin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0"><span class="nav-number">4.8.</span> <span class="nav-text"> 用户自定义函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0-%E4%BE%8B2"><span class="nav-number">4.8.1.</span> <span class="nav-text"> 函数 例2</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#make-%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8C"><span class="nav-number">5.</span> <span class="nav-text"> Make 用户手册</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/utils/make/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Make Cheatsheet | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Make Cheatsheet
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-07-31 23:59:05" itemprop="dateCreated datePublished" datetime="2025-07-31T23:59:05+08:00">2025-07-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/utilities/" itemprop="url" rel="index"><span itemprop="name">utilities</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/utils/make/" class="post-meta-item leancloud_visitors" data-flag-title="Make Cheatsheet" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/utils/make/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="utils/make/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">target ... : prerequisites ...</span><br><span class="line">  recipe</span><br><span class="line">  ...</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<ul>
+<li><strong>target …</strong> 说明在一条规则里 target 可以有多个</li>
+<li><strong>prerequisites</strong> 可以为空</li>
+<li><strong>recipe</strong> 可以为空, 这时 make 相应的 target 会提示
+<ul>
+<li><code>Nothing to be done for 'target'.</code></li>
+<li>可以通过 <code>;</code> 分号显示地指出 recipe 是空
+<ul>
+<li><code>target: ;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如果 make 命令行没有指定任何目标，make 会将 Makefile 里解析出来的<strong>第一个目标</strong>作为默认目标</li>
+</ul>
+<h1 id="make-基本原理"><a class="markdownIt-Anchor" href="#make-基本原理"></a> Make 基本原理</h1>
+<h2 id="static-pattern-rules"><a class="markdownIt-Anchor" href="#static-pattern-rules"></a> Static Pattern Rules</h2>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">targets ...: target-pattern: prereq-patterns ...</span><br><span class="line">  recipe</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+<h2 id="static-pattern-rules-vs-implicit-rules"><a class="markdownIt-Anchor" href="#static-pattern-rules-vs-implicit-rules"></a> Static Pattern Rules vs. Implicit Rules</h2>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">target-pattern : prereq-patterns</span><br><span class="line">  recipe</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+<h1 id="make-常用参数"><a class="markdownIt-Anchor" href="#make-常用参数"></a> Make 常用参数</h1>
+<h2 id="-d-debugflags"><a class="markdownIt-Anchor" href="#-d-debugflags"></a> -d, --debug=FLAGS</h2>
+<ul>
+<li>所有支持的 FLAGS (多个 flags 用<code>,</code> 分开)</li>
+<li>Debug Level Specification (GNU Make 4.3)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">标志</th>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">a</td>
+<td style="text-align:left">All</td>
+<td style="text-align:left">启用所有调试输出（等效于单独使用 -d）</td>
+</tr>
+<tr>
+<td style="text-align:left">b</td>
+<td style="text-align:left">Basic</td>
+<td style="text-align:left">基本调试：显示目标重建决策、过期检查等核心信息</td>
+</tr>
+<tr>
+<td style="text-align:left">v</td>
+<td style="text-align:left">Verbose</td>
+<td style="text-align:left">详细模式：比 b 更详细的执行信息</td>
+</tr>
+<tr>
+<td style="text-align:left">i</td>
+<td style="text-align:left">Implicit</td>
+<td style="text-align:left">隐式规则：显示隐式规则搜索/应用过程</td>
+</tr>
+<tr>
+<td style="text-align:left">j</td>
+<td style="text-align:left">Jobs</td>
+<td style="text-align:left">作业控制：输出子进程执行细节（命令/PID/退出码）</td>
+</tr>
+<tr>
+<td style="text-align:left">m</td>
+<td style="text-align:left">Makefile</td>
+<td style="text-align:left">Makefile 处理：跟踪 include/重解析过程</td>
+</tr>
+<tr>
+<td style="text-align:left">r</td>
+<td style="text-align:left">Remaking</td>
+<td style="text-align:left">重制检查：显示 makefile 自身的重制决策</td>
+</tr>
+<tr>
+<td style="text-align:left">n</td>
+<td style="text-align:left">None</td>
+<td style="text-align:left">禁用所有调试（特殊用途）</td>
+</tr>
+</tbody>
+</table>
+<!--more-->
+<h1 id="make-常用变量"><a class="markdownIt-Anchor" href="#make-常用变量"></a> Make 常用变量</h1>
+<h2 id="make-变量赋值操作符"><a class="markdownIt-Anchor" href="#make-变量赋值操作符"></a> Make 变量赋值操作符</h2>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">immediate = deferred</span><br><span class="line">immediate ?= deferred</span><br><span class="line">immediate := immediate</span><br><span class="line">immediate ::= immediate</span><br><span class="line">immediate :::= immediate-with-escape</span><br><span class="line">immediate += deferred or immediate</span><br><span class="line">immediate != immediate</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>!=</code> 用于将 shell 命令执行的结果赋给变量，等价于 <code>variable := $(shell shell_cmd)</code></li>
+</ul>
+<h2 id="makecmdgoals"><a class="markdownIt-Anchor" href="#makecmdgoals"></a> MAKECMDGOALS</h2>
+<p>表示执行 make 命令时用户给入的 targets, 这里<em>执行 make 命令时</em> 不仅包括从终端命令行执行 make, 也包括在 Makefile 规则里执行 <code>make -f ...</code></p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(info <span class="variable">$(MAKECMDGOALS)</span>)</span></span><br></pre></td></tr></table></figure>
+<p>如果执行 <code>make</code>, 它不会打印任何东西，但如果执行 <code>make all</code>, 它的输出是 <code>all</code></p>
+<h2 id="makefile_list"><a class="markdownIt-Anchor" href="#makefile_list"></a> MAKEFILE_LIST</h2>
+<p>被 make 解析过的所有 Makefile 文件名列表，按照解析的先后顺序由左到右罗列。如果当前的 Makefile 里使用了 <code>include</code>, 如 <code>include inc.mk</code>, 那么 <code>inc.mk</code> 就会成为这个列表的最后一个。注意它是<strong>文件名</strong>列表，不是文件路径列表</p>
+<h2 id="curdir"><a class="markdownIt-Anchor" href="#curdir"></a> CURDIR</h2>
+<p>Makefile 所在的目录的<strong>绝对路径</strong></p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(info <span class="variable">$(CURDIR)</span>)</span></span><br></pre></td></tr></table></figure>
+<p>如果这个 Makefile 位于 <code>/home/luc/gh/Makefile</code>, 它打印的就是 <code>/home/luc/gh</code></p>
+<h1 id="make-常用函数"><a class="markdownIt-Anchor" href="#make-常用函数"></a> Make 常用函数</h1>
+<h2 id="info-error-warning"><a class="markdownIt-Anchor" href="#info-error-warning"></a> info, error, warning</h2>
+<ul>
+<li>原型<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$(info text...)</span><br><span class="line">$(error text...)</span><br><span class="line">$(warning text...)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这3个函数被放在 GNU Make 官方文件 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Make-Control-Functions.html">8.13 Functions That Control Make</a> 章节，这里把它们放在常用函数最前面，是因为它们对于验证调试 Makefile 非常有用</li>
+<li><code>$(info text...)</code> 相当于 <code>printf()</code></li>
+<li><code>$(error text...)</code> 相当于 <code>assert(0)</code></li>
+<li>info 和 warning 的区别是前者打印在 <strong>stdout</strong>, 后者打印在 <strong>stderr</strong></li>
+<li>原样打印，不支持转义字符如 <code>\n</code></li>
+<li>info, warning, error 函数打印调试 makefile 之所以比在规则里使用 <code>echo</code> 方便，是因为它们作为内置函数可以在 makefile 的任何地方单独出现，而不像 echo 只能在规则里出现</li>
+<li>make 里的函数也会<strong>展开 expansion</strong>, 相当于 make 函数都有返回值，info, warning 函数展开后都是空字串</li>
+</ul>
+</li>
+</ul>
+<h2 id="dir-notdir"><a class="markdownIt-Anchor" href="#dir-notdir"></a> dir, notdir</h2>
+<ul>
+<li>原型<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(dir names...)</span><br><span class="line">$(notdir names...)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这两个内置函数被放在 GNU Make 官方文档 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html">8.3 Functions for File Names</a> 章节的头两个，可见它们的使用之多。这一章节的函数都是专门用来<strong>拆分</strong>文件路径的。</li>
+<li><code>$(dir names...)</code> 只取出后面文件路径(或文件路径列表)的目录部分, 相当于 shell 里的 <code>dirname</code></li>
+<li><code>$(notdir names...)</code> 只取出后面文件路径(或文件路径列表)的文件名部分, 相当于 shell 里的 <code>basename</code></li>
+<li>举个例子 Linux kernel <code>scripts/Kbuild.include</code> 中 <code>dot-target</code> 定义的例子:
+<ul>
+<li>`dot-target = $(dir <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">@</mi><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">@).</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">@</span><span class="mclose">)</span><span class="mord">.</span></span></span></span>(notdir $@)</li>
+<li>这个 dot-target 其实就是把 <code>foo/bar.o</code> 变成 <code>foo/.bar.o</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="filter-filter-out"><a class="markdownIt-Anchor" href="#filter-filter-out"></a> filter, filter-out</h2>
+<ul>
+<li>原型<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(filter pattern...,text)</span><br><span class="line">$(filter-out pattern...,text)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>filter 函数返回 <code>text</code> 中所有<strong>匹配</strong> <code>pattern...</code> 的单词</li>
+<li><code>pattern...</code> 表示可以提供多个用<strong>空白分隔</strong>的 pattern</li>
+<li>filter-out 是返回那些<strong>不匹配</strong>的，即它的结果与 filter 正好相反</li>
+</ul>
+</li>
+</ul>
+<h2 id="foreach"><a class="markdownIt-Anchor" href="#foreach"></a> foreach</h2>
+<ul>
+<li>原型<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(foreach var, list, text)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>expansion 时机：<code>var</code>, <code>list</code> 在一开始就展开，而 <code>text</code> 是在后面才展开</li>
+<li><code>list</code> 是一个空白分隔的字符串</li>
+<li><code>text</code> 的多次展开也被<strong>空白</strong>连接成一整个长字符串</li>
+</ul>
+</li>
+</ul>
+<h2 id="if"><a class="markdownIt-Anchor" href="#if"></a> if</h2>
+<ul>
+<li>原型<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(if condition, then-part[, else-part])</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果 <em>condition</em> 展开后是 <strong>非空字串</strong>non-empty string, 则为真，如果是<strong>空字串</strong>，则执行 <code>else-part</code>(如果有的话)</li>
+<li><em>then-part</em> 和 <em>else-part</em> 永远只能有一个被求值 (evaluated)</li>
+<li>if 函数同样有返回值，条件真时，返回 <em>then-part</em> 的求值结果; 条件假时，返回 <em>else-part</em> 的求值结果, 如果没有 <em>else-part</em>, 返回空字串</li>
+</ul>
+</li>
+</ul>
+<h2 id="or-and"><a class="markdownIt-Anchor" href="#or-and"></a> or, and</h2>
+<ul>
+<li>原型<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(or condition1[,condition2[,condition3...]]）</span><br><span class="line">$(and condition1[,condition2[,condition3...]]）</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>短路或(short-circuiting OR)</strong>(不是骂人🐶), 即一个挨一个展开 <em>condition</em>, 只要遇到一个展开为<strong>非空字串</strong>，就停止，这个函数返回的就是展开的那个字串，如果所有 <em>condition</em> 展开都是空，则返回空字串</li>
+<li><strong>短路与(short-circuiting AND)</strong>, 即一个挨一个展开 <em>condition</em>, 只要遇到一个展开为<strong>空字串</strong>，就停止，这个函数返回的就是空字串，如果所有 <em>condition</em> 展开都是非空字串，返回<strong>最后一个字串</strong></li>
+<li><em>condition</em> 可以有 1 到 n 个</li>
+</ul>
+</li>
+</ul>
+<h2 id="origin"><a class="markdownIt-Anchor" href="#origin"></a> origin</h2>
+<ul>
+<li>原型<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(origin variable)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><em>variable</em> 不需要加 <code>$</code> 符号</li>
+<li>它的功能类似 shell 里的 <code>which</code> 或 <code>type</code> (告诉你一个命令是不是 shell 内置命令)</li>
+<li>它的返回值有以下这些(都是字串)
+<ul>
+<li>undefined</li>
+<li>default</li>
+<li>environment</li>
+<li>environment override</li>
+<li>file</li>
+<li>command line</li>
+<li>override</li>
+<li>automatic</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="用户自定义函数"><a class="markdownIt-Anchor" href="#用户自定义函数"></a> 用户自定义函数</h2>
+<p>像其它语言一样，在 Makefile 里也可以自己定义函数， 例如</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rust_exports = <span class="variable">$(NM)</span> -p --defined-only $(1) | awk &#x27;$$2~/(T|R|D|B)/ &amp;&amp; $$3!~/__(pfx|cfi|odr_asan)/ &#123; printf $(2),$$3 &#125;&#x27;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Makefile 里定义函数，感觉还是在<strong>定义变量</strong></li>
+<li>函数名是 <code>rust_exports</code></li>
+<li>函数接受两个参数 <code>$(1)</code>, <code>$(2)</code></li>
+<li>函数中可以使用 Makefile 变量，如 <code>$(NM)</code></li>
+<li><a target="_blank" rel="noopener" href="https://gist.github.com/lucmann/3a30f9cc06bb8773a77aa5ccc945c3e5">当函数中的参数时，必须使用 <code>=</code>，而不是 <code>:=</code>, 因为有参数时需要将<strong>参数延迟展开</strong></a></li>
+</ul>
+<p>如何调用它</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">call</span> rust_exports,<span class="variable">$&lt;</span>,&quot;EXPORT_SYMBOL_RUST_GPL(%s)</span>;\n<span class="string">&quot;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>调用自定义函数使用 Make 内置函数 <code>$(call variable,param,param,...)</code></li>
+<li>在这个例子里，第1个实参是 <code>$&lt;</code>, 第2个实参是一个字符串，实际上是 awk printf 函数接受的<strong>格式字符串(format string)</strong></li>
+</ul>
+<h3 id="函数-例2"><a class="markdownIt-Anchor" href="#函数-例2"></a> 函数 例2</h3>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if_makefile_exists = <span class="variable">$(<span class="built_in">if</span> $(<span class="built_in">if</span>-exist-cond)</span>,<span class="variable">$(cmd)</span>,@：)</span><br><span class="line">if-exist-cond = <span class="variable">$(<span class="built_in">wildcard</span> $(1)</span>/Makefile)</span><br><span class="line">cmd = make -C $(1) $(2)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>if_makefile_exists</code> 函数接受两个参数，
+<ul>
+<li>参数1：目录名</li>
+<li>参数2：Target</li>
+</ul>
+</li>
+<li>功能是如果<strong>参数1</strong>指定的目录下存在 Makefile, 则构建<strong>参数2</strong>指定的目标，否则什么都不做(<code>@:</code>)</li>
+<li>调用方法：<code>$(call if_makefile_exists,images/dot,all)</code></li>
+</ul>
+<h1 id="make-用户手册"><a class="markdownIt-Anchor" href="#make-用户手册"></a> Make 用户手册</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/make.html">Make Manual</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/tools/" rel="tag"># tools</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/lnx/arch/" rel="prev" title="Hello, Arch Linux">
+                  <i class="fa fa-angle-left"></i> Hello, Arch Linux
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/lnx/nouveau/" rel="next" title="Nouveau">
+                  Nouveau <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

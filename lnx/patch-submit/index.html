@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Linux 内核的 patch 是以纯文本的邮件形式进行提交和代码走查的，而且 patch 是先到内核子系统 maintainer 维护的 git tree, 再到 Linus Torvalds 的 main tree。本文主要是以一个 patch 提交的实例来记录一下整个过程中的一些具体操作要点，至于 kernel patch 提交的规范和操作细节内核文档 和各种博客文章有很多，这里不再赘述。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Submitting My First Linux Kernel Patch">
+<meta property="og:url" content="https://lucmann.github.io/lnx/patch-submit/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="Linux 内核的 patch 是以纯文本的邮件形式进行提交和代码走查的，而且 patch 是先到内核子系统 maintainer 维护的 git tree, 再到 Linus Torvalds 的 main tree。本文主要是以一个 patch 提交的实例来记录一下整个过程中的一些具体操作要点，至于 kernel patch 提交的规范和操作细节内核文档 和各种博客文章有很多，这里不再赘述。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/images/patch-submit/patch-backport.png">
+<meta property="article:published_time" content="2023-05-08T03:38:43.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.376Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="kernel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/images/patch-submit/patch-backport.png">
+
+
+<link rel="canonical" href="https://lucmann.github.io/lnx/patch-submit/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/lnx/patch-submit/","path":"lnx/patch-submit/","title":"Submitting My First Linux Kernel Patch"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Submitting My First Linux Kernel Patch | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E5%88%B0%E7%9A%84%E5%B9%B3%E5%8F%B0%E8%BD%AF%E4%BB%B6%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text"> 用到的平台，软件，工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text"> 过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87-patch"><span class="nav-number">2.1.</span> <span class="nav-text"> 准备 patch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5-patch"><span class="nav-number">2.2.</span> <span class="nav-text"> 检查 patch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4-patch"><span class="nav-number">2.3.</span> <span class="nav-text"> 提交 patch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-mutt"><span class="nav-number">2.3.1.</span> <span class="nav-text"> 使用 mutt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-git-send-email"><span class="nav-number">2.3.2.</span> <span class="nav-text"> 使用 git send-email</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">2.4.</span> <span class="nav-text"> 注意事项</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/lnx/patch-submit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Submitting My First Linux Kernel Patch | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Submitting My First Linux Kernel Patch
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-05-08 11:38:43" itemprop="dateCreated datePublished" datetime="2023-05-08T11:38:43+08:00">2023-05-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/lnx/patch-submit/" class="post-meta-item leancloud_visitors" data-flag-title="Submitting My First Linux Kernel Patch" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/lnx/patch-submit/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="lnx/patch-submit/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Linux 内核的 patch 是以纯文本的邮件形式进行提交和代码走查的，而且 patch 是先到内核子系统 maintainer 维护的 git tree, 再到 <a target="_blank" rel="noopener" href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/">Linus Torvalds 的 main tree</a>。本文主要是以一个 patch 提交的实例来记录一下整个过程中的一些具体操作要点，至于 kernel patch 提交的规范和操作细节<a target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/latest/process/submitting-patches.html">内核文档</a> 和各种博客文章有很多，这里不再赘述。</p>
+<span id="more"></span>
+<h1 id="用到的平台软件工具"><a class="markdownIt-Anchor" href="#用到的平台软件工具"></a> 用到的平台，软件，工具</h1>
+<ul>
+<li>Windows Subsystem for Linux, Ubuntu 20.04 LTS (Focal Fossa)</li>
+<li>邮件客户端 mutt 1.13.2 (<code>apt install mutt</code>)</li>
+<li>git 2.25.1</li>
+<li>kernel git tree (mainly DRM) <a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/drm">https://gitlab.freedesktop.org/drm</a></li>
+</ul>
+<h1 id="过程"><a class="markdownIt-Anchor" href="#过程"></a> 过程</h1>
+<h2 id="准备-patch"><a class="markdownIt-Anchor" href="#准备-patch"></a> 准备 patch</h2>
+<ul>
+<li>当你的 commit 已经在源码树上提交好后，只需使用 <code>git format-patch</code> 命令即可轻松生成一个内核 patch (假设 patch 里只包含一个 commit)</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git format-patch HEAD^ -o /tmp/   # 将生成的 patch 文件保存在 /tmp 目录</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当你的 patch 被开发者 review 后，如果需要修改，修改后可通过增加 <code>-v N</code> 选项生成下一个版本的 patch</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git format-patch HEAD^ -v 2 -o /tmp/</span><br></pre></td></tr></table></figure>
+<h2 id="检查-patch"><a class="markdownIt-Anchor" href="#检查-patch"></a> 检查 patch</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./scripts/checkpatch.pl /path/to/patch</span><br></pre></td></tr></table></figure>
+<p><code>checkpatch.pl</code> 工具执行各种 codestyle, patch 格式, 社区提交补丁规范的检查，它和测试一样，都是提交补丁前不可缺少的步骤</p>
+<h2 id="提交-patch"><a class="markdownIt-Anchor" href="#提交-patch"></a> 提交 patch</h2>
+<p>个人觉得提交补丁比较简单的方式是使用 <code>git send-email</code>, 因为内核补丁或补丁集都是以纯文本(plain text)电子邮件形式提交的, 所以提交前需要</p>
+<ul>
+<li>配置好你的 SMTP (Simple Mail Transfer Protocol)邮件发送服务器</li>
+<li>确定好收件人和抄送人(Carbon Copy)
+<ul>
+<li>收件人一般是 subsystem maintainer 或邮件列表，如 <a href="mailto:dri-devel@lists.freedesktop.org">dri-devel@lists.freedesktop.org</a></li>
+<li>抄送人一般使用脚本 <code>./scripts/get_maintainer.pl /path/to/patch</code> 来自动获取
+<ul>
+<li><code>./scripts/get_maintainer.pl</code> 不加任何选项时输出格式是这样子的(具体内容随补丁而定)  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Maarten Lankhorst &lt;maarten.lankhorst@linux.intel.com&gt; (maintainer:DRM DRIVERS AND MISC GPU PATCHES)</span><br><span class="line">Maxime Ripard &lt;mripard@kernel.org&gt; (maintainer:DRM DRIVERS AND MISC GPU PATCHES)</span><br><span class="line">Thomas Zimmermann &lt;tzimmermann@suse.de&gt; (maintainer:DRM DRIVERS AND MISC GPU PATCHES)</span><br><span class="line">David Airlie &lt;airlied@gmail.com&gt; (maintainer:DRM DRIVERS)</span><br><span class="line">Simona Vetter &lt;simona@ffwll.ch&gt; (maintainer:DRM DRIVERS)</span><br><span class="line">dri-devel@lists.freedesktop.org (open list:DRM DRIVERS)</span><br><span class="line">linux-kernel@vger.kernel.org (open list)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="使用-mutt"><a class="markdownIt-Anchor" href="#使用-mutt"></a> 使用 mutt</h3>
+<p>提交 Linux kernel patch 实际上就是用邮件客户端将生成好的 patch 文件发送给相关的 maintainers 和 maillists. <code>git send-email</code> 也可以做同样的事，这里使用的是 mutt. mutt 的基本命令行格式是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mutt [-Enx] [-e cmd] [-F file] [-H file] [-i file] [-s subj] [-b addr] [-c addr] [-a file [...] --] addr|mailto_url [...]</span><br></pre></td></tr></table></figure>
+<p>本例中只使用到了 <code>-H file</code> 选项，它将包含有邮件头和邮件主体的 patch 文件作为参数创建邮件草稿 (意思是该命令执行后还会让你再编辑邮件，包括收件人，邮件内容增删改等）。本例中 mutt 的唯一参数是后面的收件人列表，它是通过内核源码树里的一个<a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/latest/source/scripts/get_maintainer.pl">脚本工具</a>自动获取的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mutt -H /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch \</span><br><span class="line">    &quot;`./scripts/get_maintainer.pl --separator , --norolestats \</span><br><span class="line">    /tmp/v2-0001-drm-vram-helper-fix-function-names-in-vram-helper.patch`&quot;</span><br></pre></td></tr></table></figure>
+<p>带有 <code>Fixes:</code> tag 的patch 应该会被 backport 到以前必要 -stable tree.</p>
+<p><img src="/images/patch-submit/patch-backport.png" alt="patch-backport" /></p>
+<h3 id="使用-git-send-email"><a class="markdownIt-Anchor" href="#使用-git-send-email"></a> 使用 git send-email</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git send-email --to dri-devel@lists.freedesktop.org --cc-cmd &quot;./scripts/get_maintainer.pl --nogit-fallback --norolestats&quot; /tmp/0001-drm-doc-Fix-doc-in-drm_file.patch</span><br></pre></td></tr></table></figure>
+<h2 id="注意事项"><a class="markdownIt-Anchor" href="#注意事项"></a> 注意事项</h2>
+<p><code>git send-email</code> 同样需要配置发送邮件服务器 stmp</p>
+<ul>
+<li>
+<p>将 <a href="mailto:user@stmp.gmail.com">user@stmp.gmail.com</a> 的密码配置在 ~/.gitconfig 的 sendemail 段</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[sendemail]</span><br><span class="line">    smtpserver = smtp.gmail.com</span><br><span class="line">    smtpencryption = tls</span><br><span class="line">    smtpserverport = 587</span><br><span class="line">    smtpuser = onion0709@gmail.com</span><br><span class="line">    smtppass = &lt;16 characters Google App Password&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>mutt 需要配置 IMAP/SMTP, 即邮件收发协议配置 (这是整个过程中最费劲的)<br />
+mutt 的配置文件默认路径是 <code>$HOME/.mutt/muttrc</code></p>
+</li>
+<li>
+<p>git 需要配置完整的 <code>user.name</code>, <code>user.email</code>.</p>
+</li>
+<li>
+<p><code>git commit</code> 时需要加 <code>-s</code> (<code>--signoff</code>) 来自动增加 Signed-off-by 标签 (如果你 Signed-off-by 标签的邮件地址和发送 patch 的邮箱地址不同的话，还需要在邮件主体的第一行手动添加 <code>From: Zhang San &lt;xxx@yourmail.com&gt;</code>, <a href="mailto:xxx@yourmail.com">xxx@yourmail.com</a> 是你的 Signed-off-by 邮件地址)</p>
+</li>
+<li>
+<p>如果 patch 邮件发出后2,3周，甚至一个月都没有收到任何回应，在确认收件地址没问题的情况下，可以再次 <code>git send-email</code> 原来的patch, 同时<strong>在邮件主题手动加上 RESEND</strong> 标识</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[PATCH RESEND] sub/sys: Condensed patch summary</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><code>git send-email -v 2 --in-reply-to=&quot;&lt;v1-message-id&gt; ...&quot;</code> 避免因提供补丁的下一个版本而中断线程。</p>
+</li>
+<li>
+<p>对于补丁集 (Patch Series), 一般 Changelog 会写在补丁集的 cover letter 里。对于单个补丁，如果不想让 Changelog 出现在 commit message 里，但又想给 Maintainer 提供补丁迭代的信息，可以在 <code>Signed-off-by</code> 后面<strong>手动加上 <code>---</code></strong>, 然后开始写 Changelog(如下), 这样 Changelog 就不会出现在最终的 Commit message 里， <strong>修改的时机</strong>可以在 <code>git commit -s</code> 写提交日志时，也可以在 <code>git send-email --to ...</code> 发送邮件时选择 <code>[e]dit</code></p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line">Signed-off-by: Zhang San &lt;zhang.san@gmail.com&gt;</span><br><span class="line">---</span><br><span class="line">v3:</span><br><span class="line">- blablabla</span><br><span class="line">- asdfasdfasdf</span><br><span class="line">v2:</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/latest/process/submitting-patches.html">Submitting patches: the essential guide to getting your code into the kernel</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kernel/" rel="tag"># kernel</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/utils/icd/" rel="prev" title="Installable Client Driver">
+                  <i class="fa fa-angle-left"></i> Installable Client Driver
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/gfx/kms/" rel="next" title="Knowledge from "[RFC] Plane color pipeline KMS uAPI"">
+                  Knowledge from "[RFC] Plane color pipeline KMS uAPI" <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

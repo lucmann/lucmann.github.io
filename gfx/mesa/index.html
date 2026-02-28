@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Overview Mesa 包含了各种 GPU&#x2F;CPU 的 OpenGL, OpenCL, Vulkan 实现(Usermode Driver), 也包括 GLX, EGL, GBM 等协议的实现。  Vulkan 驱动     codename directories platforms     anv src&#x2F;intel&#x2F;vulkan, src&#x2F;intel&#x2F;vulkan_hasvk Alde">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Notes for Mesa">
+<meta property="og:url" content="https://lucmann.github.io/gfx/mesa/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="Overview Mesa 包含了各种 GPU&#x2F;CPU 的 OpenGL, OpenCL, Vulkan 实现(Usermode Driver), 也包括 GLX, EGL, GBM 等协议的实现。  Vulkan 驱动     codename directories platforms     anv src&#x2F;intel&#x2F;vulkan, src&#x2F;intel&#x2F;vulkan_hasvk Alde">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/gfx/mesa/osdemo.jpg">
+<meta property="og:image" content="https://lucmann.github.io/gfx/mesa/OSMesaCreateContextExt.png">
+<meta property="og:image" content="https://lucmann.github.io/gfx/mesa/PopMatrix.png">
+<meta property="og:image" content="https://lucmann.github.io/gfx/mesa/glxgears.png">
+<meta property="og:image" content="https://lucmann.github.io/gfx/mesa/glXCreateContext.png">
+<meta property="og:image" content="https://lucmann.github.io/gfx/mesa/glXChooseVisual.png">
+<meta property="og:image" content="https://lucmann.github.io/gfx/mesa/gdb.svg">
+<meta property="article:published_time" content="2020-02-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.254Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="Mesa">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/gfx/mesa/osdemo.jpg">
+
+
+<link rel="canonical" href="https://lucmann.github.io/gfx/mesa/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/gfx/mesa/","path":"gfx/mesa/","title":"Notes for Mesa"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Notes for Mesa | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#overview"><span class="nav-number">1.</span> <span class="nav-text"> Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#build"><span class="nav-number">2.</span> <span class="nav-text"> Build</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#build-dependencies-since-mesa-2500"><span class="nav-number">2.1.</span> <span class="nav-text"> Build Dependencies (since mesa-25.0.0)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8E-mesa-%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="nav-number">3.</span> <span class="nav-text"> 与 mesa 相关的一些常用软件包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mesa-utils"><span class="nav-number">3.1.</span> <span class="nav-text"> mesa-utils</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mesa-utils-extra"><span class="nav-number">3.2.</span> <span class="nav-text"> mesa-utils-extra</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#off-screen-demos"><span class="nav-number">4.</span> <span class="nav-text"> Off-screen Demos</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#requisite"><span class="nav-number">4.1.</span> <span class="nav-text"> Requisite</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#osmesa-call-graphs"><span class="nav-number">4.2.</span> <span class="nav-text"> OSMesa Call Graphs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#three-different-build-configuration-reference-to-meson_optionstxt"><span class="nav-number">4.3.</span> <span class="nav-text"> Three Different Build Configuration (reference to meson_options.txt)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#three-different-call-paths"><span class="nav-number">4.4.</span> <span class="nav-text"> Three Different Call Paths</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#context"><span class="nav-number">4.4.1.</span> <span class="nav-text"> Context</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#draw"><span class="nav-number">4.4.2.</span> <span class="nav-text"> Draw</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gallium-based-glx-demos"><span class="nav-number">5.</span> <span class="nav-text"> Gallium-Based GLX Demos</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dri-based-glx-demos"><span class="nav-number">6.</span> <span class="nav-text"> DRI-Based GLX Demos</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#loading"><span class="nav-number">6.1.</span> <span class="nav-text"> Loading</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#contexts"><span class="nav-number">6.2.</span> <span class="nav-text"> Contexts</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gl_context"><span class="nav-number">6.2.1.</span> <span class="nav-text"> gl_context</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#st_context"><span class="nav-number">6.2.2.</span> <span class="nav-text"> st_context</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#draw_context"><span class="nav-number">6.2.3.</span> <span class="nav-text"> draw_context</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vbo_context"><span class="nav-number">6.2.4.</span> <span class="nav-text"> vbo_context</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#vbo_exec_vtx_init"><span class="nav-number">6.2.4.1.</span> <span class="nav-text"> vbo_exec_vtx_init</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vbo-vs-vao"><span class="nav-number">6.2.4.2.</span> <span class="nav-text"> vbo vs. vao</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatchers"><span class="nav-number">6.3.</span> <span class="nav-text"> Dispatchers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modules"><span class="nav-number">6.4.</span> <span class="nav-text"> Modules</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#draw_xxx_stage"><span class="nav-number">6.5.</span> <span class="nav-text"> draw_xxx_stage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#auxiliary"><span class="nav-number">6.6.</span> <span class="nav-text"> Auxiliary</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#qa"><span class="nav-number">7.</span> <span class="nav-text"> Q&amp;A</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#debug"><span class="nav-number">8.</span> <span class="nav-text"> Debug</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">8.1.</span> <span class="nav-text"> 环境变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#references"><span class="nav-number">9.</span> <span class="nav-text"> References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/gfx/mesa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Notes for Mesa | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Notes for Mesa
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-02-04 00:00:00" itemprop="dateCreated datePublished" datetime="2020-02-04T00:00:00+08:00">2020-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/graphics/" itemprop="url" rel="index"><span itemprop="name">graphics</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/gfx/mesa/" class="post-meta-item leancloud_visitors" data-flag-title="Notes for Mesa" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/gfx/mesa/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="gfx/mesa/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="overview"><a class="markdownIt-Anchor" href="#overview"></a> Overview</h1>
+<p>Mesa 包含了各种 GPU/CPU 的 OpenGL, OpenCL, Vulkan 实现(Usermode Driver), 也包括 GLX, EGL, GBM 等协议的实现。</p>
+<ul>
+<li>Vulkan 驱动</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">codename</th>
+<th style="text-align:left">directories</th>
+<th style="text-align:left">platforms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">anv</td>
+<td style="text-align:left">src/intel/vulkan, src/intel/vulkan_hasvk</td>
+<td style="text-align:left">Alder Lake-P</td>
+</tr>
+<tr>
+<td style="text-align:left">asahi</td>
+<td style="text-align:left">src/asahi/vulkan</td>
+<td style="text-align:left">Apple M1, M2</td>
+</tr>
+<tr>
+<td style="text-align:left">lpv</td>
+<td style="text-align:left">src/gallium/drivers/llvmpipe</td>
+<td style="text-align:left">CPU</td>
+</tr>
+<tr>
+<td style="text-align:left">panvk</td>
+<td style="text-align:left">src/panfrost/vulkan</td>
+<td style="text-align:left">RK3399</td>
+</tr>
+<tr>
+<td style="text-align:left">v3dv</td>
+<td style="text-align:left">src/broadcom/vulkan</td>
+<td style="text-align:left">Raspberry Pi</td>
+</tr>
+</tbody>
+</table>
+<h1 id="build"><a class="markdownIt-Anchor" href="#build"></a> Build</h1>
+<h2 id="build-dependencies-since-mesa-2500"><a class="markdownIt-Anchor" href="#build-dependencies-since-mesa-2500"></a> Build Dependencies (since mesa-25.0.0)</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">dep</th>
+<th style="text-align:left">apt-get</th>
+<th style="text-align:left">version required</th>
+<th style="text-align:left">yet another install</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">/usr/bin/glslangValidator</td>
+<td style="text-align:left">glslang-tools</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/glslang">https://github.com/KhronosGroup/glslang</a></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">/usr/bin/rustc</td>
+<td style="text-align:left">rustc</td>
+<td style="text-align:left">1.78.0 or newer</td>
+<td style="text-align:left">`curl --proto ‘=https’ --tlsv1.2 -sSf <a target="_blank" rel="noopener" href="https://sh.rustup.rs">https://sh.rustup.rs</a></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">bindgen (rust package)</td>
+<td style="text-align:left">cargo</td>
+<td style="text-align:left">0.65 or newer</td>
+<td style="text-align:left"><code>cargo install bindgen-cli</code></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">libclc-dev</td>
+<td style="text-align:left">libclc-17-dev</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">not required if -Dmesa-clc=auto</td>
+</tr>
+<tr>
+<td style="text-align:left">+</td>
+<td style="text-align:left">libdrm</td>
+<td style="text-align:left">libdrm-dev</td>
+<td style="text-align:left">2.4.121(120 ok2.0)</td>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/drm">https://gitlab.freedesktop.org/mesa/drm</a></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">llvm</td>
+<td style="text-align:left">llvm-17-dev</td>
+<td style="text-align:left">(17.0.6 ok2.0)</td>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://github.com/llvm/llvm-project">https://github.com/llvm/llvm-project</a></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">libLLVMSPIRVLib.so.17</td>
+<td style="text-align:left">llvm-spirv-17</td>
+<td style="text-align:left">(17.0.0 ok2.0)</td>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/SPIRV-LLVM-Translator">https://github.com/KhronosGroup/SPIRV-LLVM-Translator</a></td>
+</tr>
+<tr>
+<td style="text-align:left">+</td>
+<td style="text-align:left">LLVMSPIRVLib.h</td>
+<td style="text-align:left">llvmspirvlib-17-dev</td>
+<td style="text-align:left">(absent ok2.0)</td>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/SPIRV-LLVM-Translator">https://github.com/KhronosGroup/SPIRV-LLVM-Translator</a></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">clang-cpp</td>
+<td style="text-align:left">libclang-cpp17-dev</td>
+<td style="text-align:left">(17.0.6 ok2.0)</td>
+<td style="text-align:left">not required if -Dmesa-clc=auto</td>
+</tr>
+<tr>
+<td style="text-align:left">*</td>
+<td style="text-align:left">clang-dev</td>
+<td style="text-align:left">libclang-17-dev</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/mesa/-/issues/10485">Debian package issue</a></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">xshmfence</td>
+<td style="text-align:left">libxshmfence-dev</td>
+<td style="text-align:left">(1.3    ok2.0)</td>
+<td style="text-align:left">required if -Dplatforms=x11</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">xxf86vm</td>
+<td style="text-align:left">libxxf86vm-dev</td>
+<td style="text-align:left">(1.1.4  ok2.0)</td>
+<td style="text-align:left">required since -Dglx-direct=true by default</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">xrandr</td>
+<td style="text-align:left">libxrandr-dev</td>
+<td style="text-align:left">(1.5.2  ok2.0)</td>
+<td style="text-align:left">required since -Dxlib-lease=true</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">cbindgen (rust package)</td>
+<td style="text-align:left">cargo</td>
+<td style="text-align:left">0.28.0</td>
+<td style="text-align:left"><code>cargo install cbindgen</code>; required if -Dgallium-drivers=nouveau</td>
+</tr>
+</tbody>
+</table>
+<p>NOTE:</p>
+<ul>
+<li>
+<p>(*) 表示本来不需要的依赖</p>
+</li>
+<li>
+<p>(+) 在 OpenKylin 2.0 的源里没有，需要源码构建</p>
+</li>
+<li>
+<p>Ubuntu 22.04</p>
+</li>
+</ul>
+<p><strong>书到用时方恨少，包要装时不好找</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install -y cmake ninja-build bison flex g++ git pkg-config python3-setuptools python3-lz4 \</span><br><span class="line">    python3-jinja2 libssl-dev libelf-dev libboost-dev libglm-dev libtinyobjloader-dev libstb-dev \</span><br><span class="line">    libpng-dev wayland-protocols libwayland-dev libdecor-0-dev freeglut3-dev libglfw3-dev libexpat1-dev libglvnd-dev \</span><br><span class="line">    libx11-dev libxext-dev libxshmfence-dev libxrandr-dev libxxf86vm-dev libxfixes-dev libx11-xcb-dev \</span><br><span class="line">    libxcb1-dev libxcb-randr0-dev libxcb-glx0-dev libxcb-shm0-dev libxcb-dri3-dev libxcb-dri2-0-dev libxcb-present-dev \</span><br><span class="line">    libselinux1-dev libvulkan-dev vulkan-tools mesa-utils</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">meson build -Dprefix=/usr/local -Dlibdir=lib/x86_64-linux-gnu -Dplatforms=x11 -Dgallium-drivers=nouveau</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-Dprefix=/usr/local</code> 避免覆盖系统原来的 <code>libGL*</code></li>
+<li><code>-Dlibdir=lib/x86_64-linux-gnu</code> 设置库的安装路径为 <code>/etc/ld.so.conf.d/x86_64-linux-gnu.conf</code> 中搜索<strong>第一顺位</strong>的路径</li>
+<li>其他默认就好， 出现的依赖在 OpenKylin 2.0 上 apt-get 基本都能解决</li>
+</ul>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">Build targets in project: 437</span><br><span class="line">WARNING: Project specifies a minimum meson_version &#x27;&gt;= 1.1.0&#x27; but uses features which were added in newer versions:</span><br><span class="line"> * 1.3.0: &#123;&#x27;rust.proc_macro&#x27;, &#x27;rust_abi arg in static_library&#x27;&#125;</span><br><span class="line"></span><br><span class="line">mesa 25.0.0-devel</span><br><span class="line"></span><br><span class="line">  Directories</span><br><span class="line">    prefix                       : /usr/local</span><br><span class="line">    libdir                       : lib/x86_64-linux-gnu</span><br><span class="line">    includedir                   : include</span><br><span class="line"></span><br><span class="line">  Common C and C++ arguments</span><br><span class="line">    c_cpp_args                   : -mtls-dialect=gnu2</span><br><span class="line"></span><br><span class="line">  OpenGL</span><br><span class="line">    OpenGL                       : YES</span><br><span class="line">    ES1                          : YES</span><br><span class="line">    ES2                          : YES</span><br><span class="line">    Shared glapi                 : YES</span><br><span class="line">    GLVND                        : YES</span><br><span class="line"></span><br><span class="line">  DRI</span><br><span class="line">    Platform                     : drm</span><br><span class="line">    Driver dir                   : /usr/local/lib/x86_64-linux-gnu/dri</span><br><span class="line"></span><br><span class="line">  GLX</span><br><span class="line">    Enabled                      : YES</span><br><span class="line">    Provider                     : dri</span><br><span class="line"></span><br><span class="line">  EGL</span><br><span class="line">    Enabled                      : YES</span><br><span class="line">    Drivers                      : builtin:egl_dri2 builtin:egl_dri3</span><br><span class="line">    Platforms                    : x11 surfaceless drm xcb</span><br><span class="line"></span><br><span class="line">  GBM</span><br><span class="line">    Enabled                      : YES</span><br><span class="line">    Backends path                : /usr/local/lib/x86_64-linux-gnu/gbm</span><br><span class="line"></span><br><span class="line">  Vulkan</span><br><span class="line">    Drivers                      : amd intel intel_hasvk nouveau swrast</span><br><span class="line">    Platforms                    : x11 surfaceless drm xcb</span><br><span class="line">    ICD dir                      : share/vulkan/icd.d</span><br><span class="line">    Intel Ray tracing            : YES</span><br><span class="line"></span><br><span class="line">  Video</span><br><span class="line">    Codecs                       : av1dec av1enc vp9dec</span><br><span class="line">    APIs                         : vulkan xa</span><br><span class="line"></span><br><span class="line">  LLVM</span><br><span class="line">    Enabled                      : YES</span><br><span class="line">    Version                      : 17.0.6</span><br><span class="line"></span><br><span class="line">  Gallium</span><br><span class="line">    Enabled                      : YES</span><br><span class="line">    Drivers                      : nouveau</span><br><span class="line">    Platforms                    : x11 surfaceless drm xcb</span><br><span class="line">    Frontends                    : mesa xa</span><br><span class="line">    Off-screen rendering (OSMesa): NO</span><br><span class="line">    HUD lm-sensors               : NO</span><br><span class="line"></span><br><span class="line">  Perfetto</span><br><span class="line">    Enabled                      : NO</span><br><span class="line"></span><br><span class="line">  Teflon (TensorFlow Lite delegate)</span><br><span class="line">    Enabled                      : NO</span><br><span class="line"></span><br><span class="line">  Subprojects</span><br><span class="line">    paste                        : YES</span><br><span class="line">    proc-macro2                  : YES (from syn =&gt; quote)</span><br><span class="line">    quote                        : YES (from syn)</span><br><span class="line">    syn                          : YES</span><br><span class="line">    unicode-ident                : YES (from syn)</span><br><span class="line"></span><br><span class="line">  User defined options</span><br><span class="line">    libdir                       : lib/x86_64-linux-gnu</span><br><span class="line">    prefix                       : /usr/local</span><br><span class="line">    gallium-drivers              : nouveau</span><br><span class="line">    platforms                    : x11</span><br><span class="line"></span><br><span class="line">Found ninja-1.11.1 at /usr/bin/ninja</span><br><span class="line">WARNING: Running the setup command as `meson [options]` instead of `meson setup [options]` is ambiguous and deprecated.</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>After compilation and installed as follow:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -l /usr/local/lib/x86_64-linux-gnu</span><br><span class="line">total 159360</span><br><span class="line">lrwxrwxrwx 1 root root        10 Feb  7 17:13 libGL.so -&gt; libGL.so.1</span><br><span class="line">lrwxrwxrwx 1 root root        14 Feb  7 17:13 libGL.so.1 -&gt; libGL.so.1.5.0</span><br><span class="line">-rwxr-xr-x 1 root root 111044912 Feb  7 17:13 libGL.so.1.5.0</span><br><span class="line">lrwxrwxrwx 1 root root        14 Feb  7 17:13 libOSMesa.so -&gt; libOSMesa.so.8</span><br><span class="line">lrwxrwxrwx 1 root root        18 Feb  7 17:13 libOSMesa.so.8 -&gt; libOSMesa.so.8.0.0</span><br><span class="line">-rwxr-xr-x 1 root root  51541176 Feb  7 17:13 libOSMesa.so.8.0.0</span><br><span class="line">lrwxrwxrwx 1 root root        13 Feb  7 17:13 libglapi.so -&gt; libglapi.so.0</span><br><span class="line">lrwxrwxrwx 1 root root        17 Feb  7 17:13 libglapi.so.0 -&gt; libglapi.so.0.0.0</span><br><span class="line">-rwxr-xr-x 1 root root    337264 Feb  7 17:07 libglapi.so.0.0.0</span><br><span class="line">drwxr-xr-x 1 root root       512 Feb  7 17:13 pkgconfig</span><br></pre></td></tr></table></figure>
+<p>NOTE:</p>
+<ul>
+<li>Mesa is installed in <code>/usr/local/lib/$(uname -p)-linux-gnu</code> by default. So you have to <code>ldconfig</code> so that your linker can find them.</li>
+<li>libsoftpipe.a will be built but not installed.</li>
+<li>meson build system will enable compiler’s <code>-g</code> flag by default unless you are building on the release branch.</li>
+<li>if you have remodified the <strong>meson_options.txt</strong> and built once and now are about to reconfigure and rebuild, you need to run:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">meson setup --wipe build</span><br></pre></td></tr></table></figure>
+<h1 id="与-mesa-相关的一些常用软件包"><a class="markdownIt-Anchor" href="#与-mesa-相关的一些常用软件包"></a> 与 mesa 相关的一些常用软件包</h1>
+<h2 id="mesa-utils"><a class="markdownIt-Anchor" href="#mesa-utils"></a> mesa-utils</h2>
+<p>包含以下 glx demo 或 test program</p>
+<ul>
+<li>glxdemo</li>
+<li>glxgears</li>
+<li>glxheads</li>
+<li>glxinfo</li>
+</ul>
+<h2 id="mesa-utils-extra"><a class="markdownIt-Anchor" href="#mesa-utils-extra"></a> mesa-utils-extra</h2>
+<p>包含以下 egl demo 或 test program</p>
+<ul>
+<li>eglinfo</li>
+<li>es2_info</li>
+<li>es2gears_wayland</li>
+<li>es2gears_x11</li>
+<li>es2tri</li>
+</ul>
+<h1 id="off-screen-demos"><a class="markdownIt-Anchor" href="#off-screen-demos"></a> Off-screen Demos</h1>
+<p>Now that mesa have been built and installed we can give a try to run an OGL application. Similarly without window system supportd on the WSL, <a target="_blank" rel="noopener" href="https://mesa3d.org/osmesa.html">off-screen rendering</a> is my choice. We can clone the mesa <a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/demos">demos</a> which includes a lot of demos besides off-screen demos.</p>
+<h2 id="requisite"><a class="markdownIt-Anchor" href="#requisite"></a> Requisite</h2>
+<p>We need some more libraries besides libOSMesa and libGL before you can get these off-screen demos worked. They are:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/glu">GLU</a></li>
+<li>libm</li>
+</ul>
+<p>To build these demos:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc osdemo.c -o osdemo -g -I/home/luc/github/demos/src/util -lGL -lGLU -lOSMesa -lm</span><br></pre></td></tr></table></figure>
+<p>The executable osdemo saves the rendered pixels as the portable pixmap format. You need to covert it to image format e.g. jpg. You may do this with <code>pnmtojpeg output.ppm &gt; output.jpg</code>.</p>
+<div align=center><img src="/gfx/mesa/osdemo.jpg" class="" title="osdemo"></div>
+<h2 id="osmesa-call-graphs"><a class="markdownIt-Anchor" href="#osmesa-call-graphs"></a> OSMesa Call Graphs</h2>
+<p>Mesa supports many features from software pipelines to hardware drivers. For example <a target="_blank" rel="noopener" href="https://www.freedesktop.org/wiki/Software/gallium/">Gallium</a>, it features with several software or hardware implementations which include the two software pipelines, softpipe and <a target="_blank" rel="noopener" href="https://www.mesa3d.org/llvmpipe.html">llvmpipe</a>. With the different pipes enabled will the calls walk in the different paths.</p>
+<h2 id="three-different-build-configuration-reference-to-meson_optionstxt"><a class="markdownIt-Anchor" href="#three-different-build-configuration-reference-to-meson_optionstxt"></a> Three Different Build Configuration (reference to <strong>meson_options.txt</strong>)</h2>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th><em>platform</em></th>
+<th><em>glx</em></th>
+<th><em>dri-drivers</em></th>
+<th><em>gallium-drivers</em></th>
+<th><em>llvm</em></th>
+<th><em>osmesa</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>llvmpipe</strong></td>
+<td>x11</td>
+<td>gallium-xlib</td>
+<td></td>
+<td>swrast</td>
+<td>true</td>
+<td>gallium</td>
+</tr>
+<tr>
+<td><strong>softpipe</strong></td>
+<td>x11</td>
+<td>gallium-xlib</td>
+<td></td>
+<td>swrast</td>
+<td>false</td>
+<td>gallium</td>
+</tr>
+<tr>
+<td><strong>tnl</strong></td>
+<td>x11</td>
+<td>gallium-xlib</td>
+<td></td>
+<td>swrast</td>
+<td>true</td>
+<td>classic</td>
+</tr>
+</tbody>
+</table>
+<h2 id="three-different-call-paths"><a class="markdownIt-Anchor" href="#three-different-call-paths"></a> Three Different Call Paths</h2>
+<h3 id="context"><a class="markdownIt-Anchor" href="#context"></a> Context</h3>
+<div align=center><img src="/gfx/mesa/OSMesaCreateContextExt.png" class="" title="context initialization"></div>
+<p>NOTE: As for softpipe and llvmpipe <code>gl_api</code> and <code>gl_context</code> are created respectively while both of them are created in one path for the classic osmesa.</p>
+<h3 id="draw"><a class="markdownIt-Anchor" href="#draw"></a> Draw</h3>
+<div align=center><img src="/gfx/mesa/PopMatrix.png" class="" title="draw command"></div>
+<h1 id="gallium-based-glx-demos"><a class="markdownIt-Anchor" href="#gallium-based-glx-demos"></a> Gallium-Based GLX Demos</h1>
+<p>If you want to know the full graphic stack of an OpenGL demo, you can not get rid of the window system. That is why I will try some GLX demos. Evidently GLX demos must depend on X11. You can cope with this problem by installing <a target="_blank" rel="noopener" href="https://sourceforge.net/projects/vcxsrv/">vcXsrv</a> on the Windows 10 which hosts your WSL.</p>
+<div align=center><img src="/gfx/mesa/glxgears.png" class="" title="glx demo"></div>
+<p>This time I still choose the gallium-xlib with softpipe. The following call graph shows the path that GLX context is created.</p>
+<div align=center><img src="/gfx/mesa/glXCreateContext.png" class="" title="glx context creation"></div>
+<p>As we know, Mesa is quite modularized and flexible. How does it take the path that <code>softpipe_create_context</code> rather than other pipe contexts? The <a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/include/state_tracker/st_api.h">st_manager</a> is a key structure.</p>
+<p><code>struct pipe_screen</code> has a callback function that will be set to <code>softpipe_create_context</code>. The following calls will create <code>struct pipe_screen</code> that will be set to the <code>st_manager</code>.</p>
+<div align=center><img src="/gfx/mesa/glXChooseVisual.png" class="" title="pipe_screen creation"></div>
+<p>To bind the intended gallium driver backend to Mesa there must be something done before <code>glXChooseVisual</code> is called. It’s started by the library <code>init()</code> and prepare the global variables.</p>
+<p><a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/mesa/blob/master/src/gallium/state_trackers/glx/xlib/xm_public.h">xm_public.h</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* This is the driver interface required by the glx/xlib state tracker. </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">xm_driver</span> &#123;</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">pipe_screen</span> *(*<span class="title">create_pipe_screen</span>)( <span class="title">Display</span> *<span class="title">display</span> );</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">st_api</span> *(*<span class="title">create_st_api</span>)( <span class="title">void</span> );</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span></span><br><span class="line"><span class="title function_">xmesa_set_driver</span><span class="params">( <span class="type">const</span> <span class="keyword">struct</span> xm_driver *driver )</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="dri-based-glx-demos"><a class="markdownIt-Anchor" href="#dri-based-glx-demos"></a> DRI-Based GLX Demos</h1>
+<h2 id="loading"><a class="markdownIt-Anchor" href="#loading"></a> Loading</h2>
+<ul>
+<li><code>__glXInitialize</code></li>
+<li><code>driOpenDriver</code></li>
+</ul>
+<p>This process of loading drivers works similarly with that of gallium-based glx. Compilation macros and environment variables make a difference. There are several approaches to load the specific drivers:</p>
+<ul>
+<li><code>dri3_create_display</code></li>
+<li><code>dri2CreateDisplay</code></li>
+<li><code>driCreateDisplay</code></li>
+<li><code>driswCreateDisplay</code></li>
+<li><code>applegl_create_display</code></li>
+<li><code>driwindowsCreateDisplay</code></li>
+</ul>
+<p>Let’s look into <code>driCreateDisplay</code>. Once it manages to attach to <code>driCreateScreen</code> which searches and matches the appropriate gallium driver the function <code>driOpenDriver</code> will open the <strong>found</strong> driver by its name like “i965”, “radeon”, “nouveau”, etc. These drivers are supposed to be installed at <strong><code>LIBGL_DRIVERS_PATH</code></strong> or <code>LIBGL_DRIVERS_DIR</code>(deprecated) and named as <code>*_dri.so</code> by default.</p>
+<p>Like Gallium-based GLX’s <code>_init</code> routine with GCC <strong><code>constructor</code></strong> attribute, DRI-based GLX also defines a routine <code>megadriver_stub_init</code> with <code>constructor</code> attribute which allows to load the specific driver in a way of <strong><code>__DRIextension</code></strong>.</p>
+<div align=center><img src="/gfx/mesa/gdb.svg" class="" title="osdemo"></div>
+<h2 id="contexts"><a class="markdownIt-Anchor" href="#contexts"></a> Contexts</h2>
+<p>There are a variety of <strong>contexts</strong> in Mesa. They are designed as a framework of layers.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">__________________</span><br><span class="line">|                |</span><br><span class="line">|   gl_contex    | --------------&gt; standard &amp; general</span><br><span class="line">|________________|</span><br><span class="line"></span><br><span class="line">__________________</span><br><span class="line">|                |</span><br><span class="line">|   st_contex    | --------------&gt; adapter</span><br><span class="line">|________________|</span><br><span class="line"></span><br><span class="line">__________________</span><br><span class="line">|                |</span><br><span class="line">|  draw_contex   | --------------&gt; driver-specific</span><br><span class="line">|________________|</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="gl_context"><a class="markdownIt-Anchor" href="#gl_context"></a> gl_context</h3>
+<blockquote><p>This is the central context data structure for Mesa. Almost all OpenGL state is contained in this structure. Think of this as a base class from which device drivers will derive sub classes.</p>
+</blockquote>
+<p>Apart from OpenGL state it contains several other contexts</p>
+<ul>
+<li><code>swrast_context</code></li>
+<li><code>swsetup_context</code></li>
+<li><code>swtnl_context</code></li>
+<li><code>vbo_context</code></li>
+<li><code>st_context</code></li>
+</ul>
+<h3 id="st_context"><a class="markdownIt-Anchor" href="#st_context"></a> st_context</h3>
+<h3 id="draw_context"><a class="markdownIt-Anchor" href="#draw_context"></a> draw_context</h3>
+<h3 id="vbo_context"><a class="markdownIt-Anchor" href="#vbo_context"></a> vbo_context</h3>
+<p>VBO is short for vertex buffer object. This context derives two kinds of vbo contexts, <code>vbo_exec_context</code> and <code>vbo_save_context</code> which <code>vbo_exec_context</code> is generic for core and compatible ogl and the other is specific for compatible ogl.</p>
+<h4 id="vbo_exec_vtx_init"><a class="markdownIt-Anchor" href="#vbo_exec_vtx_init"></a> vbo_exec_vtx_init</h4>
+<ul>
+<li>Allocate a <code>gl_buffer_object</code> which just is referenced.</li>
+<li>Initialize vbo attributes including size, type and active size.</li>
+</ul>
+<h4 id="vbo-vs-vao"><a class="markdownIt-Anchor" href="#vbo-vs-vao"></a> vbo vs. vao</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">gl_buffer_object</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">   GLint RefCount;</span><br><span class="line">   GLuint Name;</span><br><span class="line">   GLchar *Label;       </span><br><span class="line">   GLenum16 Usage;      </span><br><span class="line">   GLbitfield StorageFlags; </span><br><span class="line">   GLsizeiptrARB Size;  </span><br><span class="line">   GLubyte *Data;       </span><br><span class="line">   GLboolean DeletePending;   </span><br><span class="line">   GLboolean Written;   </span><br><span class="line">   GLboolean Purgeable; </span><br><span class="line">   GLboolean Immutable; </span><br><span class="line">   gl_buffer_usage UsageHistory; </span><br><span class="line">   GLuint NumSubDataCalls;</span><br><span class="line">   GLuint NumMapBufferWriteCalls;</span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">gl_buffer_mapping</span> <span class="title">Mappings</span>[<span class="title">MAP_COUNT</span>];</span></span><br><span class="line">   <span class="type">simple_mtx_t</span> MinMaxCacheMutex;</span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">hash_table</span> *<span class="title">MinMaxCache</span>;</span></span><br><span class="line">   <span class="type">unsigned</span> MinMaxCacheHitIndices;</span><br><span class="line">   <span class="type">unsigned</span> MinMaxCacheMissIndices;</span><br><span class="line">   <span class="type">bool</span> MinMaxCacheDirty;</span><br><span class="line">   <span class="type">bool</span> HandleAllocated; </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">gl_vertex_array_object</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">   GLuint Name;</span><br><span class="line">   GLint RefCount;</span><br><span class="line">   GLchar *Label;       </span><br><span class="line">   GLboolean EverBound;</span><br><span class="line">   <span class="type">bool</span> SharedAndImmutable;</span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">gl_array_attributes</span> <span class="title">VertexAttrib</span>[<span class="title">VERT_ATTRIB_MAX</span>];</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">gl_vertex_buffer_binding</span> <span class="title">BufferBinding</span>[<span class="title">VERT_ATTRIB_MAX</span>];</span></span><br><span class="line">   GLbitfield VertexAttribBufferMask;</span><br><span class="line">   GLbitfield Enabled;</span><br><span class="line">   GLbitfield _EffEnabledVBO;</span><br><span class="line">   gl_attribute_map_mode _AttributeMapMode;</span><br><span class="line">   GLbitfield NewArrays;</span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">gl_buffer_object</span> *<span class="title">IndexBufferObj</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="dispatchers"><a class="markdownIt-Anchor" href="#dispatchers"></a> Dispatchers</h2>
+<ul>
+<li><em><code>Exec</code></em>: The current dispatch table for non-displaylist-saving execution, either BeginEnd or OutsideBeginEnd</li>
+<li><em><code>OutsideBeginEnd</code></em>: The normal dispatch table for non-displaylist-saving, non-begin/end</li>
+<li><em><code>Save</code></em>: The dispatch table used between glNewList() and glEndList()</li>
+<li><em><code>BeginEnd</code></em>: The dispatch table used between glBegin() and glEnd() (outside of a display list). Only valid functions between those two are set, which is mostly just the set in a GLvertexformat struct.</li>
+<li><em><code>ContextLost</code></em>: Dispatch table for when a graphics reset has happened.</li>
+<li><em><code>MarshalExec</code></em>: Dispatch table used to marshal API calls from the client program to a separate server thread. NULL if API calls are not being marshalled to another thread.</li>
+<li><em><code>CurrentClientDispatch</code></em>: Dispatch table currently in use for fielding API calls from the client program. If API calls are being marshalled to another thread, this refers to <em><code>MarshalExec</code></em>. Otherwise it refers to <em><code>CurrentServerDispatch</code></em>.</li>
+<li><em><code>CurrentServerDispatch</code></em>: Dispatch table currently in use for performing API calls. It refers to <em><code>Save</code></em> or <em><code>Exec</code></em>.</li>
+</ul>
+<h2 id="modules"><a class="markdownIt-Anchor" href="#modules"></a> Modules</h2>
+<ul>
+<li>draw module</li>
+<li>CSO module</li>
+<li>translate module</li>
+<li>VBO module</li>
+<li>TNL module(Transform &amp; Light)</li>
+</ul>
+<h2 id="draw_xxx_stage"><a class="markdownIt-Anchor" href="#draw_xxx_stage"></a> draw_xxx_stage</h2>
+<ul>
+<li><strong><code>extern struct draw_stage *draw_unfilled_stage( struct draw_context *context );</code></strong></li>
+<li><strong><code>extern struct draw_stage *draw_twoside_stage( struct draw_context *context );</code></strong></li>
+<li><strong><code>extern struct draw_stage *draw_offset_stage( struct draw_context *context );</code></strong></li>
+<li><strong><code>extern struct draw_stage *draw_clip_stage( struct draw_context *context );</code></strong></li>
+<li><strong><code>extern struct draw_stage *draw_flatshade_stage( struct draw_context *context );</code></strong></li>
+<li><strong><code>extern struct draw_stage *draw_cull_stage( struct draw_context *context );</code></strong></li>
+<li><strong><code>extern struct draw_stage *draw_stipple_stage( struct draw_context *context );</code></strong></li>
+<li><strong><code>extern struct draw_stage *draw_wide_line_stage( struct draw_context *context );</code></strong></li>
+<li><strong><code>extern struct draw_stage *draw_wide_point_stage( struct draw_context *context );</code></strong></li>
+<li><strong><code>extern struct draw_stage *draw_validate_stage( struct draw_context *context );</code></strong></li>
+</ul>
+<h2 id="auxiliary"><a class="markdownIt-Anchor" href="#auxiliary"></a> Auxiliary</h2>
+<ul>
+<li>
+<p>cso_cache<br />
+The CSO cache is used to accelerate preparation of state by saving driver-specific state structure for later use.</p>
+</li>
+<li>
+<p>draw<br />
+Draw is a software TCL pipeline for hardware that lacks vertex shaders or other essential parts of pre-rasterization vertex preparation.</p>
+</li>
+<li>
+<p>driver_ddebug</p>
+</li>
+<li>
+<p>driver_noop</p>
+</li>
+<li>
+<p>driver_rbug</p>
+</li>
+<li>
+<p>driver_trace</p>
+</li>
+<li>
+<p>gallivm</p>
+</li>
+<li>
+<p>hud</p>
+</li>
+<li>
+<p>indices<br />
+Indices provides tools for translating or generating element indices for use with element-based rendering.</p>
+</li>
+<li>
+<p>nir</p>
+</li>
+<li>
+<p>os</p>
+<ul>
+<li>memory allocation</li>
+<li>simple message logging</li>
+<li>obtaining run-time configuration option</li>
+<li>threading primitives<br />
+The OS module contains the abstraction for basic operating system services above. This is the bare minimum required to port Gallium to a new platform. It already provides the implementations of these abstractions for the most common platforms. When targeting an embedded platform no implementation will be provided - these must be provided separately.</li>
+</ul>
+</li>
+<li>
+<p>pipe-loader</p>
+</li>
+<li>
+<p>pipebuffer</p>
+</li>
+<li>
+<p>postprocess</p>
+</li>
+<li>
+<p>rbug</p>
+</li>
+<li>
+<p>renderonly</p>
+</li>
+<li>
+<p>rtasm</p>
+</li>
+<li>
+<p>target-helpers</p>
+</li>
+<li>
+<p>tgsi</p>
+</li>
+<li>
+<p>translate</p>
+</li>
+<li>
+<p>util</p>
+</li>
+<li>
+<p>vl</p>
+</li>
+</ul>
+<h1 id="qa"><a class="markdownIt-Anchor" href="#qa"></a> Q&amp;A</h1>
+<ul>
+<li>When xlib creates pipe screen, <em>only</em> software rasterizers or pipes’screen are created. And llvmpipe, softpipe, virgl, swr, unexceptionally, are software rasterizers or virtual GPU. <a target="_blank" rel="noopener" href="https://www.collabora.com/news-and-blog/blog/2018/10/31/introducing-zink-opengl-implementation-vulkan/">Zink</a> is, in brief, a translator from OpenGL to Vulkan and implemented as Gallium driver. So why only software pipes?</li>
+</ul>
+<p>The answer is <strong><code>sw_winsys</code></strong>. All of target helpers’s parameter is a <code>sw_winsys</code>. Check mesa source directory: <a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/mesa/tree/master/src/gallium/winsys">mesa/src/gallium/winsys</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">amdgpu</span><br><span class="line">etnaviv</span><br><span class="line">freedreno</span><br><span class="line">i915</span><br><span class="line">iris</span><br><span class="line">kmsro</span><br><span class="line">lima</span><br><span class="line">nouveau</span><br><span class="line">panfrost</span><br><span class="line">radeon</span><br><span class="line">svga</span><br><span class="line">sw</span><br><span class="line">tegra</span><br><span class="line">v3d</span><br><span class="line">vc4</span><br><span class="line">virgl</span><br></pre></td></tr></table></figure>
+<p>To put it simply, specific driver corresponds to specific winsys. The <code>sw</code> is for software rasterizers. If you expect to create pipe screen for some driver else, you need to add another target helper with its winsys as parameter like:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">static inline struct pipe_screen *</span><br><span class="line">i915_screen_create_named(struct i915_drm_winsys *winsys, const char *driver)</span><br></pre></td></tr></table></figure>
+<p>That means you have to declare a bunch of new interfaces from the top. So you’d better wrap the function to create specific driver’s winsys so that it can take a sw_winsys as its parameter like:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#if defined(GALLIUM_VIRGL)</span><br><span class="line">   if (screen == NULL &amp;&amp; strcmp(driver, &quot;virpipe&quot;) == 0) &#123;</span><br><span class="line">      struct virgl_winsys *vws;</span><br><span class="line">      vws = virgl_vtest_winsys_wrap(winsys);</span><br><span class="line">      screen = virgl_create_screen(vws, NULL);</span><br><span class="line">   &#125;</span><br><span class="line">#endif</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://libGL.so">libGL.so</a> is not built until glx option is enabled in <strong>meson_options.txt</strong>.</li>
+</ul>
+<p>Only with essential build-time dependencies for X11 installed and glx option configured is <a target="_blank" rel="noopener" href="http://libGL.so">libGL.so</a> built.</p>
+<ul>
+<li>What role do DRM, DRI and Gallium play in Mesa?</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">_libdrm_checks = [</span><br><span class="line">  [&#x27;intel&#x27;, with_dri_i915 or with_gallium_i915],</span><br><span class="line">  [&#x27;amdgpu&#x27;, with_amd_vk or with_gallium_radeonsi],</span><br><span class="line">  [&#x27;radeon&#x27;, (with_gallium_radeonsi or with_dri_r100 or with_dri_r200 or</span><br><span class="line">              with_gallium_r300 or with_gallium_r600)],</span><br><span class="line">  [&#x27;nouveau&#x27;, (with_gallium_nouveau or with_dri_nouveau)],</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>DRI and Gallium seem to be respectively different underlying implementation in Mesa. Moreover in term of swrast and i915, you have to choose either of both as you can read the following code snippet in meson.build. In fact DRI is more complicated and staler but Gallium is more smaller and simpler.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if with_dri_swrast and (with_gallium_softpipe or with_gallium_swr)</span><br><span class="line">  error(&#x27;Only one swrast provider can be built&#x27;)</span><br><span class="line">endif</span><br><span class="line">if with_dri_i915 and with_gallium_i915</span><br><span class="line">  error(&#x27;Only one i915 provider can be built&#x27;)</span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>What problems are encountered when you build mesa on the WSL?</p>
+</li>
+<li>
+<p>dri based GLX requires shared-glapi</p>
+</li>
+<li>
+<p>Gallium-xlib based GLX requires softpipe or llvmpipe</p>
+<ul>
+<li>means that <code>gallium-xlib</code> is supposed to only support software rasterizers(llvmpipe, softpipe) and virtual GPU(virgl, swr).</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">option(</span><br><span class="line">  &#x27;glx&#x27;,</span><br><span class="line">  type : &#x27;combo&#x27;,</span><br><span class="line">  value : &#x27;xlib&#x27;,</span><br><span class="line">  choices : [&#x27;auto&#x27;, &#x27;disabled&#x27;, &#x27;dri&#x27;, &#x27;xlib&#x27;, &#x27;gallium-xlib&#x27;],</span><br><span class="line">  description : &#x27;Build support for GLX platform&#x27;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>In Mesa, glx is implemented in three ways:</p>
+<table>
+<thead>
+<tr>
+<th>*-based</th>
+<th>backend</th>
+<th>window system</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dri-based</td>
+<td>non-sw-pipes</td>
+<td>*_drm_winsys</td>
+</tr>
+<tr>
+<td>xlib</td>
+<td>tnl</td>
+<td>sw_winsys</td>
+</tr>
+<tr>
+<td>gallium-based</td>
+<td>softpipe/llvmpipe</td>
+<td>sw_winsys</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>OSMesa gallium requires gallium softpipe or llvmpipe
+<ul>
+<li>means if <code>osmesa</code> is configured as <code>gallium</code>, <code>gallium-drivers</code> must include <code>swrast</code> but the <code>classic</code> osmesa uses the fixed-functioned TNL by default.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">option(</span><br><span class="line">  &#x27;osmesa&#x27;,</span><br><span class="line">  type : &#x27;combo&#x27;,</span><br><span class="line">  value : &#x27;gallium&#x27;,</span><br><span class="line">  choices : [&#x27;none&#x27;, &#x27;classic&#x27;, &#x27;gallium&#x27;],</span><br><span class="line">  description : &#x27;Build OSmesa.&#x27;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>Cannot build GLX support without X11 platform support and at least one OpenGL API</p>
+<ul>
+<li>GLX, As the name suggests, is dedicated to X11 winsys.</li>
+</ul>
+</li>
+<li>
+<p>When <code>__glXInitialize</code> creates the <code>Display</code>, <strong>only</strong> <code>driswCreateDisplay</code> returns successfully. Both of <code>dri2CreateDisplay</code> and <code>driCreateDisplay</code> failed.</p>
+</li>
+<li>
+<p>env: WSL on Windows 10 and with vcXsrv installed on the host as X server</p>
+</li>
+</ul>
+<p>The cause of failure is that vcXsrv has no extensions with DRI or DRI2. This lack of X server extension fails <code>DRI2QueryExtension</code> and <code>XF86DRIQueryExtension</code> so that the loading of gallium driver is not invoked.</p>
+<h1 id="debug"><a class="markdownIt-Anchor" href="#debug"></a> Debug</h1>
+<h2 id="环境变量"><a class="markdownIt-Anchor" href="#环境变量"></a> 环境变量</h2>
+<ul>
+<li>MESA_VERBOSE=comma-separated-list
+<ul>
+<li>MESA_VERBOSE=api</li>
+</ul>
+</li>
+<li>MESA_GLSL=comma-separated-list
+<ul>
+<li><code>MESA_GLSL=log</code> 把所有 GLSL shader 保存到文件里， shader_X.vert 或 shader_X.frag</li>
+</ul>
+</li>
+</ul>
+<h1 id="references"><a class="markdownIt-Anchor" href="#references"></a> References</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.mesa3d.org/shading.html#environment-variables">mdoc: Shading Languages Environment Variables</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Mesa/" rel="tag"># Mesa</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/gfx/X/debug-x11-with-tcpdump/" rel="next" title="Debugging X11 with tcpdump">
+                  Debugging X11 with tcpdump <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

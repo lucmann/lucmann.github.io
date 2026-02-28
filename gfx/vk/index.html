@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Vulkan 是一个低开销、跨平台的二维和三维图形与计算的应用程序接口，由 Khronos 在2015年在 GDC 上首次发布。它旨在提供高效能和更均衡的 CPU 和 GPU 占用，类似于 Direct3D 12 和 AMD Mantle。 在这里主要收集一些与 Vulkan 强相关的一些项目，便于 Vulkan 的学习和使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vulkan">
+<meta property="og:url" content="https://lucmann.github.io/gfx/vk/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="Vulkan 是一个低开销、跨平台的二维和三维图形与计算的应用程序接口，由 Khronos 在2015年在 GDC 上首次发布。它旨在提供高效能和更均衡的 CPU 和 GPU 占用，类似于 Direct3D 12 和 AMD Mantle。 在这里主要收集一些与 Vulkan 强相关的一些项目，便于 Vulkan 的学习和使用。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/images/vk/vkcube.gif">
+<meta property="og:image" content="https://lucmann.github.io/images/vk/surface_rotation.png">
+<meta property="og:image" content="https://lucmann.github.io/images/vk/gears-srgb.gif">
+<meta property="og:image" content="https://lucmann.github.io/images/vk/gears-rgb.gif">
+<meta property="og:image" content="https://lucmann.github.io/images/vk/glxgears-on-zink.gif">
+<meta property="og:image" content="https://lucmann.github.io/images/vk/glmark2-on-zink.gif">
+<meta property="article:published_time" content="2021-04-02T13:21:27.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.259Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="Vulkan">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/images/vk/vkcube.gif">
+
+
+<link rel="canonical" href="https://lucmann.github.io/gfx/vk/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/gfx/vk/","path":"gfx/vk/","title":"Vulkan"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Vulkan | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#vulkan-sdk"><span class="nav-number">1.</span> <span class="nav-text"> vulkan-sdk</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#vulkan-headers"><span class="nav-number">1.1.</span> <span class="nav-text"> Vulkan-Headers</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vulkan-hpp"><span class="nav-number">2.</span> <span class="nav-text"> Vulkan-Hpp</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#vulkan-tools"><span class="nav-number">2.1.</span> <span class="nav-text"> Vulkan-Tools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spirv-tools"><span class="nav-number">2.2.</span> <span class="nav-text"> SPIRV-Tools</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vulkan-samples"><span class="nav-number">3.</span> <span class="nav-text"> Vulkan-Samples</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vulkanexamples"><span class="nav-number">4.</span> <span class="nav-text"> VulkanExamples</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vulkan-icd"><span class="nav-number">5.</span> <span class="nav-text"> Vulkan ICD</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vulkan-wsi"><span class="nav-number">6.</span> <span class="nav-text"> Vulkan WSI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lavapipe"><span class="nav-number">7.</span> <span class="nav-text"> LAVApipe</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#zink"><span class="nav-number">8.</span> <span class="nav-text"> Zink</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#appendix-apt-install-2304-lunar-lobster"><span class="nav-number">9.</span> <span class="nav-text"> Appendix: apt install (23.04 Lunar Lobster)</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/gfx/vk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Vulkan | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vulkan
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-04-02 21:21:27" itemprop="dateCreated datePublished" datetime="2021-04-02T21:21:27+08:00">2021-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/graphics/" itemprop="url" rel="index"><span itemprop="name">graphics</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/gfx/vk/" class="post-meta-item leancloud_visitors" data-flag-title="Vulkan" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/gfx/vk/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="gfx/vk/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Vulkan 是一个低开销、跨平台的二维和三维图形与计算的应用程序接口，由 Khronos 在2015年在 GDC 上首次发布。它旨在提供高效能和更均衡的 CPU 和 GPU 占用，类似于 Direct3D 12 和 AMD Mantle。</p>
+<p>在这里主要收集一些与 Vulkan 强相关的一些项目，便于 Vulkan 的学习和使用。</p>
+<span id="more"></span>
+<h1 id="vulkan-sdk"><a class="markdownIt-Anchor" href="#vulkan-sdk"></a> <a target="_blank" rel="noopener" href="https://vulkan.lunarg.com/">vulkan-sdk</a></h1>
+<p>Vulkan SDK 为开发者提供了开发和调试 Vulkan 应用程序的关键工具，主要包括:</p>
+<ul>
+<li>Vulkan-Headers</li>
+<li>Vulkan-Tools</li>
+<li>SPIRV-Tools</li>
+<li>glslang</li>
+<li>VulkanMemoryAllocator (vma)</li>
+<li>Vulkan-Utilities-Library (vul)</li>
+</ul>
+<p>这些基本都是 C++ 编写的工具或库。</p>
+<p>LunarG 官方的 vulkan-sdk 同时会提供 Binary 和一个 vulkansdk 脚本，以及一个环境变量配置脚本。通常解压 (<code>tar -xvJf</code>) 后只需要</p>
+<p><code>source setup-env.sh</code></p>
+<p>SDK 中包含的所有库，应用程序及 cmake 文件都会在当前终端生效。另外，vulkansdk 允许用户方便地有选择地安装 SDK 包含的工具，例如单独下载安装 Vulkan-Headers:</p>
+<p><code>./vulkansdk --skip-deps vulkan-headers</code></p>
+<p>(注意 vulkansdk 默认都会将指定安装的项目安装在当前路径下的 <code>$(arch)</code> 目录下，这个安装路径在编译 Vulkan-Tools 时需要被设置到 Vulkan-Tools 的 cmake 变量 <code>-DVULKAN_HEADERS_INSTALL_DIR=/home/luc/gh/1.3.290.0/x86_64</code> 原因是 Vulkan-Tools 需要用到这个路径下的 Python 模块)</p>
+<h2 id="vulkan-headers"><a class="markdownIt-Anchor" href="#vulkan-headers"></a> <a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/Vulkan-Headers">Vulkan-Headers</a></h2>
+<p>Vulkan-Headers 主要包含 Vulkan API 的头文件和一些用于(根据 Khronos XML 文件)自动生成头文件的Python 脚本。Vulkan-Headers 的版本变更和 vulkan-sdk 是同步的，基本上所有 Vulkan 的相关的工具或库都依赖它。</p>
+<p>例如 Vulkan-Tools 中的 vulkaninfo, 当需要构建它时，就需要指定 <code>-DVULKAN_HEADERS_INSTALL_DIR</code>, 而且必须将 Vulkan-Tools 仓库的 tag 检出到和 Vulkan-Headers 仓库的一样才能编译成功。</p>
+<h1 id="vulkan-hpp"><a class="markdownIt-Anchor" href="#vulkan-hpp"></a> <a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/Vulkan-Hpp">Vulkan-Hpp</a></h1>
+<p>Vulkan-Hpp 旨在为 Vulkan C API 提供头文件(header only)形式的 C++ 绑定, 以此来简化 Vulkan 应用的开发过程同时不引入额外的 CPU 运行时开销。 Vulkan-Hpp 依赖 Vulkan-Headers, 而且它俩同时是 vulkan-sdk 的一部分, 它们三者的版本号应该都要一致 (定义在 <code>$&#123;CMAKE_INSTALL_PREFIX&#125;/include/vulkan/vulkan_core.h</code> 的 <code>VK_HEADER_VERSION</code>)。 实际上， Vulkan-Hpp 里包含一个 <code>VulkanHppGenerator</code> 程序，它会自动重新生成 vulkan 的一些头文件。</p>
+<pre><code class="highlight mermaid">flowchart LR
+    A[&quot;Vulkan Registry XML&quot;]
+    B[&quot;Vulkan .h/.hpp headers&quot;]
+    C[&quot;Vulkan .hpp headers&quot;]
+    A--&gt;|Vulkan-Headers .py|B
+    B--&gt;|VulkanHppGenerator|C</code></pre>
+<h2 id="vulkan-tools"><a class="markdownIt-Anchor" href="#vulkan-tools"></a> <a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/Vulkan-Tools">Vulkan-Tools</a></h2>
+<ul>
+<li><code>vulkaninfo --summary</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">VULKANINFO</span><br><span class="line">==========</span><br><span class="line"></span><br><span class="line">Vulkan Instance Version: 1.3.261</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Instance Extensions: count = 17</span><br><span class="line">-------------------------------</span><br><span class="line">VK_EXT_debug_report                    : extension revision 10</span><br><span class="line">VK_EXT_debug_utils                     : extension revision 2</span><br><span class="line">VK_EXT_headless_surface                : extension revision 1</span><br><span class="line">VK_EXT_surface_maintenance1            : extension revision 1</span><br><span class="line">VK_EXT_swapchain_colorspace            : extension revision 5</span><br><span class="line">VK_KHR_device_group_creation           : extension revision 1</span><br><span class="line">VK_KHR_external_fence_capabilities     : extension revision 1</span><br><span class="line">VK_KHR_external_memory_capabilities    : extension revision 1</span><br><span class="line">VK_KHR_external_semaphore_capabilities : extension revision 1</span><br><span class="line">VK_KHR_get_physical_device_properties2 : extension revision 2</span><br><span class="line">VK_KHR_get_surface_capabilities2       : extension revision 1</span><br><span class="line">VK_KHR_portability_enumeration         : extension revision 1</span><br><span class="line">VK_KHR_surface                         : extension revision 25</span><br><span class="line">VK_KHR_surface_protected_capabilities  : extension revision 1</span><br><span class="line">VK_KHR_xcb_surface                     : extension revision 6</span><br><span class="line">VK_KHR_xlib_surface                    : extension revision 6</span><br><span class="line">VK_LUNARG_direct_driver_loading        : extension revision 1</span><br><span class="line"></span><br><span class="line">Instance Layers: count = 13</span><br><span class="line">---------------------------</span><br><span class="line">VK_LAYER_FROG_gamescope_wsi       Gamescope WSI (XWayland Bypass) Layer (x86_64) 1.3.221  version 1</span><br><span class="line">VK_LAYER_INTEL_nullhw             INTEL NULL HW                                  1.1.73   version 1</span><br><span class="line">VK_LAYER_KHRONOS_profiles         Khronos Profiles layer                         1.3.280  version 1</span><br><span class="line">VK_LAYER_KHRONOS_shader_object    Khronos Shader object layer                    1.3.280  version 1</span><br><span class="line">VK_LAYER_KHRONOS_synchronization2 Khronos Synchronization2 layer                 1.3.280  version 1</span><br><span class="line">VK_LAYER_KHRONOS_validation       Khronos Validation Layer                       1.3.280  version 1</span><br><span class="line">VK_LAYER_LUNARG_api_dump          LunarG API dump layer                          1.3.280  version 2</span><br><span class="line">VK_LAYER_LUNARG_gfxreconstruct    GFXReconstruct Capture Layer Version 1.0.3     1.3.280  version 4194307</span><br><span class="line">VK_LAYER_LUNARG_monitor           Execution Monitoring Layer                     1.3.280  version 1</span><br><span class="line">VK_LAYER_LUNARG_screenshot        LunarG image capture layer                     1.3.280  version 1</span><br><span class="line">VK_LAYER_MANGOHUD_overlay_x86_64  Vulkan Hud Overlay                             1.3.0    version 1</span><br><span class="line">VK_LAYER_MESA_device_select       Linux device selection layer                   1.3.211  version 1</span><br><span class="line">VK_LAYER_MESA_overlay             Mesa Overlay layer                             1.3.211  version 1</span><br><span class="line"></span><br><span class="line">Devices:</span><br><span class="line">========</span><br><span class="line">GPU0:</span><br><span class="line">        apiVersion         = 1.3.255</span><br><span class="line">        driverVersion      = 0.0.1</span><br><span class="line">        vendorID           = 0x10005</span><br><span class="line">        deviceID           = 0x0000</span><br><span class="line">        deviceType         = PHYSICAL_DEVICE_TYPE_CPU</span><br><span class="line">        deviceName         = llvmpipe (LLVM 15.0.7, 256 bits)</span><br><span class="line">        driverID           = DRIVER_ID_MESA_LLVMPIPE</span><br><span class="line">        driverName         = llvmpipe</span><br><span class="line">        driverInfo         = Mesa 23.2.1-1ubuntu3.1~22.04.2 (LLVM 15.0.7)</span><br><span class="line">        conformanceVersion = 1.3.1.1</span><br><span class="line">        deviceUUID         = 6d657361-3233-2e32-2e31-2d3175627500</span><br><span class="line">        driverUUID         = 6c6c766d-7069-7065-5555-494400000000</span><br><span class="line">GPU1:</span><br><span class="line">        apiVersion         = 1.3.292</span><br><span class="line">        driverVersion      = 0.0.1</span><br><span class="line">        vendorID           = 0x10005</span><br><span class="line">        deviceID           = 0x0000</span><br><span class="line">        deviceType         = PHYSICAL_DEVICE_TYPE_CPU</span><br><span class="line">        deviceName         = llvmpipe (LLVM 16.0.0, 256 bits)</span><br><span class="line">        driverID           = DRIVER_ID_MESA_LLVMPIPE</span><br><span class="line">        driverName         = llvmpipe</span><br><span class="line">        driverInfo         = Mesa 24.3.0-devel (git-d58f7a24d1) (LLVM 16.0.0)</span><br><span class="line">        conformanceVersion = 1.3.1.1</span><br><span class="line">        deviceUUID         = 6d657361-3234-2e33-2e30-2d6465766500</span><br><span class="line">        driverUUID         = 6c6c766d-7069-7065-5555-494400000000</span><br></pre></td></tr></table></figure>
+<ul>
+<li>vkcube/vkcubepp
+<ul>
+<li><code>vkcube --gpu_number 1 --width 800 --height 600</code><br />
+<img src="/images/vk/vkcube.gif" alt="vkcube" /></li>
+</ul>
+</li>
+</ul>
+<h2 id="spirv-tools"><a class="markdownIt-Anchor" href="#spirv-tools"></a> <a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/SPIRV-Tools">SPIRV-Tools</a></h2>
+<p>SPIRV-Tools 主要收集了与 shader 相关的一整套工具链，包括编译，链接，优化，反汇编等等。它依赖 <a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/SPIRV-Headers">SPIRV-Headers</a></p>
+<p>SPIRV-Tools 包含的比较常用的工具:</p>
+<ul>
+<li>spirv-dis</li>
+<li>spirv-opt</li>
+</ul>
+<h1 id="vulkan-samples"><a class="markdownIt-Anchor" href="#vulkan-samples"></a> <a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/Vulkan-Samples">Vulkan-Samples</a></h1>
+<p><code>./build/app/bin/Debug/x86_64/vulkan_samples sample surface_rotation</code><br />
+<img src="/images/vk/surface_rotation.png" alt="surface_rotation" /></p>
+<h1 id="vulkanexamples"><a class="markdownIt-Anchor" href="#vulkanexamples"></a> <a target="_blank" rel="noopener" href="https://github.com/jherico/VulkanExamples">VulkanExamples</a></h1>
+<p>VulkanExamples 是将大部分 <a target="_blank" rel="noopener" href="https://github.com/SaschaWillems/Vulkan">Sascha Willems 的 Vulkan examples</a> 移植到 Vulkan-Hpp, 但当我试着在 Ubuntu 20.04.3 上编译并在 LAVApipe 是运行时，发现一个问题，大多数 Demo 会 assert:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gears: ../src/vulkan/runtime/vk_render_pass.c:2347: vk_common_CmdBeginRenderPass2: Assertion `image_view-&gt;format == pass_att-&gt;format&#x27; failed.</span><br></pre></td></tr></table></figure>
+<p>原因是 VulkanExamples 的 <code>ExampleBase::colorformat</code> 默认是 <code>vk::Format::eB8G8R8A8Unorm</code>, 而驱动侧 wsi 从窗口系统(Ubuntu 20.04.3是 X11) 获取的 visual 格式会在下面的 format 数据里顺序匹配:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">static const VkFormat formats[] = &#123;</span><br><span class="line">   VK_FORMAT_R5G6B5_UNORM_PACK16,</span><br><span class="line">   VK_FORMAT_B8G8R8A8_SRGB,</span><br><span class="line">   VK_FORMAT_B8G8R8A8_UNORM,</span><br><span class="line">   VK_FORMAT_A2R10G10B10_UNORM_PACK32,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>而 VulkanExamples base 只会从 <code>physicalDevice.getSurfaceFormatsKHR()</code> 返回的列表里取第一个格式，而它取回的是 <code>vk::Format::eB8G8R8A8Srgb</code>, 所以才会导致驱动 <code>vk_common_CmdBeginRenderPass2()</code> 的断言失败。mesa 的 wsi common 层之所以会将 <code>VK_FORMAT_B8G8R8A8_SRGB</code> 放到 <code>VK_FORMAT_B8G8R8A8_UNORM</code> 前面，应该是考虑到在应用程序中可能 sRGB 颜色空间使用更为广泛吧(doge)。</p>
+<p>而且 <a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/Vulkan-Samples">KhronosGroup/Vulkan-Samples</a> 自从 <a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/Vulkan-Samples/commit/38d628b032a88cf032e88877c1b75aa470333c32">38d628b032a8</a> 就已经首选 <code>vk::Format::eR8G8B8A8Srgb</code> 作为 swapchain image 的格式了。</p>
+<p>将 <code>ExampleBase::colorformat</code> 改为 sRGB 后的对比效果(哪个是 sRGB 呢?)<br />
+<img src="/images/vk/gears-srgb.gif" alt="gears-srgb" /><br />
+<img src="/images/vk/gears-rgb.gif" alt="gears-rgb" /></p>
+<h1 id="vulkan-icd"><a class="markdownIt-Anchor" href="#vulkan-icd"></a> Vulkan ICD</h1>
+<p>Vulkan ICD (Installable Client Driver) 可安装客户端驱动程序是 Vulkan 生成系统中的关键组件。它在 Vulkan 应用程序和系统上安装的各种 Vulkan 驱动程序之间充当桥梁。每个 Vulkan 驱动程序有带有一个 ICD JSON 文件，它里面描述了驱动动态库文件的路径，以便 Vulkan-Loader 可以枚举系统安装的每个 Vulkan 驱动。ICD Json 文件的路径和命名都是规范的:</p>
+<ul>
+<li>命名规范
+<ul>
+<li><code>driver_name</code>_icd.<code>$arch</code>.json</li>
+</ul>
+</li>
+<li>路径规范
+<ul>
+<li><code>$&#123;CMAKE_INSTALL_PREFIX&#125;</code>/<code>$&#123;CMAKE_INSTALL_DATADIR&#125;</code>/vulkan/icd.d/</li>
+</ul>
+</li>
+</ul>
+<p>Vulkan ICD 可以类比 OpenGL 世界的 <a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/glvnd/libglvnd">GLVND (GL Vendor-Neutral Dispatch library)</a>, GLVND 的目的同样是在同一系统上允许多个 OpenGL 驱动库共存，并在运行时决定将每个 API 调用分派给哪个供应商的驱动。只不过 GLVND 的 GLX 没有使用 JSON 文件，而是依靠环境变量:</p>
+<p>export __GLX_VENDOR_LIBRARY_NAME=<code>driver_name</code></p>
+<p><code>driver_name</code> 就是 OpenGL 驱动库文件 libGLX_<code>driver_name</code>.so 的一部分, 这种方式更依赖于动态链接库 <em><a target="_blank" rel="noopener" href="http://dl.so">dl.so</a></em></p>
+<p>而 GLVND 的 EGL 实现基本上与 Vulkan ICD 是一样的(可能Vulkan ICD 就是来源于 GLVND EGL ICD)。GLVND EGL ICD 的 JSON 文件命名规范和安装路径规范:</p>
+<ul>
+<li>命名规范
+<ul>
+<li>10_<code>myvendor</code>.<code>$arch</code>.json</li>
+</ul>
+</li>
+<li>路径规范
+<ul>
+<li><code>$&#123;CMAKE_INSTALL_PREFIX&#125;</code>/<code>$&#123;CMAKE_INSTALL_DATADIR&#125;</code>/glvnd/egl_vendor.d/</li>
+</ul>
+</li>
+</ul>
+<h1 id="vulkan-wsi"><a class="markdownIt-Anchor" href="#vulkan-wsi"></a> Vulkan WSI</h1>
+<p>Vulkan WSI (Window System Integration) 是Vulkan API 的一个重要组成部分，用于将渲染结果显示在不同平台的窗口系统上。WSI 通过一系列可选的 Vulkan 扩展来实现，这些扩展抽象了每个平台的窗口机制，使得 Vulkan API 可以在各种平台上使用。</p>
+<ul>
+<li>VK_KHR_surface (object/handle <code>VkSurfaceKHR</code>)
+<ul>
+<li>VK_KHR_win32_surface</li>
+<li>VK_KHR_android_surface</li>
+<li>VK_KHR_wayland_surface</li>
+<li>VK_KHR_xcb_surface, VK_KHR_xlib_surface</li>
+<li>VK_MVK_macos_surface</li>
+<li>VK_MVK_ios_surface</li>
+</ul>
+</li>
+<li>VK_KHR_swapchain (object/handle <code>VkSwapchainKHR</code>)</li>
+</ul>
+<p><em>注意: <code>VkSurfaceKHR</code> 和 <code>VkSwapchainKHR</code> 本质上都是一个指向结构体的指针类型，即 <code>struct VkSurfaceKHR_T *</code> (详见 <a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/Vulkan-Headers/blob/main/include/vulkan/vulkan_core.h#L57">vulkan_core.h</a>)</em></p>
+<ul>
+<li>Vulkan SDK 自带的 vulkaninfo 在 Ubuntu 20.04/22.04 (llvmpipe Vulkan 驱动)段错误
+<ul>
+<li>Vulkan SDK 自带的 vulkaninfo 在编译时应该没有关闭 <code>-DBUILD_WSI_WAYLAND_SUPPORT</code></li>
+<li>Ubuntu 20.04/22.04 的 Mesa 实现中 <code>vkIcdWsiPlatform</code> 不支持 wayland 平台
+<ul>
+<li>mesa 中的 <code>struct wsi_device</code> 定义了一个 <code>struct wsi_interface *</code> 的一个数组 <code>wsi[VK_ICD_WSI_PLATFORM_MAX]</code>, 在 Ubuntu 20.04/22.04 上该表 <code>VK_ICD_WSI_PLATFORM_WAYLAND</code> 对应的 wsi_interface 是空的  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">            (gdb) p wsi_device-&gt;wsi</span><br><span class="line">            $2 = &#123;0x0, 0x0, 0x0, 0x555555744e00, 0x555555744e00, 0x0, 0x0, 0x0, 0x555555702560, 0x555555753330&#125;</span><br><span class="line">            (gdb) ptype surface-&gt;platform</span><br><span class="line">type = enum &#123;VK_ICD_WSI_PLATFORM_MIR, VK_ICD_WSI_PLATFORM_WAYLAND, VK_ICD_WSI_PLATFORM_WIN32, VK_ICD_WSI_PLATFORM_XCB, VK_ICD_WSI_PLATFORM_XLIB, VK_ICD_WSI_PLATFORM_ANDROID, VK_ICD_WSI_PLATFORM_MACOS, VK_ICD_WSI_PLATFORM_IOS, VK_ICD_WSI_PLATFORM_DISPLAY, VK_ICD_WSI_PLATFORM_HEADLESS, VK_ICD_WSI_PLATFORM_METAL, VK_ICD_WSI_PLATFORM_DIRECTFB, VK_ICD_WSI_PLATFORM_VI, VK_ICD_WSI_PLATFORM_GGP, VK_ICD_WSI_PLATFORM_SCREEN, VK_ICD_WSI_PLATFORM_FUCHSIA&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="lavapipe"><a class="markdownIt-Anchor" href="#lavapipe"></a> <a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/mesa/-/tree/main/src/gallium/frontends/lavapipe">LAVApipe</a></h1>
+<p>Vulkan 的软实现，不依赖任何 GPU, 但它和 llvmpipe 一样，依赖 LLVM。构建它依赖:</p>
+<ul>
+<li>LLVM</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/KhronosGroup/SPIRV-LLVM-Translator">SPIRV-LLVM-Translator</a>
+<ul>
+<li>(SPIRV-LLVM-Translator 的版本似乎与 LLVM 的版本有严格的耦合，亲测如果 <code>BASE_LLVM_VERSION=20.0.0</code>, 实际安装的 LLVM 是 16.0.0 编译失败)</li>
+</ul>
+</li>
+</ul>
+<h1 id="zink"><a class="markdownIt-Anchor" href="#zink"></a> <a target="_blank" rel="noopener" href="https://docs.mesa3d.org/drivers/zink.html">Zink</a></h1>
+<p>Zink 不是某个具体 GPU 的驱动，而是一个将OpenGL API 调用翻译成 Vulkan API, 以在只有Vulkan 驱动的平台上提供完整OpenGL支持。例如，同时编译安装 Mesa 的 Zink (-Dgallium-drivers=zink)和 LAVApipe (-Dvulkan-drivers=swrast) 驱动，你就不仅可以跑 vkcube 也可以跑 glxgears。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">User defined options</span><br><span class="line">  buildtype                    : debug</span><br><span class="line">  prefix                       : /usr</span><br><span class="line">  cpp_rtti                     : false</span><br><span class="line">  gallium-drivers              : zink</span><br><span class="line">  glx                          : dri</span><br><span class="line">  llvm                         : enabled</span><br><span class="line">  platforms                    : x11</span><br><span class="line">  vulkan-drivers               : swrast</span><br></pre></td></tr></table></figure>
+<p>但是在软渲染上跑需要提供一些环境变量 <code>MESA_LOADER_DRIVER_OVERRIDE=zink LIBGL_KOPPER_DRI2=true LIBGL_ALWAYS_SOFTWARE=true ZINK_DEBUG=nir glxgears</code></p>
+<ul>
+<li><code>LIBGL_KOPPER_DRI2=true</code> 是因为我的环境上没有 DRI3, Zink 在没有 DRI3 支持, 且用户没有要求使用 DRI2 的情况下是不被使能的。</li>
+<li><code>LIBGL_ALWAYS_SOFTWARE=true</code> 是因为 zink 的实现要求 <a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/src/gallium/drivers/zink/zink_screen.c#L1763"><code>/* allow software rendering only if forced by the user */</code></a></li>
+<li><code>ZINK_DEBUG=nir</code> 为了能直观地看到驱动使用的是 Zink 而非 LLVMpipe 的OpenGL实现，特意加了 Zink 调试环境变量，将 shader 的 NIR 打印出来
+<ul>
+<li>glxgears on Zink<br />
+<img src="/images/vk/glxgears-on-zink.gif" alt="glxgears on Zink" /></li>
+<li>glmark2 on Zink<br />
+<img src="/images/vk/glmark2-on-zink.gif" alt="glmark2 on Zink" /></li>
+</ul>
+</li>
+</ul>
+<h1 id="appendix-apt-install-2304-lunar-lobster"><a class="markdownIt-Anchor" href="#appendix-apt-install-2304-lunar-lobster"></a> Appendix: apt install (23.04 Lunar Lobster)</h1>
+<p><strong>书到用时方恨少，包到装时不好找</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install -y cmake ninja-build bison flex g++ git pkg-config python3-setuptools python3-lz4 \</span><br><span class="line">    python3-jinja2 libssl-dev libelf-dev libboost-dev libglm-dev libtinyobjloader-dev libstb-dev \</span><br><span class="line">    libpng-dev wayland-protocols libwayland-dev libdecor-0-dev freeglut3-dev libexpat1-dev libglvnd-dev \</span><br><span class="line">    libx11-dev libxext-dev libxshmfence-dev libxrandr-dev libxxf86vm-dev libxfixes-dev libx11-xcb-dev \</span><br><span class="line">    libxcb1-dev libxcb-randr0-dev libxcb-glx0-dev libxcb-shm0-dev libxcb-dri3-dev libxcb-dri2-0-dev libxcb-present-dev \</span><br><span class="line">    libselinux1-dev libvulkan-dev vulkan-tools mesa-utils</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Vulkan/" rel="tag"># Vulkan</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/gfx/wayland/" rel="prev" title="Wayland">
+                  <i class="fa fa-angle-left"></i> Wayland
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/gfx/program-object/" rel="next" title="OpenGL Program Object">
+                  OpenGL Program Object <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

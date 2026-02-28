@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Motivation Given that a difficulty to add a custom X11 device driver or module or extension for Xserver, I try to find out how an Xserver is built and its dependent drivers and modules and extensions">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Build X Server (Xorg) from Source">
+<meta property="og:url" content="https://lucmann.github.io/gfx/X/build-xserver/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="Motivation Given that a difficulty to add a custom X11 device driver or module or extension for Xserver, I try to find out how an Xserver is built and its dependent drivers and modules and extensions">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-10-19T09:47:39.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.165Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="X11">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lucmann.github.io/gfx/X/build-xserver/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/gfx/X/build-xserver/","path":"gfx/X/build-xserver/","title":"Build X Server (Xorg) from Source"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Build X Server (Xorg) from Source | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#motivation"><span class="nav-number">1.</span> <span class="nav-text"> Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#build"><span class="nav-number">2.</span> <span class="nav-text"> Build</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#replacement"><span class="nav-number">2.1.</span> <span class="nav-text"> Replacement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conclusion"><span class="nav-number">2.2.</span> <span class="nav-text"> Conclusion</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#xserver-%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7"><span class="nav-number">3.</span> <span class="nav-text"> Xserver 相关工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#xinit"><span class="nav-number">3.1.</span> <span class="nav-text"> xinit</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/gfx/X/build-xserver/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Build X Server (Xorg) from Source | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Build X Server (Xorg) from Source
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-10-19 17:47:39" itemprop="dateCreated datePublished" datetime="2020-10-19T17:47:39+08:00">2020-10-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/graphics/" itemprop="url" rel="index"><span itemprop="name">graphics</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/gfx/X/build-xserver/" class="post-meta-item leancloud_visitors" data-flag-title="Build X Server (Xorg) from Source" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/gfx/X/build-xserver/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="gfx/X/build-xserver/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="motivation"><a class="markdownIt-Anchor" href="#motivation"></a> Motivation</h1>
+<p>Given that a difficulty to add a custom X11 device driver or module or extension for Xserver, I try to find out how an Xserver is built and its dependent drivers and modules and extensions are orgnized together by building it from <a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/xorg/xserver.git">source</a>.</p>
+<span id="more"></span>
+<h1 id="build"><a class="markdownIt-Anchor" href="#build"></a> Build</h1>
+<p>Xorg 的源码库克隆下来后，checkout 到目标分支或 tag, 假设我们想编译 xorg-server-1.20.4 这个版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout xorg-server-1.20.4 -b 1.20.4  // 将这个 tag 检出后命名为 1.20.4 分支</span><br></pre></td></tr></table></figure>
+<p>X Server 的源码库中除了 Xorg，还包含 modesetting_drv.so, xnest, xwin, xvfb 等，这些组件并不全都需要，如果全都编译，可能会有更多的依赖。<br />
+另外，Xorg 本身安装在 /usr/bin/ 目录, 其它相关 DDX 驱动安装在 /usr/lib/xorg/modules 目录，为了让编译好的 Xorg 和相关驱动安装后能够覆盖原来的，需要通过指定 meson 的 <code>prefix</code> 和 <code>libdir</code> 构建变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">meson build -Dprefix=/usr -Dlibdir=lib -Dxnest=false -Dxwin=false -Dxvfb=false</span><br></pre></td></tr></table></figure>
+<p>NOTES: 默认情况下，<code>prefix=/usr/local</code>, <code>libdir=lib/x86_64-linux-gnu</code></p>
+<p>构建配置完成后，进行编译</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja -C build</span><br></pre></td></tr></table></figure>
+<p>编译完成后，使用 sudo 进行安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ninja install -C build</span><br></pre></td></tr></table></figure>
+<p>安装成功后，使用 systemd 重启 X Server 服务 （假设使用的窗口管理器是 lightdm)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart lightdm</span><br></pre></td></tr></table></figure>
+<p>It is easy to find what are built with <code>find build -type f -perm /a+x -regex '.*[^0-9h]$'</code></p>
+<pre>
+./build/meson-private/sanitycheckc.exe
+./build/test/tests
+./build/test/simple-xinit
+./build/hw/xnest/Xnest
+./build/hw/vfb/Xvfb
+./build/hw/xfree86/gtf
+./build/hw/xfree86/vgahw/libvgahw.so
+./build/hw/xfree86/libxorgserver.so
+./build/hw/xfree86/fbdevhw/libfbdevhw.so
+./build/hw/xfree86/drivers/modesetting/modesetting_drv.so
+./build/hw/xfree86/dixmods/libglx.so
+./build/hw/xfree86/dixmods/libwfb.so
+./build/hw/xfree86/dixmods/libshadow.so
+./build/hw/xfree86/shadowfb/libshadowfb.so
+./build/hw/xfree86/cvt
+./build/hw/xfree86/exa/libexa.so
+./build/hw/xfree86/Xorg
+./build/hw/xfree86/int10/libint10.so
+./build/hw/xfree86/loader/xorg_symbol_test
+</pre>
+<p>where <code>./build/hw/xfree86/Xorg</code> is newly built Xserver.</p>
+<h2 id="replacement"><a class="markdownIt-Anchor" href="#replacement"></a> Replacement</h2>
+<p>Now that we have an Xorg out there, we can try it. I have an <em>xrdp</em> installed on my WSL as its desktop environment. We can replace <code>xorgxrdp</code> with this new one for testing. To do it, we need to modify xrdp’s init configuration file <code>/etc/xrdp/sesman.ini</code></p>
+<pre>
+[Xorg]
+; Specify the path of non-suid Xorg executable. It might differ depending
+; on your distribution and version. The typical path is shown as follows:
+;
+; Fedora 26 or later    :  param=/usr/libexec/Xorg
+; Debian 9 or later     :  param=/usr/lib/xorg/Xorg
+; Ubuntu 16.04 or later :  param=/usr/lib/xorg/Xorg
+; Arch Linux            :  param=/usr/lib/xorg-server/Xorg
+; CentOS 7              :  param=/usr/bin/Xorg or param=Xorg
+;
+;param=/usr/lib/xorg/Xorg
+;
+param=/home/luc/github/xserver/build/hw/xfree86/Xorg
+</pre>
+<p>But it failed on restart xrdp.service. We check the log and <code>/etc/X11/xrdp/xorg.conf</code>. It turns out some drivers related xrdp do not exist. It is xrdp that customizes Xorg.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep &#x27;(EE) Failed to&#x27; ~/.xorgxrdp.25.log</span><br></pre></td></tr></table></figure>
+<pre>
+[ 22862.100] (EE) Failed to load module "glx" (module does not exist, 0)
+[ 22862.100] (EE) Failed to load module "int10" (module does not exist, 0)
+[ 22862.100] (EE) Failed to load module "vbe" (module does not exist, 0)
+[ 22862.100] (EE) Failed to load module "glamoregl" (module does not exist, 0)
+[ 22862.100] (EE) Failed to load module "xorgxrdp" (module does not exist, 0)
+[ 22862.100] (EE) Failed to load module "xrdpdev" (module does not exist, 0)
+[ 22862.100] (EE) Failed to load module "xrdpmouse" (module does not exist, 0)
+[ 22862.100] (EE) Failed to load module "xrdpkeyb" (module does not exist, 0)
+</pre>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -E &#x27;(Driver | Load)&#x27; /etc/X11/xrdp/xorg.conf</span><br></pre></td></tr></table></figure>
+<pre>
+    Load "dbe"
+    Load "ddc"
+    Load "extmod"
+    Load "glx"
+    Load "int10"
+    Load "record"
+    Load "vbe"
+    Load "glamoregl"
+    Load "xorgxrdp"
+    Load "fb"
+    Driver "xrdpkeyb"
+    Driver "xrdpmouse"
+    Driver "xrdpdev"
+</pre>
+<h2 id="conclusion"><a class="markdownIt-Anchor" href="#conclusion"></a> Conclusion</h2>
+<p>Xserver/Xorg is built in a flexible and easy way. We can implement our own device-dependent functionality and add it to Xserver as its another driver or module.</p>
+<h1 id="xserver-相关工具"><a class="markdownIt-Anchor" href="#xserver-相关工具"></a> Xserver 相关工具</h1>
+<h2 id="xinit"><a class="markdownIt-Anchor" href="#xinit"></a> xinit</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ dpkg --contents /var/cache/apt/archives/xinit_1.4.1-0ubuntu2_amd64.deb | awk <span class="string">&#x27;&#123;print $NF&#125;&#x27;</span> | rg -v <span class="string">&#x27;/$&#x27;</span></span><br><span class="line">./etc/X11/xinit/xinitrc</span><br><span class="line">./etc/X11/xinit/xserverrc</span><br><span class="line">./usr/bin/startx</span><br><span class="line">./usr/bin/xinit</span><br><span class="line">./usr/share/doc/xinit/NEWS.Debian.gz</span><br><span class="line">./usr/share/doc/xinit/changelog.Debian.gz</span><br><span class="line">./usr/share/doc/xinit/copyright</span><br><span class="line">./usr/share/man/man1/startx.1.gz</span><br><span class="line">./usr/share/man/man1/xinit.1.gz</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/X11/" rel="tag"># X11</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/gfx/X/pixmap/" rel="prev" title="Pixmap in X">
+                  <i class="fa fa-angle-left"></i> Pixmap in X
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/gfx/glamor/" rel="next" title="glamor">
+                  glamor <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

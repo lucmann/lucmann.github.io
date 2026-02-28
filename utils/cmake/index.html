@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="最近看了一些关于Modern CMake(since 3.0.0)的教程，这里记录一下.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMake 不是一个构建系统">
+<meta property="og:url" content="https://lucmann.github.io/utils/cmake/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="最近看了一些关于Modern CMake(since 3.0.0)的教程，这里记录一下.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-09T23:42:04.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.445Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="tools">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lucmann.github.io/utils/cmake/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/utils/cmake/","path":"utils/cmake/","title":"CMake 不是一个构建系统"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CMake 不是一个构建系统 | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#modern-cmake"><span class="nav-number">1.</span> <span class="nav-text"> Modern CMake</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#command-options"><span class="nav-number">2.</span> <span class="nav-text"> Command Options</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#built-in-variables"><span class="nav-number">3.</span> <span class="nav-text"> Built-in Variables</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#guideline"><span class="nav-number">3.1.</span> <span class="nav-text"> Guideline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#targets-and-properties"><span class="nav-number">3.2.</span> <span class="nav-text"> Targets and Properties</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cmake-inheritance"><span class="nav-number">3.3.</span> <span class="nav-text"> CMake Inheritance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#include-inheritance"><span class="nav-number">3.3.1.</span> <span class="nav-text"> Include Inheritance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#generator-expressions"><span class="nav-number">3.4.</span> <span class="nav-text"> Generator Expressions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#find_package"><span class="nav-number">3.5.</span> <span class="nav-text"> find_package()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pkg_check_modules"><span class="nav-number">3.6.</span> <span class="nav-text"> pkg_check_modules()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ctest"><span class="nav-number">3.7.</span> <span class="nav-text"> CTest</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#notes"><span class="nav-number">4.</span> <span class="nav-text"> NOTES</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#-fpic"><span class="nav-number">4.1.</span> <span class="nav-text"> -fPIC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_gnu_source"><span class="nav-number">4.2.</span> <span class="nav-text"> _GNU_SOURCE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E8%B4%B4%E5%A3%AB"><span class="nav-number">5.</span> <span class="nav-text"> 小贴士</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/utils/cmake/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CMake 不是一个构建系统 | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CMake 不是一个构建系统
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-01-10 07:42:04" itemprop="dateCreated datePublished" datetime="2021-01-10T07:42:04+08:00">2021-01-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/utilities/" itemprop="url" rel="index"><span itemprop="name">utilities</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/utils/cmake/" class="post-meta-item leancloud_visitors" data-flag-title="CMake 不是一个构建系统" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/utils/cmake/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="utils/cmake/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>最近看了一些关于Modern CMake(since 3.0.0)的教程，这里记录一下.</p>
+<span id="more"></span>
+<h1 id="modern-cmake"><a class="markdownIt-Anchor" href="#modern-cmake"></a> Modern CMake</h1>
+<p>作为一个<em>Build System Generator</em>, 现代CMake可以帮助我们做哪些事情呢？</p>
+<ul>
+<li>Build</li>
+<li>Install</li>
+<li>Test</li>
+<li>Package</li>
+</ul>
+<h1 id="command-options"><a class="markdownIt-Anchor" href="#command-options"></a> Command Options</h1>
+<ul>
+<li>
+<p>cmake -B build</p>
+<ul>
+<li>Build的工作主要包括解决依赖关系，构建目标(库,应用,测试用例)。<code>cmake</code>命令有很多选项可以帮助我们灵活有效地构建目标， 例如：Out-of-source构建，意思是不污染源代码目录，在指定的单独的目录下生成构建系统, 如果build不存在，cmake会创建它</li>
+<li><code>-B</code>，<code>-S</code> 选项是从 CMake <strong>3.13</strong> 版本引入的</li>
+</ul>
+</li>
+<li>
+<p>cmake -B build --graphviz=file.dot</p>
+<ul>
+<li>将构建目标间的依赖关系输出Graphivz dot, 生成的<code>file.dot</code>可以用dot命令生成图片<code>dot -Tpng -o file.png file.dot</code></li>
+</ul>
+</li>
+<li>
+<p>cmake --build build</p>
+<ul>
+<li>开始构建, 通过<code>-B</code>, <code>--build</code>选项可以省去<code>mkdir build &amp;&amp; cd build &amp;&amp; cmake .. &amp;&amp; make</code>繁琐的操作</li>
+</ul>
+</li>
+<li>
+<p>cmake --build build --clean-first</p>
+<ul>
+<li>全量构建, 如果是 <code>-G &quot;Ninja&quot;</code>, 则 <code>ninja -C build clean</code>, 然后再重新 <code>ninja -C build</code></li>
+</ul>
+</li>
+<li>
+<p>cmake --build build --target lib1</p>
+<ul>
+<li>只构建指定的目标<code>lib1</code>, 如果<code>lib1</code>依赖其它目标，被依赖的目标也会被构建</li>
+</ul>
+</li>
+<li>
+<p>cmake --install build</p>
+<ul>
+<li>安装</li>
+</ul>
+</li>
+<li>
+<p>cmake -L build</p>
+<ul>
+<li>查询CMAKE变量配置值，包括内置变量和自定义变量</li>
+</ul>
+</li>
+<li>
+<p>cmake --build build --target help</p>
+<ul>
+<li>列出生成的Makefile里有效的<code>target</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="built-in-variables"><a class="markdownIt-Anchor" href="#built-in-variables"></a> Built-in Variables</h1>
+<ul>
+<li>
+<p><code>-DCMAKE_EXE_LINKER_FLAGS=&quot;-fuse-ld=gold&quot;</code></p>
+<ul>
+<li>将 linker 由默认的 bfd 换成 gold, CMake 3.29+ 使用 <code>-DCMAKE_LINKER=gold</code></li>
+</ul>
+</li>
+<li>
+<p><code>-DCMAKE_EXPORT_COMPILE_COMMANDS=on</code></p>
+<ul>
+<li>生成 compile_commands.json</li>
+</ul>
+</li>
+<li>
+<p><code>-DCMAKE_CXX_FLAGS=&quot;-Wno-error=missing-field-initializers&quot;</code></p>
+<ul>
+<li>将 <code>missing-field-initializers</code> 由 error 转为 warning</li>
+</ul>
+</li>
+<li>
+<p><code>-DCMAKE_CXX_FLAGS=&quot;-stdlib=libc++ -fexperimental-library&quot;</code></p>
+<ul>
+<li>当你使用 LLVM 的 c++ runtimes 时， 需要额外指定这两个编译选项，否则编译器仍然会使用 <code>libstdc++.so.1</code></li>
+</ul>
+</li>
+<li>
+<p><code>-DCMAKE_EXE_LINKER_FLAGS=&quot;-nostartfiles&quot;</code></p>
+<ul>
+<li>解决 “Scrt1.o: undefined reference to <code>main</code>”</li>
+</ul>
+</li>
+<li>
+<p>CMAKE_SOURCE_DIR</p>
+<ul>
+<li>指所在工程顶层目录绝对路径，一般源码git-clone下来后就确定了</li>
+</ul>
+</li>
+<li>
+<p>CMAKE_CURRENT_SOURCE_DIR</p>
+<ul>
+<li>指CMakeLists.txt所在目录的绝对路径，随着CMakeLists.txt位置变化</li>
+</ul>
+</li>
+<li>
+<p><code>-DCMAKE_VERBOSE_MAKEFILE=ON</code></p>
+<ul>
+<li>产生非常详细的编译过程日志，包括目录改变，编译器选项和链接器选项</li>
+</ul>
+</li>
+<li>
+<p>CMAKE_INSTALL_PREFIX</p>
+<ul>
+<li>自定义安装路径, 默认 /usr/local</li>
+</ul>
+</li>
+<li>
+<p>`-DCMAKE_CXX_STANDARD=14</p>
+<ul>
+<li>C++ 版本号, 如 11, 14</li>
+</ul>
+</li>
+<li>
+<p><code>-DCMAKE_CXX_COMPILER_ID=GNU</code></p>
+<ul>
+<li>如 GNU, Clang, Intel, MSVC, 作用和 <code>CC=gcc CXX=g++</code> 一样</li>
+</ul>
+</li>
+<li>
+<p><code>-DCMAKE_CXX_FLAGS=&quot;-std=c++11&quot;</code></p>
+<ul>
+<li>C++ 编译器选项， 如 -std=c++11</li>
+</ul>
+</li>
+</ul>
+<h2 id="guideline"><a class="markdownIt-Anchor" href="#guideline"></a> Guideline</h2>
+<ul>
+<li>Declare your module with <code>ADD_LIBRARY</code> or <code>ADD_EXECUTABLE</code>.</li>
+<li>Declare your build flags with <code>TARGET_xxx()</code>.</li>
+<li>Declare your dependencies with <code>TARGET_LINK_LIBRARIES</code></li>
+<li>Specify what is <code>PUBLIC</code> and what is <code>PRIVATE</code></li>
+<li>Don’t make any assumption about the platform and compiler.</li>
+<li>Make sure that all your projects can be built both standalone and as a subproject of another project.</li>
+<li>Always add namespaced aliases for libraries.<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">add_library(foo STATIC</span><br><span class="line">  foo1.cpp</span><br><span class="line">  foo2.cpp</span><br><span class="line">  )</span><br><span class="line">add_library(my::foo ALIAS foo)</span><br></pre></td></tr></table></figure>
+</li>
+<li>Don’t make libraries STATIC/SHARED unless they cannot be built otherwise.</li>
+<li>Leave the control of BUILD_SHARED_LIBS to your clients.</li>
+<li>Create macros to wrap commands that have output parameters. Otherwise, creat a function.</li>
+<li>Modern CMake is about Targets and Properties!</li>
+<li>Avoid custom variables in the arguments of project commands.</li>
+<li>CMake is not a build system, but a build system generator.</li>
+<li>Forget those commands:
+<ul>
+<li>add_compile_options()</li>
+<li>include_directories()</li>
+<li>link_directories()</li>
+<li>link_libraries()</li>
+</ul>
+</li>
+<li>Non-INTERFACE_ properties define the build specification of a targt</li>
+<li>INTERFACE_ properties define the usage requirements of a target</li>
+<li>Use target_link_libraries() to express direct dependencies</li>
+<li>Don’t use <code>TARGET_LINK_LIBRARIES()</code> without specifying <code>PUBLIC</code>, <code>PRIVATE</code> or <code>INTERFACE</code>.</li>
+</ul>
+<h2 id="targets-and-properties"><a class="markdownIt-Anchor" href="#targets-and-properties"></a> Targets and Properties</h2>
+<p>Modern CMake更像一个面向对象编程语言， Targets是Objects, 它们有Properties(Member Variables)和Commands(Methods),<br />
+Targets的Properties包括编译这个Target的源文件，编译选项，以及最后链接的库这些都是一个Target的Properties. 只要是Properties，就有这个Property的作用域(Scope). Properties也有作用域的概念(scope), 对应<code>INTERFACE</code>和<code>PRIVATE</code>.<br />
+INTERFACE properties是外部用的，也就是给导入或使用本Targets的其它Targets用的。PRIVATE properties是Targets内部用的。</p>
+<h2 id="cmake-inheritance"><a class="markdownIt-Anchor" href="#cmake-inheritance"></a> CMake Inheritance</h2>
+<h3 id="include-inheritance"><a class="markdownIt-Anchor" href="#include-inheritance"></a> Include Inheritance</h3>
+<p>在 CMake 中，在预处理阶段搜索头文件是从 <code>INCLUDE_DIRECTORIES</code> 和 <code>INTERFACE_INCLUDE_DIRECTORIES</code> 这两个变量里包含的路径中搜索。<code>target_include_directories</code> 会将指定的路径都加入 <code>INCLUDE_DIRECTORIES</code>, 但是会依据 <code>&lt;PRIVATE|PUBLIC|INTERFACE&gt;</code> 有选择地将指定路径加入 <code>INTERFACE_INCLUDE_DIRECTORIES</code>. <code>INCLUDE_DIRECTORIES</code> 包含的路径只会被<strong>当前 target</strong> 作为搜索路径, 而 <code>INTERFACE_INCLUDE_DIRECTORIES</code> 包含的路径会被加到任何依赖当前 target 的 target 的 <code>INCLUDE_DIRECTORIES</code>.</p>
+<h2 id="generator-expressions"><a class="markdownIt-Anchor" href="#generator-expressions"></a> Generator Expressions</h2>
+<p>Generator Expressions（生成表达式）是指在生成构建系统的过程中（如果是Make构建系统，就是在生成Makefile的过程中）针对每个构建配置生成特定的值. 生成表达式有3类:</p>
+<ul>
+<li>Logical Expressions</li>
+<li>Informational Expressions</li>
+<li>Output Expressions</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">target_compile_definitions(foo PRIVATE</span><br><span class="line">    &quot;VERBOSITY=$&lt;IF:$&lt;CONFIG:Debug&gt;,30,10&gt;&quot;</span><br><span class="line">)    </span><br></pre></td></tr></table></figure>
+<p>上例中使用了嵌套的generator expressions, <code>$&lt;CONFIG:cfg&gt;</code>嵌套在<code>$&lt;IF:?,true-value...,false-value...&gt;</code>, 两者都是logical expressions, 注意后者是CMake 3.8才有的。<code>$&lt;CONFIG:Debug&gt;</code>的意思是如果<code>CONFIG</code>是<code>Debug</code>,那么这个表达式的值是<code>1</code>,否则是<code>0</code>, 注意这个比较是不区分大小写的字符串比较。<code>$&lt;IF:?,true-value...,false-value...&gt;</code>就像三元表达式<code>a ? b : c</code>一样。</p>
+<p>注意<code>0</code>和<code>1</code>是两个basic logical expressions,所有其它logical expressions的最终值都是<code>0</code>或<code>1</code>,所以下面的表达式是有效的</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo></mrow><annotation encoding="application/x-tex">&lt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span></span></span></span><a href="CONFIG:Debug">CONFIG:Debug</a>:DEBUG_MODE&gt;</p>
+<p>它展开后是<code>$&lt;0:DEBUG_MODE&gt;</code>或<code>$&lt;1:DEBUG_MODE&gt;</code>,所以整个表达式最终值是<code>DEBUG_MODE</code>或空。</p>
+<h2 id="find_package"><a class="markdownIt-Anchor" href="#find_package"></a> <code>find_package()</code></h2>
+<p>如果cmake可以成功执行 <code>find_package(PACKAGE)</code>，那么说明你的系统上一定存在一个 <code>FindPACKAGE.cmake</code>的文件</p>
+<ul>
+<li><code>find_package(Threads REQUIRED)</code>: FindThreads.cmake 文件确定一个系统上的 thread 库，如果在Linux 下，如果找到的话就是 <code>libpthread.so</code> (C++ std::thread 依赖 <code>libpthread.so</code>)</li>
+</ul>
+<h2 id="pkg_check_modules"><a class="markdownIt-Anchor" href="#pkg_check_modules"></a> <code>pkg_check_modules()</code></h2>
+<p>使用 <code>pkg_check_modules()</code> 前需要先(因为pkg_check_modules() 底层是依靠 pkg-config)</p>
+<ul>
+<li><code>find_package(PkgConfig)</code></li>
+</ul>
+<p>例如找到系统上的 <a target="_blank" rel="noopener" href="http://libdrm.so">libdrm.so</a> (因为cmake和libdrm本身没有提供 FindLibDRM.cmake), 就需要</p>
+<ul>
+<li><code>pkg_check_modules(LIBDRM REQUIRED libdrm)</code></li>
+</ul>
+<p>这里 <code>LIBDRM</code> 是自定义的，但要与后面使用的变量名对齐，<a target="_blank" rel="noopener" href="http://xn--libdrm-hh4kt54g.so">如果libdrm.so</a> 被找到，则以下变量会被置成相应的路径或值(基本上就是pkg-config 能查到的所有信息)</p>
+<ul>
+<li>LIBDRM_FOUND</li>
+<li>LIBDRM_LIBRARIES</li>
+<li>LIBDRM_LIBRARY_DIRS</li>
+<li>LIBDRM_LDFLAGS</li>
+<li>LIBDRM_LDFLAGS_OTHER</li>
+<li>LIBDRM_INCLUDE_DIRS</li>
+<li>LIBDRM_CFLAGS</li>
+<li>LIBDRM_CFLAGS_OTHER</li>
+</ul>
+<h2 id="ctest"><a class="markdownIt-Anchor" href="#ctest"></a> CTest</h2>
+<ul>
+<li>
+<p>打开CTest, 后续可以直接通过 <code>make [-C builddir] test</code> 运行测试用例</p>
+<ul>
+<li><code>enable_testing()</code></li>
+</ul>
+</li>
+<li>
+<p>增加测试用例</p>
+<ul>
+<li><code>add_test(NAME PALBench.test_cpu_read_vram COMMAND test_cpu_access_vram -size 1048576 -access read)</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="notes"><a class="markdownIt-Anchor" href="#notes"></a> NOTES</h1>
+<h2 id="-fpic"><a class="markdownIt-Anchor" href="#-fpic"></a> -fPIC</h2>
+<ul>
+<li>-fPIC 是一个编译器选项，而不是链接器选项。</li>
+<li>当你正在构建的一个动态库(<a target="_blank" rel="noopener" href="http://xn--libPAL-hh4k.so">如libPAL.so</a>)依赖另一个静态库(如libADT.a), 这时必须在 <code>add_library(ADT STATIC ...)</code> 之后增加编译选项 <code>-fPIC</code>, 这时需要使用
+<ul>
+<li><code>target_compile_options(ADT PRIVATE &quot;-fPIC&quot;)</code><br />
+而不是</li>
+<li><code>target_link_options(ADT PUBLIC &quot;-fPIC&quot;)</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="_gnu_source"><a class="markdownIt-Anchor" href="#_gnu_source"></a> _GNU_SOURCE</h2>
+<ul>
+<li>编译器莫名其妙地报undeclared错误，如 <code>O_CLOEXEC</code> 未声明，即使已经包含了它的头文件 <code>fcntl.h</code> 也还报，这可能需要定义一下<code>_GNU_SOURCE</code>:
+<ul>
+<li><code>target_compile_definitions(target PUBLIC _GNU_SOURCE)</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="小贴士"><a class="markdownIt-Anchor" href="#小贴士"></a> 小贴士</h1>
+<ul>
+<li><code>time ninja -C build | while read line; do echo $(date +%s.%N) $&#123;line&#125;; done</code>
+<ul>
+<li>输出编译时间</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/tools/" rel="tag"># tools</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/gfx/X/kylin-alpha-issue/" rel="prev" title="Kylin V10 窗口透明问题">
+                  <i class="fa fa-angle-left"></i> Kylin V10 窗口透明问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/utils/lspci/" rel="next" title="lspci 学习笔记">
+                  lspci 学习笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

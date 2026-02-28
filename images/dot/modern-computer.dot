@@ -1,0 +1,39 @@
+digraph COMPUTER {
+    compound=true;
+    splines=line;
+    node [shape=box];
+    
+    subgraph cluster_CPU {
+        label="CPU Chip";
+        style=filled;
+        color=lightgrey;
+        node [style=filled, color=white];
+        
+        CPU [label="CPU"];
+
+        subgraph cluster_north_bridge {
+            label="The former Northbridge\na.k.a Host Bridge";
+            style=filled;
+            color=lightblue;
+            fontcolor=blue;
+            newrank=true;
+
+            MCH  [label="Memory Controller"];
+            PCIE [label="PCIe Controller\na.k.a Root Complex"];
+            
+        }
+        
+        CPU -> MCH [label="former FSB", lhead=cluster_north_bridge, fontcolor=blue, style=dashed];
+    }
+    
+    subgraph cluster_south_bridge {
+        label="The former Southbridge";
+        style=filled;
+        color=lightgreen;
+        fontcolor=blue;
+        node [style=filled, color=white];
+        PCH  [label="Platform Controller Hub"];
+    }
+
+    CPU -> PCH [label="DMI", lhead=cluster_south_bridge];
+}

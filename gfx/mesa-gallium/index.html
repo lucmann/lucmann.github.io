@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Gallium Framework 引用 Mesa3D 官方文档的话，Gallium 本质上是一种应用程序接口，用于编写与设备基本无关的图形驱动程序。它提供了多个对象，以简单明了的方式封装了图形硬件的核心服务。据说，Gallium 的设计是借鉴了 DirectX。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mesa Gallium 驱动框架">
+<meta property="og:url" content="https://lucmann.github.io/gfx/mesa-gallium/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="Gallium Framework 引用 Mesa3D 官方文档的话，Gallium 本质上是一种应用程序接口，用于编写与设备基本无关的图形驱动程序。它提供了多个对象，以简单明了的方式封装了图形硬件的核心服务。据说，Gallium 的设计是借鉴了 DirectX。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/images/mesa-gallium/sb7-asteroids.png">
+<meta property="article:published_time" content="2021-04-08T00:07:49.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.253Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="Mesa">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/images/mesa-gallium/sb7-asteroids.png">
+
+
+<link rel="canonical" href="https://lucmann.github.io/gfx/mesa-gallium/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/gfx/mesa-gallium/","path":"gfx/mesa-gallium/","title":"Mesa Gallium 驱动框架"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Mesa Gallium 驱动框架 | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#gallium-framework"><span class="nav-number">1.</span> <span class="nav-text"> Gallium Framework</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#state-tracker"><span class="nav-number">2.</span> <span class="nav-text"> State Tracker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gallium-api"><span class="nav-number">3.</span> <span class="nav-text"> Gallium API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#resource_copy_region"><span class="nav-number">3.1.</span> <span class="nav-text"> resource_copy_region</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gallium-hud"><span class="nav-number">4.</span> <span class="nav-text"> Gallium HUD</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/gfx/mesa-gallium/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Mesa Gallium 驱动框架 | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mesa Gallium 驱动框架
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-04-08 08:07:49" itemprop="dateCreated datePublished" datetime="2021-04-08T08:07:49+08:00">2021-04-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/graphics/" itemprop="url" rel="index"><span itemprop="name">graphics</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/gfx/mesa-gallium/" class="post-meta-item leancloud_visitors" data-flag-title="Mesa Gallium 驱动框架" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/gfx/mesa-gallium/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="gfx/mesa-gallium/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="gallium-framework"><a class="markdownIt-Anchor" href="#gallium-framework"></a> Gallium Framework</h1>
+<p>引用<a target="_blank" rel="noopener" href="https://docs.mesa3d.org/gallium/intro.html#what-is-gallium"> Mesa3D 官方文档</a>的话，Gallium 本质上是一种应用程序接口，用于编写与设备基本无关的图形驱动程序。它提供了多个对象，以简单明了的方式封装了图形硬件的核心服务。据说，Gallium 的设计是借鉴了 DirectX。</p>
+<span id="more"></span>
+<p>它提供的比较核心的对象，我觉得有</p>
+<ul>
+<li><code>pipe_screen</code></li>
+<li><code>pipe_context</code></li>
+<li><code>pipe_resource</code></li>
+<li><code>pipe_surface</code></li>
+<li><code>pipe_framebuffer_state</code></li>
+</ul>
+<p>一开始看 Gallium 时，疑问为什么没有 <em>pipe_device</em>, 其实很简单，Gallium 这一套 API 之所以可以用来编写<strong>与设备基本无关</strong>的图形驱动程序，可能就是因为它没有抽象 device 这个数据结构。</p>
+<p>Gallium 确实是一组 API, 因为 <code>pipe_screen</code> 里是一大堆函数, <code>pipe_context</code> 里也是一大堆函数。虽然 Gallium 没有定义 pipe_device, 但几乎与硬件设备相关的一切都包含在了 <code>pipe_screen</code>,  一个 <code>pipe_screen</code> 同时可以追踪多个 <code>pipe_context</code>, 每个 <code>pipe_context</code> 里都有一个指向它所在的 <code>pipe_screen</code> 的指针 (handle)。</p>
+<p>当一个 Gallium 驱动初始化时，第一个调用的函数就是 <code>driCreateNewScreen3()</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * This is the first entrypoint in the driver called by the DRI driver loader</span></span><br><span class="line"><span class="comment"> * after dlopen()ing it.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * It&#x27;s used to create global state for the driver across contexts on the same</span></span><br><span class="line"><span class="comment"> * Display.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">__DRIscreen *</span><br><span class="line"><span class="title function_">driCreateNewScreen3</span><span class="params">(<span class="type">int</span> scrn, <span class="type">int</span> fd,</span></span><br><span class="line"><span class="params">                    <span class="type">const</span> __DRIextension **loader_extensions,</span></span><br><span class="line"><span class="params">                    <span class="keyword">enum</span> dri_screen_type type,</span></span><br><span class="line"><span class="params">                    <span class="type">const</span> __DRIconfig ***driver_configs, <span class="type">bool</span> driver_name_is_inferred,</span></span><br><span class="line"><span class="params">                    <span class="type">bool</span> has_multibuffer, <span class="type">void</span> *data)</span></span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart TD
+    A[&quot;__glXInitialize()&quot;]
+    B[&quot;AllocAndFetchScreenConfigs()&quot;]
+    C[&quot;dri3_create_screen()&quot;]
+    D[&quot;`**driCreateNewScreen3()**`&quot;]
+    E[&quot;dri2_init_screen()&quot;]
+    F[&quot;pipe_loader_create_screen()&quot;]
+    G[&quot;pipe_loader_create_screen_vk()&quot;]
+    H[&quot;pipe_loader_drm_create_screen()&quot;]
+    I[&quot;pipe_xxx_create_screen()&quot;]
+    J[&quot;`**xxx_create_screen()**`&quot;]
+
+    A --&gt; B --&gt; C --&gt; D --&gt; E --&gt; F --&gt; G --&gt; H --&gt; I --&gt; J</code></pre>
+<h1 id="state-tracker"><a class="markdownIt-Anchor" href="#state-tracker"></a> State Tracker</h1>
+<pre><code class="highlight mermaid">flowchart TD
+    A[&quot;vbo_exec_FlushVertices_internal()&quot;]
+    B[&quot;vbo_exec_vtx_flush()&quot;]
+    C[&quot;vbo_exec_copy_vertices()&quot;]
+    D[&quot;st_prepare_draw()&quot;]
+    E[&quot;st_validate_st()&quot;]
+    F[&quot;st_update_framebuffer_state()&quot;]
+    G[&quot;st_manager_validate_framebuffers()&quot;]
+    H[&quot;st_framebuffer_validate()&quot;]
+
+    A --&gt; B --&gt; C --&gt; D --&gt; E -- ST_NEW_FB_STATE --&gt; F --&gt; G --&gt; H</code></pre>
+<p><code>st_validate_st()</code> 可能会更新很多状态，像 <code>ST_NEW_FB_STATE</code> 如果 dirty, 那么就会调用 <code>st_update_framebuffer_state()</code> 函数。</p>
+<ul>
+<li><code>grep -Po 'ST_STATE\(ST_.*?\)' src/mesa/state_tracker/st_atom_list.h | awk -F&quot;[(,)]&quot; '&#123;printf &quot;| %-26s | %-32s |\n&quot;, $2, $3&#125;'</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">STATE</th>
+<th style="text-align:left">HOOK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">ST_NEW_DSA</td>
+<td style="text-align:left">st_update_depth_stencil_alpha</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_CLIP_STATE</td>
+<td style="text-align:left">st_update_clip</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_FS_STATE</td>
+<td style="text-align:left">st_update_fp</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_GS_STATE</td>
+<td style="text-align:left">st_update_gp</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TES_STATE</td>
+<td style="text-align:left">st_update_tep</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TCS_STATE</td>
+<td style="text-align:left">st_update_tcp</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_VS_STATE</td>
+<td style="text-align:left">st_update_vp</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_POLY_STIPPLE</td>
+<td style="text-align:left">st_update_polygon_stipple</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_WINDOW_RECTANGLES</td>
+<td style="text-align:left">st_update_window_rectangles</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_BLEND_COLOR</td>
+<td style="text-align:left">st_update_blend_color</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_VS_SAMPLER_VIEWS</td>
+<td style="text-align:left">st_update_vertex_textures</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_FS_SAMPLER_VIEWS</td>
+<td style="text-align:left">st_update_fragment_textures</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_GS_SAMPLER_VIEWS</td>
+<td style="text-align:left">st_update_geometry_textures</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TCS_SAMPLER_VIEWS</td>
+<td style="text-align:left">st_update_tessctrl_textures</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TES_SAMPLER_VIEWS</td>
+<td style="text-align:left">st_update_tesseval_textures</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_VS_SAMPLERS</td>
+<td style="text-align:left">st_update_vertex_samplers</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TCS_SAMPLERS</td>
+<td style="text-align:left">st_update_tessctrl_samplers</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TES_SAMPLERS</td>
+<td style="text-align:left">st_update_tesseval_samplers</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_GS_SAMPLERS</td>
+<td style="text-align:left">st_update_geometry_samplers</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_FS_SAMPLERS</td>
+<td style="text-align:left">st_update_fragment_samplers</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_VS_IMAGES</td>
+<td style="text-align:left">st_bind_vs_images</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TCS_IMAGES</td>
+<td style="text-align:left">st_bind_tcs_images</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TES_IMAGES</td>
+<td style="text-align:left">st_bind_tes_images</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_GS_IMAGES</td>
+<td style="text-align:left">st_bind_gs_images</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_FS_IMAGES</td>
+<td style="text-align:left">st_bind_fs_images</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_FB_STATE</td>
+<td style="text-align:left">st_update_framebuffer_state</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_BLEND</td>
+<td style="text-align:left">st_update_blend</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_RASTERIZER</td>
+<td style="text-align:left">st_update_rasterizer</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_SAMPLE_STATE</td>
+<td style="text-align:left">st_update_sample_state</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_SAMPLE_SHADING</td>
+<td style="text-align:left">st_update_sample_shading</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_SCISSOR</td>
+<td style="text-align:left">st_update_scissor</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_VIEWPORT</td>
+<td style="text-align:left">st_update_viewport</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_VS_CONSTANTS</td>
+<td style="text-align:left">st_update_vs_constants</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TCS_CONSTANTS</td>
+<td style="text-align:left">st_update_tcs_constants</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TES_CONSTANTS</td>
+<td style="text-align:left">st_update_tes_constants</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_GS_CONSTANTS</td>
+<td style="text-align:left">st_update_gs_constants</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_FS_CONSTANTS</td>
+<td style="text-align:left">st_update_fs_constants</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_VS_UBOS</td>
+<td style="text-align:left">st_bind_vs_ubos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TCS_UBOS</td>
+<td style="text-align:left">st_bind_tcs_ubos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TES_UBOS</td>
+<td style="text-align:left">st_bind_tes_ubos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_FS_UBOS</td>
+<td style="text-align:left">st_bind_fs_ubos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_GS_UBOS</td>
+<td style="text-align:left">st_bind_gs_ubos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_VS_ATOMICS</td>
+<td style="text-align:left">st_bind_vs_atomics</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TCS_ATOMICS</td>
+<td style="text-align:left">st_bind_tcs_atomics</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TES_ATOMICS</td>
+<td style="text-align:left">st_bind_tes_atomics</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_FS_ATOMICS</td>
+<td style="text-align:left">st_bind_fs_atomics</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_GS_ATOMICS</td>
+<td style="text-align:left">st_bind_gs_atomics</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_VS_SSBOS</td>
+<td style="text-align:left">st_bind_vs_ssbos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TCS_SSBOS</td>
+<td style="text-align:left">st_bind_tcs_ssbos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TES_SSBOS</td>
+<td style="text-align:left">st_bind_tes_ssbos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_FS_SSBOS</td>
+<td style="text-align:left">st_bind_fs_ssbos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_GS_SSBOS</td>
+<td style="text-align:left">st_bind_gs_ssbos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_PIXEL_TRANSFER</td>
+<td style="text-align:left">st_update_pixel_transfer</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_TESS_STATE</td>
+<td style="text-align:left">st_update_tess</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_HW_ATOMICS</td>
+<td style="text-align:left">st_bind_hw_atomic_buffers</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_VERTEX_ARRAYS</td>
+<td style="text-align:left">st_update_array</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_CS_STATE</td>
+<td style="text-align:left">st_update_cp</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_CS_SAMPLER_VIEWS</td>
+<td style="text-align:left">st_update_compute_textures</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_CS_SAMPLERS</td>
+<td style="text-align:left">st_update_compute_samplers</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_CS_CONSTANTS</td>
+<td style="text-align:left">st_update_cs_constants</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_CS_UBOS</td>
+<td style="text-align:left">st_bind_cs_ubos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_CS_ATOMICS</td>
+<td style="text-align:left">st_bind_cs_atomics</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_CS_SSBOS</td>
+<td style="text-align:left">st_bind_cs_ssbos</td>
+</tr>
+<tr>
+<td style="text-align:left">ST_NEW_CS_IMAGES</td>
+<td style="text-align:left">st_bind_cs_images</td>
+</tr>
+</tbody>
+</table>
+<h1 id="gallium-api"><a class="markdownIt-Anchor" href="#gallium-api"></a> Gallium API</h1>
+<h2 id="resource_copy_region"><a class="markdownIt-Anchor" href="#resource_copy_region"></a> resource_copy_region</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Copy a block of pixels from one resource to another.</span></span><br><span class="line"><span class="comment"> * The resource must be of the same format.</span></span><br><span class="line"><span class="comment"> * Resources with nr_samples &gt; 1 are not allowed.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> (*resource_copy_region)(<span class="keyword">struct</span> pipe_context *pipe,</span><br><span class="line">                             <span class="keyword">struct</span> pipe_resource *dst,</span><br><span class="line">                             <span class="type">unsigned</span> dst_level,</span><br><span class="line">                             <span class="type">unsigned</span> dstx, <span class="type">unsigned</span> dsty, <span class="type">unsigned</span> dstz,</span><br><span class="line">                             <span class="keyword">struct</span> pipe_resource *src,</span><br><span class="line">                             <span class="type">unsigned</span> src_level,</span><br><span class="line">                             <span class="type">const</span> <span class="keyword">struct</span> pipe_box *src_box);</span><br></pre></td></tr></table></figure>
+<p>resource_copy_region 只能在 buffer 与 buffer 之间或 texture 与 texture 之间 memcpy, 而且源与目标的 format 必须相同。之所以不能做 buffers 与 textures 之间的 memcpy, 至少是因为缺少 stride 参数。一些硬件(如 nvidia) 可以通过专门的 copy engine 完成这些拷贝，但对于其它硬件可能需要一个 compute shader 去做这些拷贝。另一方面，那些专门的 copy engine 通常是比较慢的，所以只在那些带宽非常有限的 PCIe 传输场景下才有用。如果想利用全部的<br />
+VRAM 带宽(甚至 infinity cache bandwidth), 你很可能必须使用 compute shaders.</p>
+<h1 id="gallium-hud"><a class="markdownIt-Anchor" href="#gallium-hud"></a> Gallium HUD</h1>
+<p>HUD (Head-up Display) 是 Gallium 一个用于观测图形应用的 fps, cpu 利用率等性能数据的内置功能，它有点像精简版的 <a target="_blank" rel="noopener" href="https://github.com/flightlessmango/MangoHud">MangoHud</a>, 但它的方便在于集成在驱动内部，不管是普通的 Gallium 驱动，还是 Zink，它都可以使用。它的 mannual 可以通过环境变量 <code>GALLIUM_HUD=help</code> 看到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">Syntax: GALLIUM_HUD=name1[+name2][...][:value1][,nameI...][;nameJ...]</span><br><span class="line"></span><br><span class="line">  Names are identifiers of data sources which will be drawn as graphs</span><br><span class="line">  in panes. Multiple graphs can be drawn in the same pane.</span><br><span class="line">  There can be multiple panes placed in rows and columns.</span><br><span class="line"></span><br><span class="line">  &#x27;+&#x27; separates names which will share a pane.</span><br><span class="line">  &#x27;:[value]&#x27; specifies the initial maximum value of the Y axis</span><br><span class="line">             for the given pane.</span><br><span class="line">  &#x27;,&#x27; creates a new pane below the last one.</span><br><span class="line">  &#x27;;&#x27; creates a new pane at the top of the next column.</span><br><span class="line">  &#x27;=&#x27; followed by a string, changes the name of the last data source</span><br><span class="line">      to that string</span><br><span class="line"></span><br><span class="line">  Example: GALLIUM_HUD=&quot;cpu,fps;primitives-generated&quot;</span><br><span class="line"></span><br><span class="line">  Additionally, by prepending &#x27;.[identifier][value]&#x27; modifiers to</span><br><span class="line">  a name, it is possible to explicitly set the location and size</span><br><span class="line">  of a pane, along with limiting overall maximum value of the</span><br><span class="line">  Y axis and activating dynamic readjustment of the Y axis.</span><br><span class="line">  Several modifiers may be applied to the same pane simultaneously.</span><br><span class="line"></span><br><span class="line">  &#x27;x[value]&#x27; sets the location of the pane on the x axis relative</span><br><span class="line">             to the upper-left corner of the viewport, in pixels.</span><br><span class="line">  &#x27;y[value]&#x27; sets the location of the pane on the y axis relative</span><br><span class="line">             to the upper-left corner of the viewport, in pixels.</span><br><span class="line">  &#x27;w[value]&#x27; sets width of the graph pixels.</span><br><span class="line">  &#x27;h[value]&#x27; sets height of the graph in pixels.</span><br><span class="line">  &#x27;c[value]&#x27; sets the ceiling of the value of the Y axis.</span><br><span class="line">             If the graph needs to draw values higher than</span><br><span class="line">             the ceiling allows, the value is clamped.</span><br><span class="line">  &#x27;d&#x27; activates dynamic Y axis readjustment to set the value of</span><br><span class="line">      the Y axis to match the highest value still visible in the graph.</span><br><span class="line">  &#x27;r&#x27; resets the color counter (the next color will be green)</span><br><span class="line">  &#x27;s&#x27; sort items below graphs in descending order</span><br><span class="line"></span><br><span class="line">  If &#x27;c&#x27; and &#x27;d&#x27; modifiers are used simultaneously, both are in effect:</span><br><span class="line">  the Y axis does not go above the restriction imposed by &#x27;c&#x27; while</span><br><span class="line">  still adjusting the value of the Y axis down when appropriate.</span><br><span class="line"></span><br><span class="line">  You can change behavior of the whole HUD by adding these options at</span><br><span class="line">  the beginning of the environment variable:</span><br><span class="line">  &#x27;simple,&#x27; disables all the fancy stuff and only draws text.</span><br><span class="line"></span><br><span class="line">  Example: GALLIUM_HUD=&quot;.w256.h64.x1600.y520.d.c1000fps+cpu,.datom-count&quot;</span><br><span class="line"></span><br><span class="line">  Available names:</span><br><span class="line">    stdout (prints the counters value to stdout)</span><br><span class="line">    csv (prints the counter values to stdout as CSV, use + to separate names)</span><br><span class="line">    fps</span><br><span class="line">    frametime</span><br><span class="line">    cpu</span><br><span class="line">    cpu0</span><br><span class="line">    cpu1</span><br><span class="line">    cpu2</span><br><span class="line">    cpu3</span><br><span class="line">    cpu4</span><br><span class="line">    cpu5</span><br><span class="line">    cpu6</span><br><span class="line">    cpu7</span><br><span class="line">    cpu8</span><br><span class="line">    cpu9</span><br><span class="line">    cpu10</span><br><span class="line">    cpu11</span><br><span class="line">    samples-passed</span><br><span class="line">    primitives-generated</span><br><span class="line">    render-passes</span><br></pre></td></tr></table></figure>
+<p><img src="/images/mesa-gallium/sb7-asteroids.png" alt=" 的效果" /></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Mesa/" rel="tag"># Mesa</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/lnx/drm-device/" rel="prev" title="DRM Device">
+                  <i class="fa fa-angle-left"></i> DRM Device
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/lnx/drm-driver/" rel="next" title="Direct Rendering Management">
+                  Direct Rendering Management <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="winsys有什么用 winsys像一个桥梁，它要将GPU渲染的结果传输到窗口系统的framebuffer，由显示系统将其呈现在屏幕上。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mesa中的winsys层">
+<meta property="og:url" content="https://lucmann.github.io/gfx/X/winsys/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="winsys有什么用 winsys像一个桥梁，它要将GPU渲染的结果传输到窗口系统的framebuffer，由显示系统将其呈现在屏幕上。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/gfx/X/winsys/winsys-Page-2.drawio.png">
+<meta property="og:image" content="https://lucmann.github.io/gfx/X/winsys/winsys-Page-9.drawio.png">
+<meta property="article:published_time" content="2021-09-12T03:10:57.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.165Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="X11">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/gfx/X/winsys/winsys-Page-2.drawio.png">
+
+
+<link rel="canonical" href="https://lucmann.github.io/gfx/X/winsys/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/gfx/X/winsys/","path":"gfx/X/winsys/","title":"mesa中的winsys层"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>mesa中的winsys层 | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#winsys%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text"> winsys有什么用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mesa%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text"> mesa中的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Edri"><span class="nav-number">2.1.</span> <span class="nav-text"> 基于dri</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Edri-winsys%E7%9A%84gallium-driver%E7%9A%84%E5%8A%A0%E8%BD%BD"><span class="nav-number">2.1.1.</span> <span class="nav-text"> 基于dri winsys的gallium driver的加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Edri-winsys%E7%9A%84gallium-driver%E7%9A%84winsys%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.1.2.</span> <span class="nav-text"> 基于dri winsys的gallium driver的winsys实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9Edri"><span class="nav-number">2.2.</span> <span class="nav-text"> 非dri</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/gfx/X/winsys/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="mesa中的winsys层 | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          mesa中的winsys层
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-09-12 11:10:57" itemprop="dateCreated datePublished" datetime="2021-09-12T11:10:57+08:00">2021-09-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/graphics/" itemprop="url" rel="index"><span itemprop="name">graphics</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/gfx/X/winsys/" class="post-meta-item leancloud_visitors" data-flag-title="mesa中的winsys层" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/gfx/X/winsys/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="gfx/X/winsys/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="winsys有什么用"><a class="markdownIt-Anchor" href="#winsys有什么用"></a> winsys有什么用</h1>
+<p>winsys像一个桥梁，它要将GPU渲染的结果传输到窗口系统的framebuffer，由显示系统将其呈现在屏幕上。</p>
+<span id="more"></span>
+<img src="/gfx/X/winsys/winsys-Page-2.drawio.png" class="" title="winsys">
+<h1 id="mesa中的实现"><a class="markdownIt-Anchor" href="#mesa中的实现"></a> mesa中的实现</h1>
+<p>mesa中winsys有两种实现: 一种是基于dri的，另一种是不基于dri的。两者的主要区别在以下几点:</p>
+<ul>
+<li>winsys提供的FBO(上图中的framebuffer)的来源</li>
+</ul>
+<h2 id="基于dri"><a class="markdownIt-Anchor" href="#基于dri"></a> 基于dri</h2>
+<ul>
+<li>amdgpu_winsys</li>
+<li>radeon_winsys</li>
+<li>nouveau_winsys</li>
+</ul>
+<p>基于dri的winsys的实现代码在<code>src/gallium/frontends/dri</code>目录</p>
+<h3 id="基于dri-winsys的gallium-driver的加载"><a class="markdownIt-Anchor" href="#基于dri-winsys的gallium-driver的加载"></a> 基于dri winsys的gallium driver的加载</h3>
+<p>所有使用基于dri的winsys的gallium drivers都会利用下面的宏声明和定义一个函数符号(除了swrast)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#define DEFINE_LOADER_DRM_ENTRYPOINT(drivername)                          \</span><br><span class="line">const __DRIextension **__driDriverGetExtensions_##drivername(void);       \</span><br><span class="line">PUBLIC const __DRIextension **__driDriverGetExtensions_##drivername(void) \</span><br><span class="line">&#123;                                                                         \</span><br><span class="line">   globalDriverAPI = &amp;galliumdrm_driver_api;                              \</span><br><span class="line">   return galliumdrm_driver_extensions;                                   \</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例如，<code>const __DRIextension **__driDriverGetExtensions_r600(void);</code>. 你可以在相应的动态库里查找到该符号。<br />
+上面宏中的<code>galliumdrm_driver_api</code>和<code>galliumdrm_driver_extensions</code>都是全局的。</p>
+<ul>
+<li><code>galliumdrm_driver_api</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const struct __DriverAPIRec galliumdrm_driver_api = &#123;</span><br><span class="line">   .InitScreen = dri2_init_screen,</span><br><span class="line">   .DestroyScreen = dri_destroy_screen,</span><br><span class="line">   .CreateContext = dri_create_context,</span><br><span class="line">   .DestroyContext = dri_destroy_context,</span><br><span class="line">   .CreateBuffer = dri2_create_buffer,</span><br><span class="line">   .DestroyBuffer = dri_destroy_buffer,</span><br><span class="line">   .MakeCurrent = dri_make_current,</span><br><span class="line">   .UnbindContext = dri_unbind_context,</span><br><span class="line"></span><br><span class="line">   .AllocateBuffer = dri2_allocate_buffer,</span><br><span class="line">   .ReleaseBuffer  = dri2_release_buffer,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>galliumdrm_driver_extensions</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/* This is the table of extensions that the loader will dlsym() for. */</span><br><span class="line">const __DRIextension *galliumdrm_driver_extensions[] = &#123;</span><br><span class="line">    &amp;driCoreExtension.base,</span><br><span class="line">    &amp;driImageDriverExtension.base,</span><br><span class="line">    &amp;driDRI2Extension.base,</span><br><span class="line">    &amp;gallium_config_options.base,</span><br><span class="line">    NULL</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这里出现的4个数组元素都是<code>__DRIextension</code>的子类，同时他们都是全局的。例如<code>driImageDriverExtension</code>被定义在<code>src/mesa/drivers/dri/common/dri_util.c</code>文件中:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/** Image driver interface */</span><br><span class="line">const __DRIimageDriverExtension driImageDriverExtension = &#123;</span><br><span class="line">    .base = &#123; __DRI_IMAGE_DRIVER, 1 &#125;,</span><br><span class="line"></span><br><span class="line">    .createNewScreen2           = driCreateNewScreen2,</span><br><span class="line">    .createNewDrawable          = driCreateNewDrawable,</span><br><span class="line">    .getAPIMask                 = driGetAPIMask,</span><br><span class="line">    .createContextAttribs       = driCreateContextAttribs,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>除了这个<code>driImageDriverExtension</code>，基于dri的winsys还定义了一个与<code>__DRIimage</code>有关的<code>__DRIextension</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/* The image loader extension record for DRI3</span><br><span class="line"> */</span><br><span class="line">static const __DRIimageLoaderExtension imageLoaderExtension = &#123;</span><br><span class="line">   .base = &#123; __DRI_IMAGE_LOADER, 3 &#125;,</span><br><span class="line"></span><br><span class="line">   .getBuffers          = loader_dri3_get_buffers,</span><br><span class="line">   .flushFrontBuffer    = dri3_flush_front_buffer,</span><br><span class="line">   .flushSwapBuffers    = dri3_flush_swap_buffers,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这个所谓的image loader extension是在多GPU的场景下会用到，也就是当系统中同时存在两个GPU时，可以通过设置mesa提供的环境变量<code>DRI_PRIME</code>，启用PRIME模式，此时其中一个GPU作为Display GPU(server GPU), 用做X11显示，另外一个GPU作为Render GPU, 用做3D渲染，当我们申请<code>__DRI_IMAGE_BUFFER_FRONT</code>时，我们不能直接使用pixmap,<br />
+因为所有pixmaps都是被server GPU所有，这种pixmap的格式可能不能被render GPU所理解。这种情况下，在<code>loader_dri3_get_buffers</code>中，会在render GPU的VRAM里创建一个Fake Front Buffer, 最后<code>dri3_flush_front_buffer</code>会将Fake Front Buffer的内容同步到真正的Front Buffer，即display GPU的pixmap里。</p>
+<ul>
+<li><code>xcb_dri3_pixmap_from_buffer</code></li>
+</ul>
+<p>这个函数是由<code>c_client.py</code>自动生成的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">xcb_void_cookie_t</span><br><span class="line">xcb_dri3_pixmap_from_buffer (xcb_connection_t *c,</span><br><span class="line">                             xcb_pixmap_t      pixmap,</span><br><span class="line">                             xcb_drawable_t    drawable,</span><br><span class="line">                             uint32_t          size,</span><br><span class="line">                             uint16_t          width,</span><br><span class="line">                             uint16_t          height,</span><br><span class="line">                             uint16_t          stride,</span><br><span class="line">                             uint8_t           depth,</span><br><span class="line">                             uint8_t           bpp,</span><br><span class="line">                             int32_t           pixmap_fd)</span><br><span class="line">&#123;</span><br><span class="line">    static const xcb_protocol_request_t xcb_req = &#123;</span><br><span class="line">        .count = 2,</span><br><span class="line">        .ext = &amp;xcb_dri3_id,</span><br><span class="line">        .opcode = XCB_DRI3_PIXMAP_FROM_BUFFER,</span><br><span class="line">        .isvoid = 1</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    struct iovec xcb_parts[4];</span><br><span class="line">    xcb_void_cookie_t xcb_ret;</span><br><span class="line">    xcb_dri3_pixmap_from_buffer_request_t xcb_out;</span><br><span class="line">    int fds[1];</span><br><span class="line">    int fd_index = 0;</span><br><span class="line"></span><br><span class="line">    xcb_out.pixmap = pixmap;</span><br><span class="line">    xcb_out.drawable = drawable;</span><br><span class="line">    xcb_out.size = size;</span><br><span class="line">    xcb_out.width = width;</span><br><span class="line">    xcb_out.height = height;</span><br><span class="line">    xcb_out.stride = stride;</span><br><span class="line">    xcb_out.depth = depth;</span><br><span class="line">    xcb_out.bpp = bpp;</span><br><span class="line"></span><br><span class="line">    xcb_parts[2].iov_base = (char *) &amp;xcb_out;</span><br><span class="line">    xcb_parts[2].iov_len = sizeof(xcb_out);</span><br><span class="line">    xcb_parts[3].iov_base = 0;</span><br><span class="line">    xcb_parts[3].iov_len = -xcb_parts[2].iov_len &amp; 3;</span><br><span class="line"></span><br><span class="line">    fds[fd_index++] = pixmap_fd;</span><br><span class="line">    xcb_ret.sequence = xcb_send_request_with_fds(c, 0, xcb_parts + 2, &amp;xcb_req, 1, fds);</span><br><span class="line">    return xcb_ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而X Server收到这个request后的处理函数如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">int</span><br><span class="line">dri3_pixmap_from_fds(PixmapPtr *ppixmap, ScreenPtr screen,</span><br><span class="line">                     CARD8 num_fds, const int *fds,</span><br><span class="line">                     CARD16 width, CARD16 height,</span><br><span class="line">                     const CARD32 *strides, const CARD32 *offsets,</span><br><span class="line">                     CARD8 depth, CARD8 bpp, CARD64 modifier)</span><br><span class="line">&#123;</span><br><span class="line">    dri3_screen_priv_ptr        ds = dri3_screen_priv(screen);</span><br><span class="line">    const dri3_screen_info_rec *info = ds-&gt;info;</span><br><span class="line">    PixmapPtr                   pixmap;</span><br><span class="line"></span><br><span class="line">    if (!info)</span><br><span class="line">        return BadImplementation;</span><br><span class="line"></span><br><span class="line">    if (info-&gt;version &gt;= 2 &amp;&amp; info-&gt;pixmap_from_fds != NULL) &#123;</span><br><span class="line">        pixmap = (*info-&gt;pixmap_from_fds) (screen, num_fds, fds, width, height,</span><br><span class="line">                                           strides, offsets, depth, bpp, modifier);</span><br><span class="line">    &#125; else if (info-&gt;pixmap_from_fd != NULL &amp;&amp; num_fds == 1) &#123;</span><br><span class="line">        pixmap = (*info-&gt;pixmap_from_fd) (screen, fds[0], width, height,</span><br><span class="line">                                          strides[0], depth, bpp);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return BadImplementation;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (!pixmap)</span><br><span class="line">        return BadAlloc;</span><br><span class="line"></span><br><span class="line">    *ppixmap = pixmap;</span><br><span class="line">    return Success;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到最终是调用了<code>pixmap_from_fds</code>或<code>pixmap_from_fd</code>, 接下来的工作由display GPU的kmd完成，最后当display GPU <code>gbm_bo_import</code>调用了<code>drmPrimeFDToHandle</code>函数后，X Server进程进入内核态，接下来内核DRM子系统的ioctl会调用<code>drm_prime_fd_to_handle_ioctl</code>, 它会调用display GPU的<code>prime_fd_to_handle</code> callback. 整个过程其实是将显存(buffer, 确切说是back buffer)抽象成dma-buf(dma-buf实际上是一个文件，所以它有fd, 可供在进程间传递)来实现用户应用进程与X Server进程间的Buffer共享。</p>
+<img src="/gfx/X/winsys/winsys-Page-9.drawio.png" class="" title="dma-buf">
+<p>下面是内核函数<code>dma_buf_get</code>的实现，从这个小函数的实现我们可以清楚地看到fd -&gt; file -&gt; dma_buf的转换</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * dma_buf_get - returns the struct dma_buf related to an fd</span></span><br><span class="line"><span class="comment"> * @fd:	[in]	fd associated with the struct dma_buf to be returned</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * On success, returns the struct dma_buf associated with an fd; uses</span></span><br><span class="line"><span class="comment"> * file&#x27;s refcounting done by fget to increase refcount. returns ERR_PTR</span></span><br><span class="line"><span class="comment"> * otherwise.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">struct</span> dma_buf *<span class="title function_">dma_buf_get</span><span class="params">(<span class="type">int</span> fd)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">file</span>;</span></span><br><span class="line"></span><br><span class="line">	file = fget(fd);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!file)</span><br><span class="line">		<span class="keyword">return</span> ERR_PTR(-EBADF);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!is_dma_buf_file(file)) &#123;</span><br><span class="line">		fput(file);</span><br><span class="line">		<span class="keyword">return</span> ERR_PTR(-EINVAL);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> file-&gt;private_data;</span><br><span class="line">&#125;</span><br><span class="line">EXPORT_SYMBOL_GPL(dma_buf_get);</span><br></pre></td></tr></table></figure>
+<h3 id="基于dri-winsys的gallium-driver的winsys实现"><a class="markdownIt-Anchor" href="#基于dri-winsys的gallium-driver的winsys实现"></a> 基于dri winsys的gallium driver的winsys实现</h3>
+<p>winsys是一个桥梁，它主要要实现的就是将color buffer传输到窗口系统的framebuffer.那么基于dri的winsys是怎么实现这个桥梁的? 它主要依赖下面两个对象:</p>
+<ul>
+<li>DRIimage
+<ul>
+<li><code>__DRIimageRec</code></li>
+<li><code>__DRIimageExtensionRec</code></li>
+</ul>
+</li>
+</ul>
+<p>DRIimage通过调用<code>pipe_screen.resource_create</code>函数创建，创建后还需要queryImage一些信息，这些信息为X11所需要。</p>
+<ul>
+<li>PIPE_RESOURCE_PARAM_NPLANES</li>
+<li>PIPE_RESOURCE_PARAM_STRIDE</li>
+<li>PIPE_RESOURCE_PARAM_OFFSET</li>
+<li>PIPE_RESOURCE_PARAM_MODIFIER</li>
+<li>PIPE_RESOURCE_PARAM_HANDLE_TYPE_FD</li>
+</ul>
+<p><code>PIPE_RESOURCE_PARAM_HANDLE_TYPE_FD</code>通过向kernel发送下面请求，由一个gem handle返回一个file descriptor. 有了这个FD, 不同的进程间就可以共享内存。比方，当xserver获取到这个FD后，它可以通过<code>DRM_IOCTL_PRIME_FD_TO_HANDLE</code>又重新获取到gem bo的handle.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">int</span><br><span class="line">panfrost_bo_export(struct panfrost_bo *bo)</span><br><span class="line">&#123;</span><br><span class="line">        struct drm_prime_handle args = &#123;</span><br><span class="line">                .handle = bo-&gt;gem_handle,</span><br><span class="line">                .flags = DRM_CLOEXEC,</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        int ret = drmIoctl(bo-&gt;dev-&gt;fd, DRM_IOCTL_PRIME_HANDLE_TO_FD, &amp;args);</span><br><span class="line">        if (ret == -1)</span><br><span class="line">                return -1;</span><br><span class="line"></span><br><span class="line">        bo-&gt;flags |= PAN_BO_SHARED;</span><br><span class="line">        return args.fd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>X11 present extension</li>
+</ul>
+<h2 id="非dri"><a class="markdownIt-Anchor" href="#非dri"></a> 非dri</h2>
+<ul>
+<li>sw_winsys</li>
+</ul>
+<p>非dri的winsys的实现代码在<code>src/gallium/winsys/sw/xlib</code>目录</p>
+<p>不同的winsys实际上是不同的接口(函数)，下面以sw_winsys为例说明一下mesa里的winsys的接口与实现。</p>
+<table>
+<thead>
+<tr>
+    <th>接口</th>
+    <th>实现</th>
+    <th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>void<br>(*destroy)(struct sw_winsys *ws);</td>
+    <td>xlib_displaytarget_destroy</td>
+    <td>销毁这个winsys</td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/X11/" rel="tag"># X11</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/lnx/mpin/" rel="prev" title="死锁是如何发生的？">
+                  <i class="fa fa-angle-left"></i> 死锁是如何发生的？
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/lnx/kms/" rel="next" title="Atomic Mode Setting 设计概要 第一部分 （译）">
+                  Atomic Mode Setting 设计概要 第一部分 （译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

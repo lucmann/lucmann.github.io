@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="高端硅片可以构建市场，但最终，软件支持往往决定了赢家和输家 – Jack Huynh, AMD 高级副总裁兼计算和图形业务集团总经理  AMD 的通用计算平台 ROCm (Radeon Open Compute) 是在通用计算领域与 NVIDIA 的 CUDA （Compute Unified Device Architecture) 相抗衡的软件基础设施。ROCm 实现的其实是由 AMD 发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ROCm">
+<meta property="og:url" content="https://lucmann.github.io/comp/rocm/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="高端硅片可以构建市场，但最终，软件支持往往决定了赢家和输家 – Jack Huynh, AMD 高级副总裁兼计算和图形业务集团总经理  AMD 的通用计算平台 ROCm (Radeon Open Compute) 是在通用计算领域与 NVIDIA 的 CUDA （Compute Unified Device Architecture) 相抗衡的软件基础设施。ROCm 实现的其实是由 AMD 发">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-09-02T23:10:39.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.164Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="ROCm">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lucmann.github.io/comp/rocm/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/comp/rocm/","path":"comp/rocm/","title":"ROCm"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ROCm | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%AB%AF%E7%A1%85%E7%89%87%E5%8F%AF%E4%BB%A5%E6%9E%84%E5%BB%BA%E5%B8%82%E5%9C%BA%E4%BD%86%E6%9C%80%E7%BB%88%E8%BD%AF%E4%BB%B6%E6%94%AF%E6%8C%81%E5%BE%80%E5%BE%80%E5%86%B3%E5%AE%9A%E4%BA%86%E8%B5%A2%E5%AE%B6%E5%92%8C%E8%BE%93%E5%AE%B6"><span class="nav-number">1.</span> <span class="nav-text"> 高端硅片可以构建市场，但最终，软件支持往往决定了赢家和输家</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#clr"><span class="nav-number"></span> <span class="nav-text"> CLR</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rocr"><span class="nav-number"></span> <span class="nav-text"> ROCR</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rocmllvm-project"><span class="nav-number"></span> <span class="nav-text"> ROCm&#x2F;llvm-project</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#amdkfd"><span class="nav-number"></span> <span class="nav-text"> AMDKFD</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#udna"><span class="nav-number"></span> <span class="nav-text"> UDNA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hsa"><span class="nav-number"></span> <span class="nav-text"> HSA vs UXL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number"></span> <span class="nav-text"> 参考</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/comp/rocm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ROCm | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ROCm
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-09-03 07:10:39" itemprop="dateCreated datePublished" datetime="2024-09-03T07:10:39+08:00">2024-09-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/computing/" itemprop="url" rel="index"><span itemprop="name">computing</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/comp/rocm/" class="post-meta-item leancloud_visitors" data-flag-title="ROCm" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/comp/rocm/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="comp/rocm/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<h3 id="高端硅片可以构建市场但最终软件支持往往决定了赢家和输家"><a class="markdownIt-Anchor" href="#高端硅片可以构建市场但最终软件支持往往决定了赢家和输家"></a> <em>高端硅片可以构建市场，但最终，软件支持往往决定了赢家和输家</em></h3>
+<p>– Jack Huynh, AMD 高级副总裁兼计算和图形业务集团总经理</p>
+</blockquote>
+<p>AMD 的通用计算平台 ROCm (Radeon Open Compute) 是在通用计算领域与 NVIDIA 的 CUDA （Compute Unified Device Architecture) 相抗衡的软件基础设施。ROCm 实现的其实是由 AMD 发起的 HSA (Heterogeneous System Architecture) 标准，所以它的运行时主要由 3 个部分组成:</p>
+<p>OOC: ROCm 平台又叫 Boltzmann 平台，原因据说是为了纪念统计力学和热力学领域著名物理学家路德维希·玻尔兹曼，他的工作对理解物质的微观行为和能量分布有着深远的影响。AMD 选取这个名字，可能是为了强调该平台在高性能计算领域的强大计算力和科学计算的应用前景。</p>
+<span id="more"></span>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ROCm/clr">AMD Compute Common Language Runtimes</a>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ROCm/HIP">HIP runtime</a> (C++ Heterogeneous-Compute Interface for Portability)
+<ul>
+<li>可以算是一种 C++ 方言</li>
+<li>AMD 提供工具 <a target="_blank" rel="noopener" href="https://github.com/ROCm/HIPIFY">HIPIFY</a> 可以把 CUDA 源代码翻译成 HIP C++</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://www.khronos.org/opencl/">OpenCL runtime</a> （Open Computing Language)
+<ul>
+<li>由 Khronos Group 发布的开放异构系统并行编程语言</li>
+<li>语言风格更接近 C</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ROCm/clr/tree/amd-staging/rocclr">rocclr</a> HIP 和 OpenCL 共用的 runtime</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ROCm/HIP">HIP</a>
+<ul>
+<li>这个仓库以前主要提供一个 compiler driver utility <code>hipcc</code> 脚本，目前 hipcc 已经被移到 AMD 自己 forked <a target="_blank" rel="noopener" href="https://github.com/ROCm/llvm-project/tree/amd-staging/amd/hipcc">llvm-project/amd/hipcc</a></li>
+<li>hipcc 之于 HIP-Clang 就像 gcc 之于 GCC</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ROCm/ROCR-Runtime">ROCR</a>
+<ul>
+<li>
+<p>ROCt libhsakmt-staticdrm HSA Kernel Mode Trunk 用户态库</p>
+<ul>
+<li>libhsakmt 总是被构建成静态库 .a</li>
+<li>libhsakmt 通过 DRM 设备节点与 KFD 交互</li>
+</ul>
+</li>
+<li>
+<p>ROCr libhsa-runtime64</p>
+<ul>
+<li>用户可以通过 CMAKE 变量 <code>BUILD_SHARED_LIBS</code> 选择构建 libhsa-runtime64 为静态库或动态库</li>
+</ul>
+</li>
+<li>
+<p>ROCR 主要向用户提供 AMD GPU/NPU/HSA 设备内核驱动 (包括 KFD 和 <a target="_blank" rel="noopener" href="https://patchwork.freedesktop.org/series/136294/">XDNA</a>) 的用户态封装和抽象, 类似 amdgpu.ko 与 libdrm_amdgpu 的关系。它的 libhsakmt 通过 KFD 提供的 IOCTL 直接访问 HSA 硬件，而 libhsa-runtime64 主要实现 HSA 标准的 Core Profile 和各厂家的扩展 (extension)。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>可以说，ROCm 的整个运行时环境分的 3 大块，分别负责打通</p>
+<ul>
+<li>CLR   向上，面向编程语言</li>
+<li>ROCR  向下，面向内核驱动</li>
+<li>HIP   面向编译系统(HIP 原来提供的 hipcc 已并入 ROCm/llvm-project)</li>
+</ul>
+<h1 id="clr"><a class="markdownIt-Anchor" href="#clr"></a> <a target="_blank" rel="noopener" href="https://github.com/ROCm/clr">CLR</a></h1>
+<p>所谓 Common Language Runtimes, 就是指 HIP 和 OpenCL 两种编程语言的运行时, 类似 C/C++ 的 <a target="_blank" rel="noopener" href="http://libc.so">libc.so</a> 和 <a target="_blank" rel="noopener" href="http://libstdc++.so">libstdc++.so</a>。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://libamdhip64.so">libamdhip64.so</a></li>
+<li>libamdocl64.so.2.1.nnn</li>
+</ul>
+<p>这两个动态库各自都需要链接 rocclr</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target_link_libraries(amdocl PUBLIC rocclr)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># ROCclr abstracts the usage of multiple AMD compilers and runtimes.</span><br><span class="line"># It is possible to support multiple backends concurrently in the same binary.</span><br><span class="line">option(ROCCLR_ENABLE_HSAIL &quot;Enable support for HSAIL compiler&quot; OFF)</span><br><span class="line">option(ROCCLR_ENABLE_LC    &quot;Enable support for LC compiler&quot;    ON)</span><br><span class="line">option(ROCCLR_ENABLE_HSA   &quot;Enable support for HSA runtime&quot;    ON)</span><br><span class="line">option(ROCCLR_ENABLE_PAL   &quot;Enable support for PAL runtime&quot;    OFF)</span><br></pre></td></tr></table></figure>
+<p>因为无论 amdhip64 还是 amdocl ，它们也都要调到编译器后端，在 CLR 的实现里支持两个编译器后端：</p>
+<ul>
+<li><code>ROCCLR_ENABLE_HSAIL</code> HSAIL (HSA Intermediate Language, 似乎已经废弃)
+<ul>
+<li>CLR 的源码中是通过宏 <code>WITH_COMPILER_LIB</code> guard</li>
+</ul>
+</li>
+<li><code>ROCCLR_ENABLE_LC</code>    <a target="_blank" rel="noopener" href="https://github.com/ROCm/llvm-project/tree/amd-staging/amd/comgr">COMGR</a> (Code Object Manager) 目前在 <code>ROCm/llvm-project/amd/comgr/</code> 下维护
+<ul>
+<li>CLR 的源码中是通过宏 <code>USE_COMGR_LIBRARY</code> guard</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">bool Program::compileImpl(const std::string&amp; sourceCode,</span><br><span class="line">                          const std::vector&lt;const std::string*&gt;&amp; headers,</span><br><span class="line">                          const char** headerIncludeNames, amd::option::Options* options,</span><br><span class="line">                          const std::vector&lt;std::string&gt;&amp; preCompiledHeaders) &#123;</span><br><span class="line">  if (isLC()) &#123;</span><br><span class="line">    return compileImplLC(sourceCode, headers, headerIncludeNames, options, preCompiledHeaders);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    return compileImplHSAIL(sourceCode, headers, headerIncludeNames, options);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CLR 也支持两个运行时后端：</p>
+<ul>
+<li><code>ROCCLR_ENABLE_HSA</code>
+<ul>
+<li>如果使用 HSA runtime, 那么 CLR 需要调用 ROCR (libhsa-runtime64)</li>
+</ul>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">find_package(hsa-runtime64 1.11 REQUIRED CONFIG</span><br><span class="line">  PATHS</span><br><span class="line">    /opt/rocm/</span><br><span class="line">    $&#123;ROCM_INSTALL_PATH&#125;</span><br><span class="line">  PATH_SUFFIXES</span><br><span class="line">    cmake/hsa-runtime64</span><br><span class="line">    lib/cmake/hsa-runtime64</span><br><span class="line">    lib64/cmake/hsa-runtime64)</span><br><span class="line">target_link_libraries(rocclr PUBLIC hsa-runtime64::hsa-runtime64)</span><br></pre></td></tr></table></figure>
+</li>
+<li><code>ROCCLR_ENABLE_PAL</code> <a target="_blank" rel="noopener" href="https://github.com/GPUOpen-Drivers/pal">PAL</a> (Platform Abstraction Library)
+<ul>
+<li>如果使用 PAL runtime, rocclr 需要链接 <a target="_blank" rel="noopener" href="http://libpal.so">libpal.so</a> 和 <a target="_blank" rel="noopener" href="http://libamdhsaloader.so">libamdhsaloader.so</a></li>
+</ul>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">find_package(AMD_PAL)</span><br><span class="line">find_package(AMD_HSA_LOADER)</span><br><span class="line">target_link_libraries(rocclr PUBLIC pal amdhsaloader)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="rocr"><a class="markdownIt-Anchor" href="#rocr"></a> <a target="_blank" rel="noopener" href="https://github.com/ROCm/ROCR-Runtime">ROCR</a></h1>
+<p>计算世界的 libdrm</p>
+<p>ROCR 是 KMD 的封装(主要是 KMD 实现的 ioctl 和设备,内存管理接口)，类似 libdrm, 但 ROCR 也对驱动动本身(因为KMD可能会有 KFD, AMDGPU, XDNA)进行了抽象，便于扩展到新驱动架构。例如，在最近 ROCR 就增加了对 <a target="_blank" rel="noopener" href="https://patchwork.freedesktop.org/series/136294/">AMD NPU 驱动 XDNA</a> 的支持。</p>
+<p>OOC: <a target="_blank" rel="noopener" href="http://libhsa-runtime64.so">libhsa-runtime64.so</a> 打开的是 <code>/dev/kfd</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">hsa_status_t XdnaDriver::DiscoverDriver() &#123;</span><br><span class="line">  const int max_minor_num(64);</span><br><span class="line">  const std::string devnode_prefix(&quot;/dev/accel/accel&quot;);</span><br><span class="line"></span><br><span class="line">  for (int i = 0; i &lt; max_minor_num; ++i) &#123;</span><br><span class="line">    std::unique_ptr&lt;Driver&gt; xdna_drv(</span><br><span class="line">        new XdnaDriver(devnode_prefix + std::to_string(i)));</span><br><span class="line">    if (xdna_drv-&gt;Open() == HSA_STATUS_SUCCESS) &#123;</span><br><span class="line">      if (xdna_drv-&gt;QueryKernelModeDriver(</span><br><span class="line">              core::DriverQuery::GET_DRIVER_VERSION) == HSA_STATUS_SUCCESS) &#123;</span><br><span class="line">        core::Runtime::runtime_singleton_-&gt;RegisterDriver(xdna_drv);</span><br><span class="line">        return HSA_STATUS_SUCCESS;</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        xdna_drv-&gt;Close();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return HSA_STATUS_ERROR;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="rocmllvm-project"><a class="markdownIt-Anchor" href="#rocmllvm-project"></a> <a target="_blank" rel="noopener" href="https://github.com/ROCm/llvm-project">ROCm/llvm-project</a></h1>
+<p><a target="_blank" rel="noopener" href="https://github.com/ROCm/llvm-project">ROCm/llvm-project</a> 是 AMD 专为 ROCm fork 出来的 LLVM 仓库，它里面包含所有 <a target="_blank" rel="noopener" href="https://github.com/llvm/llvm-project">llvm-project</a> 上游变更，再加上 AMD 特有的 <strong>amd</strong> 子目录。 在 amd 目录下存在 3 个组件:</p>
+<ul>
+<li>amd_comgr</li>
+<li>device-libs</li>
+<li>hipcc</li>
+</ul>
+<p>这 3 个组件可以有两种构建方式:</p>
+<ul>
+<li>因为每个子目录下都有自己的 CMakeLists.txt, 所以可以通过 cmake 的 <code>-S</code> 选项分别逐个构建
+<ul>
+<li>虽然这 3 个组件是可以独立构建的，但 amd_comgr 依赖 device-libs</li>
+</ul>
+</li>
+<li>也可以通过 llvm 构建选项 <code>LLVM_EXTERNAL_PROJECTS</code>, <code>LLVM_EXTERNAL_DEVICELIBS_SOURCE_DIR</code>, <code>LLVM_EXTERNAL_COMGR_SOURCE_DIR</code> 与 llvm 一起构建
+<ul>
+<li>这种方式好像需要运行 <code>amd/utils/omnibus.sh</code>, 试了一下没有成功，还是第一种方式相对简单些</li>
+</ul>
+</li>
+</ul>
+<p>构建顺序应该只能是：</p>
+<ul>
+<li><code>cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0/llvm -DLLVM_ENABLE_PROJECTS=&quot;clang;lld;llvm&quot; -DLLVM_TARGETS_TO_BUILD=&quot;BPF;AMDGPU;host&quot; -DLLVM_LIBDIR_SUFFIX=64 -DLLVM_BUILD_LLVM_DYLIB=OFF -DBUILD_SHARED_LIBS=OFF -DLLVM_USE_LINKER=gold</code>
+<ul>
+<li>构建 comgr 不支持 shared libraries LLVM,  所以必须将 LLVM 编译成静态库 (<code>-DBUILD_SHARED_LIBS=OFF</code>)</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ROCm/llvm-project/issues/37"><code>CMAKE_BUILD_TYPE</code> 不要选 Debug 或 RelWithDebInfo, 除非你有足够的硬盘空间</a></li>
+</ul>
+</li>
+<li><code> cmake -S amd/device-libs -B build-rocm -G &quot;Ninja&quot; -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0 -DLLVM_DIR=~/.local/rocm/6.2.0/llvm/lib64/cmake/llvm</code>
+<ul>
+<li><code>LLVM_DIR</code> 要设置的是包含 <code>LLVMConfig.cmake</code> 的路径, 而不是 <code>llvm-config --prefix</code> 输出的路径</li>
+</ul>
+</li>
+<li><code>cmake -S amd/comgr -B build-rocm -G &quot;Ninja&quot; -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/.local/rocm/6.2.0 -DLLVM_DIR=~/.local/rocm/6.2.0/llvm/lib64/cmake/llvm -DCMAKE_MODULE_PATH=~/local/rocm/6.2.0/lib/cmake/AMDDeviceLibs</code></li>
+</ul>
+<h1 id="amdkfd"><a class="markdownIt-Anchor" href="#amdkfd"></a> <a target="_blank" rel="noopener" href="https://github.com/ROCm/ROCK-Kernel-Driver">AMDKFD</a></h1>
+<p>计算世界的 AMDGPU</p>
+<p>AMDKFD 是 AMD Kernel Fusion Driver, 它基本上是 AMD HSA 在内核中的实现，所以 ROCm/OpenCL 都需要它。<a target="_blank" rel="noopener" href="https://lwn.net/Articles/619581/">AMDKFD 在 2014 年合入 Linux kernel 3.19 的主线</a>, 而在 2018 年 AMDKFD 正式与 AMDGPU 合并成为一个单一内核模块 <a target="_blank" rel="noopener" href="https://lists.freedesktop.org/archives/amd-gfx/2018-July/023673.html">amdgpu.ko</a>。</p>
+<p>OOC: AMD “Fusion” 是 AMD 在 2011 年推出的一系列处理器，旨在将 CPU 和 GPU 集成到一个芯片上，称为 APU (加速处理单元)。这些处理器的目标是提供更高的性能和能效，特别是在图形和并行计算任务方面。</p>
+<p>AMDKFD 有 3 个内核配置选项:</p>
+<ul>
+<li>HSA_AMD     基本上在 X86_64, ARM64 和 PPC64 系统上是默认打开的</li>
+<li>HSA_AMD_SVM 基于 HMM 的共享虚拟内存管理器</li>
+<li>HSA_AMD_P2P 基于 PCI_P2PDMA 的多 GPU 间数据传输功能</li>
+</ul>
+<h1 id="udna"><a class="markdownIt-Anchor" href="#udna"></a> <a target="_blank" rel="noopener" href="https://winbuzzer.com/2024/09/10/amd-combines-rdna-and-cdna-into-udna-to-rival-nvidia-cuda-xcxwbn/">UDNA</a></h1>
+<p>在未来， AMD 计划将 RDNA 和 CDNA 架构统一为 UDNA 架构，并为该架构引入张量计算单元，以更好地支持 AI 计算，统一的 UDNA 架构对开发者来说将更友好，可以让开发者利用相同的底层微架构来实现 AI, HPC 和游戏。</p>
+<h1 id="hsa"><a class="markdownIt-Anchor" href="#hsa"></a> <a target="_blank" rel="noopener" href="https://hsafoundation.com/">HSA</a> vs <a target="_blank" rel="noopener" href="https://uxlfoundation.org/">UXL</a></h1>
+<p>HSA 标准是 ROCm 的基石之一，它让用户在通用计算领域除了 CUDA 之外能有另外一个选择。而 UXL (Unified Acceleration) Foundation 旨在为不同架构不同厂商的加速器构建统一的软件生态系统，从而也成为另一个能与 nVIDIA 的 GPU 和 CUDA 相抗衡的计算平台。</p>
+<h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://rocm.docs.amd.com/en/latest/what-is-rocm.html">What’s ROCm</a></li>
+<li><a target="_blank" rel="noopener" href="https://hsafoundation.com/standards/">Heterogeneous System Architecture standards</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.hsafoundation.com/wp-content/uploads/2021/02/HSA-PRM-1.1.1.pdf">HSA Programmer’s Reference Manual: HSAIL Virtual ISA</a></li>
+<li><a target="_blank" rel="noopener" href="https://lwn.net/Articles/619581/">AMDKFD Kernel Driver</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ROCm/" rel="tag"># ROCm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/gfx/radv/" rel="prev" title="AMD GPU Vulkan Drivers for Linux">
+                  <i class="fa fa-angle-left"></i> AMD GPU Vulkan Drivers for Linux
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/lnx/accel/" rel="next" title="Linux accel 子系统">
+                  Linux accel 子系统 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

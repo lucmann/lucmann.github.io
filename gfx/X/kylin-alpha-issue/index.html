@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="最近在看X11 Server的代码,顺手做下笔记。X11 Server的代码很古老了，有的是1993年写的，目前的X Server实现X.org是从最早的一个X Server实现XFree86 4.4 RC2版本(2004年)派生出来的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kylin V10 窗口透明问题">
+<meta property="og:url" content="https://lucmann.github.io/gfx/X/kylin-alpha-issue/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="最近在看X11 Server的代码,顺手做下笔记。X11 Server的代码很古老了，有的是1993年写的，目前的X Server实现X.org是从最早的一个X Server实现XFree86 4.4 RC2版本(2004年)派生出来的。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/images/kylin-alpha-issue/fbconfig.png">
+<meta property="og:image" content="https://lucmann.github.io/images/kylin-alpha-issue/visual_0x23.png">
+<meta property="og:image" content="https://lucmann.github.io/images/kylin-alpha-issue/visual_0x5b.png">
+<meta property="article:published_time" content="2020-12-20T03:58:43.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.165Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="X11">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/images/kylin-alpha-issue/fbconfig.png">
+
+
+<link rel="canonical" href="https://lucmann.github.io/gfx/X/kylin-alpha-issue/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/gfx/X/kylin-alpha-issue/","path":"gfx/X/kylin-alpha-issue/","title":"Kylin V10 窗口透明问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Kylin V10 窗口透明问题 | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8C%E4%B8%80%E4%B8%AA%E4%BD%BF%E7%94%A8glfw%E7%9A%84opengl%E7%A8%8B%E5%BA%8F%E5%9C%A8kylin-v10%E7%B3%BB%E7%BB%9F%E4%B8%8A%E5%8F%AF%E4%BB%A5%E4%BF%AE%E6%94%B9alpha%E9%80%9A%E9%81%93%E6%94%B9%E5%8F%98%E7%AA%97%E5%8F%A3%E8%83%8C%E6%99%AF%E7%9A%84%E9%80%8F%E6%98%8E%E5%BA%A6%E8%80%8C%E5%9C%A8ubuntu-focal-fossa%E7%B3%BB%E7%BB%9F%E4%B8%8A%E5%8D%B4%E4%B8%8D%E8%83%BD"><span class="nav-number">1.</span> <span class="nav-text"> 同一个使用glfw的OpenGL程序在Kylin V10系统上可以修改alpha通道改变窗口背景的透明度，而在Ubuntu Focal Fossa系统上却不能？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#glx-visual-%E5%92%8C-fbconfig-%E4%B8%8D%E6%98%AF%E4%B8%80%E5%9B%9E%E4%BA%8B"><span class="nav-number">2.</span> <span class="nav-text"> glx visual 和 fbconfig 不是一回事</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/gfx/X/kylin-alpha-issue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Kylin V10 窗口透明问题 | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Kylin V10 窗口透明问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-12-20 11:58:43" itemprop="dateCreated datePublished" datetime="2020-12-20T11:58:43+08:00">2020-12-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/graphics/" itemprop="url" rel="index"><span itemprop="name">graphics</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/gfx/X/kylin-alpha-issue/" class="post-meta-item leancloud_visitors" data-flag-title="Kylin V10 窗口透明问题" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/gfx/X/kylin-alpha-issue/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="gfx/X/kylin-alpha-issue/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>最近在看<a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/xorg/xserver">X11 Server的代码</a>,顺手做下笔记。X11 Server的代码很古老了，有的是1993年写的，目前的X Server实现<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/X.Org_Server">X.org</a>是从最早的一个X Server实现<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/XFree86">XFree86</a> 4.4 RC2版本(2004年)派生出来的。</p>
+<span id="more"></span>
+<p>X11 Server编译后会生成若干动态链接库形式的驱动程序和一个可执行程序Xorg. Xorg本质上是一个服务器程序，像其它所有服务器程序一样，它的main函数里有一个while循环，以保证在程序启动后，到程序退出前能够为客户端持续提供服务。Xorg的另一个特点是极具扩展性，所有动态链接库形式的DDX(Device Dependent X)驱动都是以Xorg Module的方式动态加载的，具体加载哪个DDX Driver由Xorg的Config文件配置。</p>
+<h1 id="同一个使用glfw的opengl程序在kylin-v10系统上可以修改alpha通道改变窗口背景的透明度而在ubuntu-focal-fossa系统上却不能"><a class="markdownIt-Anchor" href="#同一个使用glfw的opengl程序在kylin-v10系统上可以修改alpha通道改变窗口背景的透明度而在ubuntu-focal-fossa系统上却不能"></a> 同一个使用glfw的OpenGL程序在Kylin V10系统上可以修改alpha通道改变窗口背景的透明度，而在Ubuntu Focal Fossa系统上却不能？</h1>
+<p>Alpha通道控制窗口的透明度(transparency)。而X11窗口系统上，alpha通道是否可用，和X11 Server的RENDER扩展有关，下面来自glfw的代码是自明的(self-explanatory)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GLFWbool _glfwIsVisualTransparentX11(Visual* visual)</span><br><span class="line">&#123;</span><br><span class="line">    if (!_glfw.x11.xrender.available)</span><br><span class="line">        return GLFW_FALSE;</span><br><span class="line"></span><br><span class="line">    XRenderPictFormat* pf = XRenderFindVisualFormat(_glfw.x11.display, visual);</span><br><span class="line">    return pf &amp;&amp; pf-&gt;direct.alphaMask;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于系统上的 X11 Server 的 RENDER 扩展的信息可以通过 <code>xdpyinfo</code> 命令查看(此命令输出很多信息)</p>
+<ul>
+<li>Render formats</li>
+</ul>
+<p><code>xdpyinfo -ext RENDER | awk '/Render formats/,/Screen formats/'</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> Render formats :</span><br><span class="line"> pict format:</span><br><span class="line">format id:    0x25</span><br><span class="line">type:         Direct</span><br><span class="line">depth:        1</span><br><span class="line">alpha:         0 mask 0x1</span><br><span class="line">red:           0 mask 0x0</span><br><span class="line">green:         0 mask 0x0</span><br><span class="line">blue:          0 mask 0x0</span><br><span class="line"> pict format:</span><br><span class="line"> ...</span><br><span class="line"> pict format:</span><br><span class="line">format id:    0x40</span><br><span class="line">type:         Direct</span><br><span class="line">depth:        32</span><br><span class="line">alpha:         0 mask 0x0</span><br><span class="line">red:           0 mask 0x3ff</span><br><span class="line">green:        10 mask 0x3ff</span><br><span class="line">blue:         20 mask 0x3ff</span><br><span class="line"> Screen formats :</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Screen formats</li>
+</ul>
+<p><code>xdpyinfo -ext RENDER | awk '/Screen formats/,/depth formats/'</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Screen formats :</span><br><span class="line">  Screen 0 (sub-pixel order Unknown)</span><br><span class="line">    filters: nearest, bilinear, convolution, fast(nearest), good(bilinear), best(bilinear)</span><br><span class="line">    visual format:</span><br><span class="line">      visual id:      0x23</span><br><span class="line">      pict format id: 0x2c</span><br><span class="line">      ...</span><br><span class="line">    visual format:</span><br><span class="line">      visual id:      0x3a0</span><br><span class="line">      pict format id: 0x28</span><br><span class="line">   depth formats:</span><br></pre></td></tr></table></figure>
+<p>上面使用 <code>xdpyinfo</code> 命令得到两张表：</p>
+<ul>
+<li><strong>Render formats</strong> 表列出了所有 RENDER 扩展支持的颜色格式的信息，包括它们的位深 (depth), 以及每个 Component 的位深 (mask)</li>
+<li><strong>Screen formats</strong> 表实际上列出的是所有 X Visual 与 Render formats 的绑定关系</li>
+</ul>
+<p>接下来只需要查看一下程序(或者 GLFW )选取的 X Visual 的 Render format 的 Alpha 分量的位深是否为 0。 0 意味着 GLFW 获取的 <code>GLFW_TRANSPARENT_FRAMEBUFFER</code> 属性是<code>FALSE</code>, 也就意味着 GLFW 创建的这个窗口中，无法通过修改颜色的 Alpha 分量来改变窗口的透明度, 因为应用的窗口和桌面背景的融合(你是否能透过窗口看到桌面)是 X11 控制的。</p>
+<p>我系统上(WSL Ubuntu 20.04)绝大部分VISUAL对应的都是这个ID为<code>0x2c</code>的<strong>pict format</strong>, 所以我不能通过修改alpha通道改变窗口背景或内容的透明度，除非我强制让glfw选择其它的VISUAL(对应的<strong>pict format</strong>不是<code>0x2c</code>)。</p>
+<p>为了确定这个问题的确是VISUAL惹的祸，我想摆脱glfw，在单纯的GLX环境下测试一下，正好<a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/demos">mesa/demos</a>这个工程下有一个<strong>glxgears_fbconfig</strong>，这个demo允许通过<code>GLX_FBCONFIG_ID</code>来指定你想要的 <code>GLXFBConfig</code>， 而 <code>GLXFBConfig</code> 和 <code>XVisualInfo</code> 虽然是不同组件里定义的描述 FB 配置的数据结构(前者是 <strong>Mesa GLX</strong> 里定义的，而后者是 <strong>X11 Util</strong> 里定义的), 但两者存在一一对应的关系。</p>
+<p><img src="/images/kylin-alpha-issue/fbconfig.png" alt="GLXFBConfig vs XVisualInfo" /></p>
+<ul>
+<li>
+<p>visual id: 0x5b, pict format id 0x28</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pict format:</span><br><span class="line">      format id:    0x28</span><br><span class="line">      type:         Direct</span><br><span class="line">      depth:        32</span><br><span class="line">      alpha:        24 mask 0xff</span><br><span class="line">      red:          16 mask 0xff</span><br><span class="line">      green:         8 mask 0xff</span><br><span class="line">      blue:          0 mask 0xff</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>visual id: 0x23, pict format id 0x2c</p>
+</li>
+</ul>
+<p>注意，为了更清楚地看出不同，我使用<code>glClearBufferfv</code>将背景设置为半透明</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">diff --git a/src/xdemos/glxgears_fbconfig.c b/src/xdemos/glxgears_fbconfig.c</span></span><br><span class="line"><span class="comment">index 8806dd1c..7d6cbd29 100644</span></span><br><span class="line"><span class="comment">--- a/src/xdemos/glxgears_fbconfig.c</span></span><br><span class="line"><span class="comment">+++ b/src/xdemos/glxgears_fbconfig.c</span></span><br><span class="line">@@ -35,0 +36 @@</span><br><span class="line"><span class="addition">+#define GL_GLEXT_PROTOTYPES</span></span><br><span class="line">@@ -242,0 +244 @@ draw(void)</span><br><span class="line"><span class="addition">+    static const GLfloat bg[] = &#123;0.0, 0.0, 0.0, 0.5&#125;;</span></span><br><span class="line"><span class="addition">+    @@ -243,0 +246 @@ draw(void)</span></span><br><span class="line"><span class="addition">+    +   glClearBufferfv(GL_COLOR, 0, bg);</span></span><br><span class="line"><span class="addition">+    @@ -439,0 +443 @@ make_window( Display *dpy, const char *name,</span></span><br><span class="line"><span class="addition">+    +            GLX_VISUAL_ID,     0x23,)</span></span><br></pre></td></tr></table></figure>
+<p>测试结果如下:</p>
+<p><img src="/images/kylin-alpha-issue/visual_0x23.png" alt="VisualID=0x23" /><br />
+<img src="/images/kylin-alpha-issue/visual_0x5b.png" alt="VisualID=0x5b" /></p>
+<p>从测试结果看，在<code>VisualID=0x23</code>的情况下，这个VISUAL对应的<code>pict format</code>没有alpha通道，所以修改<code>bg</code>的alpha值不会对窗口背景的透明度有任何影响。</p>
+<h1 id="glx-visual-和-fbconfig-不是一回事"><a class="markdownIt-Anchor" href="#glx-visual-和-fbconfig-不是一回事"></a> glx visual 和 fbconfig 不是一回事</h1>
+<p>所以 <strong>GLX_VISUAL_ID</strong> 和 <strong>GLX_FBCONFIG_ID</strong> 也不是一回事， 虽然它俩都是 <code>XID</code>, 但 mesa 的实现虽然将 glx visual 和 fbconfig 统一用 <code>glx_config</code> 来表示, 但</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_GLX_PUBLIC XVisualInfo *</span><br><span class="line"><span class="title function_">glXChooseVisual</span><span class="params">(Display * dpy, <span class="type">int</span> screen, <span class="type">int</span> *attribList)</span>;</span><br><span class="line"></span><br><span class="line">_GLX_PUBLIC GLXFBConfig *</span><br><span class="line"><span class="title function_">glXChooseFBConfig</span><span class="params">(Display * dpy, <span class="type">int</span> screen, <span class="type">const</span> <span class="type">int</span> *attribList, <span class="type">int</span> *nitems)</span></span><br></pre></td></tr></table></figure>
+<p>是完全不同的实现，而且 mesa 的 <code>glXChooseVisual()</code> 实际上无法通过指定 <strong>GLX_VISUAL_ID</strong> 来选择某个特定的 X Visual (这可能是一个 Bug)。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/X11/" rel="tag"># X11</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/utils/update-alternatives/" rel="prev" title="update-alternatives">
+                  <i class="fa fa-angle-left"></i> update-alternatives
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/utils/cmake/" rel="next" title="CMake 不是一个构建系统">
+                  CMake 不是一个构建系统 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Transform Feedback 引入 Transform Feedback首先是DirectX3D引入的，但在DirectX3D中它不叫TF, 而是叫Stream Output Stage. 它第一次被引入OpenGL是在2006年，但当时是以扩展的形式GL_EXT_transform_feedback引入的，它正式成为OpenGL Required Core Features是在Open">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GL_ARB_transform_feedback">
+<meta property="og:url" content="https://lucmann.github.io/gfx/ARB/ARB_transform_feedback3/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="Transform Feedback 引入 Transform Feedback首先是DirectX3D引入的，但在DirectX3D中它不叫TF, 而是叫Stream Output Stage. 它第一次被引入OpenGL是在2006年，但当时是以扩展的形式GL_EXT_transform_feedback引入的，它正式成为OpenGL Required Core Features是在Open">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/images/tf-gles-31.jpg">
+<meta property="og:image" content="https://lucmann.github.io/images/ompparticles.png">
+<meta property="article:published_time" content="2021-05-08T01:04:30.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.164Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="OpenGL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/images/tf-gles-31.jpg">
+
+
+<link rel="canonical" href="https://lucmann.github.io/gfx/ARB/ARB_transform_feedback3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/gfx/ARB/ARB_transform_feedback3/","path":"gfx/ARB/ARB_transform_feedback3/","title":"GL_ARB_transform_feedback"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>GL_ARB_transform_feedback | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#transform-feedback"><span class="nav-number">1.</span> <span class="nav-text"> Transform Feedback 引入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#transform-feedback-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text"> Transform Feedback 是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#vertex-processing"><span class="nav-number">2.1.</span> <span class="nav-text"> Vertex Processing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#capturing"><span class="nav-number">2.2.</span> <span class="nav-text"> Capturing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#capturing-setting"><span class="nav-number">2.2.1.</span> <span class="nav-text"> Capturing Setting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#captured-output-variables"><span class="nav-number">2.2.2.</span> <span class="nav-text"> Captured Output Variables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%B0%91%E9%A1%B6%E7%82%B9%E5%B1%9E%E6%80%A7%E6%88%96%E6%80%BB%E5%85%B1%E5%A4%9A%E5%B0%91%E6%95%B0%E6%8D%AE%E5%8F%AF%E4%BB%A5%E8%A2%AB%E8%AE%B0%E5%BD%95"><span class="nav-number">2.2.3.</span> <span class="nav-text"> 多少顶点属性或总共多少数据可以被记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B6%E7%82%B9%E5%B1%9E%E6%80%A7%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.2.4.</span> <span class="nav-text"> 顶点属性的数据类型是什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#varyings"><span class="nav-number">2.3.</span> <span class="nav-text"> Varyings</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#transform-feedback-%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text"> Transform Feedback 处理过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#feedback-buffer-binding"><span class="nav-number">3.1.</span> <span class="nav-text"> Feedback Buffer Binding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#feedback-beginend"><span class="nav-number">3.2.</span> <span class="nav-text"> Feedback Begin&#x2F;End</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#feedback-objects"><span class="nav-number">3.3.</span> <span class="nav-text"> Feedback Objects</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#feedback-rendering"><span class="nav-number">3.4.</span> <span class="nav-text"> Feedback Rendering</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#transform-feedback-%E5%BA%94%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text"> Transform Feedback 应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90-springmass"><span class="nav-number">4.1.</span> <span class="nav-text"> 例子 springmass</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/gfx/ARB/ARB_transform_feedback3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="GL_ARB_transform_feedback | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GL_ARB_transform_feedback
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-08 09:04:30" itemprop="dateCreated datePublished" datetime="2021-05-08T09:04:30+08:00">2021-05-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/graphics/" itemprop="url" rel="index"><span itemprop="name">graphics</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/gfx/ARB/ARB_transform_feedback3/" class="post-meta-item leancloud_visitors" data-flag-title="GL_ARB_transform_feedback" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/gfx/ARB/ARB_transform_feedback3/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="gfx/ARB/ARB_transform_feedback3/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="transform-feedback"><a class="markdownIt-Anchor" href="#transform-feedback"></a> <a target="_blank" rel="noopener" href="https://www.khronos.org/opengl/wiki/Transform_Feedback">Transform Feedback</a> 引入</h1>
+<p>Transform Feedback首先是DirectX3D引入的，但在DirectX3D中它不叫TF, 而是叫<strong>Stream Output Stage</strong>. 它第一次被引入OpenGL是在2006年，但当时是以扩展的形式<a target="_blank" rel="noopener" href="https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_transform_feedback.txt">GL_EXT_transform_feedback</a>引入的，它正式成为OpenGL Required Core Features是在OpenGL 3.0(2008), 在这之后，OpenGL 4.0, 4.2, 4.6又分别引入了一些TF相关的新特性。</p>
+<span id="more"></span>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Extensions</th>
+<th style="text-align:left">OpenGL Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GL_EXT_transform_feedback</td>
+<td style="text-align:left">3.0</td>
+</tr>
+<tr>
+<td style="text-align:left">GL_ARB_transform_feedback2</td>
+<td style="text-align:left">4.0</td>
+</tr>
+<tr>
+<td style="text-align:left">GL_ARB_transform_feedback3</td>
+<td style="text-align:left">4.0</td>
+</tr>
+<tr>
+<td style="text-align:left">GL_ARB_transform_feedback_instanced</td>
+<td style="text-align:left">4.2</td>
+</tr>
+<tr>
+<td style="text-align:left">GL_ARB_transform_feedback_overflow_query</td>
+<td style="text-align:left">4.6</td>
+</tr>
+</tbody>
+</table>
+<h1 id="transform-feedback-是什么"><a class="markdownIt-Anchor" href="#transform-feedback-是什么"></a> Transform Feedback 是什么</h1>
+<p>TF是将Vertex_Processing阶段产生的图元的顶点属性(vertex attributes)保存(capture/record)在<strong>Transform Feedback Buffer</strong>, 保存之后你可以:</p>
+<ul>
+<li>CPU侧读取这些数据重新应用到你的渲染引擎</li>
+<li>GPU直接将这些数据反馈到另一个Draw Call</li>
+</ul>
+<p>某种意义上讲，TF是OpenGL第一种compute shader的形式，在TF之前，唯一能从shader的输出读取数据的方式是<code>glReadPixels</code>和其同族API.</p>
+<p><img src="/images/tf-gles-31.jpg" alt="OpenGL 3.1 Pipeline" /></p>
+<h2 id="vertex-processing"><a class="markdownIt-Anchor" href="#vertex-processing"></a> <a target="_blank" rel="noopener" href="https://www.khronos.org/opengl/wiki/Vertex_Processing">Vertex Processing</a></h2>
+<p>TF的输入来自Vertex Processing, 所以首先要确定Vertex Processing阶段都做什么，输出什么。Vertex Processing的输出是图元(Primitives), 它至少包含一个vertex shader.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">着色器</th>
+<th style="text-align:left">是否必需</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">VERTEX</td>
+<td style="text-align:left">Y</td>
+</tr>
+<tr>
+<td style="text-align:left">TESSELLATION</td>
+<td style="text-align:left">N</td>
+</tr>
+<tr>
+<td style="text-align:left">GEOMETRY</td>
+<td style="text-align:left">N</td>
+</tr>
+</tbody>
+</table>
+<h2 id="capturing"><a class="markdownIt-Anchor" href="#capturing"></a> Capturing</h2>
+<p>当Vertex Processing最后的shader是geometry或tessellation evaluation时，则所记录的图元就是geometry或tessellation evaluation输出的图元，否则那些顶点数据来自vertex shader. 另外所记录的顶点数据也不一定都保存在同一个buffer里，这即为<code>bufferMode</code>的含义。</p>
+<h3 id="capturing-setting"><a class="markdownIt-Anchor" href="#capturing-setting"></a> Capturing Setting</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void glTransformFeedbackVaryings(GLuint program,</span><br><span class="line">				 GLsizei count,</span><br><span class="line">				 const char **varyings,</span><br><span class="line">				 GLenum bufferMode);</span><br></pre></td></tr></table></figure>
+<p>这个API设置:</p>
+<ul>
+<li>
+<p>哪些program的输出变量被<strong>captured</strong></p>
+</li>
+<li>
+<p>capturing模式， capturing模式有两种</p>
+<ul>
+<li><code>GL_INTERLEAVED_ATTRIBS</code></li>
+<li><code>GL_SEPARATE_ATTRIBS</code></li>
+</ul>
+</li>
+<li>
+<p>interleaved mode</p>
+</li>
+</ul>
+<p>这种模式下，所有captured的输出被保存在同一个buffer object.</p>
+<ul>
+<li>separate mode</li>
+</ul>
+<p>这种模式下，输出未必被captured到不同的buffer object, 它仅仅是指输出被captured到不同的<strong>buffer binding points</strong>. 因为同一个buffer object的不同区域也可以被绑定到不同的<strong>buffer binding points</strong>.</p>
+<h3 id="captured-output-variables"><a class="markdownIt-Anchor" href="#captured-output-variables"></a> Captured Output Variables</h3>
+<p>那么可以记录的顶点属性有多少个呢？大小如何？</p>
+<h3 id="多少顶点属性或总共多少数据可以被记录"><a class="markdownIt-Anchor" href="#多少顶点属性或总共多少数据可以被记录"></a> 多少顶点属性或总共多少数据可以被记录</h3>
+<ul>
+<li>separate capture</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Limitation</th>
+<th style="text-align:center">Minimal Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS</td>
+<td style="text-align:center">4</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>interleaved capture</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Limitation</th>
+<th style="text-align:center">Minimal Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td>
+<td style="text-align:center">64</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>advanced interleaved capture (不同的变量放在不同的buffers)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Limitation</th>
+<th style="text-align:center">Minimal Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GL_MAX_TRANSFORM_FEEDBACK_BUFFERS</td>
+<td style="text-align:center">64</td>
+</tr>
+</tbody>
+</table>
+<p>注意到在interleaved capture mode下，没有顶点属性个数的限制，原因是在interleaved mode下，所有顶点属性都是在同一个buffer中，所以限制了总的components的个数后，无论你记录多少个属性，这些属性总的components个数不能超过这个最大值, 而在separate mode下，每个列出的变量是保存在各自不同的buffer中，所以除了对components设限外，还要对属性个数设限。所以这里<code>GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS</code>的一个更好的名字应该是<code>GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_BUFFERS</code>.</p>
+<h3 id="顶点属性的数据类型是什么"><a class="markdownIt-Anchor" href="#顶点属性的数据类型是什么"></a> 顶点属性的数据类型是什么</h3>
+<ul>
+<li>structs</li>
+<li>arrays</li>
+<li>members of interface blocks</li>
+</ul>
+<h2 id="varyings"><a class="markdownIt-Anchor" href="#varyings"></a> Varyings</h2>
+<h1 id="transform-feedback-处理过程"><a class="markdownIt-Anchor" href="#transform-feedback-处理过程"></a> Transform Feedback 处理过程</h1>
+<h2 id="feedback-buffer-binding"><a class="markdownIt-Anchor" href="#feedback-buffer-binding"></a> Feedback Buffer Binding</h2>
+<p>当设置好要capturing program中的哪些输出变量，以何种模式captured后，接下来就要设置(申请)保存captured的数据的buffer objects.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void glBindBufferRange(GLenum target,</span><br><span class="line">		       GLuint index,</span><br><span class="line">		       GLuint buffer,</span><br><span class="line">		       GLintptr offset,</span><br><span class="line">		       GLsizeiptr size);</span><br></pre></td></tr></table></figure>
+<p>这里<code>target</code>就是<code>GL_TRANSFORM_FEEDBACK_BUFFER</code>. <code>offset</code>必须是4字节对齐，如果存进buffer的值包含<strong>double-precision</strong>, 则需要8字节对齐。</p>
+<h2 id="feedback-beginend"><a class="markdownIt-Anchor" href="#feedback-beginend"></a> Feedback Begin/End</h2>
+<p>Capture设置好，Buffer绑定好之后，就可以开始<strong>Recording</strong> Vertex Processing产出的数据了。通过调用下面的API开始Feedback:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void glBeginTransformFeedback(GLenum primitiveMode);</span><br></pre></td></tr></table></figure>
+<p>这里<code>primitiveMode</code>只能是以下3种之一:</p>
+<ul>
+<li>GL_POINTS</li>
+<li>GL_LINES</li>
+<li>GL_TRIANGLES</li>
+</ul>
+<p>Transform Feedback模式被激活后，在没有调用<code>glPauseTransformFeedback</code>或<code>glEndTransformFeedback</code>之前，以下行为不被允许:</p>
+<ul>
+<li>修改<code>GL_TRANSFORM_FEEDBACK_BUFFER</code>的bindings</li>
+<li>任何对这些绑定的<code>GL_TRANSFORM_FEEDBACK_BUFFER</code>的读写操作</li>
+<li>重新申请这些绑定的<code>GL_TRANSFORM_FEEDBACK_BUFFER</code>的存储</li>
+<li>修改当前使用的program, 也就是不能调用<code>glUseProgram</code>或<code>glBindProgramPipeline</code>, 还有<code>glUseProgramStages</code></li>
+</ul>
+<p>退出Transform Feedback模式调用:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void glEndTransformFeedback();</span><br></pre></td></tr></table></figure>
+<h2 id="feedback-objects"><a class="markdownIt-Anchor" href="#feedback-objects"></a> Feedback Objects</h2>
+<p>跟其它OpenGL的功能一样，Transform Feedback也有一大堆state需要track, 所以这些state被封装进<strong>Transform Feedback Objects</strong>, 这些Feedback Objects和其它OpenGL Object一样需要<code>Gen</code>, <code>Delete</code>和<code>Bind</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void glGenTransformFeedbacks(GLsizei n, GLuint *ids);</span><br><span class="line">void glDeleteTransformFeedbacks(GLsizei n, const GLuint *ids);</span><br><span class="line">void glBindTransformFeedback(GLenum target, GLuint id);</span><br></pre></td></tr></table></figure>
+<p>NOTE:</p>
+<ul>
+<li><code>glBindTransformFeedback</code>的<code>target</code>永远是<code>GL_TRANSFORM_FEEDBACK</code></li>
+<li>不能绑定一个Feedback Object，如果当前的Feedback Object还是active或没有被paused.</li>
+</ul>
+<p>那么Feedback Object里封装了哪些Transform Feedback state呢？</p>
+<ul>
+<li>generic buffer bindings, 即调用<code>glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, ...)</code>绑定的那些buffers</li>
+<li>indexed buffer bindings, 即调用<code>glBindBufferRange(GL_TRANSFORM_FEEDBACK, ...)</code>绑定的那些buffers</li>
+<li>transform feedback是否是active还是paused</li>
+<li>被当前的feedback操作记录的count of primitives等等</li>
+</ul>
+<h2 id="feedback-rendering"><a class="markdownIt-Anchor" href="#feedback-rendering"></a> Feedback Rendering</h2>
+<p>OK, 我们现在获得了Vertex Processing的结果，并记录了这次Transform Feedback操作的状态到Transform Feedback Objects(例如captured count of primitives, the number of vertices). 但是我们如何利用这些captured数据呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void glDrawTransformFeedback(GLenum mode,</span><br><span class="line">			     GLuint id);</span><br><span class="line"></span><br><span class="line">void glDrawTransformFeedbackInstanced(GLenum mode,</span><br><span class="line">				      GLuint id,</span><br><span class="line">				      GLsizei instancecount);</span><br><span class="line">void glDrawTransformFeedbackStream(GLenum mode,</span><br><span class="line">				   GLuint id,</span><br><span class="line">				   GLuint stream);</span><br><span class="line">void glDrawTransformFeedbackStreamInstanced(GLenum mode,</span><br><span class="line">					    GLuint id,</span><br><span class="line">					    GLuint stream,</span><br><span class="line">					    GLsizei instancecount);</span><br></pre></td></tr></table></figure>
+<p>NOTE:</p>
+<ul>
+<li>在调用这些<code>Draw</code>命令前，一定要先调用<code>glEndTransformFeedback</code>, 因为只有当调用了<code>glEndTransformFeedback</code>后，OpenGL状态机才知道一次完整的Transform Feedback操作完成了。</li>
+</ul>
+<h1 id="transform-feedback-应用"><a class="markdownIt-Anchor" href="#transform-feedback-应用"></a> Transform Feedback 应用</h1>
+<p>TF最常见的应用是粒子系统(Particle System), 即包含许许多多小颗粒的场景，如烟，雾，火等，这些场景的共同点是包含大量顶点，而且顶点属性在不断变化，如果没有TF, 会大大增加CPU向GPU传送顶点数据的开销，不论是总线的带宽还是CPU的使用率都可能无法承受。</p>
+<h2 id="例子-springmass"><a class="markdownIt-Anchor" href="#例子-springmass"></a> 例子 springmass</h2>
+<ul>
+<li>两个Shader programs
+<ul>
+<li><code>m_update_program</code>, 用来更新(重新计算)顶点属性</li>
+<li><code>m_render_program</code>, 用来渲染最后的画面</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">void render(double t)</span><br><span class="line">&#123;</span><br><span class="line">    int i;</span><br><span class="line">    glUseProgram(m_update_program);</span><br><span class="line"></span><br><span class="line">    glEnable(GL_RASTERIZER_DISCARD);</span><br><span class="line"></span><br><span class="line">    for (i = iterations_per_frame; i != 0; --i)</span><br><span class="line">    &#123;</span><br><span class="line">        glBindVertexArray(m_vao[m_iteration_index &amp; 1]);</span><br><span class="line">        glBindTexture(GL_TEXTURE_BUFFER, m_pos_tbo[m_iteration_index &amp; 1]);</span><br><span class="line">        m_iteration_index++;</span><br><span class="line">        glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_vbo[POSITION_A + (m_iteration_index &amp; 1)]);</span><br><span class="line">        glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 1, m_vbo[VELOCITY_A + (m_iteration_index &amp; 1)]);</span><br><span class="line">        glBeginTransformFeedback(GL_POINTS);</span><br><span class="line">        glDrawArrays(GL_POINTS, 0, POINTS_TOTAL);</span><br><span class="line">        glEndTransformFeedback();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    glDisable(GL_RASTERIZER_DISCARD);</span><br><span class="line"></span><br><span class="line">    static const GLfloat black[] = &#123; 0.0f, 0.0f, 0.0f, 0.0f &#125;;</span><br><span class="line"></span><br><span class="line">    glViewport(0, 0, info.windowWidth, info.windowHeight);</span><br><span class="line">    glClearBufferfv(GL_COLOR, 0, black);</span><br><span class="line"></span><br><span class="line">    glUseProgram(m_render_program);</span><br><span class="line"></span><br><span class="line">    if (draw_points)</span><br><span class="line">    &#123;</span><br><span class="line">        glPointSize(4.0f);</span><br><span class="line">        glDrawArrays(GL_POINTS, 0, POINTS_TOTAL);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (draw_lines)</span><br><span class="line">    &#123;</span><br><span class="line">        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer);</span><br><span class="line">        glDrawElements(GL_LINES, CONNECTIONS_TOTAL * 2, GL_UNSIGNED_INT, NULL);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这段<code>render()</code>函数的前半段是一个双缓冲交替的模式, 用来倒换TFB和Vertex Array Buffer的数据。后半段是简单的<code>DrawArrays()</code>或<code>DrawElements()</code>。我们简单说下前半段的for-loop.</p>
+<p>首先定义了3个Buffer数组：分别用作Vertex Array Buffer, Transform Feedback Buffer和Texture Buffer</p>
+<ul>
+<li><code>m_vao[2] = &#123;1, 2&#125;</code></li>
+<li><code>m_vbo[5] = &#123;1, 2, 3, 4, 5&#125;</code></li>
+<li><code>m_pos_tbo[2] = &#123;1, 2&#125;</code></li>
+</ul>
+<p>循环展开后:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 0</span></span><br><span class="line">glBindVertexArray(<span class="number">1</span>);</span><br><span class="line">glBindTexture(GL_TEXTURE_BUFFER, <span class="number">1</span>);</span><br><span class="line">m_iteration_index++;</span><br><span class="line">glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, <span class="number">0</span>, <span class="number">2</span>);</span><br><span class="line">glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, <span class="number">1</span>, <span class="number">4</span>);</span><br><span class="line">glBeginTransformFeedback(GL_POINTS);</span><br><span class="line">glDrawArrays(GL_POINTS, <span class="number">0</span>，POINTS_TOTAL);</span><br><span class="line">glEndTransformFeedback();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line">glBindVertexArray(<span class="number">2</span>);</span><br><span class="line">glBindTexture(GL_TEXTURE_BUFFER, <span class="number">2</span>);</span><br><span class="line">m_iteration_index++;</span><br><span class="line">glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, <span class="number">1</span>, <span class="number">3</span>);</span><br><span class="line">glBeginTransformFeedback(GL_POINTS);</span><br><span class="line">glDrawArrays(GL_POINTS, <span class="number">0</span>，POINTS_TOTAL);</span><br><span class="line">glEndTransformFeedback();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line">glBindVertexArray(<span class="number">1</span>);</span><br><span class="line">glBindTexture(GL_TEXTURE_BUFFER, <span class="number">1</span>);</span><br><span class="line">m_iteration_index++;</span><br><span class="line">glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, <span class="number">0</span>, <span class="number">2</span>);</span><br><span class="line">glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, <span class="number">1</span>, <span class="number">4</span>);</span><br><span class="line">glBeginTransformFeedback(GL_POINTS);</span><br><span class="line">glDrawArrays(GL_POINTS, <span class="number">0</span>，POINTS_TOTAL);</span><br><span class="line">glEndTransformFeedback();</span><br></pre></td></tr></table></figure>
+<p><img src="/images/ompparticles.png" alt="ompparticles" /></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/lwtbn1/OpenGL_Superbible_7th/blob/master/src/ompparticles/ompparticles.cpp">ompparticles.cpp</a></p>
+<h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://jason-blog.jlekstrand.net/2018/10/transform-feedback-is-terrible-so-why.html">Transform Feedback Is Terrible, So Why Are We Doing It</a></li>
+<li><a target="_blank" rel="noopener" href="https://community.arm.com/cn/b/blog/posts/transform-feedback-1547554897">Transform Feedback的前世今生(一)</a></li>
+<li><a target="_blank" rel="noopener" href="https://ogldev.org/www/tutorial28/tutorial28.html">Particle System using Transform Feedback</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OpenGL/" rel="tag"># OpenGL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/gfx/opengl-objects/" rel="prev" title="OpenGL Objects">
+                  <i class="fa fa-angle-left"></i> OpenGL Objects
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/lnx/udev/" rel="next" title="udev, sysfs & libudev">
+                  udev, sysfs & libudev <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

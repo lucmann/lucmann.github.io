@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Just read it gallium&#x2F;dril: Compatibility stub for the legacy DRI loader interface">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DRI Legacy">
+<meta property="og:url" content="https://lucmann.github.io/gfx/dril/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="Just read it gallium&#x2F;dril: Compatibility stub for the legacy DRI loader interface">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-09-13T06:44:56.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.166Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="Mesa">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lucmann.github.io/gfx/dril/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/gfx/dril/","path":"gfx/dril/","title":"DRI Legacy"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>DRI Legacy | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#just-read-it"><span class="nav-number">1.</span> <span class="nav-text"> Just read it</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dri-extensions"><span class="nav-number">2.</span> <span class="nav-text"> DRI extensions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#libgl_drivers_path"><span class="nav-number">3.</span> <span class="nav-text"> LIBGL_DRIVERS_PATH</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gl-frontends"><span class="nav-number">4.</span> <span class="nav-text"> GL Frontends</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/gfx/dril/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="DRI Legacy | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DRI Legacy
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-09-13 14:44:56" itemprop="dateCreated datePublished" datetime="2024-09-13T14:44:56+08:00">2024-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/graphics/" itemprop="url" rel="index"><span itemprop="name">graphics</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/gfx/dril/" class="post-meta-item leancloud_visitors" data-flag-title="DRI Legacy" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/gfx/dril/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="gfx/dril/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="just-read-it"><a class="markdownIt-Anchor" href="#just-read-it"></a> Just read it</h1>
+<p><a target="_blank" rel="noopener" href="https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/28378">gallium/dril: Compatibility stub for the legacy DRI loader interface</a></p>
+<span id="more"></span>
+<h1 id="dri-extensions"><a class="markdownIt-Anchor" href="#dri-extensions"></a> DRI extensions</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">#define __DRI2_BLOB                        &quot;DRI2_Blob&quot;</span><br><span class="line">#define __DRI2_BUFFER_DAMAGE               &quot;DRI2_BufferDamage&quot;</span><br><span class="line">#define __DRI2_CONFIG_QUERY                &quot;DRI_CONFIG_QUERY&quot;</span><br><span class="line">#define __DRI2_FENCE                       &quot;DRI2_Fence&quot;</span><br><span class="line">#define __DRI2_FLUSH                       &quot;DRI2_Flush&quot;</span><br><span class="line">#define __DRI2_FLUSH_CONTROL               &quot;DRI_FlushControl&quot;</span><br><span class="line">#define __DRI2_INTEROP                     &quot;DRI2_Interop&quot;</span><br><span class="line">#define __DRI2_NO_ERROR                    &quot;DRI_NoError&quot;</span><br><span class="line">#define __DRI2_RENDERER_QUERY              &quot;DRI_RENDERER_QUERY&quot;</span><br><span class="line">#define __DRI2_ROBUSTNESS                  &quot;DRI_Robustness&quot;</span><br><span class="line">#define __DRI2_THROTTLE                    &quot;DRI2_Throttle&quot;</span><br><span class="line">#define __DRI_BACKGROUND_CALLABLE          &quot;DRI_BackgroundCallable&quot;</span><br><span class="line">#define __DRI_CONFIG_OPTIONS               &quot;DRI_ConfigOptions&quot;</span><br><span class="line">#define __DRI_COPY_SUB_BUFFER              &quot;DRI_CopySubBuffer&quot;</span><br><span class="line">#define __DRI_CORE                         &quot;DRI_Core&quot;</span><br><span class="line">#define __DRI_DRI2                         &quot;DRI_DRI2&quot;</span><br><span class="line">#define __DRI_DRI2_LOADER                  &quot;DRI_DRI2Loader&quot;</span><br><span class="line">#define __DRI_IMAGE                        &quot;DRI_IMAGE&quot;</span><br><span class="line">#define __DRI_IMAGE_DRIVER                 &quot;DRI_IMAGE_DRIVER&quot;</span><br><span class="line">#define __DRI_IMAGE_LOADER                 &quot;DRI_IMAGE_LOADER&quot;</span><br><span class="line">#define __DRI_IMAGE_LOOKUP                 &quot;DRI_IMAGE_LOOKUP&quot;</span><br><span class="line">#define __DRI_MEDIA_STREAM_COUNTER         &quot;DRI_MediaStreamCounter&quot;</span><br><span class="line">#define __DRI_MUTABLE_RENDER_BUFFER_DRIVER &quot;DRI_MutableRenderBufferDriver&quot;</span><br><span class="line">#define __DRI_MUTABLE_RENDER_BUFFER_LOADER &quot;DRI_MutableRenderBufferLoader&quot;</span><br><span class="line">#define __DRI_READ_DRAWABLE                &quot;DRI_ReadDrawable&quot;</span><br><span class="line">#define __DRI_SWAP_CONTROL                 &quot;DRI_SwapControl&quot;</span><br><span class="line">#define __DRI_SWRAST                       &quot;DRI_SWRast&quot;</span><br><span class="line">#define __DRI_SWRAST_LOADER                &quot;DRI_SWRastLoader&quot;</span><br><span class="line">#define __DRI_SYSTEM_TIME                  &quot;DRI_SystemTime&quot;</span><br><span class="line">#define __DRI_TEX_BUFFER                   &quot;DRI_TexBuffer&quot;</span><br><span class="line">#define __DRI_USE_INVALIDATE               &quot;DRI_UseInvalidate&quot;</span><br></pre></td></tr></table></figure>
+<p>(extracted by <code>rg '^#define __DRI.* &quot;DRI.*&quot;' include/GL/internal/dri_interface.h | sort | awk '&#123;printf(&quot;%s %-34s %s\n&quot;, $1, $2, $3)&#125;'</code>)</p>
+<p>这些扩展被定义在 <code>dri_interface.h</code>, 该文件有两个作用：</p>
+<ul>
+<li>它是 mesa 内部的 libGL 与 libgallium_dri 之间的约定</li>
+<li>它是 mesa 与外部 <a target="_blank" rel="noopener" href="http://X.org">X.org</a> 服务器家族的约定</li>
+</ul>
+<h1 id="libgl_drivers_path"><a class="markdownIt-Anchor" href="#libgl_drivers_path"></a> <s>LIBGL_DRIVERS_PATH</s></h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">       14  armada-drm_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  exynos_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  gm12u320_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  hdlcd_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  hx8357d_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  ili9163_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  ili9225_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  ili9341_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  ili9486_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  imx-dcss_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  imx-drm_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  imx-lcdif_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  ingenic-drm_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  kirin_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  kms_swrast_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  komeda_dri.so -&gt; libdril_dri.so</span><br><span class="line">  1151904  libdril_dri.so</span><br><span class="line">124969400  libgallium.so</span><br><span class="line">       14  mali-dp_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  mcde_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  mediatek_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  meson_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  mi0283qt_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  mxsfb-drm_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  panel-mipi-dbi_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  panfrost_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  panthor_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  pl111_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  radeonsi_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  rcar-du_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  repaper_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  rockchip_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  rzg2l-du_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  ssd130x_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  st7586_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  st7735r_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  sti_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  stm_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  sun4i-drm_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  swrast_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  udl_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  vkms_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  zink_dri.so -&gt; libdril_dri.so</span><br><span class="line">       14  zynqmp-dpsub_dri.so -&gt; libdril_dri.so</span><br></pre></td></tr></table></figure>
+<p>(generated by <code>ls -go --time-style=+ /home/luc/mesa-install/lib/x86_64-linux-gnu/dri | cut -c 14-</code>)</p>
+<h1 id="gl-frontends"><a class="markdownIt-Anchor" href="#gl-frontends"></a> GL Frontends</h1>
+<ul>
+<li>GLX</li>
+<li>EGL</li>
+<li>GBM</li>
+</ul>
+<p>在有了 DRIL 之后，这些 GL 前端库可以直接链接 <code>libgallium.so</code></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Mesa/" rel="tag"># Mesa</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/lnx/accel/" rel="prev" title="Linux accel 子系统">
+                  <i class="fa fa-angle-left"></i> Linux accel 子系统
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/gfx/vkapp/" rel="next" title="Vulkan Application">
+                  Vulkan Application <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

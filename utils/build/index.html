@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="《程序员的自我修养–链接，装载与库》这本书是在读研时才看的，印象很深，现在想想这本书讲的都是程序员，尤其是从事系统编程需要的知识。这里我将平时使用的跟编译，链接和构建应用程序及库相关的知识记录下来，希望以后能温故知新。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译，链接和运行">
+<meta property="og:url" content="https://lucmann.github.io/utils/build/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="《程序员的自我修养–链接，装载与库》这本书是在读研时才看的，印象很深，现在想想这本书讲的都是程序员，尤其是从事系统编程需要的知识。这里我将平时使用的跟编译，链接和构建应用程序及库相关的知识记录下来，希望以后能温故知新。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/images/build/execve.svg">
+<meta property="og:image" content="https://lucmann.github.io/images/build/start_main.svg">
+<meta property="article:published_time" content="2022-09-18T09:02:49.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.445Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="tools">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/images/build/execve.svg">
+
+
+<link rel="canonical" href="https://lucmann.github.io/utils/build/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/utils/build/","path":"utils/build/","title":"编译，链接和运行"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>编译，链接和运行 | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8E%E9%93%BE%E6%8E%A5%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text"> 编译器与链接器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gcc-%E7%9A%84%E4%BC%98%E5%8C%96%E7%BA%A7%E5%88%AB"><span class="nav-number">1.1.</span> <span class="nav-text"> gcc 的优化级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E8%83%8C%E5%90%8E%E5%81%9A%E7%9A%84%E4%BA%8B"><span class="nav-number">1.2.</span> <span class="nav-text"> 编译器背后做的事</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%99%A8-vs-%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text"> 动态链接器 vs 静态链接器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%BA%93%E9%83%BD%E5%8E%BB%E5%93%AA%E5%84%BF%E5%91%A2"><span class="nav-number">2.1.</span> <span class="nav-text"> 动态库都去哪儿呢</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#got-plt-pic"><span class="nav-number">2.2.</span> <span class="nav-text"> GOT, PLT &amp; PIC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.</span> <span class="nav-text"> 构建系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#autotools"><span class="nav-number">3.1.</span> <span class="nav-text"> autotools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cmake"><span class="nav-number">3.2.</span> <span class="nav-text"> cmake</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#meson"><span class="nav-number">3.3.</span> <span class="nav-text"> meson</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C"><span class="nav-number">4.</span> <span class="nav-text"> 运行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/utils/build/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="编译，链接和运行 | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          编译，链接和运行
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-09-18 17:02:49" itemprop="dateCreated datePublished" datetime="2022-09-18T17:02:49+08:00">2022-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/utilities/" itemprop="url" rel="index"><span itemprop="name">utilities</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/utils/build/" class="post-meta-item leancloud_visitors" data-flag-title="编译，链接和运行" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/utils/build/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="utils/build/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><img src="/images/build/execve.svg" alt="" /></p>
+<p>《程序员的自我修养–链接，装载与库》这本书是在读研时才看的，印象很深，现在想想这本书讲的都是程序员，尤其是从事系统编程需要的知识。这里我将平时使用的跟编译，链接和构建应用程序及库相关的知识记录下来，希望以后能温故知新。</p>
+<span id="more"></span>
+<h1 id="编译器与链接器"><a class="markdownIt-Anchor" href="#编译器与链接器"></a> 编译器与链接器</h1>
+<ul>
+<li>
+<p>gcc</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://gcc.gnu.org/projects/cxx-status.html">g++</a></p>
+</li>
+<li>
+<p>clang</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://clang.llvm.org/cxx_status.html">clang++</a></p>
+</li>
+<li>
+<p>bfd (使用 Binary File Descriptor 库构建的 Linker, Ubuntu 上默认的 ld)</p>
+</li>
+<li>
+<p>gold (<a target="_blank" rel="noopener" href="https://android.googlesource.com/toolchain/binutils/+/53b6ed3bceea971857c996b6dcb96de96b99335f/binutils-2.19/gold"><strong>go</strong>ogle <strong>l</strong>oa<strong>d</strong>er</a>)</p>
+</li>
+<li>
+<p>mold (<a target="_blank" rel="noopener" href="https://github.com/rui314/mold"><strong>mo</strong>dern <strong>l</strong>oa<strong>d</strong>er</a>)</p>
+</li>
+</ul>
+<h2 id="gcc-的优化级别"><a class="markdownIt-Anchor" href="#gcc-的优化级别"></a> gcc 的优化级别</h2>
+<p><code>-O</code> 和 <code>-O1</code> 是等价的。 <code>-O</code> 会对目标文件大小和执行时间进行优化，但不会进行非常耗时的优化，以下是 <code>-O</code> 打开的优化: (其中红色的是 <code>-Og</code> 关闭的)</p>
+<ul>
+<li>-fauto-inc-dec</li>
+<li><span style="color:red">-fbranch-count-reg</span></li>
+<li>-fcombine-stack-adjustments</li>
+<li>-fcompare-elim</li>
+<li>-fcprop-registers</li>
+<li>-fdce</li>
+<li>-fdefer-pop</li>
+<li><span style="color:red">-fdelayed-branch</span></li>
+<li><span style="color:red">-fdse</span></li>
+<li>-fforward-propagate</li>
+<li>-fguess-branch-probability</li>
+<li><span style="color:red">-fif-conversion</span></li>
+<li><span style="color:red">-fif-conversion2</span></li>
+<li><span style="color:red">-finline-functions-called-once</span></li>
+<li>-fipa-modref</li>
+<li>-fipa-profile</li>
+<li>-fipa-reference</li>
+<li>-fipa-reference-addressable</li>
+<li>-fmerge-constants</li>
+<li><span style="color:red">-fmove-loop-invariants</span></li>
+<li><span style="color:red">-fmove-loop-stores</span></li>
+<li>-fomit-frame-pointer</li>
+<li>-freorder-blocks</li>
+<li>-fshrink-wrap</li>
+<li>-fshrink-wrap-separate</li>
+<li>-fsplit-wide-types</li>
+<li>-fssa-backprop</li>
+<li><span style="color:red">-fssa-phiopt</span></li>
+<li><span style="color:red">-ftree-bit-ccp</span></li>
+<li>-ftree-ccp</li>
+<li>-ftree-ch</li>
+<li>-ftree-coalesce-vars</li>
+<li>-ftree-copy-prop</li>
+<li>-ftree-dce</li>
+<li>-ftree-dominator-opts</li>
+<li><span style="color:red">-ftree-dse</span></li>
+<li>-ftree-forwprop</li>
+<li>-ftree-fre</li>
+<li>-ftree-phiprop</li>
+<li><span style="color:red">-ftree-pta</span></li>
+<li>-ftree-scev-cprop</li>
+<li>-ftree-sink</li>
+<li>-ftree-slsr</li>
+<li><span style="color:red">-ftree-sra</span></li>
+<li>-ftree-ter</li>
+<li>-funit-at-a-time</li>
+</ul>
+<h2 id="编译器背后做的事"><a class="markdownIt-Anchor" href="#编译器背后做的事"></a> 编译器背后做的事</h2>
+<ul>
+<li>当你编译一个 hello world C 程序时，一般并不会指定 <code>-lc</code> 链接选项，那为什么会自动链接 libc.so.6 呢？</li>
+</ul>
+<p>原因是 gcc 有一套内置的链接规则，通过 <code>gcc -dumpspecs</code> 可以看到它，这套规则规定在满足条件时，gcc 会默认为你加上 <code>-lc</code> 选项</p>
+<h1 id="动态链接器-vs-静态链接器"><a class="markdownIt-Anchor" href="#动态链接器-vs-静态链接器"></a> 动态链接器 vs 静态链接器</h1>
+<p><strong>动态链接器 <code>/lib64/ld-linux-x86-64.so.2</code></strong> 是程序运行时调用的，它由操作系统内核通过 execve 族系统调用加载到内存，进而由它加载其它用到的动态链接库。它本身是一个静态链接库，不依赖其它库。</p>
+<p><strong>静态链接器 <code>/usr/bin/ld</code></strong> 是构建程序或库时调用的，它由编译器(如 gcc)调用, 它本身是一个可执行程序，而且可以读入链接脚本(linker script)来改变它的行为。例如，常见的 <code>/lib/x86_64-linux-gnu/libc.so</code> 就是一个<strong>链接器脚本文件(纯ASCII text)</strong>, 而不是<s>共享对象(shared object) Binary 文件</s>, 这个链接脚本的内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/* GNU ld script</span><br><span class="line">   Use the shared library, but some functions are only in</span><br><span class="line">   the static library, so try that secondarily.  */</span><br><span class="line">OUTPUT_FORMAT(elf64-x86-64)</span><br><span class="line">GROUP (</span><br><span class="line">  /lib/x86_64-linux-gnu/libc.so.6</span><br><span class="line">  /usr/lib/x86_64-linux-gnu/libc_nonshared.a</span><br><span class="line">  AS_NEEDED ( /lib64/ld-linux-x86-64.so.2 )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>虽然静态链接器和动态链接器运行在两个不同的阶段，但静态链接器也可以影响到动态链接器的行为，比如 <code>-Wl,-rpath,/path/to/lib</code>, 也就是常说的 Runtime PATH, 这个参数可以让动态链接器去指定<strong>目录</strong>下搜索的目标动态库。</p>
+<ul>
+<li><code>-L/path/to/lib</code>          编译时搜索路径</li>
+<li><code>-Wl,-rpath,/path/to/lib</code> 运行时搜索路径</li>
+</ul>
+<h2 id="动态库都去哪儿呢"><a class="markdownIt-Anchor" href="#动态库都去哪儿呢"></a> 动态库都去哪儿呢</h2>
+<ul>
+<li>pkg-config</li>
+</ul>
+<p><strong>pkg-config (symbolic link to <code>/usr/bin/pkgconf</code>)</strong> 是用来获取系统上安装的库的信息的程序。cmake, meson 这些构建系统底层都是靠它来解析依赖包的。 下面的命令可以查看 pkg-config 工作时所搜索的路径和优先次序， 用户也可以通过环境变量 <strong><code>PKG_CONFIG_PATH</code></strong> 来指定自己想要优先搜索的路径。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pkg-config --variable pc_path pkg-config | sed <span class="string">&#x27;s/:/\n/g&#x27;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/lib/x86_64-linux-gnu/pkgconfig</span><br><span class="line">/usr/local/lib/pkgconfig</span><br><span class="line">/usr/local/share/pkgconfig</span><br><span class="line">/usr/lib/x86_64-linux-gnu/pkgconfig</span><br><span class="line">/usr/lib/pkgconfig</span><br><span class="line">/usr/share/pkgconfig</span><br></pre></td></tr></table></figure>
+<p><code>pkg-config</code> 是二进制可执行程序 <code>/usr/bin/pkgconf</code> 的一个符号链接文件，它是 CMake, meson 等构建系统主要使用的系统动态库检测的工具。<code>pkg-config</code> 本质上是在解析 <code>*.pc</code> 文件。下面是常见的 Mesa OpenGL Library 的 .pc 文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">➜  piglit git:(main) ✗ find /usr -name &#x27;gl.pc&#x27; -ls</span><br><span class="line">    78674      4 -rw-r--r--   1 root     root          205 Jan  3  2023 /usr/lib/x86_64-linux-gnu/pkgconfig/gl.pc</span><br><span class="line">    72985      4 -rw-r--r--   1 root     root          362 Jun  7 18:16 /usr/local/lib/x86_64-linux-gnu/pkgconfig/gl.pc</span><br><span class="line">➜  piglit git:(main) ✗ bat /usr/local/lib/x86_64-linux-gnu/pkgconfig/gl.pc</span><br><span class="line">───────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br><span class="line">       │ File: /usr/local/lib/x86_64-linux-gnu/pkgconfig/gl.pc</span><br><span class="line">───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br><span class="line">   1   │ prefix=/usr/local</span><br><span class="line">   2   │ includedir=$&#123;prefix&#125;/include</span><br><span class="line">   3   │ libdir=$&#123;prefix&#125;/lib/x86_64-linux-gnu</span><br><span class="line">   4   │</span><br><span class="line">   5   │ glx_tls=yes</span><br><span class="line">   6   │</span><br><span class="line">   7   │ Name: gl</span><br><span class="line">   8   │ Description: Mesa OpenGL Library</span><br><span class="line">   9   │ Version: 24.2.0-devel</span><br><span class="line">  10   │ Requires.private: x11, xext, xfixes, x11-xcb, xcb, xcb-glx &gt;=  1.8.1, xcb-dri2 &gt;=  1.8, xxf86vm, libdrm &gt;=  2.4.75</span><br><span class="line">  11   │ Libs: -L$&#123;libdir&#125; -lGL</span><br><span class="line">  12   │ Libs.private: -lpthread -pthread -lm</span><br><span class="line">  13   │ Cflags: -I$&#123;includedir&#125;</span><br><span class="line">───────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br><span class="line">➜  piglit git:(main) ✗ bat /usr/lib/x86_64-linux-gnu/pkgconfig/gl.pc</span><br><span class="line">───────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br><span class="line">       │ File: /usr/lib/x86_64-linux-gnu/pkgconfig/gl.pc</span><br><span class="line">───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br><span class="line">   1   │ prefix=/usr</span><br><span class="line">   2   │ includedir=$&#123;prefix&#125;/include</span><br><span class="line">   3   │ libdir=$&#123;prefix&#125;/lib/x86_64-linux-gnu</span><br><span class="line">   4   │</span><br><span class="line">   5   │ Name: GL</span><br><span class="line">   6   │ Description: Legacy OpenGL and GLX library and headers.</span><br><span class="line">   7   │ Version: 1.2</span><br><span class="line">   8   │ Libs: -L$&#123;libdir&#125; -lGL</span><br><span class="line">   9   │ Cflags: -I$&#123;includedir&#125;</span><br><span class="line">───────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>lib*-dev</code> 与 <code>lib*</code> 的区别</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ dpkg -L libxcb1</span><br><span class="line">/.</span><br><span class="line">/usr</span><br><span class="line">/usr/lib</span><br><span class="line">/usr/lib/x86_64-linux-gnu</span><br><span class="line">/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0</span><br><span class="line">/usr/share</span><br><span class="line">/usr/share/doc</span><br><span class="line">/usr/share/doc/libxcb1</span><br><span class="line">/usr/share/doc/libxcb1/changelog.Debian.gz</span><br><span class="line">/usr/share/doc/libxcb1/copyright</span><br><span class="line">/usr/lib/x86_64-linux-gnu/libxcb.so.1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ dpkg -L libxcb1-dev</span><br><span class="line">/.</span><br><span class="line">/usr</span><br><span class="line">/usr/include</span><br><span class="line">/usr/include/xcb</span><br><span class="line">/usr/include/xcb/bigreq.h</span><br><span class="line">/usr/include/xcb/xc_misc.h</span><br><span class="line">/usr/include/xcb/xcb.h</span><br><span class="line">/usr/include/xcb/xcbext.h</span><br><span class="line">/usr/include/xcb/xproto.h</span><br><span class="line">/usr/lib</span><br><span class="line">/usr/lib/x86_64-linux-gnu</span><br><span class="line">/usr/lib/x86_64-linux-gnu/libxcb.a</span><br><span class="line">/usr/lib/x86_64-linux-gnu/pkgconfig</span><br><span class="line">/usr/lib/x86_64-linux-gnu/pkgconfig/xcb.pc</span><br><span class="line">/usr/share</span><br><span class="line">/usr/share/doc</span><br><span class="line">/usr/share/doc/libxcb1-dev</span><br><span class="line">/usr/share/doc/libxcb1-dev/copyright</span><br><span class="line">/usr/lib/x86_64-linux-gnu/libxcb.so</span><br><span class="line">/usr/share/doc/libxcb1-dev/changelog.Debian.gz</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>/usr/sbin/ldconfig</code></li>
+</ul>
+<p>Configure Dynamic Linker Run Time Bindings</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>  <span class="built_in">test</span> <span class="variable">$#</span> = 0							\</span><br><span class="line">    &amp;&amp; <span class="built_in">test</span> x<span class="string">&quot;<span class="variable">$LDCONFIG_NOTRIGGER</span>&quot;</span> = x				\</span><br><span class="line"> &amp;&amp; <span class="built_in">test</span> x<span class="string">&quot;<span class="variable">$DPKG_MAINTSCRIPT_PACKAGE</span>&quot;</span> != x			\</span><br><span class="line"> &amp;&amp; dpkg-trigger --check-supported 2&gt;/dev/null</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">	<span class="keyword">if</span> dpkg-trigger --no-await ldconfig; <span class="keyword">then</span></span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">test</span> x<span class="string">&quot;<span class="variable">$LDCONFIG_TRIGGER_DEBUG</span>&quot;</span> != x; <span class="keyword">then</span></span><br><span class="line">			<span class="built_in">echo</span> <span class="string">&quot;ldconfig: wrapper deferring update (trigger activated)&quot;</span></span><br><span class="line">		<span class="keyword">fi</span></span><br><span class="line">		<span class="built_in">exit</span> 0</span><br><span class="line">	<span class="keyword">fi</span>	</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">exec</span> /sbin/ldconfig.real <span class="string">&quot;<span class="variable">$@</span>&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="got-plt-pic"><a class="markdownIt-Anchor" href="#got-plt-pic"></a> GOT, PLT &amp; PIC</h2>
+<ul>
+<li>GOT Global Offset Table</li>
+<li>PLT Procedure Linkage Table</li>
+<li>PIC Position Independent Code</li>
+</ul>
+<h1 id="构建系统"><a class="markdownIt-Anchor" href="#构建系统"></a> 构建系统</h1>
+<ul>
+<li>autotools</li>
+<li>cmake</li>
+<li>make</li>
+<li>meson</li>
+<li>ninja</li>
+<li>scons</li>
+</ul>
+<h2 id="autotools"><a class="markdownIt-Anchor" href="#autotools"></a> autotools</h2>
+<pre><code class="highlight mermaid">flowchart LR
+  autoreconf((&quot;autoreconf&lt;br&gt;[Perl script]&quot;))
+  autoconf(autoconf)
+  aclocal(aclocal)
+  automake(automake)
+  autoheader(autoheader)
+  gettextize(gettextize)
+  libtoolize(libtoolize)
+
+  am@&#123;shape: docs, label: &quot;Makefile.am&quot;&#125;
+  in@&#123;shape: docs, label: &quot;Makefile.in&quot;&#125;
+  mk@&#123;shape: docs, label: &quot;Makefile&quot;&#125;
+  ac@&#123;shape: paper-tape, label: &quot;configure.ac&quot;&#125;
+  co@&#123;shape: paper-tape, label: &quot;configure&lt;br&gt;[Shell script]&quot;&#125;
+
+  autoreconf --&gt; autoconf
+  autoreconf -.-&gt; aclocal
+  autoreconf -.-&gt; automake
+  autoreconf -.-&gt; autoheader
+  autoreconf -.-&gt; gettextize
+  autoreconf -.-&gt; libtoolize
+
+  am --&gt; automake --&gt; in
+  ac --&gt; autoconf --&gt; co
+  in --&gt; co --&gt; mk</code></pre>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4071880/what-are-the-differences-between-autotools-cmake-and-scons"><strong>autotools</strong> 的唯一的可取处就是 GNU 项目广泛使用它</a>。使用它的项目的构建步骤一般是</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./autogen.sh</span><br><span class="line">./configure --prefix=<span class="variable">$PREFIX</span></span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+<p>当你遇到 <code>./autogen.sh: 13: autoreconf: not found</code> 这样的错误时，你可能需要安装这些软件包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install autoconf automake libtool gettext</span><br></pre></td></tr></table></figure>
+<h2 id="cmake"><a class="markdownIt-Anchor" href="#cmake"></a> cmake</h2>
+<ul>
+<li>use <code>gold</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold</span><br></pre></td></tr></table></figure>
+<h2 id="meson"><a class="markdownIt-Anchor" href="#meson"></a> meson</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://mesonbuild.com/Builtin-options.html#details-for-buildtype">-D buildtype</a></li>
+</ul>
+<p>meson 的 buildtype 是用来设定编译优化级别 (optimization levels: -O0, -O1, -O2, -O3, -Os) 和是否有调试信息 (debug: -g)。 实际上，meson 提供两个分开的选项分别控制编译优化级别和调试信息</p>
+<ul>
+<li>
+<p>-Doptimization (plain|0|2|3|s, plain 指不设置任何 optimization flags)</p>
+</li>
+<li>
+<p>-Ddebug (true|false)</p>
+</li>
+<li>
+<p>只编译某个 target</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja -C build target</span><br></pre></td></tr></table></figure>
+<ul>
+<li>meson install --tags tag1,tag2</li>
+</ul>
+<p>Installation tags 是专门为打包 (packaging) 设计的，因为打包时开发文件包(头文件)，文档包 (mannul) 和二进制包 (shared libraries) 一般是分开的 3 个包。所以 <code>meson install --tags</code> 可以让用户分 3 次安装，每次只安装这个包所需的文件。meson 有几个预定义的 tags (不用用户自己使用 <code>install_tag</code> 关键字去指定 tag 名)</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">tags</th>
+<th style="text-align:left">files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">devel</td>
+<td style="text-align:left">static_library(), install_headers(), .a, .pc</td>
+</tr>
+<tr>
+<td style="text-align:left">runtime</td>
+<td style="text-align:left">executable(), shared_library(), shared_module(), .so, .dll</td>
+</tr>
+<tr>
+<td style="text-align:left">man</td>
+<td style="text-align:left">install_man()</td>
+</tr>
+<tr>
+<td style="text-align:left">doc</td>
+<td style="text-align:left">hotdoc.generate_doc()</td>
+</tr>
+<tr>
+<td style="text-align:left">i18n</td>
+<td style="text-align:left">i18n.gettext(), files installed into <code>localedir</code></td>
+</tr>
+<tr>
+<td style="text-align:left">bin</td>
+<td style="text-align:left">scripts and executables bundled with a library used by end users</td>
+</tr>
+<tr>
+<td style="text-align:left">bin-devel</td>
+<td style="text-align:left">scripts and executables bundled with  a library used by developers</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>use <code>gold</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">meson build --prefix=/usr -D&#123;c,cpp&#125;_args=-fuse-ld=gold -Dflavors=x11-gl,x11-glesv2</span><br></pre></td></tr></table></figure>
+<h1 id="运行"><a class="markdownIt-Anchor" href="#运行"></a> 运行</h1>
+<p>一个 ELF 可执行文件的真正入口点是 <strong><code>_start()</code></strong></p>
+<p><img src="/images/build/start_main.svg" alt="" /></p>
+<h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/compiler_support">C++ compiler support</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/tools/" rel="tag"># tools</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/misc/xiangshan/" rel="prev" title="观“老石谈芯”视频笔记 (二)">
+                  <i class="fa fa-angle-left"></i> 观“老石谈芯”视频笔记 (二)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/utils/sanitizer/" rel="next" title="Sanitizers">
+                  Sanitizers <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

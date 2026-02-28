@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="同步原语 同步原语(Synchronization Primitive)的确切定义没有一个官方的。但大体来说同步原语可能有以下几种:  semaphores mutex locks condition variables test-and-set machine instructions">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多线程中的同步">
+<meta property="og:url" content="https://lucmann.github.io/prog/mt/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="同步原语 同步原语(Synchronization Primitive)的确切定义没有一个官方的。但大体来说同步原语可能有以下几种:  semaphores mutex locks condition variables test-and-set machine instructions">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-08-08T08:24:00.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.444Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="C&#x2F;C++">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lucmann.github.io/prog/mt/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/prog/mt/","path":"prog/mt/","title":"多线程中的同步"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>多线程中的同步 | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E5%8E%9F%E8%AF%AD"><span class="nav-number">1.</span> <span class="nav-text"> 同步原语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#xshmfence"><span class="nav-number">1.1.</span> <span class="nav-text"> xshmfence</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#posix-threads-%E5%AE%9E%E7%8E%B0-lpthread"><span class="nav-number">2.</span> <span class="nav-text"> POSIX Threads 实现 - -lpthread</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#spinlock"><span class="nav-number">2.1.</span> <span class="nav-text"> Spinlock</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#posix-interfaces"><span class="nav-number">2.1.1.</span> <span class="nav-text"> POSIX interfaces</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#initializing-a-spinlock"><span class="nav-number">2.1.1.1.</span> <span class="nav-text"> Initializing a Spinlock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#acquiring-a-spinlock"><span class="nav-number">2.1.1.2.</span> <span class="nav-text"> Acquiring a Spinlock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#acquiring-a-non-blocking-spinlock"><span class="nav-number">2.1.1.3.</span> <span class="nav-text"> Acquiring a Non-Blocking Spinlock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unlocking-a-spinlock"><span class="nav-number">2.1.1.4.</span> <span class="nav-text"> Unlocking a Spinlock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#destroying-a-spinlock"><span class="nav-number">2.1.1.5.</span> <span class="nav-text"> Destroying a Spinlock</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A0%E9%94%81%E9%98%9F%E5%88%97"><span class="nav-number">3.</span> <span class="nav-text"> 无锁队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#aba-%E9%97%AE%E9%A2%98"><span class="nav-number">3.1.</span> <span class="nav-text"> ABA 问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#boostlockfreequeue-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">3.2.</span> <span class="nav-text"> boost::lockfree::queue 源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-number">3.2.1.</span> <span class="nav-text"> 算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.2.</span> <span class="nav-text"> C++实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/prog/mt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="多线程中的同步 | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          多线程中的同步
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-08-08 16:24:00" itemprop="dateCreated datePublished" datetime="2024-08-08T16:24:00+08:00">2024-08-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/programming/" itemprop="url" rel="index"><span itemprop="name">programming</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/prog/mt/" class="post-meta-item leancloud_visitors" data-flag-title="多线程中的同步" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/prog/mt/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="prog/mt/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="同步原语"><a class="markdownIt-Anchor" href="#同步原语"></a> 同步原语</h1>
+<p>同步原语(Synchronization Primitive)的<a target="_blank" rel="noopener" href="https://www.cs.columbia.edu/~hgs/os/sync.html">确切定义没有一个官方的</a>。但大体来说同步原语可能有以下几种:</p>
+<ul>
+<li>semaphores</li>
+<li>mutex</li>
+<li>locks</li>
+<li>condition variables</li>
+<li>test-and-set machine instructions</li>
+</ul>
+<span id="more"></span>
+<p>但这些同步原语是如何实现多线程同步的呢？</p>
+<ul>
+<li>当我们谈论线程同步时，我们在说什么？</li>
+</ul>
+<p>当我们谈论线程同步时，所谓同步，就是必须保证多个线程对同一数据的预期访问次序，也就是&quot;临界区&quot;的保护。之所以多个线程对同一数据的访问可能会产生不预期的结果，是因为内存(这块全局可见存储)中的数据可能会因为CPU读写顺序的差异导致其与各个CPU(核心)本地缓存中的数据不一致。所以线程同步，实质上就是需要保证如果一个CPU核心要读内存之前，另一个CPU已经将新值写入那个地址的内存，如果没有写入，就要让所有准备执行读操作的CPU核心停下来。这个过程中我们不难发现有两个关键点: CPU所执行指令(读写操作)的原子性和内存数据的可见性(本地缓存是否更新到内存)。</p>
+<ul>
+<li>原子操作</li>
+<li>内存屏障</li>
+</ul>
+<h2 id="xshmfence"><a class="markdownIt-Anchor" href="#xshmfence"></a> xshmfence</h2>
+<ul>
+<li>基于 futex 和原子操作实现  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">xshmfence_await</span><span class="params">(<span class="keyword">struct</span> xshmfence *f)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span> (__sync_val_compare_and_swap(&amp;f-&gt;v, <span class="number">0</span>, <span class="number">-1</span>) != <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (futex_wait(&amp;f-&gt;v, <span class="number">-1</span>)) &#123; <span class="comment">// blocking the caller process until f-&gt;v reaches to 0</span></span><br><span class="line">            <span class="keyword">if</span> (errno != EWOULDBLOCK)</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>基于 pthread 条件变量实现</li>
+</ul>
+<h1 id="posix-threads-实现-lpthread"><a class="markdownIt-Anchor" href="#posix-threads-实现-lpthread"></a> POSIX Threads 实现 - <code>-lpthread</code></h1>
+<h2 id="spinlock"><a class="markdownIt-Anchor" href="#spinlock"></a> Spinlock</h2>
+<p>自旋锁是解决多处理器共享内存使用的一种底层同步机制。当一个线程试图获取一个已经被另一个线程占有的自旋锁时，这个线程将以循环检查自旋锁是否被释放的方式(自旋)阻塞。一个线程不应该长时间占有一个自旋锁，因为被阻塞的线程仍然消耗CPU资源 (CPU cycles)</p>
+<h3 id="posix-interfaces"><a class="markdownIt-Anchor" href="#posix-interfaces"></a> POSIX interfaces</h3>
+<h4 id="initializing-a-spinlock"><a class="markdownIt-Anchor" href="#initializing-a-spinlock"></a> Initializing a Spinlock</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pthread_spin_init</span><span class="params">(<span class="type">pthread_spinlock_t</span> *lock, <span class="type">int</span> pshared)</span>; </span><br></pre></td></tr></table></figure>
+<p><code>pshared</code>属性可以取以下值的其中之一:</p>
+<p>PTHREAD_PROCESS_SHARED - 这个自旋锁可以被任何线程操作，即使这些线程属于不同的进程，只要申请这个自旋锁的内存是被这些进程共享的。</p>
+<p>PTHREAD_PROCESS_PRIVATE - 这个自旋锁只能被那些与初始化它的线程同属一个进程的线程操作。</p>
+<h4 id="acquiring-a-spinlock"><a class="markdownIt-Anchor" href="#acquiring-a-spinlock"></a> Acquiring a Spinlock</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pthread_spin_lock</span><span class="params">(<span class="type">pthread_spinlock_t</span> *lock)</span>;</span><br></pre></td></tr></table></figure>
+<p>如果被请求的自旋锁没有被其它线程占有，则请求它的线程成功获取这个锁，否则这个线程不从<code>pthread_spin_lock</code>中返回(阻塞)，直到这个锁被释放。一个线程尝试获取被它自己占有的自旋锁是未定义的行为。</p>
+<h4 id="acquiring-a-non-blocking-spinlock"><a class="markdownIt-Anchor" href="#acquiring-a-non-blocking-spinlock"></a> Acquiring a Non-Blocking Spinlock</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pthread_spin_trylock</span><span class="params">(<span class="type">pthread_spinlock_t</span> *lock)</span>;</span><br></pre></td></tr></table></figure>
+<p>尝试获取一个自旋锁，与<code>pthread_spin_lock</code>不同的是，如果所请求的锁被另一个线程占有，不阻塞，而是立即返回失败(Non-Blocking).</p>
+<h4 id="unlocking-a-spinlock"><a class="markdownIt-Anchor" href="#unlocking-a-spinlock"></a> Unlocking a Spinlock</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pthread_spin_unlock</span><span class="params">(<span class="type">pthread_spinlock_t</span> *lock)</span>;</span><br></pre></td></tr></table></figure>
+<p>释放被锁的自旋锁。成功返回0，否则返回以下错误码之一:</p>
+<p>EPERM - 调用线程不持有这个锁</p>
+<p>EINVAL - lock指向的不是一个已初始化的自旋锁对象</p>
+<h4 id="destroying-a-spinlock"><a class="markdownIt-Anchor" href="#destroying-a-spinlock"></a> Destroying a Spinlock</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pthread_spin_destroy</span><span class="params">(<span class="type">pthread_spinlock_t</span> *lock)</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="无锁队列"><a class="markdownIt-Anchor" href="#无锁队列"></a> 无锁队列</h1>
+<p>无锁队列的实现依靠的是CPU提供的原子操作指令(atomic) 和比较和交换指令 (cas). 其中cas 指令还有一种 double-width cas (dwcas), 就是能在 64位机器上原子地进行 128位(dword)值的cas (在 aarch64 cas 和 dwcas 是同一条指令)，CPU是否支持dwcas, 影响实现无锁队列时的一个策略，即队列容量是否固定。</p>
+<h2 id="aba-问题"><a class="markdownIt-Anchor" href="#aba-问题"></a> ABA 问题</h2>
+<p>无锁数据结构通常采用的是一种简单的“重试”策略，它的思想是线程0 获取一个ptr, 访问它指向的数据，然后尝试更新这个 ptr的值(通过 cas), 如果发现这个 ptr 已经变了(cas 比较测试失败), 那就重新获取有新值的ptr, 再访问新ptr 指向的数据。</p>
+<p>ABA 问题出现的场景是，在线程0，前后两次读到ptr 的值的中间，有可能线程1，已经修改过 ptr 的值由A 到 B，而后又在线程0 cas 操作前，线程1又<strong>恰巧</strong>在地址A申请到一个元素遂将ptr 的值又改回A, 结果就是线程1对ptr 的修改(A-&gt;B-&gt;A)对线程0不可见，而实际上A指向的内容可能已经发生变化，对线程0来说可能导致未预期的结果。</p>
+<p>这种场景的ABA问题可以通过将原来单独的一个ptr (64位系统上sizeof(ptr) = 8), 替换成一对(ptr, counter)来解决。每次ptr 被修改，counter就+1, 这样即使最后ptr 是相等的(A-&gt;B-&gt;A), 但counter 也不相等，这样只要同时对(ptr, counter) 做 cas 比较就可以准确判定ptr 是否被修改过(如果修改过，即使现在的值和之前的值相等，仍然要重新获取这个值，再次访问它指向的内容)。但现在要比较的数据由原来的8字节变成16字节，所以就需要 dwcas 指令。</p>
+<p>由上面ABA问题的分析可以看到，之所以对线程0来说，A指向的内容可能会发生变化，原因是中间存在申请内存的操作。所以只要保证在整个队列操作中，不会动态申请元素(没有了线程1恰巧又重新分配的A这个地址的可能)，这种场景的ABA问题也就不存在了。这就是为什么 CPU 如果不支持 dwcas, 则无锁队列的容量必须是固定大小的。</p>
+<h2 id="boostlockfreequeue-源码分析"><a class="markdownIt-Anchor" href="#boostlockfreequeue-源码分析"></a> boost::lockfree::queue 源码分析</h2>
+<h3 id="算法"><a class="markdownIt-Anchor" href="#算法"></a> 算法</h3>
+<ul>
+<li>出队</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">pop(Q: pointer to <span class="built_in">queue</span>, ret: pointer to data type): boolean</span><br><span class="line">D1:    loop                             # Keep trying until pop is done</span><br><span class="line">D2:      head = Q-&gt;Head                 # Read Head</span><br><span class="line">D3:      tail = Q-&gt;Tail                 # Read Tail</span><br><span class="line">D4:      next = head-&gt;next              # Read Head.ptr-&gt;next</span><br><span class="line">D5:      <span class="keyword">if</span> head == Q-&gt;Head             # Are head, tail, and next consistent?</span><br><span class="line">D6:        <span class="keyword">if</span> head.ptr == tail.ptr      # Is <span class="built_in">queue</span> empty or Tail falling bebind?</span><br><span class="line">D7:          <span class="keyword">if</span> next.ptr == <span class="literal">NULL</span>        # Is <span class="built_in">queue</span> empty?</span><br><span class="line">D8:            <span class="keyword">return</span> FALSE             # Queue is empty, couldn<span class="number">&#x27;</span>t pop</span><br><span class="line">D9:          endif</span><br><span class="line">             # Tail is falling behind. Try to advance it</span><br><span class="line">D10:         CAS(&amp;Q-&gt;Tail, tail, &lt;next.ptr, tail.count+<span class="number">1</span>&gt;)</span><br><span class="line">D11:       <span class="keyword">else</span>                         # No need to deal with Tail</span><br><span class="line">             # Read value before CAS, otherwise another pop might <span class="built_in">free</span> the next node</span><br><span class="line">D12:         *ret = next.ptr-&gt;value</span><br><span class="line">             # Try to swing Head to the next node</span><br><span class="line">D13:         <span class="keyword">if</span> CAS(&amp;Q-&gt;Head, head, &lt;next.ptr, head.count+<span class="number">1</span>&gt;)</span><br><span class="line">D14:           <span class="keyword">break</span>                    # Pop is done, Exit loop</span><br><span class="line">D15:         endif</span><br><span class="line">D16:       endif</span><br><span class="line">D17:     endif</span><br><span class="line">D18:   endloop</span><br><span class="line">D19:   <span class="built_in">free</span>(head.ptr)                   # It is safe now to <span class="built_in">free</span> the old dummy node</span><br><span class="line">D20:   <span class="keyword">return</span> TRUE                      # Queue was not empty, pop succeeded </span><br></pre></td></tr></table></figure>
+<h3 id="c实现"><a class="markdownIt-Anchor" href="#c实现"></a> C++实现</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private:</span><br><span class="line">    <span class="built_in">std</span>::atomic&lt; tagged_node_handle &gt; head_;</span><br><span class="line">    <span class="built_in">std</span>::atomic&lt; tagged_node_handle &gt; tail_;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/atomic/memory_order">std::memory_order</a></p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> <span class="title">memory_order</span> &#123;</span></span><br><span class="line">    memory_order_relaxed,</span><br><span class="line">    memory_order_consume,</span><br><span class="line">    memory_order_acquire,</span><br><span class="line">    memory_order_release,</span><br><span class="line">    memory_order_acq_rel,</span><br><span class="line">    memory_order_seq_cst, <span class="comment">// Sequentially-consistent ordering</span></span><br><span class="line">&#125; memory_order;</span><br></pre></td></tr></table></figure>
+<p>这个memory_order的顺序，由上到下对原子变量的操作和读写顺序的保证应该是越来越严格的(没有读写顺序保证-&gt;单个原子变量读写顺序保证-&gt;全局读写顺序一致)。</p>
+<ul>
+<li>
+<p><code>memory_order_relaxed</code>只保证原子操作，不保证指令顺序。</p>
+</li>
+<li>
+<p><code>memory_order_acquire</code></p>
+<ul>
+<li>用于 <code>atomic&lt;T&gt;::load()</code></li>
+<li>对于使用memory_order_acquire的指令，该指令后面的所有读写操作<strong>不能重排在该指令之前</strong></li>
+<li>当前线程执行的memory_order_acquire指令能够保证读到其他线程memory_order_release指令之前的所有内存写入操作</li>
+</ul>
+</li>
+<li>
+<p><code>memory_order_release</code></p>
+<ul>
+<li>用于 <code>atomic&lt;T&gt;::store()</code></li>
+<li>对于使用memory_order_release的指令，该指令之前的所有读写操作<strong>不能重排在该指令之后</strong></li>
+<li>当前线程memory_order_release指令之前的所有内存写操作对于其他线程的memory_order_acquire指令都可见。</li>
+</ul>
+</li>
+<li>
+<p><code>memory_order_acq_rel</code></p>
+<ul>
+<li>用于 <code>atomic&lt;T&gt;::fetch_add()</code>, <code>atomic&lt;T&gt;::compare_exchange_weak()</code> 这类 read-modify-write 操作。如果用在普通的 <code>atomic&lt;T&gt;::load()</code>，效果与用memory_order_acquire 无异。</li>
+<li>把 memory_order_acquire 和 memory_order_release 结合起来，它可以保证单个原子变量的读写顺序，下面的例子就是不适用 memory_order_acq_rel 的</li>
+</ul>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;atomic&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cassert&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::atomic&lt;<span class="type">bool</span>&gt; x = &#123;<span class="literal">false</span>&#125;;</span><br><span class="line"><span class="built_in">std</span>::atomic&lt;<span class="type">bool</span>&gt; y = &#123;<span class="literal">false</span>&#125;;</span><br><span class="line"><span class="built_in">std</span>::atomic&lt;<span class="type">int</span>&gt; z = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">write_x</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    x.store(<span class="literal">true</span>, <span class="built_in">std</span>::memory_order_acq_rel);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">write_y</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    y.store(<span class="literal">true</span>, <span class="built_in">std</span>::memory_order_acq_rel);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">read_x_then_y</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span> (!x.load(<span class="built_in">std</span>::memory_order_acq_rel))</span><br><span class="line">        ;</span><br><span class="line">    <span class="keyword">if</span> (y.load(<span class="built_in">std</span>::memory_order_acq_rel))</span><br><span class="line">        ++z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">read_y_then_x</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span> (!y.load(<span class="built_in">std</span>::memory_order_acq_rel))</span><br><span class="line">        ;</span><br><span class="line">    <span class="keyword">if</span> (x.load(<span class="built_in">std</span>::memory_order_acq_rel))</span><br><span class="line">        ++z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">std</span>::thread <span class="title function_">a</span><span class="params">(write_x)</span>;</span><br><span class="line">    <span class="built_in">std</span>::thread <span class="title function_">b</span><span class="params">(write_y)</span>;</span><br><span class="line">    <span class="built_in">std</span>::thread <span class="title function_">c</span><span class="params">(read_x_then_y)</span>;</span><br><span class="line">    <span class="built_in">std</span>::thread <span class="title function_">d</span><span class="params">(read_y_then_x)</span>;</span><br><span class="line">    a.join(); b.join(); c.join(); d.join();</span><br><span class="line">    assert(z.load() != <span class="number">0</span>); <span class="comment">// will never happen</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>上面的例子修改自 <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/atomic/memory_order">cppreference.com/atomic/memory_order Sequentially-consistent ordering</a> 部分。理论上这个例子应该能够说明 memory_order_acq_rel 与 memory_order_seq_cst 的区别，当把原例中的 seq_cst 换成 acq_rel，应该是有可能触发 <code>z.load() == 0</code>的情况的(至少在 aarch64 上，因为x86的存储器模型本身就是按序一致性模型)。但实际上却没有触发，其原因在 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/67397460/does-stlrb-provide-sequential-consistency-on-arm64">stackoverflow 上有解释</a>。 通过在 <a target="_blank" rel="noopener" href="https://godbolt.org/z/8KbxMEY6s">godbolt.org</a> 上查看这个程序的汇编代码，确实 <code>y.load(std::memory_order_acq_rel)</code>和<code>y.store(true, std::memory_order_acq_rel)</code>是被分别翻译成了 <code>ldarb</code> 和 <code>stlrb</code>。</p>
+</li>
+<li>
+<p><code>memory_order_seq_cst</code></p>
+<ul>
+<li>提供最严格的全局读写顺序一致性保证，上面的例子就只能使用 memory_order_seq_cst</li>
+<li>对于使用memory_order_seq_cst 的 <code>atomic&lt;T&gt;::store()</code> 指令来说，它强制flush 每个CPU核心的store buffer, 所以这个store 操作后面的 load (读操作)将被延迟直到store 操作完成所有 store buffer 的刷新(即对全局可见)。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>std::atomic&lt;T&gt;::load(std::memory_order order = std::memory_order_seq_cst)</code></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange"><code>std::atomic&lt;T&gt;::compare_exchange_*()</code></a></p>
+<p>C++ std::atomic<T> 的 cas 有8个不同的声明，主要区分在 weak/strong, 参数和是否有 volatile. 而boost::lockfree::queue 里使用的是下面两个版本:</p>
+<ul>
+<li>
+<p><code>std::atomic&lt;T&gt;::compare_exchange_strong(T&amp; expected, T desired, std::memory_order    order = std::memory_order_seq_cst)</code></p>
+</li>
+<li>
+<p><code>std::atomic&lt;T&gt;::compare_exchange_weak(T&amp; expected, T desired, std::memory_order order = std::memory_order_seq_cst)</code></p>
+</li>
+<li>
+<p>为什么 <code>expected</code> 参数是一个引用类型，而<code>desired</code>参数是一个值传递？</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cs.rochester.edu/u/scott/papers/1996_PODC_queues.pdf">Simple, Fast, and Practical Non-Blocking and Blocking Concurrent Queue Algorithms</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/boostorg/lockfree/blob/develop/include/boost/lockfree/detail/tagged_ptr_dcas.hpp#L120">boost::lockfree::queue</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/fangcun010/inline_asm_lockfree_queue">inline_asm_lockfree_queue</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.lse.epita.fr//2013/02/27/implementing-generic-double-word-compare-and-swap.html">Implementing generic double-word compare and swap for x86/64</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.openeuler.org/zh/blog/wangshuo/Linux_Futex_Principle_Analysis/Linux_Futex_Principle_Analysis.html">linux - futex 原理分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://coffeebeforearch.github.io/2020/08/04/atomic-vs-mutex.html">Mutex vs Atomic</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-C/" rel="tag"># C/C++</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/misc/go-game/" rel="prev" title="Post-Mortem">
+                  <i class="fa fa-angle-left"></i> Post-Mortem
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/prog/std/" rel="next" title="C++ 标准库">
+                  C++ 标准库 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

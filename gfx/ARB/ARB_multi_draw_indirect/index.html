@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Overview OpenGL 有很多 Draw 命令， 大体分为 4 类:  DrawArrays DrawElements (Indexed) DrawInstanced DrawIndirect">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGL Draw 命令">
+<meta property="og:url" content="https://lucmann.github.io/gfx/ARB/ARB_multi_draw_indirect/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="Overview OpenGL 有很多 Draw 命令， 大体分为 4 类:  DrawArrays DrawElements (Indexed) DrawInstanced DrawIndirect">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-09-15T08:44:37.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.164Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="OpenGL">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lucmann.github.io/gfx/ARB/ARB_multi_draw_indirect/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/gfx/ARB/ARB_multi_draw_indirect/","path":"gfx/ARB/ARB_multi_draw_indirect/","title":"OpenGL Draw 命令"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>OpenGL Draw 命令 | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#overview"><span class="nav-number">1.</span> <span class="nav-text"> Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#drawarrays"><span class="nav-number">2.</span> <span class="nav-text"> DrawArrays</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#drawelements"><span class="nav-number">3.</span> <span class="nav-text"> DrawElements</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#drawinstanced"><span class="nav-number">4.</span> <span class="nav-text"> Draw*Instanced</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gl_instanceid"><span class="nav-number">4.1.</span> <span class="nav-text"> gl_InstanceID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#divisor"><span class="nav-number">4.2.</span> <span class="nav-text"> divisor</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#drawindirect"><span class="nav-number">5.</span> <span class="nav-text"> Draw*Indirect</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#drawarraysindirect"><span class="nav-number">5.1.</span> <span class="nav-text"> DrawArraysIndirect</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drawelementsindirect"><span class="nav-number">5.2.</span> <span class="nav-text"> DrawElementsIndirect</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mesa-%E5%AE%9E%E7%8E%B0-indirect-draw"><span class="nav-number">5.3.</span> <span class="nav-text"> Mesa 实现 Indirect Draw</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#references"><span class="nav-number">6.</span> <span class="nav-text"> References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/gfx/ARB/ARB_multi_draw_indirect/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="OpenGL Draw 命令 | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenGL Draw 命令
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-09-15 16:44:37" itemprop="dateCreated datePublished" datetime="2020-09-15T16:44:37+08:00">2020-09-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/graphics/" itemprop="url" rel="index"><span itemprop="name">graphics</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/gfx/ARB/ARB_multi_draw_indirect/" class="post-meta-item leancloud_visitors" data-flag-title="OpenGL Draw 命令" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/gfx/ARB/ARB_multi_draw_indirect/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="gfx/ARB/ARB_multi_draw_indirect/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="overview"><a class="markdownIt-Anchor" href="#overview"></a> Overview</h1>
+<p>OpenGL 有很多 Draw 命令， 大体分为 4 类:</p>
+<ul>
+<li>DrawArrays</li>
+<li>DrawElements (Indexed)</li>
+<li>DrawInstanced</li>
+<li>DrawIndirect</li>
+</ul>
+<span id="more"></span>
+<p>所谓的绘制，如果从pipeline的角度看，实际上主要是顶点着色(vertex shading)的过程。所以这些绘制方式中主要涉及的问题是顶点(vertices)及这些顶点如果构成图元(primitives)。这些绘制方式的不同主要在于它们各自是如何看待顶点，例如，在Basic绘制中，顶点就是顶点，而在Indexed绘制中，除了顶点本身外，还给出了构造三角形的顶点索引，这在特定场景下，是一种更有效率的绘制方式。</p>
+<p>OpenGL中的Draw Commands是一组生成GPU渲染Command Stream的API，我们可以将它们简单分为4类:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Drawing</th>
+<th style="text-align:left">适用场景</th>
+<th style="text-align:left">Vertex Attributes Buffer Object Binding类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Array</td>
+<td style="text-align:left">普通</td>
+<td style="text-align:left">GL_ARRAY_BUFFER</td>
+</tr>
+<tr>
+<td style="text-align:left">Indexed</td>
+<td style="text-align:left">重复的顶点</td>
+<td style="text-align:left">GL_ELEMENT_ARRAY_BUFFER</td>
+</tr>
+<tr>
+<td style="text-align:left">Instanced</td>
+<td style="text-align:left">重复的模型(Instance/Model)</td>
+<td style="text-align:left">GL_ARRAY_BUFFER<br>GL_ELEMENT_ARRAY_BUFFER</td>
+</tr>
+<tr>
+<td style="text-align:left">Indirect</td>
+<td style="text-align:left">Drawing命令的参数直接放在GPU</td>
+<td style="text-align:left">GL_DRAW_INDIRECT_BUFFER</td>
+</tr>
+</tbody>
+</table>
+<p>Array Drawing是最基本的Draw命令，其它3类都是从它衍生来的，为了某种绘制便利或顶点复用对Array Drawing API进行扩展，从而得到相应的索引绘制、实例绘制、间接绘制。</p>
+<h1 id="drawarrays"><a class="markdownIt-Anchor" href="#drawarrays"></a> DrawArrays</h1>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">glDrawArrays</span><span class="params">(GLenum mode,</span></span><br><span class="line"><span class="params">                  GLint first,</span></span><br><span class="line"><span class="params">                  GLsizei count)</span>;</span><br></pre></td></tr></table></figure>
+<p><code>glDrawArrays</code>是OpenGL中最基本的绘制命令，<code>mode</code>接受的图元类型是下面的一个子集:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Primitives */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_POINTS                         0x0000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_LINES                          0x0001</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_LINE_LOOP                      0x0002</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_LINE_STRIP                     0x0003</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_TRIANGLES                      0x0004</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_TRIANGLE_STRIP                 0x0005</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_TRIANGLE_FAN                   0x0006</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_QUADS                          0x0007</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_QUAD_STRIP                     0x0008</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_POLYGON                        0x0009</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_LINES_ADJACENCY                0x000A (since OpenGL 3.2) </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_LINE_STRIP_ADJACENCY           0x000B (since OpenGL 3.2)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_TRIANGLES_ADJACENCY            0x000C (since OpenGL 3.2)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_TRIANGLE_STRIP_ADJACENCY       0x000D (since OpenGL 3.2)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> GL_PATCHES                        0x000E (since OpenGL 3.2)</span></span><br></pre></td></tr></table></figure>
+<p>例如顶点数组如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    vertices</span><br><span class="line">   ----------</span><br><span class="line"><span class="number">0</span> | (<span class="number">-1</span>,  <span class="number">1</span>) |</span><br><span class="line"><span class="number">1</span> | (<span class="number">-1</span>, <span class="number">-1</span>) |</span><br><span class="line"><span class="number">2</span> | ( <span class="number">1</span>, <span class="number">-1</span>) |</span><br><span class="line"><span class="number">3</span> | ( <span class="number">1</span>,  <span class="number">1</span>) |</span><br><span class="line">   ----------</span><br></pre></td></tr></table></figure>
+<p>用3个顶点绘制一个三角形，调用命令如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glDrawArrays(GL_TRIANGLES, <span class="number">0</span>, <span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="drawelements"><a class="markdownIt-Anchor" href="#drawelements"></a> DrawElements</h1>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">glDrawElements</span><span class="params">(GLenum mode,</span></span><br><span class="line"><span class="params">                    GLsizei count,</span></span><br><span class="line"><span class="params">                    GLenum type,</span></span><br><span class="line"><span class="params">                    <span class="type">const</span> <span class="type">void</span>* indices)</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">glDrawElementsBaseVertex</span><span class="params">(GLenum mode,</span></span><br><span class="line"><span class="params">                              GLsizei count,</span></span><br><span class="line"><span class="params">                              GLenum type,</span></span><br><span class="line"><span class="params">                              <span class="type">void</span>* indices</span></span><br><span class="line"><span class="params">                              GLint basevertex)</span>;</span><br></pre></td></tr></table></figure>
+<p><code>glDrawElements</code>不是直接用顶点数组去绘制，而是用顶点数组的索引去绘制，例如还是用3个顶点绘制一个三角形</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    vertices</span><br><span class="line">   ----------</span><br><span class="line"><span class="number">0</span> | (<span class="number">-1</span>,  <span class="number">1</span>) |</span><br><span class="line"><span class="number">1</span> | (<span class="number">-1</span>, <span class="number">-1</span>) |</span><br><span class="line"><span class="number">2</span> | ( <span class="number">1</span>, <span class="number">-1</span>) |</span><br><span class="line"><span class="number">3</span> | ( <span class="number">1</span>,  <span class="number">1</span>) |</span><br><span class="line">   ----------</span><br></pre></td></tr></table></figure>
+<p>这次除了顶点数组外，我们还要上传一个顶点索引数组</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  indices</span><br><span class="line">   -----</span><br><span class="line"><span class="number">0</span> |  <span class="number">0</span>  |</span><br><span class="line"><span class="number">1</span> |  <span class="number">1</span>  |</span><br><span class="line"><span class="number">2</span> |  <span class="number">2</span>  |</span><br><span class="line">   -----</span><br></pre></td></tr></table></figure>
+<p>调用命令如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glDrawElements(GL_TRIANGLES, <span class="number">3</span>, GL_UNSIGNED_BYTE, &amp;indices);</span><br></pre></td></tr></table></figure>
+<p>当然上面这个只有3个顶点的例子体现不出来<code>glDrawElements</code>的复用顶点的好处，但是在三角形很多且这些三角形的顶点有很多重复的情形下就不同了，它的优势就体现出来了:</p>
+<ul>
+<li>虽然我们额外增加了一个索引数组indices去存储所绘制顶点的索引，但相比一个顶点最多4个float类型的数据量来说，用一个unsigned byte来表示一个顶点还是划算的。</li>
+<li>在顶点坐标一样，只需改变顶点顺序的图元绘制中，将大大减少数据量。</li>
+</ul>
+<p><code>glDrawElementsBaseVertex</code>的行为和<code>glDrawElements</code>一样，除了在所取到的索引数组相应元素值上加basevertex. 考虑如下情况:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    vertices                indices</span><br><span class="line">   ----------                -----</span><br><span class="line"><span class="number">0</span> | (<span class="number">-1</span>,  <span class="number">1</span>) |            <span class="number">0</span> |  <span class="number">0</span>  |</span><br><span class="line"><span class="number">1</span> | (<span class="number">-1</span>, <span class="number">-1</span>) |            <span class="number">1</span> |  <span class="number">1</span>  |</span><br><span class="line"><span class="number">2</span> | ( <span class="number">1</span>, <span class="number">-1</span>) |            <span class="number">2</span> |  <span class="number">2</span>  |</span><br><span class="line"><span class="number">3</span> | ( <span class="number">1</span>,  <span class="number">1</span>) |            <span class="number">3</span> |  <span class="number">3</span>  |</span><br><span class="line">   ----------             <span class="number">4</span> |  <span class="number">0</span>  |</span><br><span class="line">                          <span class="number">5</span> |  <span class="number">2</span>  |</span><br><span class="line">                             -----</span><br></pre></td></tr></table></figure>
+<p>这种情况下，我们一般会调用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glDrawElements(GL_TRIANGLES, <span class="number">6</span>, GL_UNSIGNED_BYTE, &amp;indices);</span><br></pre></td></tr></table></figure>
+<p>但是如果所索引的顶点不在顶点数组的开始，而是从第100个顶点开始</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">      vertices                indices2</span><br><span class="line">     ----------                -----</span><br><span class="line">        ....                <span class="number">0</span> | <span class="number">100</span> |</span><br><span class="line"><span class="number">100</span> | (<span class="number">-1</span>,  <span class="number">1</span>) |            <span class="number">1</span> | <span class="number">101</span> |</span><br><span class="line"><span class="number">101</span> | (<span class="number">-1</span>, <span class="number">-1</span>) |            <span class="number">2</span> | <span class="number">102</span> |</span><br><span class="line"><span class="number">102</span> | ( <span class="number">1</span>, <span class="number">-1</span>) |            <span class="number">3</span> | <span class="number">103</span> |</span><br><span class="line"><span class="number">103</span> | ( <span class="number">1</span>,  <span class="number">1</span>) |            <span class="number">4</span> | <span class="number">100</span> |</span><br><span class="line">        ....                <span class="number">5</span> | <span class="number">102</span> |</span><br><span class="line">     ----------                -----</span><br></pre></td></tr></table></figure>
+<p>这种情况下原来的indices不能用了，只能再创建并绑定一个新的VBO <code>indices2</code>, 而创建绑定VBO是内存操作开销很大，<code>glDrawElementsBaseVertex</code>就是解决这个问题的。我们只需要在原来的索引值上加一个offset</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glDrawElementsBaseVertex(GL_TRIANGLES, <span class="number">6</span>, GL_UNSIGNED_BYTE, &amp;indices, <span class="number">100</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="drawinstanced"><a class="markdownIt-Anchor" href="#drawinstanced"></a> Draw*Instanced</h1>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">glDrawArraysInstanced</span><span class="params">(GLenum mode,</span></span><br><span class="line"><span class="params">                           GLint first,</span></span><br><span class="line"><span class="params">                           GLsizei count,</span></span><br><span class="line"><span class="params">                           GLsizei instancecount)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">glDrawArraysInstancedBaseInstance</span><span class="params">(GLenum mode,</span></span><br><span class="line"><span class="params">                                       GLint first,</span></span><br><span class="line"><span class="params">                                       GLsizei count,</span></span><br><span class="line"><span class="params">                                       GLsizei instancecount,</span></span><br><span class="line"><span class="params">                                       GLuint baseinstance)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">glDrawElementsInstanced</span><span class="params">(GLenum mode,</span></span><br><span class="line"><span class="params">                             GLsizei count,</span></span><br><span class="line"><span class="params">                             GLenum type,</span></span><br><span class="line"><span class="params">                             <span class="type">const</span> <span class="type">void</span>* indices,</span></span><br><span class="line"><span class="params">                             GLsizei instancecount)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">glDrawElementsInstancedBaseInstance</span><span class="params">(GLenum mode,</span></span><br><span class="line"><span class="params">                                         GLsizei count,</span></span><br><span class="line"><span class="params">                                         GLenum type,</span></span><br><span class="line"><span class="params">                                         <span class="type">const</span> <span class="type">void</span>* indices,</span></span><br><span class="line"><span class="params">                                         GLsizei instancecount,</span></span><br><span class="line"><span class="params">                                         GLuint baseinstance)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">glDrawElementsInstancedBaseVertex</span><span class="params">(GLenum mode,</span></span><br><span class="line"><span class="params">                                       GLsizei count,</span></span><br><span class="line"><span class="params">                                       GLenum type,</span></span><br><span class="line"><span class="params">                                       <span class="type">void</span>* indices,</span></span><br><span class="line"><span class="params">                                       GLsizei instancecount,</span></span><br><span class="line"><span class="params">                                       GLint basevertex)</span>;</span><br></pre></td></tr></table></figure>
+<p>要理解上面这些OpenGL Instanced Draw命令，首先我们要理解一个OpenGL里并不存在的Draw命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void glDrawArraysOneInstance(GLenum mode,</span><br><span class="line">                             GLint first,</span><br><span class="line">                             GLsizei count,</span><br><span class="line">                             GLint instance,</span><br><span class="line">                             GLuint baseinstance);</span><br></pre></td></tr></table></figure>
+<p>Instanced Drawing简单说就是一次Draw Call绘制多个实例，比如一个布满树叶的场景，每片树叶的顶点数据可能是相似的，可能就是在世界坐标系中的位置不同，其它顶点属性可能都相同。那么Instanced Drawing是如何复制相同的实例到不同的位置上的呢?</p>
+<p>OpenGL主要通过以下两个变量控制Instanced Drawing</p>
+<ul>
+<li>gl_InstanceID (Vertex Shader)</li>
+<li>divisor (glVertexAttribDivisor)</li>
+</ul>
+<h2 id="gl_instanceid"><a class="markdownIt-Anchor" href="#gl_instanceid"></a> gl_InstanceID</h2>
+<p>gl_InstanceID是Vertex Shader里的内置变量，如果你这样调用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glDrawArraysInstanced(GL_TRIANGLES, <span class="number">0</span>, <span class="number">3</span>, <span class="number">100</span>);</span><br></pre></td></tr></table></figure>
+<p>那么<code>gl_InstanceID</code>的取值范围就是[0, 99]</p>
+<h2 id="divisor"><a class="markdownIt-Anchor" href="#divisor"></a> divisor</h2>
+<p>假设location为2的Vertex Attribute用来设置每个实例的位置偏移，shader如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line">layout (location = <span class="number">0</span>) in vec2 aPos;</span><br><span class="line">layout (location = <span class="number">1</span>) in vec3 aColor;</span><br><span class="line">layout (location = <span class="number">2</span>) in vec2 aOffset;</span><br><span class="line"></span><br><span class="line">out vec3 fColor;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    gl_Position = vec4(aPos + aOffset, <span class="number">0.0</span>, <span class="number">1.0</span>);</span><br><span class="line">    fColor = aColor;</span><br><span class="line">        </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以通过下面的API告诉OpenGL, 每画一个实例更新一下index=2这个属性，而不是默认的，每一个顶点更新一次属性。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">glEnableVertexAttribArray(<span class="number">2</span>);</span><br><span class="line">glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);</span><br><span class="line">glVertexAttribPointer(<span class="number">2</span>, <span class="number">2</span>, GL_FLOAT, GL_FALSE, <span class="number">2</span> * <span class="keyword">sizeof</span>(<span class="type">float</span>), (<span class="type">void</span>*)<span class="number">0</span>);</span><br><span class="line">glBindBuffer(GL_ARRAY_BUFFER, <span class="number">0</span>);</span><br><span class="line">glVertexAttribDivisor(<span class="number">2</span>, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="drawindirect"><a class="markdownIt-Anchor" href="#drawindirect"></a> Draw*Indirect</h1>
+<p>Indirect Drawing是将Array/Indexed Drawing命令的参数存入专门的Buffer Object，也就是GPU Storage里，这里的Buffer Object的绑定类型是<code>GL_DRAW_INDIRECT_BUFFER</code>。之所以这样做，是为了能让GPU直接写回这些值，比方Compute Shader, 或者为Transform Feedback设计的Geometry Shader, 亦或是OpenCL/CUDA kernel函数。这样避免了这些参数在GPU和CPU之间来回地复制(round-trip)</p>
+<h2 id="drawarraysindirect"><a class="markdownIt-Anchor" href="#drawarraysindirect"></a> DrawArraysIndirect</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">glDrawArraysIndirect</span><span class="params">(GLenum mode, <span class="type">const</span> <span class="type">void</span> *indirect)</span>;</span><br></pre></td></tr></table></figure>
+<p>在OpenGL ES 3.1及以上，DrawArraysIndirect的Draw Parameters被定义成下面的结构体:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    uint count;</span><br><span class="line">    uint instanceCount;</span><br><span class="line">    uint first;</span><br><span class="line">    uint reservedMustBeZero;</span><br><span class="line">&#125; DrawArraysIndirectCommand;</span><br></pre></td></tr></table></figure>
+<p>在OpenGL 4.0及以上，DrawArraysIndirect的Draw Parameters被定义成下面的结构体:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    uint count;</span><br><span class="line">    uint instanceCount;</span><br><span class="line">    uint first;</span><br><span class="line">    uint baseInstance;</span><br><span class="line">&#125; DrawArraysIndirectCommand;</span><br></pre></td></tr></table></figure>
+<p>之所以 ES 的 DrawIndirectCommand 里没有 <code>baseInstance</code>，是因为 ES 没有下面的命令:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">glDrawArraysIntancedBaseInstance</span><span class="params">(GLenum mode,</span></span><br><span class="line"><span class="params">				      GLint first,</span></span><br><span class="line"><span class="params">				      GLsizei count,</span></span><br><span class="line"><span class="params">				      GLsizei instancecount,</span></span><br><span class="line"><span class="params">				      GLuint baseinstance)</span>;</span><br></pre></td></tr></table></figure>
+<p>因此在 ES 中，<code>glDrawArraysIndirect()</code> 可以分解成</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DrawArraysIndirectCommand *cmd = (DrawArraysIndirectCommand *)indirect;</span><br><span class="line">DrawArraysInstanced(mode, cmd-&gt;first, cmd-&gt;count, cmd-&gt;instanceCount);</span><br></pre></td></tr></table></figure>
+<p>而在OpenGL中，<code>glDrawArraysIndirect()</code> 可以分解成</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DrawArraysIndirectCommand *cmd = (DrawArraysIndirectCommand *)indirect;</span><br><span class="line">DrawArraysInstancedBaseInstance(mode, cmd-&gt;first, cmd-&gt;count,</span><br><span class="line">                cmd-&gt;instanceCount, cmd-&gt;baseInstance);</span><br></pre></td></tr></table></figure>
+<p>下面是 <a target="_blank" rel="noopener" href="https://github.com/linzj/sb7code_withmedia/blob/master/src/multidrawindirect/multidrawindirect.cpp">SuperBible7 multidrawindirect</a> 中 MultiDraw 的实现 (<a target="_blank" rel="noopener" href="https://registry.khronos.org/OpenGL/extensions/ARB/ARB_multi_draw_indirect.txt">GL_ARB_multi_draw_indirect</a> 是 4.1 引入的新扩展)：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (mode == MODE_MULTIDRAW)</span><br><span class="line">&#123;</span><br><span class="line">    glMultiDrawArraysIndirect(GL_TRIANGLES, <span class="literal">NULL</span>, NUM_DRAWS, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (mode == MODE_SEPARATE_DRAWS)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; NUM_DRAWS; j++)</span><br><span class="line">    &#123;</span><br><span class="line">        GLuint first, count;</span><br><span class="line">        object.get_sub_object_info(j % object.get_sub_object_count(), first, count);</span><br><span class="line">        glDrawArraysInstancedBaseInstance(GL_TRIANGLES,</span><br><span class="line">                                          first,</span><br><span class="line">                                          count,</span><br><span class="line">                                          <span class="number">1</span>, j);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="drawelementsindirect"><a class="markdownIt-Anchor" href="#drawelementsindirect"></a> DrawElementsIndirect</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void glDrawElementsIndirect(GLenum mode, GLenum type, const void *indirect);</span><br></pre></td></tr></table></figure>
+<p>在ES 3.1中, DrawElementsIndirect的Draw Parameters被定义成下面这个结构体:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    uint count;</span><br><span class="line">    uint instanceCount;</span><br><span class="line">    uint firstIndex;</span><br><span class="line">    <span class="type">int</span>  baseVertex;</span><br><span class="line">    uint reservedMustBeZero;</span><br><span class="line">&#125; DrawElementsIndirectCommand;</span><br></pre></td></tr></table></figure>
+<p>而在OpenGL 4.0及以上, DrawElementsIndirect的<code>indirect</code>指向的Draw Parameters被定义成下面的结构体:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    uint count;</span><br><span class="line">    uint primCount;</span><br><span class="line">    uint firstIndex;</span><br><span class="line">    uint baseVertex;</span><br><span class="line">    uint baseInstance;</span><br><span class="line">&#125; DrawElementsIndirectCommand;</span><br></pre></td></tr></table></figure>
+<h2 id="mesa-实现-indirect-draw"><a class="markdownIt-Anchor" href="#mesa-实现-indirect-draw"></a> Mesa 实现 Indirect Draw</h2>
+<p>应该很少有直接支持 Indirect Draw 的硬件，Mesa 中提供一个 utility 函数 <code>util_draw_indirect()</code>, 它将 indirect buffer 中的参数分析后把 indirect draw 展开成普通的 gallium-&gt;draw_vbo(), 像 sb7code 中 multidrawindirect 这个 demo, 展开后的循环次数是 50000 次。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* This extracts the draw arguments from the indirect resource,</span></span><br><span class="line"><span class="comment"> * puts them into a new instance of pipe_draw_info, and calls draw_vbo on it.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">util_draw_indirect</span><span class="params">(<span class="keyword">struct</span> pipe_context *pipe,</span></span><br><span class="line"><span class="params">                   <span class="type">const</span> <span class="keyword">struct</span> pipe_draw_info *info_in,</span></span><br><span class="line"><span class="params">                   <span class="type">unsigned</span> drawid_offset,</span></span><br><span class="line"><span class="params">                   <span class="type">const</span> <span class="keyword">struct</span> pipe_draw_indirect_info *indirect)</span></span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">   <span class="keyword">for</span> (<span class="type">unsigned</span> i = <span class="number">0</span>; i &lt; draw_count; i++) &#123;</span><br><span class="line">      <span class="class"><span class="keyword">struct</span> <span class="title">pipe_draw_start_count_bias</span> <span class="title">draw</span>;</span></span><br><span class="line"></span><br><span class="line">      draw.count = params[<span class="number">0</span>];</span><br><span class="line">      info.instance_count = params[<span class="number">1</span>];</span><br><span class="line">      draw.start = params[<span class="number">2</span>];</span><br><span class="line">      draw.index_bias = info_in-&gt;index_size ? params[<span class="number">3</span>] : <span class="number">0</span>;</span><br><span class="line">      info.start_instance = info_in-&gt;index_size ? params[<span class="number">4</span>] : params[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">      pipe-&gt;draw_vbo(pipe, &amp;info, i + drawid_offset, <span class="literal">NULL</span>, &amp;draw, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">      params += indirect-&gt;stride / <span class="number">4</span>;</span><br><span class="line">   &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="references"><a class="markdownIt-Anchor" href="#references"></a> References</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learnopengl.com/Advanced-OpenGL/Instancing">https://learnopengl.com/Advanced-OpenGL/Instancing</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OpenGL/" rel="tag"># OpenGL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/gfx/X/x-display/" rel="prev" title="X11中的Display, Screen, Depth和Visual">
+                  <i class="fa fa-angle-left"></i> X11中的Display, Screen, Depth和Visual
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/gfx/X/pixmap/" rel="next" title="Pixmap in X">
+                  Pixmap in X <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

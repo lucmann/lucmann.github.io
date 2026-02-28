@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Distro Ubuntu Arch Linux     source git:&#x2F;&#x2F;git.launchpad.net&#x2F;~ubuntu-kernel&#x2F;ubuntu&#x2F;+source&#x2F;linux&#x2F;+git&#x2F;jammy git@github.com:archlinux&#x2F;linux.git   initrd sudo mkinitramfs -o &#x2F;boot&#x2F;initrd.img-KERNELVER">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Kernel Debugging">
+<meta property="og:url" content="https://lucmann.github.io/lnx/kernel-debug/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="Distro Ubuntu Arch Linux     source git:&#x2F;&#x2F;git.launchpad.net&#x2F;~ubuntu-kernel&#x2F;ubuntu&#x2F;+source&#x2F;linux&#x2F;+git&#x2F;jammy git@github.com:archlinux&#x2F;linux.git   initrd sudo mkinitramfs -o &#x2F;boot&#x2F;initrd.img-KERNELVER">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/images/kernel-build/install.png">
+<meta property="article:published_time" content="2023-05-19T03:38:43.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.376Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="kernel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/images/kernel-build/install.png">
+
+
+<link rel="canonical" href="https://lucmann.github.io/lnx/kernel-debug/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/lnx/kernel-debug/","path":"lnx/kernel-debug/","title":"Linux Kernel Debugging"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux Kernel Debugging | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8"><span class="nav-number">1.</span> <span class="nav-text"> 编译内核</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ubuntu"><span class="nav-number">1.1.</span> <span class="nav-text"> Ubuntu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows-subsytem-for-linux"><span class="nav-number">1.2.</span> <span class="nav-text"> Windows Subsytem for Linux</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%86%85%E6%A0%B8"><span class="nav-number">2.</span> <span class="nav-text"> 安装内核</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ubuntu-2"><span class="nav-number">2.1.</span> <span class="nav-text"> Ubuntu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows-subsystem-for-linux"><span class="nav-number">2.2.</span> <span class="nav-text"> Windows Subsystem for Linux</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7"><span class="nav-number">3.</span> <span class="nav-text"> 编译工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E5%86%85%E6%A0%B8"><span class="nav-number">4.</span> <span class="nav-text"> 调试内核</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E8%B0%83%E8%AF%95%E7%9B%B8%E5%85%B3%E7%9A%84%E5%86%85%E6%A0%B8%E9%85%8D%E7%BD%AE"><span class="nav-number">4.1.</span> <span class="nav-text"> 与调试相关的内核配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#config_debug_fs"><span class="nav-number">4.1.1.</span> <span class="nav-text"> CONFIG_DEBUG_FS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8-wsl2-%E4%B8%8A%E5%90%AF%E7%94%A8-debugfs"><span class="nav-number">4.1.1.1.</span> <span class="nav-text"> 如何在 WSL2 上启用 debugfs</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config_tracing"><span class="nav-number">4.1.2.</span> <span class="nav-text"> CONFIG_TRACING</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tracers"><span class="nav-number">4.1.2.1.</span> <span class="nav-text"> tracers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ftrace"><span class="nav-number">4.1.2.2.</span> <span class="nav-text"> ftrace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#trace-cmd"><span class="nav-number">4.1.2.3.</span> <span class="nav-text"> trace-cmd</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config_ikconfig_proc"><span class="nav-number">4.1.3.</span> <span class="nav-text"> CONFIG_IKCONFIG_PROC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config_dynamic_debug"><span class="nav-number">4.1.4.</span> <span class="nav-text"> CONFIG_DYNAMIC_DEBUG</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%E8%BF%90%E8%A1%8C%E6%97%B6%E6%89%93%E5%BC%80"><span class="nav-number">4.1.4.1.</span> <span class="nav-text"> 方法一：运行时打开</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E5%8F%82%E6%95%B0"><span class="nav-number">4.1.4.2.</span> <span class="nav-text"> 方法二：内核启动参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89etcmodprobedxxxconf"><span class="nav-number">4.1.4.3.</span> <span class="nav-text"> 方法三：&#x2F;etc&#x2F;modprobe.d&#x2F;xxx.conf</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config_drm_use_dynamic_debug"><span class="nav-number">4.1.5.</span> <span class="nav-text"> CONFIG_DRM_USE_DYNAMIC_DEBUG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config_debug_atomic_sleep"><span class="nav-number">4.1.6.</span> <span class="nav-text"> CONFIG_DEBUG_ATOMIC_SLEEP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kernlog"><span class="nav-number">4.2.</span> <span class="nav-text"> kern.log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sysctl-%E5%92%8C%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0"><span class="nav-number">4.3.</span> <span class="nav-text"> sysctl 和内核参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/lnx/kernel-debug/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux Kernel Debugging | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux Kernel Debugging
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-05-19 11:38:43" itemprop="dateCreated datePublished" datetime="2023-05-19T11:38:43+08:00">2023-05-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/lnx/kernel-debug/" class="post-meta-item leancloud_visitors" data-flag-title="Linux Kernel Debugging" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/lnx/kernel-debug/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="lnx/kernel-debug/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><table>
+<thead>
+<tr>
+<th style="text-align:left">Distro</th>
+<th style="text-align:left">Ubuntu</th>
+<th style="text-align:left">Arch Linux</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">source</td>
+<td style="text-align:left"><a href="git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy">git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy</a></td>
+<td style="text-align:left"><a href="git@github.com:archlinux/linux.git">git@github.com:archlinux/linux.git</a></td>
+</tr>
+<tr>
+<td style="text-align:left">initrd</td>
+<td style="text-align:left"><code>sudo mkinitramfs -o /boot/initrd.img-KERNELVERSION KERNELVERSION</code></td>
+<td style="text-align:left"><code>sudo mkinitcpio --generate /boot/initramfs-KERNELVERSION.img --kernel KERNELVERSION</code></td>
+</tr>
+<tr>
+<td style="text-align:left">grub</td>
+<td style="text-align:left"><code>sudo update-grub</code></td>
+<td style="text-align:left"><code>sudo grub-mkconfig -o /boot/grub/grub.cfg</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>KERNELVERSION</code> 是 <code>make kernelrelease</code> 的输出，同时也是 <code>sudo make modules_install</code> 时在 <code>/lib/modules</code> 创建的目录名</li>
+</ul>
+<span id="more"></span>
+<h1 id="编译内核"><a class="markdownIt-Anchor" href="#编译内核"></a> 编译内核</h1>
+<ul>
+<li>配置内核最简单的方法是 <code>make olddefconfig</code></li>
+<li>内核配置保存在 .config</li>
+<li>内核源码树里包含命令行修改 .config 的脚本 scripts/config</li>
+<li>内核构建依赖 flex, bison 词法分析程序</li>
+</ul>
+<h2 id="ubuntu"><a class="markdownIt-Anchor" href="#ubuntu"></a> Ubuntu</h2>
+<ul>
+<li>Environment</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">configuration</th>
+<th style="text-align:left">version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">distro</td>
+<td style="text-align:left">Ubuntu 22.04 Jammy Jellyfish</td>
+</tr>
+<tr>
+<td style="text-align:left">gcc</td>
+<td style="text-align:left">11.2.0</td>
+</tr>
+<tr>
+<td style="text-align:left">original kernel</td>
+<td style="text-align:left">5.15.0-43-generic</td>
+</tr>
+<tr>
+<td style="text-align:left">building kernel</td>
+<td style="text-align:left">v6.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Compilation Errors</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Errors</th>
+<th style="text-align:left">Need to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">gelf.h: No such file or directory</td>
+<td style="text-align:left">apt install libelf-dev</td>
+</tr>
+<tr>
+<td style="text-align:left">&lt;openssl/opensslv.h&gt;: No such file or directory</td>
+<td style="text-align:left">apt install libssl-dev</td>
+</tr>
+<tr>
+<td style="text-align:left">No rule to make target ‘debian/canonical-certs.pem’</td>
+<td style="text-align:left">./scripts/config --set-str SYSTEM_TRUSTED_KEYS “”</td>
+</tr>
+<tr>
+<td style="text-align:left">No rule to make target ‘debian/canonical-revoked-certs.pem’</td>
+<td style="text-align:left">./scripts/config --set-str SYSTEM_REVOCATION_KEYS “”</td>
+</tr>
+</tbody>
+</table>
+<h2 id="windows-subsytem-for-linux"><a class="markdownIt-Anchor" href="#windows-subsytem-for-linux"></a> Windows Subsytem for Linux</h2>
+<ul>
+<li>.config</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make KCONFIG_CONFIG=Microsoft/config-wsl</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>Compilation Errors<br />
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36393978/article/details/124274364">这是一个非常常见的依赖问题</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  LD      vmlinux.o</span><br><span class="line">  MODPOST vmlinux.symvers</span><br><span class="line">  MODINFO modules.builtin.modinfo</span><br><span class="line">  GEN     modules.builtin</span><br><span class="line">BTF: .tmp_vmlinux.btf: pahole (pahole) is not available</span><br><span class="line">Failed to generate BTF for vmlinux</span><br><span class="line">Try to disable CONFIG_DEBUG_INFO_BTF</span><br><span class="line">make: *** [Makefile:1218: vmlinux] Error 1</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="安装内核"><a class="markdownIt-Anchor" href="#安装内核"></a> 安装内核</h1>
+<p>安装内核包括 4 部分：</p>
+<ul>
+<li>安装 vmlinuz, 也就是压缩格式的内核 ELF 镜像 <code>make install</code>
+<ul>
+<li><code>make install</code> 最终要么调用用户自定义的安装脚本，要么调用内核源码树里的 <code>install.sh</code> 脚本<br />
+<img src="/images/kernel-build/install.png" alt="" /></li>
+</ul>
+</li>
+<li>安装 modules, <code>make modules_install</code></li>
+<li>制作 initramdisk (或者叫 initramfs) 初始化内存盘，它里面会包含必要的 modules</li>
+<li>更新 grub, 以便启动时可以选择新内核</li>
+</ul>
+<h2 id="ubuntu-2"><a class="markdownIt-Anchor" href="#ubuntu-2"></a> Ubuntu</h2>
+<h2 id="windows-subsystem-for-linux"><a class="markdownIt-Anchor" href="#windows-subsystem-for-linux"></a> Windows Subsystem for Linux</h2>
+<ul>
+<li>
+<p><code>mv arch/x86/boot/bzImage /mnt/c/Users/luc/</code></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://falco.org/blog/falco-wsl2-custom-kernel/">编辑 /mnt/c/Users/luc/.wslconfig</a>, 添加下面两行</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">kernel=C:\\Users\\luc\\bzImage</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>NOTE: 如果<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/commandline/automatically-configuring-wsl/">以上两行添加进 /etc/wsl.conf 文件，不会有任何作用</a>, 因为 <code>/etc/wsl.conf</code> 不支持 <code>wsl2</code> Section</p>
+</blockquote>
+<ul>
+<li>配置完成后，重启 WSL Ubuntu 20.04, 新编译的内核将生效。不要用 <code>wsl --terminate</code>.</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --shutdown Ubuntu-20.04</span><br></pre></td></tr></table></figure>
+<h1 id="编译工具"><a class="markdownIt-Anchor" href="#编译工具"></a> 编译工具</h1>
+<p>内核源码树中 <code>tools</code> 目录下包含了相当有用的工具，像 perf, objtool 等等，可以通过 <code>make tools/help</code> 查看完整工具列表。以构建安装 perf 为例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make tools/perf</span><br><span class="line"><span class="built_in">sudo</span> make -C tools/perf install prefix=/usr</span><br></pre></td></tr></table></figure>
+<p>对于修改安装路径, <code>prefix</code> 和 <code>DESTDIR</code> 变量都可以，但 PREFIX 不行。</p>
+<h1 id="调试内核"><a class="markdownIt-Anchor" href="#调试内核"></a> 调试内核</h1>
+<h2 id="与调试相关的内核配置"><a class="markdownIt-Anchor" href="#与调试相关的内核配置"></a> 与调试相关的内核配置</h2>
+<h3 id="config_debug_fs"><a class="markdownIt-Anchor" href="#config_debug_fs"></a> CONFIG_DEBUG_FS</h3>
+<h4 id="如何在-wsl2-上启用-debugfs"><a class="markdownIt-Anchor" href="#如何在-wsl2-上启用-debugfs"></a> 如何在 WSL2 上启用 debugfs</h4>
+<p>确认下内核是否开启了 debugfs</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zcat /proc/config.gz | grep CONFIG_DEBUG_FS</span><br></pre></td></tr></table></figure>
+<p>要想使用 debugfs，首先要挂载它到 <code>/sys/kernel/debug</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t debugfs none /sys/kernel/debug/</span><br></pre></td></tr></table></figure>
+<p>如果想让挂载在系统重启后自动挂载，在 <code>/etc/fstab</code> 加下面一行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">debugfs     /sys/kernel/debug       debugfs defaults        0 0</span><br></pre></td></tr></table></figure>
+<p>在添加后，执行 <code>mount -a</code> 命令将看到 <code>/sys/kernel/debug</code> 文件系统的内容, <code>/sys/kernel/debug</code> 目录的权限是 700, 只有 root 用户才能进入，sudo 也不行</p>
+<h3 id="config_tracing"><a class="markdownIt-Anchor" href="#config_tracing"></a> CONFIG_TRACING</h3>
+<p>CONFIG_TRACING 是内核 2.6.27 (2008-10-09)* 引入的一个<strong>不可配置的(not configurable)</strong> 内核选项，所谓<strong>不可配置</strong>的意思是这个 CONFIG <strong>不能直接</strong>由用户打开或关闭，它的开启与否只能由其它依赖它的选项的状态决定。</p>
+<p>它对应的 <strong>tracefs</strong> 也需要挂载</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t tracefs none /sys/kernel/tracing</span><br></pre></td></tr></table></figure>
+<p>像 <strong>ftrace</strong>, <strong>trace-cmd</strong> 都需要挂载这个目录。</p>
+<h4 id="tracers"><a class="markdownIt-Anchor" href="#tracers"></a> tracers</h4>
+<p>要使用 <strong>ftrace</strong>, 不光要挂载 tracefs, 内核相应的追踪器 (tracer) 也要编译进内核，可用的内核追踪器可以通过 <code>cat /sys/kernel/tracing/available_tracers</code> 查看。</p>
+<ul>
+<li>CONFIG_FUNCTION_TRACER</li>
+<li>CONFIG_FUNCTION_GRAPH_TRACER</li>
+<li>CONFIG_HWLAT_TRACER</li>
+<li>CONFIG_IRQSOFF_TRACER</li>
+<li>CONFIG_OSNOISE_TRACER</li>
+<li>CONFIG_PREEMPT_TRACER</li>
+<li>CONFIG_SCHED_TRACER</li>
+<li>CONFIG_STACK_TRACER</li>
+<li>CONFIG_CONTEXT_SWITCH_TRACER</li>
+<li>CONFIG_NOP_TRACER</li>
+</ul>
+<h4 id="ftrace"><a class="markdownIt-Anchor" href="#ftrace"></a> ftrace</h4>
+<p>ftrace 常用的有两种：<strong>基于 function 的</strong>和<strong>基于 event 的</strong></p>
+<ul>
+<li>基于 function
+<ul>
+<li><code>cat available_tracers</code> 查看有哪些 tracers</li>
+<li><code>echo function_graph &gt; current_tracer</code> 从 <code>available_tracers</code> 中选择一个 tracer</li>
+<li><code>echo xxxxx &gt; set_graph_function</code> 从 <code>available_filter_functions</code> 中选择几个 functions</li>
+<li><code>echo 1 &gt; tracing_on</code> 启动 trace</li>
+<li><code>cat trace</code> 或 <code>cat trace_pipe</code> 查看结果</li>
+</ul>
+</li>
+<li>基于 event
+<ul>
+<li><code>cat available_events</code> 查看有哪些 events</li>
+<li><code>echo amdgpu:amdgpu_sched_run_job &gt; set_event</code> 添加 event
+<ul>
+<li><code>echo amdgpu:amdgpu_device_wreg &gt;&gt; set_event</code> 继续追加 event</li>
+</ul>
+</li>
+<li><code>echo 1 &gt; tracing_on</code> 启动 trace</li>
+<li><code>cat trace</code> 或 <code>cat trace_pipe</code> 查看结果</li>
+</ul>
+</li>
+</ul>
+<p>以上操作均需要 <strong>root 权限</strong>， 在目录 <strong><code>/sys/kernel/debug/tracing</code></strong> 下执行</p>
+<h4 id="trace-cmd"><a class="markdownIt-Anchor" href="#trace-cmd"></a> trace-cmd</h4>
+<p><strong>trace-cmd</strong> 实际上是为了方便使用 <strong>ftrace</strong>, 比方下面的 trace-cmd 命令与直接 <code>cat /sys/kernel/tracing/available_events</code> 是等价的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trace-cmd list -e</span><br></pre></td></tr></table></figure>
+<h3 id="config_ikconfig_proc"><a class="markdownIt-Anchor" href="#config_ikconfig_proc"></a> CONFIG_IKCONFIG_PROC</h3>
+<p>这个配置决定 <code>/proc/config.gz</code> 是否存在。Ubuntu 似乎默认关闭此配置，而是将内核 config 保存在 <code>/boot/config-$(uname -r)</code></p>
+<h3 id="config_dynamic_debug"><a class="markdownIt-Anchor" href="#config_dynamic_debug"></a> CONFIG_DYNAMIC_DEBUG</h3>
+<p>打开 <strong>Dynamic Debug</strong> 有好几种，但前提都是 <code>CONFIG_DYNAMIC_DEBUG=y</code></p>
+<h4 id="方法一运行时打开"><a class="markdownIt-Anchor" href="#方法一运行时打开"></a> 方法一：运行时打开</h4>
+<p>Dynamic Debug 就通过 <code>/sys/kernel/debug/dynamic_debug/control</code> 文件打开或关闭特定文件的某行或函数里的打印，但它只对使用</p>
+<ul>
+<li><code>pr_debug()</code></li>
+<li><code>dev_dbg()</code></li>
+<li><code>print_hex_dump_debug()</code></li>
+<li><code>print_hex_dump_bytes()</code></li>
+</ul>
+<p>这 4 个函数的打印来有用。</p>
+<h4 id="方法二内核启动参数"><a class="markdownIt-Anchor" href="#方法二内核启动参数"></a> 方法二：内核启动参数</h4>
+<ul>
+<li>按 <code>file</code> 打开 dynamic debug</li>
+</ul>
+<p><span style="background-color: yellow; padding: 4px;">dyndbg=&quot;file arch/x86/pci/* +p&quot;</span></p>
+<p>这个启动参数会打开 <code>arch/x86/pci</code> 目录下所有 dynamic debug 打印，如果通过修改 <code>/etc/default/grub</code> 里的 <code>GRUB_CMDLINE_LINUX</code>, 需要对双引号进行转义</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GRUB_CMDLINE_LINUX=&quot;dyndbg=\&quot;file arch/x86/pci/* +p\&quot;&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>按 <code>module</code> 打开 dynamic debug</li>
+</ul>
+<p><span style="background-color: yellow; padding: 4px;">dyndbg=&quot;module i915 +p&quot;</span></p>
+<p>如果要同时将 <code>arch/x86/pci/</code> 目录下所有文件和内核模块 <code>i915</code> 的 dynamic debug 都打开</p>
+<p><span style="background-color: yellow; padding: 4px;">dyndbg=&quot;file arch/x86/pci/* +p;module i915 +p&quot;</span></p>
+<h4 id="方法三etcmodprobedxxxconf"><a class="markdownIt-Anchor" href="#方法三etcmodprobedxxxconf"></a> 方法三：/etc/modprobe.d/xxx.conf</h4>
+<p>由于 <code>dyndbg=</code> 内核参数一般在内核模块加载前就解析了，所以对于按模块打开 dynamic debug 来说，在 <code>/etc/modprobe.d/i915-debug.conf</code> 文件中设置更保险</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options i915 dyndbg=+p</span><br></pre></td></tr></table></figure>
+<h3 id="config_drm_use_dynamic_debug"><a class="markdownIt-Anchor" href="#config_drm_use_dynamic_debug"></a> <code>CONFIG_DRM_USE_DYNAMIC_DEBUG</code></h3>
+<p>这是内核 6.1 (2022-12-11) 才引入的专门控制 <code>drm_dbg()</code> 是否用 <strong>Dynamic Debug</strong> 来实现的可配置选项。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">if</span> !defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> drm_dev_dbg(dev, cat, fmt, ...)				\</span></span><br><span class="line"><span class="meta">	__drm_dev_dbg(NULL, dev, cat, fmt, ##__VA_ARGS__)</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> drm_dev_dbg(dev, cat, fmt, ...)				\</span></span><br><span class="line"><span class="meta">	_dynamic_func_call_cls(cat, fmt, __drm_dev_dbg,		\</span></span><br><span class="line"><span class="meta">			       dev, cat, fmt, ##__VA_ARGS__)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="config_debug_atomic_sleep"><a class="markdownIt-Anchor" href="#config_debug_atomic_sleep"></a> <code>CONFIG_DEBUG_ATOMIC_SLEEP</code></h3>
+<p><a target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/latest/driver-api/dma-buf.html?highlight=dma_fence_wait_timeout#c.dma_fence_wait_timeout"><code>dma_fence_wait_timeout()</code></a> 会睡眠调用进程直到 fence 被 signaled 或者指定定时器超时。该函数中会调用 <code>might_sleep()</code> 来标识 (annotation) 调用进程可能进入睡眠状态，并打印源文件名和行号，帮助调试。 但只有内核配置了 <code>CONFIG_DEBUG_ATOMIC_SLEEP</code> 才有效，否则 <code>__might_sleep()</code> 是一个空函数。</p>
+<h2 id="kernlog"><a class="markdownIt-Anchor" href="#kernlog"></a> kern.log</h2>
+<p><code>/var/log/kern.log</code> 的一个主要问题是每行前面的 <code>%HOSTNAME%</code> 太长又没什么用，<code>%timegenerated%</code> 和内核原始打印 <code>%msg%</code> 里的时间戳实际上有一个就可以了。查了一下配置方法，实际上就是要在 <code>/etc/rsyslog.conf</code> 里定义一个 <code>$template</code>, 并指定为默认的模板</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$template SimpleFormat,&quot;%timegenerated:::date-rfc3339% %msg:::drop-last-lf%\n&quot;</span><br><span class="line">$ActionFileDefaultTemplate SimpleFormat</span><br></pre></td></tr></table></figure>
+<p>或在 <code>/etc/rsyslog.d/50-default.conf</code> 里的 <code>kern.*</code> 规则中加上这个 template</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kern.* -/var/log/kern.log;SimpleFormat</span><br></pre></td></tr></table></figure>
+<p>注意，不要直接在 <code>/etc/rsyslog.conf</code> 里直接加上面这条规则，要加在 <code>/etc/rsyslog.d/50-default.conf</code>， 否则会输出两遍。</p>
+<p>最后，就是要重启 rsyslog 服务生效。</p>
+<p>内核的 log 实际上都是写入一个 ring buffer 里的，暴露给用户的接口是 <code>/proc/kmsg</code> 和 <code>/dev/kmsg</code>, rsyslog 服务也是通过这些接口，重新处理 log 后写入 <code>/var/log/kern.log</code> 的。下面的操作可以让 <code>dmesg</code> 多一条 log</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;&lt;3&gt;HELLO&quot; &gt; /dev/kmsg</span><br></pre></td></tr></table></figure>
+<h2 id="sysctl-和内核参数"><a class="markdownIt-Anchor" href="#sysctl-和内核参数"></a> <code>sysctl</code> 和内核参数</h2>
+<p>运行时内核参数大多在 <code>/proc/sys/</code> 目录下，二进制程序 <code>/usr/sbin/sysctl</code> 可用来查看，修改这些内核参数。</p>
+<ul>
+<li>查看某个内核参数的值
+<ul>
+<li><code>sysctl kernel.perf_event_paranoid</code></li>
+</ul>
+</li>
+<li>列出所有内核参数的值 (有些需要 root 权限)
+<ul>
+<li><code>sysctl -a</code></li>
+</ul>
+</li>
+<li>修改某个内核参数的值
+<ul>
+<li><code>sysctl kernel.perf_event_paranoid=-1</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://wiki.ubuntu.com/Kernel/SourceCode">https://wiki.ubuntu.com/Kernel/SourceCode</a></li>
+<li><a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/Installation_guide">https://wiki.archlinux.org/title/Installation_guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://access.redhat.com/solutions/5914171">https://access.redhat.com/solutions/5914171</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/v4.14/admin-guide/dynamic-debug-howto.html">Dynamic Debug Howto</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.rsyslog.com/how-to-bind-a-template/">How to bind a template in rsyslog.conf</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.rsyslog.com/doc/configuration/properties.html#message-properties">Rsyslog properties</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kernel/" rel="tag"># kernel</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/gfx/kms/" rel="prev" title="Knowledge from "[RFC] Plane color pipeline KMS uAPI"">
+                  <i class="fa fa-angle-left"></i> Knowledge from "[RFC] Plane color pipeline KMS uAPI"
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/lnx/syscall/" rel="next" title="Syscall vs C routines">
+                  Syscall vs C routines <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

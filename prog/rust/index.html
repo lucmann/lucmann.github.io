@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Hello world 安装 rust 的方式有好几种，但最方便的应该是通过 rustup 脚本。 1curl --proto &#x27;&#x3D;https&#x27; --tlsv1.2 -sSf https:&#x2F;&#x2F;sh.rustup.rs | sh rustup 默认安装最新的 stable 工具链到 $HOME&#x2F;.cargo 目录下，安装的组件包括  Rust 构建系统和包管理器 cargo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hello, Rust">
+<meta property="og:url" content="https://lucmann.github.io/prog/rust/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="Hello world 安装 rust 的方式有好几种，但最方便的应该是通过 rustup 脚本。 1curl --proto &#x27;&#x3D;https&#x27; --tlsv1.2 -sSf https:&#x2F;&#x2F;sh.rustup.rs | sh rustup 默认安装最新的 stable 工具链到 $HOME&#x2F;.cargo 目录下，安装的组件包括  Rust 构建系统和包管理器 cargo">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lucmann.github.io/images/rust/rustlings-doc.png">
+<meta property="article:published_time" content="2021-07-11T15:47:20.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.444Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="Rust">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lucmann.github.io/images/rust/rustlings-doc.png">
+
+
+<link rel="canonical" href="https://lucmann.github.io/prog/rust/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/prog/rust/","path":"prog/rust/","title":"Hello, Rust"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hello, Rust | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#hello-world"><span class="nav-number">1.</span> <span class="nav-text"> Hello world</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rustup"><span class="nav-number">2.</span> <span class="nav-text"> rustup</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cargo"><span class="nav-number">3.</span> <span class="nav-text"> cargo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA"><span class="nav-number">3.1.</span> <span class="nav-text"> 构建</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rust-hello-world"><span class="nav-number">4.</span> <span class="nav-text"> Rust Hello World</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rust-for-linux"><span class="nav-number">5.</span> <span class="nav-text"> Rust for Linux</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#learn-rust-from-rust-for-linux"><span class="nav-number">6.</span> <span class="nav-text"> Learn Rust from Rust for Linux</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nightly-vs-stable-rustc"><span class="nav-number">7.</span> <span class="nav-text"> Nightly vs. Stable rustc</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#macros"><span class="nav-number">8.</span> <span class="nav-text"> Macros</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#declarative-macros-%E5%A3%B0%E6%98%8E%E5%BC%8F%E5%AE%8F-macro_rules"><span class="nav-number">8.1.</span> <span class="nav-text"> Declarative Macros 声明式宏 macro_rules!</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#procedural-macros-%E8%BF%87%E7%A8%8B%E5%AE%8F-rust-code-that-generates-rust-code"><span class="nav-number">8.2.</span> <span class="nav-text"> Procedural Macros 过程宏 Rust code that generates rust code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#function-like-macros"><span class="nav-number">8.2.1.</span> <span class="nav-text"> Function-like macros</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#derive-macros-derivedebug"><span class="nav-number">8.2.2.</span> <span class="nav-text"> derive macros #[derive(Debug)]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#attribute-macros-bitfield"><span class="nav-number">8.2.3.</span> <span class="nav-text"> attribute macros #[bitfield]</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#traits"><span class="nav-number">9.</span> <span class="nav-text"> Traits</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#closures-%E9%97%AD%E5%8C%85%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0"><span class="nav-number">10.</span> <span class="nav-text"> Closures 闭包(匿名函数)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5%E5%8C%BA%E5%88%86"><span class="nav-number">11.</span> <span class="nav-text"> 概念区分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E5%92%8C%E5%80%9F%E7%94%A8"><span class="nav-number">11.1.</span> <span class="nav-text"> 引用和借用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string-vs-str-vs-str"><span class="nav-number">11.2.</span> <span class="nav-text"> String vs str vs &amp;str</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#none-vs"><span class="nav-number">11.3.</span> <span class="nav-text"> None vs ()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">12.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/prog/rust/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hello, Rust | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hello, Rust
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-07-11 23:47:20" itemprop="dateCreated datePublished" datetime="2021-07-11T23:47:20+08:00">2021-07-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/programming/" itemprop="url" rel="index"><span itemprop="name">programming</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/prog/rust/" class="post-meta-item leancloud_visitors" data-flag-title="Hello, Rust" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/prog/rust/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="prog/rust/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+<span id="more"></span>
+<h1 id="hello-world"><a class="markdownIt-Anchor" href="#hello-world"></a> Hello world</h1>
+<p>安装 rust 的方式有好几种，但最方便的应该是通过 <strong>rustup</strong> 脚本。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl --proto &#x27;=https&#x27; --tlsv1.2 -sSf https://sh.rustup.rs | sh</span><br></pre></td></tr></table></figure>
+<p>rustup 默认安装最新的 stable 工具链到 <code>$HOME/.cargo</code> 目录下，安装的组件包括</p>
+<ul>
+<li>Rust 构建系统和包管理器 <code>cargo</code></li>
+<li>Rust 静态代码分析工具 <code>clippy</code></li>
+<li>Rust 离线文档 <strong>rust-docs</strong></li>
+<li>Rust 标准库 <strong>rust-std</strong></li>
+<li>Rust 编译器 <code>rustc</code></li>
+<li>Rust 代码格式工具 <code>rustfmt</code></li>
+</ul>
+<p>这些组件安装后， Rust 环境基本上就 OK 了，可以写一个 hello world 测试一下</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;Hello, world!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以直接使用 <code>rustc</code> 来编译它，就像使用 gcc 那样</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rustc main.rs -o main</span><br></pre></td></tr></table></figure>
+<h1 id="rustup"><a class="markdownIt-Anchor" href="#rustup"></a> rustup</h1>
+<p>rustup 是一个 rust 工具链管理工具，可以轻松在一个机器上部署多个版本的 rust 工具链，并在它们之间轻松切换。例如安装 stable, nightly, 1.82.0</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rustup install stable</span><br><span class="line">rustup install nightly</span><br><span class="line">rustup install 1.82.0</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看当前工具链版本
+<ul>
+<li><code>rustup default</code></li>
+</ul>
+</li>
+<li>设置当前工具链为 1.82.0
+<ul>
+<li><code>rustup default 1.82.0</code></li>
+</ul>
+</li>
+<li>如果存在多个版本的工具链，为 cargo 指定特定工具链
+<ul>
+<li><code>cargo +1.82.0 install --path /some/rust/project/dir</code></li>
+</ul>
+</li>
+</ul>
+<p>当然推荐的方法是使用 <code>cargo</code>, 就像编译 C 时大多用 <code>make</code> 一样。 <code>cargo</code> 是 rust 的包管理工具，帮助管理项目中包的依赖及应用的构建，创建一个 Rust 项目，通常第一步是执行 <code>cargo init</code>, 它自动创建一个 <strong>Rust binary (application) package</strong>, 这样的包里会包含一个 <strong>Cargo.toml</strong> 文件(自动生成)， 后面 <code>cargo build</code> 就是根据这个文件内容来编译 Rust 项目。(如果要清理构建的结果，使用 <code>cargo clean</code>)</p>
+<h1 id="cargo"><a class="markdownIt-Anchor" href="#cargo"></a> <a target="_blank" rel="noopener" href="https://doc.rust-lang.org/cargo/index.html">cargo</a></h1>
+<p>Rust 的包叫 <strong>crate</strong>, <strong>cargo</strong> 既是包管理器，也是 Rust 项目的构建系统。</p>
+<h2 id="构建"><a class="markdownIt-Anchor" href="#构建"></a> 构建</h2>
+<p>常用的 cargo 构建命令, 每个命令可能支持若干选项，如 <code>cargo build --bin hello_world</code>, 当一个 crate 下存在多个目标时， <code>--bin</code> 指定构建某个目标</p>
+<ul>
+<li><code>cargo new</code></li>
+<li><code>cargo init</code></li>
+<li><code>cargo build</code></li>
+<li><code>cargo clean</code></li>
+<li><code>cargo modules structure --package XXX</code>
+<ul>
+<li>显示某个 crate 的框架 (如有哪些函数, 类等)</li>
+</ul>
+</li>
+<li><code>cargo doc</code>
+<ul>
+<li><code>cargo doc --open --manifest-path=/path/to/Cargo.toml</code>
+<ul>
+<li>生成指定 crate (以及依赖) 的文档，并启动浏览器打开<br />
+<img src="/images/rust/rustlings-doc.png" alt="cargo doc --open" /></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="rust-hello-world"><a class="markdownIt-Anchor" href="#rust-hello-world"></a> Rust Hello World</h1>
+<p>Rust 相对于 C 是复杂的，那我们也来一个 Non-trivial 版本的 Hello world。这个 Hello World 不使用标准库，而是通过<strong>汇编指令(x86)</strong> 直接调用操作系统的系统调用 (write), 来将&quot;Hello world&quot;,送到标准输出。</p>
+<p>Rust 的标准库依赖 C 库 libc.so.6。但 Rust 语言允许你禁用标准库，从而不依赖 C 库。要达到这个目的，需要对 Hello world 程序和编译过程做些<a target="_blank" rel="noopener" href="https://github.com/lucmann/pmp/tree/master/rust">修改</a></p>
+<ul>
+<li><code>#![no_std]</code> 明确告诉 rustc 不要用标准库， 那就意味着不能调用 <code>println!</code> 宏在标准输出上打印字符, 可以通过内联汇编调用 <code>write</code> 系统调用直接将字符送到标准输出。不要 rust 标准库，也就不要 C 标准库，那也就调用不了 crt1.o 里的 <code>_start</code> 函数， 所以这也意味着要自己实现 <code>_start</code></li>
+<li><code>#![no_main]</code> 不要 main 函数，因为程序真正的入口点是 <code>_start</code> 函数， 既然我们直接实现 <code>_start()</code>, 那也就没必要提供 <code>main</code> 这个入口了。</li>
+<li>要提供一个 <code>panic_handler</code>, 且需要将 <code>panic</code> 的触发事件改为 <code>abort</code> (默认 <code>panic=unwind</code>)</li>
+</ul>
+<p><code>cargo build</code> 时可以通过环境变量 <code>RUSTFLAGS</code> 告诉编译器和静态链接器以上这些信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RUSTFLAGS=&quot;-Clink-arg=-nostartfiles -Cpanic=abort&quot; cargo build --bin hello_nostd</span><br></pre></td></tr></table></figure>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#![no_std]</span></span><br><span class="line"><span class="meta">#![no_main]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> core::panic::PanicInfo;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[panic_handler]</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">panic</span>(_: &amp;PanicInfo) <span class="punctuation">-&gt;</span> ! &#123;</span><br><span class="line">    <span class="keyword">loop</span> &#123;&#125; <span class="comment">// Loop forever to halt the program</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[no_mangle]</span></span><br><span class="line"><span class="meta">#[cfg(target_arch = <span class="string">&quot;x86_64&quot;</span>)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">unsafe</span> <span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> <span class="keyword">fn</span> <span class="title function_">_start</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">message</span> = <span class="string">b&quot;Hello, world!\n&quot;</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">fd</span>: <span class="type">usize</span> = <span class="number">1</span>; <span class="comment">// File descriptor for stdout</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">syscall_no</span>: <span class="type">usize</span> = <span class="number">1</span>; <span class="comment">// Syscall number for write in Linux x86_64</span></span><br><span class="line">    <span class="comment">// Use inline asm macro to perform the syscall</span></span><br><span class="line">    core::arch::asm!(</span><br><span class="line">        <span class="string">&quot;syscall&quot;</span>,</span><br><span class="line">        <span class="title function_ invoke__">in</span>(<span class="string">&quot;rax&quot;</span>) syscall_no, <span class="comment">// syscall number</span></span><br><span class="line">        <span class="title function_ invoke__">in</span>(<span class="string">&quot;rdi&quot;</span>) fd,         <span class="comment">// file descriptor</span></span><br><span class="line">        <span class="title function_ invoke__">in</span>(<span class="string">&quot;rsi&quot;</span>) message.<span class="title function_ invoke__">as_ptr</span>(), <span class="comment">// pointer to the message</span></span><br><span class="line">        <span class="title function_ invoke__">in</span>(<span class="string">&quot;rdx&quot;</span>) message.<span class="title function_ invoke__">len</span>(), <span class="comment">// length of the message</span></span><br><span class="line">        <span class="title function_ invoke__">out</span>(<span class="string">&quot;rcx&quot;</span>) _, <span class="title function_ invoke__">out</span>(<span class="string">&quot;r11&quot;</span>) _, <span class="comment">// telling compiler these registers will</span></span><br><span class="line">                                    <span class="comment">// be clobbered by syscalls</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Exit the program with status code 0</span></span><br><span class="line">    core::arch::asm!(</span><br><span class="line">        <span class="string">&quot;syscall&quot;</span>,</span><br><span class="line">        <span class="title function_ invoke__">in</span>(<span class="string">&quot;rax&quot;</span>) <span class="number">60</span>, <span class="comment">// syscall number for exit</span></span><br><span class="line">        <span class="title function_ invoke__">in</span>(<span class="string">&quot;rdi&quot;</span>) <span class="number">0</span>,  <span class="comment">// exit status code</span></span><br><span class="line">        <span class="title function_ invoke__">out</span>(<span class="string">&quot;rcx&quot;</span>) _, <span class="title function_ invoke__">out</span>(<span class="string">&quot;r11&quot;</span>) _, <span class="comment">// telling compiler these registers will</span></span><br><span class="line">                                    <span class="comment">// be clobbered by syscalls</span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="rust-for-linux"><a class="markdownIt-Anchor" href="#rust-for-linux"></a> Rust for Linux</h1>
+<p>Rust 是 2022 年 10 月随 Linux 6.1-rc1 进入内核主线的。Linux 内核从此就变成了一个双语言项目，首先要解决的问题之一就是 C 和 Rust 函数互相调用的问题，这就需要一个自动生成 <strong>Rust FFI bindings to C</strong> 的工具 <a target="_blank" rel="noopener" href="https://github.com/rust-lang/rust-bindgen">bindgen</a>, 所以 bindgen 也是构建内核中 Rust 代码的依赖之一。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S rust-bindgen</span><br></pre></td></tr></table></figure>
+<p>内核有个特殊之处就是它不能链接 C 标准库，所以它自然也不能链接 Rust 标准库，所以编译开启 Rust (<code>CONFIG_RUST</code>) 内核需要安装 Rust 标准库的源码，这步可以通过 rustup 完成</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rustup component add rust-src</span><br></pre></td></tr></table></figure>
+<p>这些完成后，在内核源码树根目录下运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make rustavailable</span><br></pre></td></tr></table></figure>
+<p>检查编译内核的 Rust 环境是否已经准备 OK.</p>
+<p>内核 Rust 构建系统提供对 VSCode <strong>rust-analyzer</strong> 插件的支持(因为 Rust for Linux 不用 Cargo, 所以默认情况下 rust-analyzer server 是无法正常工作的), 运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make rust-analyzer</span><br></pre></td></tr></table></figure>
+<p>会生成 <strong>rust-project.json</strong>, 有了这个文件，rust-ananlyzer 插件可以运行。但是注意 <code>rust-analyzer</code> 目标必须在内核配置过之后才能 make</p>
+<p>编译内核第一步，是得到 <code>.config</code> 配置文件, 配置项 <code>Rust support</code> 的位置在 <code>General setup</code> -&gt; <code>Rust support</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+<h1 id="learn-rust-from-rust-for-linux"><a class="markdownIt-Anchor" href="#learn-rust-from-rust-for-linux"></a> Learn Rust from Rust for Linux</h1>
+<p>就像之前的 <a href="https://lucmann.github.io/utils/make/">Learn Makefile from Linux Build System</a> 一样，这次我想一边阅读 Linux 内核中的 Rust 驱动代码，一边学习 Rust 语言，好处是可以了解一个实际的项目中，像 Rust 这样的语言的最佳实践是怎样的，这里就当是学习笔记吧</p>
+<h1 id="nightly-vs-stable-rustc"><a class="markdownIt-Anchor" href="#nightly-vs-stable-rustc"></a> Nightly vs. Stable rustc</h1>
+<p>Nightly rustc 每日自动构建，包含了所有最新的语言功能和标准库功能，所以稳定性也低，有可能有Bug。Rust for Linux 的官方文档虽然没有明确说构建内核 Rust 使用 Stable 编译器还是 Nightly 编译器，但最好使用 Stable, 原因是 Nightly 每天可能都有更新，Rust for Linux 也每天都在更新，如果使用 Nightly 版本的编译器，就需要二者同时都是最新，否则可能出现像下面的情况，编译器的版本号已经是 <code>1.91.0</code> 了，但相应的功能还没更新上(对于 Nightly 版本来说，所有的新功能不是在一天内更新进去的)</p>
+<figure class="highlight rust"><figcaption><span>$srctree/scripts/generate_rust_target.rs</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> cfg.<span class="title function_ invoke__">rustc_version_atleast</span>(<span class="number">1</span>, <span class="number">91</span>, <span class="number">0</span>) &#123;</span><br><span class="line">    ts.<span class="title function_ invoke__">push</span>(<span class="string">&quot;target-pointer-width&quot;</span>, <span class="number">64</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    ts.<span class="title function_ invoke__">push</span>(<span class="string">&quot;target-pointer-width&quot;</span>, <span class="string">&quot;64&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>rustup install nightly</code>
+<ul>
+<li><code>nightly-x86_64-unknown-linux-gnu installed - rustc 1.91.0-nightly (1ebbd87a6 2025-08-11)</code></li>
+</ul>
+</li>
+<li><code>rustup update nightly</code>
+<ul>
+<li>更新 nightly 版本的 rustc  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">info: syncing channel updates for &#x27;nightly-x86_64-unknown-linux-gnu&#x27;</span><br><span class="line"></span><br><span class="line">    nightly-x86_64-unknown-linux-gnu unchanged - rustc 1.92.0-nightly (c8905eaa6 2025-09-28)</span><br><span class="line"></span><br><span class="line">info: checking for self-update</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><code>rustup default nightly</code>
+<ul>
+<li><code>nightly-x86_64-unknown-linux-gnu unchanged - rustc 1.91.0-nightly (1ebbd87a6 2025-08-11)</code></li>
+<li><code>rustc --version</code></li>
+</ul>
+</li>
+<li><code>rustup component add rust-src</code>
+<ul>
+<li><code>make rustavailable</code></li>
+<li>安装 rustc nightly 后同样必须安装 nightly rust-src,否则 <code>make rustavailable</code> 会失败</li>
+</ul>
+</li>
+<li><code>rustup default nightly</code> or <code>rustup default stable</code>
+<ul>
+<li>在 nightly 和 stable 之间切换</li>
+</ul>
+</li>
+<li><code>rustup override set stable</code>
+<ul>
+<li>只改变 current working directory 的编译器版本，不影响系统的编译器版本配置</li>
+</ul>
+</li>
+</ul>
+<h1 id="macros"><a class="markdownIt-Anchor" href="#macros"></a> Macros</h1>
+<p>Rust 中的宏虽说是强大，但也非常复杂，单看它文档里的<strong>声明宏</strong>的语法定义就头大了，更不用说过程宏了。但 Rust 的宏强大就强大在<strong>过程宏</strong>，声明宏只是减少代码量，而过程宏能让编译器<strong>自动生成代码</strong>。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://doc.rust-lang.org/reference/macros-by-example.html">https://doc.rust-lang.org/reference/macros-by-example.html</a></li>
+</ul>
+<h2 id="declarative-macros-声明式宏-macro_rules"><a class="markdownIt-Anchor" href="#declarative-macros-声明式宏-macro_rules"></a> Declarative Macros 声明式宏 <code>macro_rules!</code></h2>
+<p>Rust 声明式宏给人的感觉就好像是把编译器前端的<strong>词法分析(Lexical)</strong>, <strong>语法分析(Syntactic)</strong> 开放给了用户，用户根据这套语法分析逻辑自己定义代码。定义一个声明式宏的一般语法是</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">macro_rules!</span> MACRO_NAME &#123;</span><br><span class="line">    ( PATTERN ) =&gt; &#123;</span><br><span class="line">        .....</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>声明式宏有点像<strong>模式匹配</strong>(至少它们都用到 <code>=&gt;</code>🐶), 调用宏时传入的<strong>那段字串</strong>会与 <strong>PATTERN</strong> 的结构匹配，一旦匹配就会按<strong>展开规则</strong>进行展开，这里的<strong>展开规则</strong>本身的写法很复杂，但也很强大。</p>
+<p>内核中的 <code>dev_dbg</code> 就是一个声明式宏，实际上 <code>crate::dev_printk</code> 还是一个声明式宏</p>
+<ul>
+<li>dev_dbg 宏定义</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[macro_export]</span></span><br><span class="line"><span class="built_in">macro_rules!</span> dev_dbg &#123;</span><br><span class="line">    ($($f:tt)*) =&gt; &#123; $crate::dev_printk!(pr_dbg, $($f)*); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>dev_printk 宏定义</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[doc(hidden)]</span></span><br><span class="line"><span class="meta">#[macro_export]</span></span><br><span class="line"><span class="built_in">macro_rules!</span> dev_printk &#123;</span><br><span class="line">    ($method:ident, $dev:expr, $($f:tt)*) =&gt; &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            ($dev).$<span class="title function_ invoke__">method</span>(::core::<span class="built_in">format_args!</span>($($f)*));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>dev_dbg 宏使用</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dev_dbg!(dev, <span class="string">&quot;GPU instance built\n&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>从上面3段代码看，Rust 声明宏与 C 宏本质上差不多，形式上差得多。从 <code>dev_dbg</code> 的定义看，这个宏的参数是一个 <strong>TokenTree (tt)</strong>, 这个参数的名字就是 <code>$f</code>, 它的展开就是以 <code>pr_dbg</code> 这个<strong>Identifier (ident)</strong> 作为第一个参数调用 <code>dev_printk</code> 宏，其它参数透传过去。</p>
+<p>而 <code>dev_printk</code> 宏有3个参数：</p>
+<ul>
+<li>第1个是一个 <strong>Identifier</strong>, 参数名是 <code>$method</code></li>
+<li>第2个是一个 <strong>Expression</strong>, 参数名是 <code>$dev</code></li>
+<li>第3个是一个 <strong>TokenTree</strong>,  参数名是 <code>$f</code></li>
+</ul>
+<p><code>dev_dbg!(dev, &quot;GPU instance built\n&quot;)</code> 最终展开后就是 <code>dev.pr_dbg(::core::format_args!(&quot;GPU instance built\n&quot;))</code></p>
+<h2 id="procedural-macros-过程宏-rust-code-that-generates-rust-code"><a class="markdownIt-Anchor" href="#procedural-macros-过程宏-rust-code-that-generates-rust-code"></a> Procedural Macros 过程宏 Rust code that generates rust code</h2>
+<ul>
+<li>Function-like macros</li>
+<li>derive macros</li>
+<li>attribute macros</li>
+</ul>
+<h3 id="function-like-macros"><a class="markdownIt-Anchor" href="#function-like-macros"></a> Function-like macros</h3>
+<p>函数式过程宏的一般语法是</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mod</span> foo;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[proc_macro_derive(Name)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">foo_bar</span>(input: TokenStream) <span class="punctuation">-&gt;</span> TokenStream &#123;</span><br><span class="line">    foo::<span class="title function_ invoke__">foo_bar</span>(input.<span class="title function_ invoke__">into</span>())).<span class="title function_ invoke__">into</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体的宏的实现(如何把input TokenStream 变成结果 TokenStream) 一般在一个单独的 rust mod 里。</p>
+<h3 id="derive-macros-derivedebug"><a class="markdownIt-Anchor" href="#derive-macros-derivedebug"></a> derive macros <code>#[derive(Debug)]</code></h3>
+<h3 id="attribute-macros-bitfield"><a class="markdownIt-Anchor" href="#attribute-macros-bitfield"></a> attribute macros <code>#[bitfield]</code></h3>
+<ul>
+<li>Outer attribute
+<ul>
+<li><code>#[...]</code>
+<ul>
+<li>仅修饰紧跟着它的项 (fn, struct, trait)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Inner attribute
+<ul>
+<li><code>#![...]</code>
+<ul>
+<li>修饰它所在的整个项 (crate, mod)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="traits"><a class="markdownIt-Anchor" href="#traits"></a> Traits</h1>
+<h1 id="closures-闭包匿名函数"><a class="markdownIt-Anchor" href="#closures-闭包匿名函数"></a> Closures 闭包(匿名函数)</h1>
+<p>Rust closure 和 C++ 的 lambda 类似，都是实现<strong>匿名函数</strong>，都是一种语法糖，也都是<strong>零开销抽象</strong>。Rust closure 的一般语法是</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">a_closure</span> = || &#123; .... &#125;;</span><br><span class="line"><span class="comment">// now you can call it</span></span><br><span class="line"><span class="title function_ invoke__">a_closure</span>();</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>当函数体只有一个表达式时，花括号都可以省略</p>
+</li>
+<li>
+<p>Rust closure 的变量捕获相对简单，因为它是由编译器隐式地自动完成的(根据你使用变量的方式)</p>
+</li>
+<li>
+<p>下面是一个使用 closure 的例子</p>
+  <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">_</span>: <span class="type">Result</span> = util::<span class="title function_ invoke__">wait_on</span>(Delta::<span class="title function_ invoke__">from_micros</span>(<span class="number">10</span>), || <span class="literal">None</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><code>util::wait_on()</code> 的第2个参数的类型 <code>F</code>, 是一个实现了 <code>Fn()</code> trait 且返回值类型是 <code>Option&lt;R&gt;</code> 的类型</p>
+</li>
+<li>
+<p>第2个实参： <code>|| None</code> (这个闭包够简单吧) 符合这个类型的要求</p>
+</li>
+<li>
+<p><code>Option&lt;T&gt;</code> 是个泛型枚举类型，<code>None</code> 就是它的一个枚举值</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.17-rc6/source/drivers/gpu/nova-core/util.rs#L35"><code>util::wait_on()</code></a>的实现如下</p>
+  <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">pub</span>(<span class="keyword">crate</span>) <span class="keyword">fn</span> <span class="title function_">wait_on</span>&lt;R, F: <span class="title function_ invoke__">Fn</span>() <span class="punctuation">-&gt;</span> <span class="type">Option</span>&lt;R&gt;&gt;(timeout: Delta, cond: F) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;R&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">start_time</span> = Instant::&lt;Monotonic&gt;::<span class="title function_ invoke__">now</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">loop</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> <span class="variable">Some</span>(ret) = <span class="title function_ invoke__">cond</span>() &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">Ok</span>(ret);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> start_time.<span class="title function_ invoke__">elapsed</span>().<span class="title function_ invoke__">as_nanos</span>() &gt; timeout.<span class="title function_ invoke__">as_nanos</span>() &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">Err</span>(ETIMEDOUT);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="概念区分"><a class="markdownIt-Anchor" href="#概念区分"></a> 概念区分</h1>
+<h2 id="引用和借用"><a class="markdownIt-Anchor" href="#引用和借用"></a> 引用和借用</h2>
+<p><a target="_blank" rel="noopener" href="https://course.rs/basic/ownership/borrowing.html"><strong>获取变量引用的过程叫借用(Borrowing)</strong></a>。借用这一概念是 Rust 所有权的核心。</p>
+<h2 id="string-vs-str-vs-str"><a class="markdownIt-Anchor" href="#string-vs-str-vs-str"></a> <code>String</code> vs <code>str</code> vs <code>&amp;str</code></h2>
+<ul>
+<li><code>str</code> 是 rust 语言级别的字符串类型， <code>String</code> 是 rust 标准库里实现的众多字符串类型之一, <code>&amp;str</code> 是字符串切片
+<ul>
+<li>除了 <code>std::string::String</code> 之外，标准库还定义了这些字符串类型
+<ul>
+<li><code>std::ffi::OsString</code>, <code>std::ffi::OsStr</code></li>
+<li><code>std::ffi::CString</code>, <code>std::ffi::CStr</code></li>
+<li><code>std::path::PathBuf</code>, <code>std::path::Path</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>str</code> 类型的字符串是硬编码进可执行文件，且不可修改，<code>String</code>是一个可增长、可修改且具有所有权的 UTF-8 编码的字符串</li>
+<li><code>&amp;str</code> 和 <code>String</code> 之间的转换
+<ul>
+<li><code>&amp;str</code> =&gt; <code>String</code>
+<ul>
+<li><code>String::from(&quot;hello,world&quot;)</code></li>
+<li><code>&quot;hello,world&quot;.to_string()</code></li>
+</ul>
+</li>
+<li><code>String</code> =&gt; <code>&amp;str</code>  <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span> () &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s</span> = <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello,world!&quot;</span>);</span><br><span class="line">    <span class="title function_ invoke__">say_hello</span>(&amp;s);</span><br><span class="line">    <span class="title function_ invoke__">say_hello</span>(&amp;s[..]);</span><br><span class="line">    <span class="title function_ invoke__">say_hello</span>(s.<span class="title function_ invoke__">as_str</span>());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">say_hello</span>(s: &amp;<span class="type">str</span>) &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span> ,s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="none-vs"><a class="markdownIt-Anchor" href="#none-vs"></a> <code>None</code> vs <code>()</code></h2>
+<p><code>None</code> 是一个值，<code>enum Option&lt;T&gt;</code> 中的一个枚举值，表示一个<strong>不存在的值</strong></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Option</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="title function_ invoke__">Some</span>(T),</span><br><span class="line">    <span class="literal">None</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而 <code>()</code> 是一个类型，在泛型中有时被用作<strong>占位符</strong>，表示这里需要一个类型，但并不关心具体是什么类型</p>
+<figure class="highlight rust"><figcaption><span>$srctree/drivers/gpu/nova-core/falcon.rs</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">_</span> = util::<span class="title function_ invoke__">wait_on</span>(Delta::<span class="title function_ invoke__">from_micros</span>(<span class="number">150</span>), || &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">r</span> = regs::NV_PFALCON_FALCON_HWCFG2::<span class="title function_ invoke__">read</span>(bar, E::BASE);</span><br><span class="line">    <span class="keyword">if</span> r.<span class="title function_ invoke__">reset_ready</span>() &#123;</span><br><span class="line">        <span class="title function_ invoke__">Some</span>(())</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="literal">None</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://doc.rust-lang.org/cargo/index.html">The Cargo Book</a></li>
+<li><a target="_blank" rel="noopener" href="https://course.rs/basic/variable.html">Rust 语言圣经</a>👍</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/rust-lang/rustlings">Rustling</a>🦀</li>
+<li><a target="_blank" rel="noopener" href="https://rust-for-linux.com/">Rust for Linux</a>👀</li>
+<li><a target="_blank" rel="noopener" href="https://rust.docs.kernel.org/kernel/">rust.docs.kernel.org</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/dtolnay/proc-macro-workshop">The best way to learn procedural macros is by writing them</a></li>
+<li><a target="_blank" rel="noopener" href="https://doc.rust-lang.org/book/ch20-05-macros.html">The Rust Programming Language - Macros</a></li>
+<li><a target="_blank" rel="noopener" href="https://doc.rust-lang.org/book/ch13-01-closures.html">The Rust Programming Language - Closures: Anonymous Functions That Capture Their Environment</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Rust/" rel="tag"># Rust</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/utils/nvidia-docker/" rel="prev" title="CUDA on WSL2">
+                  <i class="fa fa-angle-left"></i> CUDA on WSL2
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/lnx/mpin/" rel="next" title="死锁是如何发生的？">
+                  死锁是如何发生的？ <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

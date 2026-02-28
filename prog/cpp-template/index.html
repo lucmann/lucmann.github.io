@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-96x96.png">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucmann.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="C++中的模板 C++中的模板可分为class template和function template. 它们之间存在不同，例如，function template不能partially specialized(偏特化)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ Template">
+<meta property="og:url" content="https://lucmann.github.io/prog/cpp-template/index.html">
+<meta property="og:site_name" content="Eureka">
+<meta property="og:description" content="C++中的模板 C++中的模板可分为class template和function template. 它们之间存在不同，例如，function template不能partially specialized(偏特化)">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-10-14T08:07:50.000Z">
+<meta property="article:modified_time" content="2026-02-28T06:13:08.423Z">
+<meta property="article:author" content="Luc">
+<meta property="article:tag" content="C&#x2F;C++">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lucmann.github.io/prog/cpp-template/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucmann.github.io/prog/cpp-template/","path":"prog/cpp-template/","title":"C++ Template"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>C++ Template | Eureka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Eureka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#c%E4%B8%AD%E7%9A%84%E6%A8%A1%E6%9D%BF"><span class="nav-number">1.</span> <span class="nav-text"> C++中的模板</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E5%AE%9E%E4%BE%8B%E5%8C%96template-instantiation"><span class="nav-number">2.</span> <span class="nav-text"> 模板实例化(Template Instantiation)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#explicit-instantiation"><span class="nav-number">2.1.</span> <span class="nav-text"> Explicit Instantiation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#implicit-instantiation"><span class="nav-number">2.2.</span> <span class="nav-text"> Implicit Instantiation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E7%89%B9%E5%8C%96template-specialisation"><span class="nav-number">3.</span> <span class="nav-text"> 模板特化(template specialisation)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E7%89%B9%E5%8C%96full-specialisation"><span class="nav-number">3.1.</span> <span class="nav-text"> 全特化(full specialisation)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%8F%E7%89%B9%E5%8C%96partial-specialisation"><span class="nav-number">3.2.</span> <span class="nav-text"> 偏特化(partial specialisation)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#typename-vs-class"><span class="nav-number">4.</span> <span class="nav-text"> typename vs class</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#template-parameters-vs-template-arguments"><span class="nav-number">5.</span> <span class="nav-text"> template parameters vs template arguments</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E7%B1%BB%E7%9A%84%E6%A8%A1%E6%9D%BF%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">5.1.</span> <span class="nav-text"> 模板类的模板构造函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#constraints-rules"><span class="nav-number">6.</span> <span class="nav-text"> Constraints &amp; Rules</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Luc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lucmann" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lucmann" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:onion0709@gmail.com" title="E-Mail → mailto:onion0709@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lucmann.github.io/prog/cpp-template/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Luc">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eureka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="C++ Template | Eureka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Template
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-10-14 16:07:50" itemprop="dateCreated datePublished" datetime="2021-10-14T16:07:50+08:00">2021-10-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/programming/" itemprop="url" rel="index"><span itemprop="name">programming</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/prog/cpp-template/" class="post-meta-item leancloud_visitors" data-flag-title="C++ Template" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/prog/cpp-template/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="prog/cpp-template/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="c中的模板"><a class="markdownIt-Anchor" href="#c中的模板"></a> C++中的模板</h1>
+<p>C++中的模板可分为class template和function template. 它们之间存在不同，例如，function template不能partially specialized(偏特化)</p>
+<span id="more"></span>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span> <span class="title class_">U</span>&gt; <span class="function">T <span class="title">f</span><span class="params">(U obj)</span></span>; <span class="comment">// Primary template</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">U</span>&gt; <span class="type">void</span> <span class="built_in">f</span>&lt;<span class="type">void</span>, U&gt;(U obj); <span class="comment">// Illegal</span></span><br></pre></td></tr></table></figure>
+<h1 id="模板实例化template-instantiation"><a class="markdownIt-Anchor" href="#模板实例化template-instantiation"></a> 模板实例化(Template Instantiation)</h1>
+<p>模板的实例化分为Explicit Instantiation和Implicit Instantiation.</p>
+<h2 id="explicit-instantiation"><a class="markdownIt-Anchor" href="#explicit-instantiation"></a> Explicit Instantiation</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(T s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::out &lt;&lt; s &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;  <span class="comment">// Primary template definition</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> <span class="type">void</span> <span class="built_in">f</span>&lt;<span class="type">double</span>&gt;(<span class="type">double</span>); <span class="comment">// explicit instantiation</span></span><br><span class="line"><span class="keyword">template</span> <span class="type">void</span> f&lt;&gt;(<span class="type">char</span>);  <span class="comment">// explicit instantiation, template args deduced</span></span><br><span class="line"><span class="function"><span class="keyword">template</span> <span class="type">void</span> <span class="title">f</span><span class="params">(<span class="type">int</span>)</span></span>;  <span class="comment">// explicit instantiation, template args deduced</span></span><br></pre></td></tr></table></figure>
+<h2 id="implicit-instantiation"><a class="markdownIt-Anchor" href="#implicit-instantiation"></a> Implicit Instantiation</h2>
+<p>实际中，我们使用模板的大多数时候都是 implicit instantiation, 即我们一般不会像上面一样，显式地声明一个具体类型的模板实例，更常见的是直接声明一个模板实例(type)的对象(object)。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="type">int</span>... A&gt; <span class="keyword">class</span> <span class="title class_">NonTypeVariadicTemplate</span> &#123;&#125;;  <span class="comment">// should be in .h</span></span><br><span class="line"></span><br><span class="line">NonTypeVariadicTemplate&lt;<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>&gt; ntvt; <span class="comment">// implicit instantiation</span></span><br></pre></td></tr></table></figure>
+<h1 id="模板特化template-specialisation"><a class="markdownIt-Anchor" href="#模板特化template-specialisation"></a> 模板特化(template specialisation)</h1>
+<p>模板特化是C++泛型编程的一个重要技术，它的一个典型应用就是type trait的实现</p>
+<h2 id="全特化full-specialisation"><a class="markdownIt-Anchor" href="#全特化full-specialisation"></a> 全特化(full specialisation)</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">is_boolean</span> &#123;</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">bool</span> value = <span class="literal">false</span>;</span><br><span class="line">&#125;; <span class="comment">// primary template</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">is_boolean</span>&lt;<span class="type">bool</span>&gt; &#123;</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">bool</span> value = <span class="literal">true</span>;</span><br><span class="line">&#125;; <span class="comment">// full specialization</span></span><br></pre></td></tr></table></figure>
+<h2 id="偏特化partial-specialisation"><a class="markdownIt-Anchor" href="#偏特化partial-specialisation"></a> 偏特化(partial specialisation)</h2>
+<p>虽然模板类的全特化是一个重要的泛型编程技术，但有时候我们可能需要一个介于完全泛化和全特化之间的一个特化版本，这就是偏特化。下面的例子<code>is_pointer&lt;T&gt;</code>，这里我们需要一个完全泛化的模板版本来处理所有<code>T</code>不是一个指针类型的情形，而需要一个偏特化版本来处理所有<code>T</code>是一个指针类型的情形。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">is_pointer</span> &#123;</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">bool</span> value = <span class="literal">false</span>;</span><br><span class="line">&#125;; <span class="comment">// primary version that handles all the cases where T is not a pointer</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">is_pointer</span>&lt;T*&gt; &#123;</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">bool</span> value = <span class="literal">true</span>;</span><br><span class="line">&#125;; <span class="comment">// partial specialisation to handle all the cases where T is a pointer</span></span><br></pre></td></tr></table></figure>
+<p>从上面两个例子<code>is_boolean&lt;T&gt;</code>和<code>is_pointer&lt;T&gt;</code>可以看出，全特化和偏特化的语法有明显区别，偏特化在类名后面的尖括号<code>&lt;&gt;</code>里仍然包含模板参数，像 <code>&lt;T*&gt;</code>, 而全特化类名后面的<code>&lt;&gt;</code>里已经不包含任何模板参数 (如 <code>T</code>)，而全部是具体的类型, 像 <code>&lt;bool&gt;</code>。</p>
+<p>下面的例子是一个更复杂的偏特化的例子<code>remove_bounds&lt;T&gt;</code>, 这个模板类仅仅定义一个与<code>T</code>类型相同的typedef成员类型，但是高层的数组关联被移除了，这样的模板类可以完成一个类型的转化</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">remove_bounds</span> &#123;</span><br><span class="line">    <span class="keyword">typedef</span> T type;</span><br><span class="line">&#125;; <span class="comment">// primary version</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, std::<span class="type">size_t</span> N&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">remove_bounds</span>&lt;T[N]&gt; &#123;</span><br><span class="line">    <span class="keyword">typedef</span> T type;</span><br><span class="line">&#125;; <span class="comment">// partial specialisation</span></span><br></pre></td></tr></table></figure>
+<p>从这个例子可以看出:</p>
+<ul>
+<li>
+<p>偏特化版本的模板参数(形参)的个数不一定和默认模板的相等</p>
+<ul>
+<li>即 <code>&lt;typename T, std::size_t N&gt;</code> 比默认模板多出了 <code>std::size_t N</code></li>
+</ul>
+</li>
+<li>
+<p>偏特化版本的类名后面的模板参数(实参)的个数和类型必须匹配默认模板的参数的个数和类型</p>
+<ul>
+<li>即 <code>remove_bounds&lt;T[N]&gt;</code> 中的 <code>T[N]</code>, 个数匹配指 <code>T[N]</code> 对应主模板里 <code>T</code>， 类型匹配指 <code>T[N]</code> 中的 <code>T</code> 匹配主模板里的 <code>T</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="typename-vs-class"><a class="markdownIt-Anchor" href="#typename-vs-class"></a> <code>typename</code> vs <code>class</code></h1>
+<p>大多数情况下，<code>typename</code>和<code>class</code>可以互换使用，但它们也有不能互换的时候，下面的情况只能使用<code>typename</code>关键字:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="title class_">Option</span>&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">OptTraits</span> &#123;</span><br><span class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> Option::ValueType ValueType;</span><br><span class="line">&#125;;  <span class="comment">// Indicates Option::ValueType is a type</span></span><br></pre></td></tr></table></figure>
+<h1 id="template-parameters-vs-template-arguments"><a class="markdownIt-Anchor" href="#template-parameters-vs-template-arguments"></a> template parameters vs template arguments</h1>
+<p>template parameters之于template arguments相当于函数的形参之于实参。C++模板的通用语法是:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template &lt;parameter-list&gt; declaration</span><br></pre></td></tr></table></figure>
+<p>parameter-list中的每个形参都可以是下列3种中的任何一种:</p>
+<ul>
+<li>non-type template parameter</li>
+<li>type template parameter</li>
+<li>template template parameter</li>
+</ul>
+<h2 id="模板类的模板构造函数"><a class="markdownIt-Anchor" href="#模板类的模板构造函数"></a> 模板类的模板构造函数</h2>
+<p>模板类的模板构造函数，意思是一个模板类的一个构造函数也是一个模板函数。这种情况有两点需要注意:</p>
+<ul>
+<li>模板类的模板参数名不能和构造函数的模板参数名相同 (<em>template parameter</em> cannot share the same name)</li>
+<li>不能显式地指定模板构造函数的模板实参 (cannot explicitly specify <em>template argument</em> for constructor)</li>
+</ul>
+<p>这种情况可以很好的体现template parameter和template argument的区别，请看下面的例子:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> OptName&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Option</span> &#123;</span><br><span class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> OptName::ValueType ValueType;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Constructor</span></span><br><span class="line">    <span class="function"><span class="keyword">template</span>&lt;<span class="type">size_t</span> NumNamedValues&gt;</span></span><br><span class="line"><span class="function">    <span class="title">Option</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* shortName_</span></span></span><br><span class="line"><span class="params"><span class="function">         , <span class="type">const</span> <span class="type">char</span>* longName_</span></span></span><br><span class="line"><span class="params"><span class="function">         , <span class="type">const</span> <span class="type">char</span>* description_</span></span></span><br><span class="line"><span class="params"><span class="function">         , <span class="type">const</span> NamedValue&lt;ValueType&gt; (&amp;namedValues_)[NumNamedValues]</span></span></span><br><span class="line"><span class="params"><span class="function">         , <span class="type">const</span> <span class="type">char</span>* defaultValue_ = DE_NULL)</span></span></span><br><span class="line"><span class="function">         : shortName(shortName_)</span></span><br><span class="line"><span class="function">         , longName(longName_)</span></span><br><span class="line"><span class="function">         , description(description_)</span></span><br><span class="line"><span class="function">         , defaultValue(defaultValue_)</span></span><br><span class="line"><span class="function">         , parse((ParseFunc)DE_NULL)</span></span><br><span class="line"><span class="function">         , namedValues(DE_ARRAY_BEGIN(namedValues_))</span></span><br><span class="line"><span class="function">         , namedValuesEnd(DE_ARRAY_END(namedValues_))</span></span><br><span class="line"><span class="function">    &#123;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> NamedValue&lt;<span class="type">bool</span>&gt; s_enableNames[] = &#123;</span><br><span class="line">    &#123; <span class="string">&quot;enable&quot;</span>, <span class="literal">true</span> &#125;,</span><br><span class="line">    &#123; <span class="string">&quot;disable&quot;</span>, <span class="literal">false</span> &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Instantiation to call constructor above</span></span><br><span class="line">Option&lt;TestOOM&gt; opt = <span class="built_in">Option</span>&lt;TestOOM&gt;(DE_NULL, <span class="string">&quot;deqp-test-oom&quot;</span>, <span class="string">&quot;Run tests that exhaust memory&quot;</span>, s_enableNames, <span class="string">&quot;disable&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>从这个例子看到模板构造函数被调用时本该指定的non-type template argument(size_t) <code>NumNamedValues</code>并没有被指定, 原因是模板函数的template argument list应该紧跟在函数名后面，但是构建函数模板(类型转换函数模板conversion member function template也是同样情况)被调用的时候<strong>不使用函数名</strong>，所以没有一种方法可以显式地指定</p>
+<ul>
+<li>constructor member function template</li>
+<li>conversion member function template</li>
+</ul>
+<p>的template argument list.</p>
+<h1 id="constraints-rules"><a class="markdownIt-Anchor" href="#constraints-rules"></a> Constraints &amp; Rules</h1>
+<ul>
+<li>Explicit instantiation时，如果可以从function parameter推导出类型，可以省去template args.</li>
+<li>Function template或class template的member function的Explicit实例化不能使用<code>inline</code>和<code>constexpr</code>关键字。</li>
+<li>Different template instantiations are distinct types.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-C/" rel="tag"># C/C++</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/misc/1percent/" rel="prev" title="观“老石谈芯”视频记">
+                  <i class="fa fa-angle-left"></i> 观“老石谈芯”视频记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/gfx/ogl-pipeline/" rel="next" title="OpenGL Pipeline">
+                  OpenGL Pipeline <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Luc</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"forest","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js","integrity":"sha256-G8ouPAnw4zzMbnAenHnVz6h9XpKbNdOkrqTh7AadyHs="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"RIqzuwdV0iZwT6XIZjv74zCj-MdYXbMMI","app_key":"9gRe7wBvmmjIneYA9pYAJywK","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"lucmann-github-io","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>
