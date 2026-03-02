@@ -111,6 +111,12 @@ sudo make -C tools/perf install prefix=/usr
 # 调试内核
 ## 与调试相关的内核配置
 
+### CONFIG_PRINTK
+
+- `CONFIG_LOG_BUF_SHIFT`=17
+
+printk 有速率限制机制，当日志产生速度超过 console 输出速度时，内核会丢弃部分消息并打印 `** N printk messages dropped **`。内核配置选项 `CONFIG_LOG_BUF_SHIFT` 和内核启动参数 `log_buf_len=16M` 都可以修改默认的 ring buffer 的大小。
+
 ### CONFIG_DEBUG_FS
 
 #### 如何在 WSL2 上启用 debugfs
