@@ -257,6 +257,10 @@ DSI bridge driver probe [陷入死循环](https://gist.github.com/lucmann/7ae4bf
 
 ![From claude.ai](/images/hikey970/dsi_probe_ordering_comparison.svg)
 
+## fbdev vs drm_client
+
+kernel command line 选项 `drm_client_lib.active=fbdev` 可以覆盖内核配置项 `CONFIG_DRM_CLIENT_DEFAULT` 
+
 # Panfrost on HiKey970
 
 Pathor(C) 和 Tyr(Rust) 都是为 Valhall 架构以上的 Mali GPU (即基于 Command Stream Frontend 的 GPU) 而写的驱动, HiKey 970 (HI3670 SoC) 搭载的是 Mali G72 MP12 (Bifrost)，所以只能使用 Panfrost 驱动。上面可以启动的内核是 v4.19, 当时的 GPU 驱动还是 lima.
