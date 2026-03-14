@@ -222,10 +222,9 @@ systemctl start dhcpcd.service
 /sbin/ntpdate ntp.aliyun.com
 ```
 
-# `kirin-drm` Display Pipeline Engine driver on Hikey970
+# `kirin-drm` Display Pipeline Engine driver
 
 ![From claude.ai](/images/hikey970/hikey970-display.svg)
-
 
 ```mermaid
 flowchart TB
@@ -260,7 +259,7 @@ flowchart TB
     A --> B --> C1 --> C2 --> C3 --> C31 --> C4 --> C5 --> C6 --> C7 --> C8 --> C9 --> D --> E
 ```
 
-# `dw-dsi` DesignWare MIPI DSI Host Controller Driver on Hikey970
+# `dw-dsi` DesignWare MIPI DSI Host Controller Driver
 
 ```mermaid
 flowchart TB
@@ -309,11 +308,48 @@ DSI bridge driver probe [陷入死循环](https://gist.github.com/lucmann/7ae4bf
 
 ![From claude.ai](/images/hikey970/dsi_probe_ordering_comparison.svg)
 
+# `kirin9xx-dw-dsi` MIPI DSI Host Controller Driver
+
+```mermaid
+flowchart TB
+    subgraph "dsi_probe()@platform_driver.probe"
+        direction TB
+        A["devm_kzalloc()"]
+        B["dsi_parse_endpoint(dw_dsi, np, OUT_HDMI)"]
+        B1["dsi_host_init(dev, dw_dsi)"]
+        C["dsi_parse_endpoint(dw_dsi, np, OUT_PANEL)"]
+        D["dsi_parse_dt(plat_dev, dw_dsi)"]
+        E["platform_set_drvdata()"]
+        subgraph "dsi_host_init(dev, dw_dsi)"
+            F1["mipi_dsi_host_register(dw_dsi::mipi_dsi_host::ops)"]
+        end
+        subgraph "dsi_host_attach()@mipi_dsi_host_ops.attach"
+            G1["component_add(dev, &dsi_ops)"]
+        end
+        subgraph "dsi_bind()@component_ops.bind"
+            subgraph "dw_drm_encoder_init(dev, drm_dev, &dsi->encoder)"
+                direction TB
+                H11["drm_of_find_possible_crtcs(drm_dev, dev->of_node)"]
+                H12["drm_encoder_init(drm_dev, encoder, &dw_encoder_funcs,<br/>DRM_MODE_ENCODER_DSI, NULL)"]
+                H13["drm_encoder_helper_add(encoder, &dw_encoder_helper_funcs)"]
+                H14["drm_of_find_panel_or_bridge(np, 1, 0, NULL, &bridge)"]
+                H15["drm_bridge_attach(encoder, bridge, NULL, 0)"]
+            end
+            H2["dsi_connector_init(drm_dev, dw_dsi)"]
+        end
+
+        style B1 stroke-dasharray: 5,5
+        style H2 stroke-dasharray: 5,5
+    end
+
+    A --> B --> B1 --> C --> D --> E --> F1 --> G1 --> H11 --> H12 --> H13 --> H14 --> H15 --> H2  
+```
+
 ## fbdev vs drm_client
 
 kernel command line 选项 `drm_client_lib.active=fbdev` 可以覆盖内核配置项 `CONFIG_DRM_CLIENT_DEFAULT` 
 
-# `panfrost` GPU driver on HiKey970
+# `panfrost` GPU Driver
 
 Pathor(C) 和 Tyr(Rust) 都是为 Valhall 架构以上的 Mali GPU (即基于 Command Stream Frontend 的 GPU) 而写的驱动, HiKey 970 (HI3670 SoC) 搭载的是 Mali G72 MP12 (Bifrost)，所以只能使用 Panfrost 驱动。上面可以启动的内核是 v4.19, 当时的 GPU 驱动还是 lima.
 
