@@ -222,13 +222,13 @@ systemctl start dhcpcd.service
 /sbin/ntpdate ntp.aliyun.com
 ```
 
-# `kirin-drm` Display Pipeline Engine driver on HiKey970
+# `kirin-drm` Display Pipeline Engine driver on Hikey970
 
 ![From claude.ai](/images/hikey970/hikey970-display.svg)
 
 
 ```mermaid
-flowchart TD
+flowchart TB
     A["kirin_drm_platform_probe()<br/>@platform_driver.probe"]
     subgraph "kirin_drm_bind()@component_master_ops.bind"
         B["drm_dev_alloc()"]
@@ -236,6 +236,7 @@ flowchart TD
             C1["dev_set_drvdata(drm_dev->dev_private)"]
             C2["drm_mode_config_init(drm_dev)"]
             C3["kirin_drm_mode_config_init(drm_dev)<br/>kirin-specific mode config"]
+            C31["dss_drm_init()@kirin_dc_ops.init"]
             C4["component_bind_all(dev, drm_dev)"]
             C5["drm_vblank_init(drm_dev, num_crtc(2))"]
             C6["drm_mode_config_reset(drm_dev)"]
@@ -247,14 +248,34 @@ flowchart TD
         E["kirin_drm_connectors_register(drm_dev)"]
     end
 
+    N31["display controller init"]
     N6["reset all the states of crtc/plane/encoder/connector"]
     N8["init kms poll for handling hotplug"]
     N9["force detection after connectors init"]
 
+    C31 -.-> N31
     C6 -.-> N6
     C8 -.-> N8
     C9 -.-> N9
-    A --> B --> C1 --> C2 --> C3 --> C4 --> C5 --> C6 --> C7 --> C8 --> C9 --> D --> E
+    A --> B --> C1 --> C2 --> C3 --> C31 --> C4 --> C5 --> C6 --> C7 --> C8 --> C9 --> D --> E
+```
+
+# `dw-dsi` DesignWare MIPI DSI Host Controller Driver on Hikey970
+
+```mermaid
+flowchart TB
+    subgraph "dsi_probe()@platform_driver.probe"
+        direction TB
+        A["devm_kzalloc()"]
+        B["dsi_parse_endpoint(dw_dsi, np, OUT_HDMI)"]
+        C["dsi_host_init(dev, dw_dsi)"]
+        D["dsi_parse_endpoint(dw_dsi, np, OUT_PANEL)"]
+        E["dsi_parse_dt(plat_dev, dw_dsi)"]
+        F["platform_set_drvdata()"]
+        G["component_add(dev, &dsi_ops)"]
+    end 
+
+    A --> B --> C --> D --> E --> F --> G
 ```
 
 ## [DSI bridge probe](https://lore.kernel.org/dri-devel/e5ec9763-37fe-6cd8-6eca-52792afbdb94@samsung.com/T/)
