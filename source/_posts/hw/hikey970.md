@@ -338,8 +338,8 @@ flowchart TB
             H2["dsi_connector_init(drm_dev, dw_dsi)"]
         end
 
-        style B1 stroke-dasharray: 5,5
-        style H2 stroke-dasharray: 5,5
+        style B1 fill: #f5f5f5, stroke-dasharray: 5,5
+        style H2 fill: #f5f5f5, stroke-dasharray: 5,5
     end
 
     A --> B --> B1 --> C --> D --> E --> F1 --> G1 --> H11 --> H12 --> H13 --> H14 --> H15 --> H2  
