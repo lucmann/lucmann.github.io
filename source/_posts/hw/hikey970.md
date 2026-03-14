@@ -229,15 +229,32 @@ systemctl start dhcpcd.service
 
 ```mermaid
 flowchart TD
-    A["platform_driver.probe<br/>@kirin_drm_platform_probe()"]
-    subgraph "component_master_ops.bind<br/>@kirin_drm_bind()"
+    A["kirin_drm_platform_probe()<br/>@platform_driver.probe"]
+    subgraph "kirin_drm_bind()@component_master_ops.bind"
         B["drm_dev_alloc()"]
-        C["kirin_drm_kms_init(drm_dev)"]
+        subgraph "kirin_drm_kms_init(drm_dev)"
+            C1["dev_set_drvdata(drm_dev->dev_private)"]
+            C2["drm_mode_config_init(drm_dev)"]
+            C3["kirin_drm_mode_config_init(drm_dev)<br/>kirin-specific mode config"]
+            C4["component_bind_all(dev, drm_dev)"]
+            C5["drm_vblank_init(drm_dev, num_crtc(2))"]
+            C6["drm_mode_config_reset(drm_dev)"]
+            C7["kirin_drm_fbdev_init(drm_dev)"]
+            C8["drm_kms_helper_poll_init(drm_dev)"]
+            C9["drm_helper_hpd_irq_event()"]
+        end
         D["drm_dev_register(drm_dev)"]
         E["kirin_drm_connectors_register(drm_dev)"]
     end
 
-    A --> B --> C --> D --> E
+    N6["reset all the states of crtc/plane/encoder/connector"]
+    N8["init kms poll for handling hotplug"]
+    N9["force detection after connectors init"]
+
+    C6 -.-> N6
+    C8 -.-> N8
+    C9 -.-> N9
+    A --> B --> C1 --> C2 --> C3 --> C4 --> C5 --> C6 --> C7 --> C8 --> C9 --> D --> E
 ```
 
 ## [DSI bridge probe](https://lore.kernel.org/dri-devel/e5ec9763-37fe-6cd8-6eca-52792afbdb94@samsung.com/T/)
