@@ -266,15 +266,24 @@ flowchart TB
     subgraph "dsi_probe()@platform_driver.probe"
         direction TB
         A["devm_kzalloc()"]
-        B["dsi_parse_endpoint(dw_dsi, np, OUT_HDMI)"]
+        subgraph "dsi_parse_endpoint(dw_dsi, np, OUT_HDMI)"
+            subgraph "for_each_endpoint_of_node()"
+                subgraph "dsi_parse_bridge_endpoint(dsi, ep_node)"
+                    B1["of_graph_get_remote_port_parent()"]
+                    B2["of_drm_find_bridge()"]
+                end
+            end
+        end
         C["dsi_host_init(dev, dw_dsi)"]
         D["dsi_parse_endpoint(dw_dsi, np, OUT_PANEL)"]
         E["dsi_parse_dt(plat_dev, dw_dsi)"]
         F["platform_set_drvdata()"]
         G["component_add(dev, &dsi_ops)"]
     end 
+    N2["if bridge return NULL,<br/>then return -EPROBE_DEFER"]
 
-    A --> B --> C --> D --> E --> F --> G
+    A --> B1 --> B2 --> C --> D --> E --> F --> G
+    B2 -.-> N2
 ```
 
 ## [DSI bridge probe](https://lore.kernel.org/dri-devel/e5ec9763-37fe-6cd8-6eca-52792afbdb94@samsung.com/T/)
