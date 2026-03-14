@@ -222,9 +222,23 @@ systemctl start dhcpcd.service
 /sbin/ntpdate ntp.aliyun.com
 ```
 
-# Display on HiKey970
+# `kirin-drm` Display Pipeline Engine driver on HiKey970
 
 ![From claude.ai](/images/hikey970/hikey970-display.svg)
+
+
+```mermaid
+flowchart TD
+    A["platform_driver.probe<br/>@kirin_drm_platform_probe()"]
+    subgraph "component_master_ops.bind<br/>@kirin_drm_bind()"
+        B["drm_dev_alloc()"]
+        C["kirin_drm_kms_init(drm_dev)"]
+        D["drm_dev_register(drm_dev)"]
+        E["kirin_drm_connectors_register(drm_dev)"]
+    end
+
+    A --> B --> C --> D --> E
+```
 
 ## [DSI bridge probe](https://lore.kernel.org/dri-devel/e5ec9763-37fe-6cd8-6eca-52792afbdb94@samsung.com/T/)
 
@@ -261,7 +275,7 @@ DSI bridge driver probe [陷入死循环](https://gist.github.com/lucmann/7ae4bf
 
 kernel command line 选项 `drm_client_lib.active=fbdev` 可以覆盖内核配置项 `CONFIG_DRM_CLIENT_DEFAULT` 
 
-# Panfrost on HiKey970
+# `panfrost` GPU driver on HiKey970
 
 Pathor(C) 和 Tyr(Rust) 都是为 Valhall 架构以上的 Mali GPU (即基于 Command Stream Frontend 的 GPU) 而写的驱动, HiKey 970 (HI3670 SoC) 搭载的是 Mali G72 MP12 (Bifrost)，所以只能使用 Panfrost 驱动。上面可以启动的内核是 v4.19, 当时的 GPU 驱动还是 lima.
 
