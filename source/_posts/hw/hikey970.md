@@ -324,8 +324,15 @@ flowchart TB
     subgraph "dsi_probe()@platform_driver.probe"
         direction TB
         A["devm_kzalloc()"]
-        B["dsi_parse_endpoint(dw_dsi, np, OUT_HDMI)"]
-        B1["dsi_host_init(dev, dw_dsi)"]
+        subgraph "dsi_parse_endpoint(dw_dsi, np, OUT_HDMI)"
+            subgraph "dsi_parse_bridge_endpoint(dsi, ep_node)"
+                B["of_graph_get_remote_port_parent(ep_node)"]
+                B_["of_drm_find_bridge(bridge_node)"]
+            end
+        end
+        subgraph "dsi_host_init(dev, dw_dsi)"
+            B1["mipi_dsi_host_register(dw_dsi::mipi_dsi_host::ops)"]
+        end
         C["dsi_parse_endpoint(dw_dsi, np, OUT_PANEL)"]
         D["dsi_parse_dt(plat_dev, dw_dsi)"]
         E["platform_set_drvdata()"]
@@ -344,14 +351,15 @@ flowchart TB
                 H14["drm_of_find_panel_or_bridge(np, 1, 0, NULL, &bridge)"]
                 H15["drm_bridge_attach(encoder, bridge, NULL, 0)"]
             end
-            H2["dsi_connector_init(drm_dev, dw_dsi)"]
         end
 
+        style B  fill: #f5f5f5, stroke-dasharray: 5,5
+        style B_ fill: #f5f5f5, stroke-dasharray: 5,5
         style B1 fill: #f5f5f5, stroke-dasharray: 5,5
-        style H2 fill: #f5f5f5, stroke-dasharray: 5,5
     end
-
-    A --> B --> B1 --> C --> D --> E --> F1 --> G1 --> H11 --> H12 --> H13 --> H14 --> H15 --> H2  
+    A --> B --> B_ --> B1 --> C --> D --> E --> F1 --> G1 --> H11 --> H12 --> H13 --> H14 --> H15
+    B1 --> F1
+    B_ --> H14
 ```
 
 ## fbdev vs drm_client
