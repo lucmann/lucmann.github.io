@@ -150,7 +150,20 @@ $<$<CONFIG:Debug>:DEBUG_MODE>
 
 ## `find_package()`
 
-如果cmake可以成功执行 `find_package(PACKAGE)`，那么说明你的系统上一定存在一个 `FindPACKAGE.cmake`的文件
+`find_package()` 顾名思义，是在环境中搜索到第三方依赖，它有两种搜索模式 **Config** 和 **Module**, 如果不指定搜索模式，默认是 Config 模式。`find_package()` 的签名如下
+
+```cmake
+find_package(<PackageName> <version> [EXACT] [QUIET] [MODULE]
+  [REQUIRED|OPTIONAL]
+  [COMPONENTS <component>...]
+  [OPTIONAL_COMPONENTS <component>...]
+  [REGISTRY_VIEW {64|32|64_32|32_64|HOST|TARGET|BOTH}]
+  [GLOBAL]
+  [NO_POLICY_SCOPE]
+  [BYPASS_PROVIDER]
+  [UNWIND_INCLUDE]
+)
+```
 
 - `find_package(Threads REQUIRED)`: FindThreads.cmake 文件确定一个系统上的 thread 库，如果在Linux 下，如果找到的话就是 `libpthread.so` (C++ std::thread 依赖 `libpthread.so`)
 
