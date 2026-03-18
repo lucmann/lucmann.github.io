@@ -362,6 +362,125 @@ flowchart TB
     B_ --> H14
 ```
 
+# `adv7511` ADV7535 Bridge Driver
+
+```
+[    2.363067] [drm] Initialized kirin9xx 1.0.0 for e8600000.dpe on minor 0
+[    2.363085] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] 
+[    2.363091] [drm:drm_mode_object_get] OBJ ID: 37 (2)
+[    2.363097] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:37:HDMI-A-1]
+[    2.567054] [drm] Valid mode: 640x480@60, clock 25175 (adjusted to 25175)
+[    2.567079] [drm] Valid mode: 800x600@56, clock 36000 (adjusted to 36000)
+[    2.567100] [drm] Valid mode: 800x600@60, clock 40000 (adjusted to 40000)
+[    2.567119] [drm] Valid mode: 848x480@60, clock 33750 (adjusted to 33750)
+[    2.567137] [drm] Valid mode: 1024x768@60, clock 65000 (adjusted to 65000)
+[    2.567144] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:37:HDMI-A-1] probed modes:
+[    2.567151] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1024x768": 60 65000 1024 1048 1184 1344 768 771 777 806 0x40 0xa
+[    2.567158] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "800x600": 60 40000 800 840 968 1056 600 601 605 628 0x40 0x5
+[    2.567165] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "800x600": 56 36000 800 824 896 1024 600 601 603 625 0x40 0x5
+[    2.567171] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "848x480": 60 33750 848 864 976 1088 480 486 494 517 0x40 0x5
+[    2.567177] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "640x480": 60 25175 640 656 752 800 480 490 492 525 0x40 0xa
+[    2.567183] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] [CONNECTOR:37:HDMI-A-1] enabled? yes
+[    2.567192] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] Not using firmware configuration
+[    2.567200] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] [CONNECTOR:37:HDMI-A-1] found first mode: 1024x768
+[    2.567206] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] picking CRTCs for 2048x2048 config
+[    2.567214] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] [CRTC:35:crtc-0] desired mode 1024x768 set (0,0)
+[    2.567219] [drm:drm_mode_object_get] OBJ ID: 37 (2)
+[    2.567223] [drm:drm_mode_object_put.part.0] OBJ ID: 37 (3)
+[    2.567231] kirin9xx-drm e8600000.dpe: [drm:__drm_fb_helper_initial_config_and_unlock] test CRTC 0 primary plane
+[    2.567240] kirin9xx-drm e8600000.dpe: [drm:drm_fbdev_dma_driver_fbdev_probe] surface width(1024), height(768) and bpp(32)
+[    2.574254] kirin9xx-drm e8600000.dpe: [drm:drm_mode_addfb2] [FB:39]
+[    2.574260] [drm:drm_mode_object_put.part.0] OBJ ID: 39 (2)
+[    2.574337] kirin9xx-drm e8600000.dpe: [drm] fb0: kirin9xxdrmfb frame buffer device
+[    2.574341] [drm] Initialized kirin9xx 1.0.0 on minor 0
+[    2.574344] [drm] host attach, client name=[adv7533], id=0
+[    2.574347] adv7511 0-0039: adv7511_probe attach dsi ok
+[    2.574350] adv7511 0-0039: adv7511_probe ok
+```
+
+```
+[    2.204280] [drm] luc Initialized kirin9xx 1.0.0 on minor 0
+[    2.204471] [drm] dss irq = 51.
+[    2.204475] kirin9xx-drm e8600000.dpe: Looking up ldo3-supply from device node /dpe@e8600000
+[    2.204576] [drm] dsi_bind
+[    2.204578] kirin9xx-dw-dsi e8601000.dsi: dw_drm_encoder_init:
+[    2.204586] kirin9xx-dw-dsi e8601000.dsi: Initializing CRTC encoder: 1
+[    2.224171] kirin9xx-drm e8600000.dpe: bound e8601000.dsi (ops dsi_ops)
+[    2.267712] dwmmc_k3 ff37f000.dwmmc1: tuning ok best_clksmpl 11 tuning_sample_flag bff7fff7
+[    2.267729] mmc0: new UHS-I speed SDR104 SDHC card at address aaaa
+[    2.268024] mmcblk0: mmc0:aaaa SC16G 14.8 GiB
+[    2.282367]  mmcblk0: p1 p2
+[    2.446942] kirin9xx-drm e8600000.dpe: [drm:check_connector_changed] [CONNECTOR:37:HDMI-A-1] status updated from unknown to connected
+[    2.446962] kirin9xx-drm e8600000.dpe: [drm:check_connector_changed] [CONNECTOR:37:HDMI-A-1] Changed epoch counter 0 => 1
+[    2.446969] [drm:drm_mode_object_get] OBJ ID: 37 (2)
+[    2.446978] kirin9xx-drm e8600000.dpe: [drm:drm_sysfs_connector_hotplug_event] [CONNECTOR:37:HDMI-A-1] generating connector hotplug event
+[    2.446994] [drm:drm_mode_object_put.part.0] OBJ ID: 37 (2)
+[    2.446999] [drm] kirin_drm_kms_init ok
+[    2.447023] [drm:drm_minor_register] 
+[    2.447107] [drm:drm_minor_register] new minor registered 128
+[    2.447111] [drm:drm_minor_register] 
+[    2.447155] [drm:drm_minor_register] new minor registered 0
+[    2.447159] [drm:drm_minor_register] 
+[    2.447182] kirin9xx-drm e8600000.dpe: [drm:drm_sysfs_connector_add] [CONNECTOR:37:HDMI-A-1] adding connector to sysfs
+[    2.447246] kirin9xx-drm e8600000.dpe: [drm:drm_sysfs_connector_hotplug_event] [CONNECTOR:37:HDMI-A-1] generating connector hotplug event
+[    2.458988] [drm] Initialized kirin9xx 1.0.0 for e8600000.dpe on minor 0
+[    2.459005] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] 
+[    2.459013] [drm:drm_mode_object_get] OBJ ID: 37 (2)
+[    2.459018] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:37:HDMI-A-1]
+[    2.577598] kirin9xx-drm e8600000.dpe: [drm:update_display_info.part.0] [CONNECTOR:37:HDMI-A-1] CEA VCDB 0xd5
+[    2.577609] kirin9xx-drm e8600000.dpe: [drm:update_display_info.part.0] [CONNECTOR:37:HDMI-A-1] HDMI: DVI dual 0, max TMDS clock 360000 kHz
+[    2.577617] kirin9xx-drm e8600000.dpe: [drm:update_display_info.part.0] [CONNECTOR:37:HDMI-A-1] HDMI sink does deep color 30.
+[    2.577622] kirin9xx-drm e8600000.dpe: [drm:update_display_info.part.0] [CONNECTOR:37:HDMI-A-1] Assigning HDMI sink color depth as 10 bpc.
+[    2.577629] kirin9xx-drm e8600000.dpe: [drm:update_display_info.part.0] [CONNECTOR:37:HDMI-A-1] HDMI sink does YCRCB444 in deep color.
+[    2.577633] kirin9xx-drm e8600000.dpe: [drm:update_display_info.part.0] [CONNECTOR:37:HDMI-A-1] HDMI sink should do DC_36, but does not!
+[    2.577641] kirin9xx-drm e8600000.dpe: [drm:update_display_info.part.0] [CONNECTOR:37:HDMI-A-1] ELD monitor Sculptor
+[    2.577646] kirin9xx-drm e8600000.dpe: [drm:update_display_info.part.0] [CONNECTOR:37:HDMI-A-1] HDMI: latency present 0 0, video latency 0 0, audio latency 0 0
+[    2.577652] kirin9xx-drm e8600000.dpe: [drm:update_display_info.part.0] [CONNECTOR:37:HDMI-A-1] ELD size 32, SAD count 1
+[    2.577792] [drm] Valid mode: 1920x1080@60, clock 148500 (adjusted to 144000)
+[    2.577812] [drm] Valid mode: 1920x1080@50, clock 117000 (adjusted to 117000)
+[    2.577830] [drm] Valid mode: 1152x864@60, clock 81579 (adjusted to 81579)
+[    2.577833] [drm] Valid mode: 1280x720@60, clock 74250 (adjusted to 72000)
+[    2.577852] [drm] Valid mode: 1280x1024@60, clock 108000 (adjusted to 108000)
+[    2.577870] [drm] Valid mode: 1600x900@60, clock 108000 (adjusted to 108000)
+[    2.577888] [drm] Valid mode: 800x600@60, clock 40000 (adjusted to 40000)
+[    2.577906] [drm] Valid mode: 1024x768@60, clock 65000 (adjusted to 65000)
+[    2.577910] [drm] Valid mode: 1920x1080@60, clock 148500 (adjusted to 144000)
+[    2.577915] [drm] Valid mode: 1280x720@50, clock 74250 (adjusted to 72000)
+[    2.577917] [drm] Valid mode: 1280x720@60, clock 74250 (adjusted to 72000)
+[    2.577922] [drm] Valid mode: 1920x1080@50, clock 148500 (adjusted to 144000)
+[    2.577925] [drm] Valid mode: 1280x720@60, clock 74176 (adjusted to 74176)
+[    2.577929] [drm] Valid mode: 1920x1080@60, clock 148352 (adjusted to 148352)
+[    2.577935] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:37:HDMI-A-1] probed modes:
+[    2.577942] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1920x1080": 60 148500 1920 2008 2052 2200 1080 1082 1087 1125 0x48 0x5
+[    2.577948] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1920x1080": 60 148500 1920 2008 2052 2200 1080 1084 1089 1125 0x40 0x5
+[    2.577955] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1920x1080": 60 148352 1920 2008 2052 2200 1080 1084 1089 1125 0x40 0x5
+[    2.577961] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1920x1080": 50 148500 1920 2448 2492 2640 1080 1084 1089 1125 0x40 0x5
+[    2.577967] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1920x1080": 50 117000 1920 2008 2052 2080 1080 1084 1089 1125 0x40 0x5
+[    2.577973] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1600x900": 60 108000 1600 1624 1704 1800 900 901 904 1000 0x40 0x5
+[    2.577979] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1280x1024": 60 108000 1280 1328 1440 1688 1024 1025 1028 1066 0x40 0x5
+[    2.577984] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1152x864": 60 81579 1152 1216 1336 1520 864 865 868 895 0x0 0x6
+[    2.577990] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1280x720": 60 74250 1280 1390 1430 1650 720 725 730 750 0x40 0x5
+[    2.577996] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1280x720": 60 74250 1280 1390 1430 1650 720 725 730 750 0x40 0x5
+[    2.578002] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1280x720": 60 74176 1280 1390 1430 1650 720 725 730 750 0x40 0x5
+[    2.578007] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1280x720": 50 74250 1280 1720 1760 1980 720 725 730 750 0x40 0x5
+[    2.578013] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1024x768": 60 65000 1024 1048 1184 1344 768 771 777 806 0x40 0xa
+[    2.578018] kirin9xx-drm e8600000.dpe: [drm:drm_helper_probe_single_connector_modes] Probed mode: "800x600": 60 40000 800 840 968 1056 600 601 605 628 0x40 0x5
+[    2.578025] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] [CONNECTOR:37:HDMI-A-1] enabled? yes
+[    2.578034] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] Not using firmware configuration
+[    2.578041] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] [CONNECTOR:37:HDMI-A-1] found preferred mode: 1920x1080
+[    2.578047] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] picking CRTCs for 2048x2048 config
+[    2.578054] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] [CRTC:35:crtc-0] desired mode 1920x1080 set (0,0)
+[    2.578059] [drm:drm_mode_object_get] OBJ ID: 37 (2)
+[    2.578063] [drm:drm_mode_object_put.part.0] OBJ ID: 37 (3)
+[    2.578070] kirin9xx-drm e8600000.dpe: [drm:__drm_fb_helper_initial_config_and_unlock] test CRTC 0 primary plane
+[    2.578078] kirin9xx-drm e8600000.dpe: [drm:drm_fbdev_dma_driver_fbdev_probe] surface width(1920), height(1080) and bpp(32)
+[    2.588560] kirin9xx-drm e8600000.dpe: [drm:drm_mode_addfb2] [FB:40]
+[    2.588566] [drm:drm_mode_object_put.part.0] OBJ ID: 40 (2)
+[    2.588646] kirin9xx-drm e8600000.dpe: [drm] fb0: kirin9xxdrmfb frame buffer device
+[    2.588649] [drm] Initialized kirin9xx 1.0.0 on minor 0
+[    2.588653] [drm] host attach, client name=[adv7533], id=0
+```
+
 ## fbdev vs drm_client
 
 kernel command line 选项 `drm_client_lib.active=fbdev` 可以覆盖内核配置项 `CONFIG_DRM_CLIENT_DEFAULT` 
