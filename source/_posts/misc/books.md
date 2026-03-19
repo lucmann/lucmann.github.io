@@ -1,7 +1,7 @@
 ---
-title: 读书
+title: Eureka
 date: Fri Jan 16 12:12:02 CST 2026
-tags:
+tags: [Hobbies]
 categories: misc
 ---
 
