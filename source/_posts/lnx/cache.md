@@ -5,11 +5,50 @@ tags: [Hardware]
 categories: linux
 ---
 
-# Cache
-
-音同 cash, 不管是在硬件还是软件都是影响性能的一个重要因素之一。Cache 无论是 CPU cache 还是 GPU cache 一般都分级， L1，L2, 在 Multi-processor CPU/GPU 架构中， L1 一般是分开的，每个 Processor 有一个自己的 L1 Cache, 而 L2 Cache 是全局的，所有 processors 共享的。
+![from manus 1.6 Lite](/images/cache/cpu_cache.png)
 
 <!--more-->
+
+# Cache
+
+音同 cash, 不管是在硬件还是软件都是影响性能的一个重要因素之一。Cache 无论是 CPU cache 还是 GPU cache 一般都分级， L1，L2, 在 Multi-processor CPU/GPU 架构中， L1 一般是分开的，每个核心(Core)有自己的 L1 Cache, 而 L3 Cache 是同一处理器插槽(Socket)上的所有物理核心共享的， L2 Cache 是每核心私有还是所有核心共享和处理器的微架构有关。
+
+```lscpu
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Address sizes:                   39 bits physical, 48 bits virtual
+Byte Order:                      Little Endian
+CPU(s):                          12
+On-line CPU(s) list:             0-11
+Vendor ID:                       GenuineIntel
+Model name:                      Intel(R) Core(TM) i5-10505 CPU @ 3.20GHz
+CPU family:                      6
+Model:                           165
+Thread(s) per core:              2
+Core(s) per socket:              6
+Socket(s):                       1
+Stepping:                        3
+BogoMIPS:                        6384.02
+Flags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology cpuid pni pclmulqdq vmx ssse3 fma cx16 pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi ept vpid ept_ad fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves md_clear flush_l1d arch_capabilities
+Virtualization:                  VT-x
+Hypervisor vendor:               Microsoft
+Virtualization type:             full
+L1d cache:                       192 KiB (6 instances)
+L1i cache:                       192 KiB (6 instances)
+L2 cache:                        1.5 MiB (6 instances)
+L3 cache:                        12 MiB (1 instance)
+Vulnerability Itlb multihit:     KVM: Mitigation: VMX disabled
+Vulnerability L1tf:              Not affected
+Vulnerability Mds:               Not affected
+Vulnerability Meltdown:          Not affected
+Vulnerability Mmio stale data:   Mitigation; Clear CPU buffers; SMT Host state unknown
+Vulnerability Retbleed:          Mitigation; Enhanced IBRS
+Vulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl
+Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:        Mitigation; Enhanced IBRS, IBPB conditional, RSB filling, PBRSB-eIBRS SW sequence
+Vulnerability Srbds:             Unknown: Dependent on hypervisor status
+Vulnerability Tsx async abort:   Not affected
+```
 
 不管 Cache 有多少级，反正是为了降低 processor 访问 memory 的时延的。但是另一方面，当数据缓存到 Cache 中后，就必然引出一致性问题，这里的一致性应该有两个方面
 

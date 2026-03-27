@@ -244,3 +244,4 @@ private:
 - [Implementing generic double-word compare and swap for x86/64](https://blog.lse.epita.fr//2013/02/27/implementing-generic-double-word-compare-and-swap.html)
 - [linux - futex 原理分析](https://www.openeuler.org/zh/blog/wangshuo/Linux_Futex_Principle_Analysis/Linux_Futex_Principle_Analysis.html)
 - [Mutex vs Atomic](https://coffeebeforearch.github.io/2020/08/04/atomic-vs-mutex.html)
+- [Memory Barrier Are Like Source Control Operations](https://preshing.com/20120710/memory-barriers-are-like-source-control-operations/)
