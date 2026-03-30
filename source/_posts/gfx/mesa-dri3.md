@@ -12,7 +12,7 @@ categories: graphics
 
 # 渲染
 
-渲染由显卡(或 SoC)上的 GPU 完成，简单来说就是往后缓冲 (Back Buffer) 里哐哐哐干**像素**，一般要比后面的显示快得多(所以有些像素会被覆盖掉，我们看到的就是撕裂 **Tearing**)
+渲染由显卡(或 SoC)上的 GPU 完成，简单来说就是往后缓冲 (Back Buffer) 里哐哐哐干**像素**，一般要比后面的显示快得多, 当显示器还正在逐行扫描(Progressive Scanning)前缓冲(Front Buffer)时，后缓冲就覆盖前缓冲 (Buffer Swap), [屏幕就会出现撕裂 **Tearing**](https://www.bilibili.com/video/BV1FK4y1x7bk/?spm_id_from=333.788.videopod.sections&vd_source=ff694d1a9b41bfb4afea4712f1608eff)。
 
 ```c
 static struct loader_dri3_buffer *
@@ -510,3 +510,4 @@ __DRIimage *
 - SBC: Swap Buffer Counter, 就是Swapbuffer 的次数 [(GLX_EXT_swap_control)](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_swap_control.txt)
 - [GEM Objects Naming](https://www.kernel.org/doc/html/v5.1/gpu/drm-mm.html#gem-objects-naming)
 - [Implement a throttle dri extension v2](https://lists.freedesktop.org/archives/mesa-dev/2011-October/013221.html)
+- [【B站】全网最详细易懂的Gsync Freesync 垂直同步工作原理科普](https://www.bilibili.com/video/BV1FK4y1x7bk/?spm_id_from=333.788.videopod.sections&vd_source=ff694d1a9b41bfb4afea4712f1608eff)
