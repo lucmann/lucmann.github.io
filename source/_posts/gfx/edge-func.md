@@ -1,5 +1,5 @@
 ---
-title: Edge Function - A Little Math You Want to Know about CG
+title: î×ĵ=+1 
 date: 2024-10-22 11:38:10
 tags: [OpenGL]
 categories: graphics
