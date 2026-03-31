@@ -1,5 +1,5 @@
 ---
-title: î×ĵ=+1 
+title: î × ĵ = k̂
 date: 2024-10-22 11:38:10
 tags: [OpenGL]
 categories: graphics
