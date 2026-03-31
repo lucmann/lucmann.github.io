@@ -22,4 +22,6 @@ E_{01}(P)=(P.x - V_0.x) * (V_1.y - V_0.y) - (P.y - V_0.y) * (V_1.x - V_0.x)
 更好记的形式: $\lVert \overrightharpoon{V_1V_0} \times \overrightharpoon{PV_0} \rVert$
 
 # 参考
-[A Parallel Algorithm for Polygon Rasteriztion](https://www.cs.drexel.edu/~deb39/Classes/Papers/comp175-06-pineda.pdf)
+
+- [A Parallel Algorithm for Polygon Rasteriztion](https://www.cs.drexel.edu/~deb39/Classes/Papers/comp175-06-pineda.pdf)
+- [【B站】GAMES 101 Lecture2 Review of Linear Algebra](https://www.bilibili.com/video/BV1X7411F744?spm_id_from=333.788.videopod.episodes&vd_source=ff694d1a9b41bfb4afea4712f1608eff&p=2)
