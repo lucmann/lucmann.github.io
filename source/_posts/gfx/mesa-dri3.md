@@ -6,8 +6,28 @@ tags: Mesa
 categories: graphics
 ---
 
-![render & present](/images/mesa-dri3/backbuffer3.png)
+```mermaid
+flowchart BT
+	App@{ img: "/images/dma-buf/window-content.png", label: "vram for rendering", pos: "d", w: 60, h: 60, constraint: "on" }
+	Window@{ img: "/images/dma-buf/window-frame.png", label: "vram for window frame", pos: "d", w: 60, h: 60, constraint: "on" }
 
+	subgraph app [glxgears]
+		BO_10
+	end
+	subgraph x11 [Xorg]
+		BO_20
+		BO_11
+	end
+	subgraph compositor [kwin_x11]
+		BO_21
+	end
+
+	App ~~~ BO_10 --Exporter--> App
+	App --Importer--> BO_11
+
+	Window ~~~ BO_20 --Exporter--> Window
+	Window --Importer--> BO_21
+```
 <!--more-->
 
 # 渲染
