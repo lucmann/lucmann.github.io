@@ -483,8 +483,15 @@ flowchart TB
 
 ## modetest -M kirin9xx -s 37@35:#
 
-<video width="100%" controls preload="none" poster="/images/video-poster.jpg">
+<video width="100%" controls preload="none" poster="/images/modetest.png">
   <source src="/images/hikey970/modetest-M-kirin9xx.mp4" type="video/mp4">
+  您的浏览器不支持 HTML5 视频播放。
+</video>
+
+## fbtest
+
+<video width="100%" controls preload="none" poster="/images/modetest.png">
+  <source src="/images/hikey970/fbtest.mp4" type="video/mp4">
   您的浏览器不支持 HTML5 视频播放。
 </video>
 
