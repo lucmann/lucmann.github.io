@@ -12,20 +12,19 @@ flowchart BT
 	Window@{ img: "/images/dma-buf/window-frame.png", label: "vram for window frame", pos: "d", w: 60, h: 60, constraint: "on" }
 
 	subgraph app [glxgears]
-		BO_10
+		BO_10[Color buffer BO\npipe_resource]
 	end
 	subgraph x11 [Xorg]
-		BO_20
-		BO_11
+		BO_11[Pixmap]
 	end
 	subgraph compositor [kwin_x11]
 		BO_21
 	end
 
-	App ~~~ BO_10 --Exporter--> App
+	App ~~~ BO_10 --resource_get_handle\nXCB_DRI3_PIXMAP_FROM_BUFFERS--> App
 	App --Importer--> BO_11
 
-	Window ~~~ BO_20 --Exporter--> Window
+	Window ~~~ BO_11 --Exporter--> Window
 	Window --Importer--> BO_21
 ```
 <!--more-->
