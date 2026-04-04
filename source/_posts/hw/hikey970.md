@@ -481,7 +481,7 @@ flowchart TB
 [    2.588653] [drm] host attach, client name=[adv7533], id=0
 ```
 
-## modetest -M kirin9xx -s 37@35:#
+## modetest -M kirin9xx -s 37@35:#0
 
 <video width="100%" controls preload="none" poster="/images/modetest.png">
   <source src="/images/hikey970/modetest-M-kirin9xx.mp4" type="video/mp4">
