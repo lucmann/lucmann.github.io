@@ -6,27 +6,8 @@ tags: Mesa
 categories: graphics
 ---
 
-```mermaid
-flowchart BT
-	App@{ img: "/images/dma-buf/window-content.png", label: "vram for rendering", pos: "d", w: 60, h: 60, constraint: "on" }
-	Window@{ img: "/images/dma-buf/window-frame.png", label: "vram for window frame", pos: "d", w: 60, h: 60, constraint: "on" }
+![X11 mesa dri3 stack](/images/mesa-dri3/mesa-dri3.png)
 
-	subgraph app [glxgears]
-		BO_10[Color buffer BO\npipe_resource]
-	end
-	subgraph x11 [Xorg]
-		BO_11[Pixmap]
-	end
-	subgraph compositor [kwin_x11]
-		BO_21
-	end
-
-	App ~~~ BO_10 --resource_get_handle\nXCB_DRI3_PIXMAP_FROM_BUFFERS--> App
-	App --Importer--> BO_11
-
-	Window ~~~ BO_11 --Exporter--> Window
-	Window --Importer--> BO_21
-```
 <!--more-->
 
 # 渲染

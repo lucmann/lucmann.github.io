@@ -1,0 +1,36 @@
+digraph mesadri3 {
+    compound=true
+    newrank=true
+    node [shape=box]
+
+    colorbuffer [label="", image="window-content.png", imagescale=true]
+    windowframe [label="", image="window-frame.png", imagescale=true]
+    subgraph cluster_glxgears {
+        label="glxgears"
+        direction=TB
+        color   [label="Color Buffer BO\n(pipe_resource)", style=filled, fillcolor=lightskyblue] 
+        export  [label="resource_get_handle", shape=plaintext]
+        prime   [label="drmPrimeHandleToFD", shape=plaintext]
+        
+        color -> export -> prime
+    }
+    subgraph cluster_x11 {
+        label="xorg"
+        pixmap [label="Pixmap"]
+    }
+    subgraph cluster_kwin_x11 {
+        label="kwin_x11"
+        texture [label="GLTexture", style=filled, fillcolor=lightskyblue]
+        decoration [label="Window Frame"]
+    }
+    
+    {rank=same; colorbuffer,windowframe}
+    {rank=same; color,pixmap,texture}
+    
+    colorbuffer -> color
+    colorbuffer -> pixmap [style=invis]
+    colorbuffer -> texture
+    windowframe -> decoration
+    prime  -> pixmap  [label="XCB_DRI3_PIXMAP_FROM_BUFFERS",xlabel="domain_socket(FD)"]
+    pixmap -> texture [label="GLX_EXT_texture_from_pixmap"]    
+}
