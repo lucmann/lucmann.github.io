@@ -12,7 +12,7 @@ digraph mesadri3 {
         export  [label="resource_get_handle", shape=plaintext]
         prime   [label="drmPrimeHandleToFD", shape=plaintext]
         
-        color -> export -> prime
+        color -> export -> prime [color=lightskyblue]
     }
     subgraph cluster_x11 {
         label="Xorg"
@@ -29,14 +29,14 @@ digraph mesadri3 {
         texture [label="GLTexture", style=filled, fillcolor=lightskyblue]
         subgraph cluster_tfp {
             label="GLX_EXT_texture_from_pixmap"
+            xcb_dri3 [label="XCB_DRI3_BUFFER_FROM_PIXMAP", shape=plaintext]
             glx_bind [label="glXBindTexImageExt", shape=plaintext]
             glx_pixmap [label="glXCreatePixmap", shape=plaintext]
-            xcb_dri3 [label="XCB_DRI3_BUFFER_FROM_PIXMAP", shape=plaintext]
         }
         
-        texture    -> glx_bind   [dir=back]
-        glx_bind   -> glx_pixmap [dir=back]
-        glx_pixmap -> xcb_dri3   [dir=back]
+        texture    -> xcb_dri3   [dir=back, color=lightskyblue]
+        xcb_dri3   -> glx_bind   [dir=back, color=lightskyblue]
+        glx_bind -> glx_pixmap   [dir=back, color=lightskyblue]
     }
     
     {rank=same; colorbuffer,windowframe}
@@ -48,6 +48,5 @@ digraph mesadri3 {
     colorbuffer -> texture
     windowframe -> decoration
     prime  -> proc  [xlabel="domain_socket(FD)",label="XCB_DRI3_PIXMAP_FROM_BUFFERS", color=lightskyblue]
-    pixmap -> xcb_dri3 [xlabel="xcb_composite_name_window_pixmap(XID)", color=lightskyblue]    
-
+    pixmap -> glx_pixmap [label="xcb_composite_\nname_window_\npixmap(XID)", labelfloat=false, color=lightskyblue]    
 }
