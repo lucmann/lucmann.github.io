@@ -15,34 +15,39 @@ digraph mesadri3 {
         color -> export -> prime
     }
     subgraph cluster_x11 {
-        label="xorg"
+        label="Xorg"
         pixmap [label="Pixmap"]
         glamor [label="glamor_pixmap_from_fds", shape=plaintext]
         proc   [label="proc_dri3_pixmap_from_buffers", shape=plaintext]
 
-        pixmap -> glamor [dir=back]
-        glamor -> proc   [dir=back]
+        pixmap -> glamor [dir=back, color=lightskyblue]
+        glamor -> proc   [dir=back, color=lightskyblue]
     }
     subgraph cluster_kwin_x11 {
         label="kwin_x11"
-        texture [label="GLTexture", style=filled, fillcolor=lightskyblue]
-        glx_bind [label="glXBindTexImageExt", shape=plaintext]
-        xcb_dri3 [label="xcb_dri3_buffer_from_pixmap", shape=plaintext]
         decoration [label="Window Frame"]
+        texture [label="GLTexture", style=filled, fillcolor=lightskyblue]
+        subgraph cluster_tfp {
+            label="GLX_EXT_texture_from_pixmap"
+            glx_bind [label="glXBindTexImageExt", shape=plaintext]
+            glx_pixmap [label="glXCreatePixmap", shape=plaintext]
+            xcb_dri3 [label="XCB_DRI3_BUFFER_FROM_PIXMAP", shape=plaintext]
+        }
         
-        texture  -> glx_bind [dir=back]
-        glx_bind -> xcb_dri3 [dir=back]
+        texture    -> glx_bind   [dir=back]
+        glx_bind   -> glx_pixmap [dir=back]
+        glx_pixmap -> xcb_dri3   [dir=back]
     }
     
     {rank=same; colorbuffer,windowframe}
     {rank=same; color,pixmap,texture}
     
+    texture -> pixmap -> colorbuffer [style=invis]
     colorbuffer -> color
-    colorbuffer -> pixmap [style=invis]
+    colorbuffer -> pixmap [style=dashed]
     colorbuffer -> texture
     windowframe -> decoration
-    prime  -> proc  [xlabel="domain_socket(FD)",label="XCB_DRI3_PIXMAP_FROM_BUFFERS"]
-    //pixmap -> texture [label="xcb_drawable_t(uint32)"]    
-    pixmap -> xcb_dri3 [label="xcb_drawable_t(uint32)"]    
+    prime  -> proc  [xlabel="domain_socket(FD)",label="XCB_DRI3_PIXMAP_FROM_BUFFERS", color=lightskyblue]
+    pixmap -> xcb_dri3 [xlabel="xcb_composite_name_window_pixmap(XID)", color=lightskyblue]    
 
 }
