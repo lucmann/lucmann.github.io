@@ -7,29 +7,7 @@ categories: linux
 
 # DMA-BUF
 
-```mermaid
-flowchart BT
-	App@{ img: "/images/dma-buf/window-content.png", label: "vram for rendering", pos: "d", w: 60, h: 60, constraint: "on" }
-	Window@{ img: "/images/dma-buf/window-frame.png", label: "vram for window frame", pos: "d", w: 60, h: 60, constraint: "on" }
-
-	subgraph app [glxgears]
-		BO_10
-	end
-	subgraph x11 [Xorg]
-		BO_20
-		BO_11
-	end
-	subgraph compositor [kwin_x11]
-		BO_21
-	end
-
-	App ~~~ BO_10 --Exporter--> App
-	App --Importer--> BO_11
-
-	Window ~~~ BO_20 --Exporter--> Window
-	Window --Importer--> BO_21
-```
-
+![](/images/mesa-dri3/mesa-dri3.png)
 <!--more-->
 
 DMA-BUF 是 Linux 内核驱动中在上下文间，进程间，设备间，子系统间共享 buffer 的一种机制。 大概在[内核 3.2 版本就实现了](https://lwn.net/Articles/473668/)。 按最初的设计文档描述的，该框架大致是这样的:

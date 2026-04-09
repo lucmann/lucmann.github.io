@@ -10,9 +10,9 @@ digraph mesadri3 {
         direction=TB
         color   [label="Color Buffer BO\n(pipe_resource)", style=filled, fillcolor=lightskyblue] 
         export  [label="resource_get_handle", shape=plaintext]
-        prime   [label="drmPrimeHandleToFD", shape=plaintext]
+        prime2fd   [label="drmPrimeHandleToFD", shape=plaintext, fontsize=20]
         
-        color -> export -> prime [color=lightskyblue]
+        color -> export -> prime2fd [color=lightskyblue]
     }
     subgraph cluster_x11 {
         label="Xorg"
@@ -27,6 +27,8 @@ digraph mesadri3 {
         label="kwin_x11"
         decoration [label="Window Frame"]
         texture [label="GLTexture", style=filled, fillcolor=lightskyblue]
+        prime2handle   [label="drmPrimeFDToHandle", shape=plaintext, fontsize=20]
+        import  [label="resource_from_handle", shape=plaintext]
         subgraph cluster_tfp {
             label="GLX_EXT_texture_from_pixmap"
             xcb_dri3 [label="XCB_DRI3_BUFFER_FROM_PIXMAP", shape=plaintext]
@@ -34,9 +36,11 @@ digraph mesadri3 {
             glx_pixmap [label="glXCreatePixmap", shape=plaintext]
         }
         
-        texture    -> xcb_dri3   [dir=back, color=lightskyblue]
-        xcb_dri3   -> glx_bind   [dir=back, color=lightskyblue]
-        glx_bind -> glx_pixmap   [dir=back, color=lightskyblue]
+        texture         -> prime2handle [dir=back, color=lightskyblue]
+        prime2handle    -> import       [dir=back, color=lightskyblue]
+        import          -> xcb_dri3     [dir=back, color=lightskyblue]
+        xcb_dri3        -> glx_bind     [dir=back, color=lightskyblue]
+        glx_bind        -> glx_pixmap   [dir=back, color=lightskyblue]
     }
     
     {rank=same; colorbuffer,windowframe}
@@ -47,6 +51,6 @@ digraph mesadri3 {
     colorbuffer -> pixmap [style=dashed]
     colorbuffer -> texture
     windowframe -> decoration
-    prime  -> proc  [xlabel="domain_socket(FD)",label="XCB_DRI3_PIXMAP_FROM_BUFFERS", color=lightskyblue]
+    prime2fd  -> proc  [xlabel="domain_socket(FD)",label="XCB_DRI3_PIXMAP_FROM_BUFFERS", color=lightskyblue]
     pixmap -> glx_pixmap [label="xcb_composite_\nname_window_\npixmap(XID)", labelfloat=false, color=lightskyblue]    
 }
