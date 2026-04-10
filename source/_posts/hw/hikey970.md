@@ -364,6 +364,19 @@ flowchart TB
 
 # `adv7511` ADV7535 Bridge Driver
 
+```c
+static void adv7511_power_on(struct adv7511 *adv7511)
+```
+
+`adv7511_power_on()` 只在 3 个地方调用了:
+
+- `static void adv7511_hpd_work(struct work_struct *work)` 它被放入一个 workqueue, 由单独的 kthread 异步执行
+- `static enum drm_connector_status adv7511_detect(struct adv7511 *adv7511)` adv7511 driver probe 时并不会执行，由回调函数 `adv7511_bridge_funcs.detect()` 调用
+- `static void adv7511_bridge_atomic_enable(struct drm_bridge *bridge, struct drm_atomic_state *state)` 由回调函数 `adv7511_bridge_funcs.atomic_enable()` 调用
+
+目前 **kirin9xx-dw-dsi** driver 的问题是 **`adv7511_bridge_funcs.atomic_enable()` 没有被调用**
+
+
 ```
 [    2.363067] [drm] Initialized kirin9xx 1.0.0 for e8600000.dpe on minor 0
 [    2.363085] kirin9xx-drm e8600000.dpe: [drm:drm_client_modeset_probe] 
