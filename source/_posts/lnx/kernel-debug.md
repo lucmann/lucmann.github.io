@@ -20,6 +20,11 @@ categories: linux
 - 配置内核最简单的方法是 `make olddefconfig`
 - 内核配置保存在 .config
 - 内核源码树里包含命令行修改 .config 的脚本 scripts/config
+
+  ```bash 单独 enable/disable 某个配置
+  ./scripts/config -d BTRFS_FS --file ../hikey970-debian-image/config/hikey970-6.19.0-rc2-dirty.clang.config
+  ```
+
 - 内核构建依赖 flex, bison 词法分析程序
 
 ## Ubuntu
