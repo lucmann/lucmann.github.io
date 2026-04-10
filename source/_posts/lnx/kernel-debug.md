@@ -63,6 +63,31 @@ make KCONFIG_CONFIG=Microsoft/config-wsl
   Try to disable CONFIG_DEBUG_INFO_BTF
   make: *** [Makefile:1218: vmlinux] Error 1
   ```
+  
+## 交叉编译内核
+
+内核配置 (`make menuconfig`) 好后, 就可以直接 make 编译内核，当需要交叉编译时(如在 x86_64 Host 机器上编译出 aarch64 目标机器上运行的内核), 需要设置以下 **make variables**:
+
+- HOSTCC
+- ARCH
+- CROSS_COMPILE
+
+```bash
+make HOSTCC=clang ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
+```
+
+通过指定 `KCONFIG_CONFIG` 可以省去 `make menuconfig` 配置内核生成 `.config` 这一步
+
+```bash
+make HOSTCC=clang ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- KCFLAGS=-DDEBUG KCONFIG_CONFIG=../hikey970-debian-image/config/hikey970-6.19.0-rc2-dirty.clang.config
+```
+
+单独编译某个目标文件
+
+```bash
+make HOSTCC=clang ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- KCFLAGS=-DDEBUG KCONFIG_CONFIG=../hikey970-debian-image/config/hikey970-6.19.0-rc2-dirty.clang.config V=1 drivers/regulator/of_regulator.o
+```
+
 # 安装内核
 
 安装内核包括 4 部分：
