@@ -43,6 +43,9 @@ categories: utilities
 - cmake --build build --target help
   - 列出生成的Makefile里有效的`target`
 
+- cmake --trace-expand --trace-redirect=file.log
+  - 保存 cmake 执行的每条命令(--trace-expand 使 cmake 变量都展开) 到 `file.log` 文件中
+
 # Built-in Variables
 
 - `-DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold"`
