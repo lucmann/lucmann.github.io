@@ -18,14 +18,21 @@ Linux 下的 Shell 有很多， sh, bash, csh, zsh 等, 这里主要记录一下
 
 ## Parameter Expansion
 
-### Use an alternate value
+|parameter expansion	|unset var	|var=""		|var="gnu"  |
+|:----------------------|:----------|:----------|:----------|
+|${var-default}			|default	|—			|gnu		|
+|${var:-default}		|default	|default	|gnu		|
+|${var+alternate}		|—			|alternate	|alternate	|
+|${var:+alternate}		|—			|—			|alternate	|
+|${var?error}			|error		|—			|gnu		|
+|${var:?error}			|error		|error		|gnu		|
 
 ```bash
-${var:+WORD}
-${var+WORD}
+${var:+alternate}
+${var+alternate}
 ```
 
-如果 `var` 没有设置或为空，则这个变量展开为 Nothing (注意：不是空 empty, 是 nothing), 如果被设置了（不包括被设置成空），它展开为 `+` 后面的 WORD.
+例如 `var` 没有设置或为空，则这个变量展开为 Nothing (注意：不是空 empty, 是 nothing), 如果被设置了（不包括被设置成空），它展开为 `+` 后面的 WORD.
 
 如果冒号被省略，则 `var` 即使被设置为空，它也展开为 `+` 后面的 WORD
 
