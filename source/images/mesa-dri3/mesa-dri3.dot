@@ -9,7 +9,7 @@ digraph mesadri3 {
         label="glxgears"
         direction=TB
         color   [label="Color Buffer BO\n(pipe_resource)", style=filled, fillcolor=lightskyblue] 
-        export  [label="resource_get_handle", shape=plaintext]
+        export  [label="pipe_screen::resource_get_handle", shape=plaintext]
         prime2fd   [label="drmPrimeHandleToFD", shape=plaintext, fontsize=20]
         
         color -> export -> prime2fd [color=lightskyblue]
@@ -28,7 +28,7 @@ digraph mesadri3 {
         decoration [label="Window Frame"]
         texture [label="GLTexture", style=filled, fillcolor=lightskyblue]
         prime2handle   [label="drmPrimeFDToHandle", shape=plaintext, fontsize=20]
-        import  [label="resource_from_handle", shape=plaintext]
+        import  [label="pipe_screen::resource_from_handle", shape=plaintext]
         subgraph cluster_tfp {
             label="GLX_EXT_texture_from_pixmap"
             xcb_dri3 [label="XCB_DRI3_BUFFER_FROM_PIXMAP", shape=plaintext]
