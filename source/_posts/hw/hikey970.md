@@ -494,6 +494,10 @@ static void adv7511_power_on(struct adv7511 *adv7511)
 [    2.588653] [drm] host attach, client name=[adv7533], id=0
 ```
 
+## fbdev vs drm_client
+
+kernel command line 选项 `drm_client_lib.active=fbdev` 可以覆盖内核配置项 `CONFIG_DRM_CLIENT_DEFAULT` 
+
 ## modetest -M kirin9xx -s 37@35:#0
 
 <video width="100%" controls preload="none" poster="/images/modetest.png">
@@ -508,9 +512,12 @@ static void adv7511_power_on(struct adv7511 *adv7511)
   您的浏览器不支持 HTML5 视频播放。
 </video>
 
-## fbdev vs drm_client
+## xfce4
 
-kernel command line 选项 `drm_client_lib.active=fbdev` 可以覆盖内核配置项 `CONFIG_DRM_CLIENT_DEFAULT` 
+<video width="100%" controls preload="none" poster="/images/modetest.png">
+  <source src="/images/hikey970/xfce-glxgears.mp4" type="video/mp4">
+  您的浏览器不支持 HTML5 视频播放。
+</video>
 
 # `panfrost` GPU Driver
 
