@@ -55,3 +55,21 @@ quit
 ```
 
 P.S. [llvmpipe.log](https://pastebin.com/bCEBrwAW)
+
+# Multi-Threads Multi-Processes Debugging
+
+## inferior
+
+如果你的程序里有 `fork()`， GDB 会为新的进程创建一个独立的 **inferior**, 所谓"独立"， 就像一个新 shell 一样，inferior 之间的环境变量是不共享的
+
+- `info inferiors`
+    - 查看所有 inferior
+- `inferior N`
+    - 切到 N 这个 inferior
+- `remove-inferiors 1-8`
+    - 删除 1 到 8 这些 inferiors
+
+## thread
+
+- `thread apply all bt`
+    - 同时打印出所有线程的 backtrace
