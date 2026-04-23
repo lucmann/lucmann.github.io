@@ -56,7 +56,7 @@ quit
 
 P.S. [llvmpipe.log](https://pastebin.com/bCEBrwAW)
 
-# Multi-Threads Multi-Processes Debugging
+# Multi-Thread Multi-Process Debugging
 
 ## inferior
 
