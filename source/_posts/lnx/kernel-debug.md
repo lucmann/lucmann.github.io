@@ -316,8 +316,8 @@ echo "<3>HELLO" > /dev/kmsg
 ```
 
 ## 内核参数
-
-### `drm.debug`
+### 模块参数
+#### `drm.debug`
 
 `BIT(5)` 一般不要设置，否则会产生 `drm_update_vblank_count` 的 log flood.
 
