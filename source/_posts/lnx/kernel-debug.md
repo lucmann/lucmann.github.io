@@ -139,8 +139,7 @@ sudo make -C tools/perf install prefix=/usr
 对于修改安装路径, `prefix` 和 `DESTDIR` 变量都可以，但 PREFIX 不行。
 
 # 调试内核
-## 与调试相关的内核配置
-
+## 内核配置
 ### CONFIG_PRINTK
 
 - `CONFIG_LOG_BUF_SHIFT`=17
@@ -290,31 +289,6 @@ options i915 dyndbg=+p
 
 [`dma_fence_wait_timeout()`](https://www.kernel.org/doc/html/latest/driver-api/dma-buf.html?highlight=dma_fence_wait_timeout#c.dma_fence_wait_timeout) 会睡眠调用进程直到 fence 被 signaled 或者指定定时器超时。该函数中会调用 `might_sleep()` 来标识 (annotation) 调用进程可能进入睡眠状态，并打印源文件名和行号，帮助调试。 但只有内核配置了 `CONFIG_DEBUG_ATOMIC_SLEEP` 才有效，否则 `__might_sleep()` 是一个空函数。
 
-## kern.log
-
-`/var/log/kern.log` 的一个主要问题是每行前面的 `%HOSTNAME%` 太长又没什么用，`%timegenerated%` 和内核原始打印 `%msg%` 里的时间戳实际上有一个就可以了。查了一下配置方法，实际上就是要在 `/etc/rsyslog.conf` 里定义一个 `$template`, 并指定为默认的模板
-
-```
-$template SimpleFormat,"%timegenerated:::date-rfc3339% %msg:::drop-last-lf%\n"
-$ActionFileDefaultTemplate SimpleFormat
-```
-
-或在 `/etc/rsyslog.d/50-default.conf` 里的 `kern.*` 规则中加上这个 template
-
-```
-kern.* -/var/log/kern.log;SimpleFormat
-```
-
-注意，不要直接在 `/etc/rsyslog.conf` 里直接加上面这条规则，要加在 `/etc/rsyslog.d/50-default.conf`， 否则会输出两遍。
-
-最后，就是要重启 rsyslog 服务生效。
-
-内核的 log 实际上都是写入一个 ring buffer 里的，暴露给用户的接口是 `/proc/kmsg` 和 `/dev/kmsg`, rsyslog 服务也是通过这些接口，重新处理 log 后写入 `/var/log/kern.log` 的。下面的操作可以让 `dmesg` 多一条 log
-
-```shell
-echo "<3>HELLO" > /dev/kmsg
-```
-
 ## 内核参数
 ### 模块参数
 #### `drm.debug`
@@ -365,6 +339,31 @@ DECLARE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
 	- `sysctl -a`
 - 修改某个内核参数的值
 	- `sysctl kernel.perf_event_paranoid=-1`
+
+## 内核日志
+
+`/var/log/kern.log` 的一个主要问题是每行前面的 `%HOSTNAME%` 太长又没什么用，`%timegenerated%` 和内核原始打印 `%msg%` 里的时间戳实际上有一个就可以了。查了一下配置方法，实际上就是要在 `/etc/rsyslog.conf` 里定义一个 `$template`, 并指定为默认的模板
+
+```
+$template SimpleFormat,"%timegenerated:::date-rfc3339% %msg:::drop-last-lf%\n"
+$ActionFileDefaultTemplate SimpleFormat
+```
+
+或在 `/etc/rsyslog.d/50-default.conf` 里的 `kern.*` 规则中加上这个 template
+
+```
+kern.* -/var/log/kern.log;SimpleFormat
+```
+
+注意，不要直接在 `/etc/rsyslog.conf` 里直接加上面这条规则，要加在 `/etc/rsyslog.d/50-default.conf`， 否则会输出两遍。
+
+最后，就是要重启 rsyslog 服务生效。
+
+内核的 log 实际上都是写入一个 ring buffer 里的，暴露给用户的接口是 `/proc/kmsg` 和 `/dev/kmsg`, rsyslog 服务也是通过这些接口，重新处理 log 后写入 `/var/log/kern.log` 的。下面的操作可以让 `dmesg` 多一条 log
+
+```shell
+echo "<3>HELLO" > /dev/kmsg
+```
 
 # 参考
 - [https://wiki.ubuntu.com/Kernel/SourceCode](https://wiki.ubuntu.com/Kernel/SourceCode)
