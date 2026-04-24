@@ -315,7 +315,47 @@ kern.* -/var/log/kern.log;SimpleFormat
 echo "<3>HELLO" > /dev/kmsg
 ```
 
-## `sysctl` 和内核参数
+## 内核参数
+
+### `drm.debug`
+
+`BIT(5)` 一般不要设置，否则会产生 `drm_update_vblank_count` 的 log flood.
+
+```c drm_print.c
+ * __drm_debug: Enable debug output.
+ * Bitmask of DRM_UT_x. See include/drm/drm_print.h for details.
+ */
+unsigned long __drm_debug;
+EXPORT_SYMBOL(__drm_debug);
+
+MODULE_PARM_DESC(debug, "Enable debug output, where each bit enables a debug category.\n"
+"\t\tBit 0 (0x01)  will enable CORE messages (drm core code)\n"
+"\t\tBit 1 (0x02)  will enable DRIVER messages (drm controller code)\n"
+"\t\tBit 2 (0x04)  will enable KMS messages (modesetting code)\n"
+"\t\tBit 3 (0x08)  will enable PRIME messages (prime code)\n"
+"\t\tBit 4 (0x10)  will enable ATOMIC messages (atomic code)\n"
+"\t\tBit 5 (0x20)  will enable VBL messages (vblank code)\n"
+"\t\tBit 7 (0x80)  will enable LEASE messages (leasing code)\n"
+"\t\tBit 8 (0x100) will enable DP messages (displayport code)");
+
+#if !defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)
+module_param_named(debug, __drm_debug, ulong, 0600);
+#else
+/* classnames must match vals of enum drm_debug_category */
+DECLARE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
+			"DRM_UT_CORE",
+			"DRM_UT_DRIVER",
+			"DRM_UT_KMS",
+			"DRM_UT_PRIME",
+			"DRM_UT_ATOMIC",
+			"DRM_UT_VBL",
+			"DRM_UT_STATE",
+			"DRM_UT_LEASE",
+			"DRM_UT_DP",
+			"DRM_UT_DRMRES");
+```
+
+### `sysctl`
 
 运行时内核参数大多在 `/proc/sys/` 目录下，二进制程序 `/usr/sbin/sysctl` 可用来查看，修改这些内核参数。
 
