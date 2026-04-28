@@ -93,3 +93,4 @@ block-beta
 - [GPU Framebuffer Memory: Understanding Tiling](https://developer.samsung.com/galaxy-gamedev/resources/articles/gpu-framebuffer.html)
 - [Qualcomm Adreno GPU](https://docs.qualcomm.com/bundle/publicresource/topics/80-78185-2/gpu.html)
 - [ARM Mali GPU](https://developer.arm.com/documentation/102693/1-6/Useful-resources?lang=en)
+- [[PATCH] drm/doc: Start documenting aspects specific to tile-based renderers](https://lists.freedesktop.org/archives/lima/2025-April/001296.html)
