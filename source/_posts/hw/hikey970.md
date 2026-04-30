@@ -225,6 +225,7 @@ systemctl start dhcpcd.service
 # `kirin-drm` Display Pipeline Engine driver
 
 ![From claude.ai](/images/hikey970/hikey970-display.svg)
+![](/images/hikey970/atomic_modeset.png)
 
 ```mermaid
 flowchart TB
@@ -612,3 +613,4 @@ SD 卡启动有两个主要问题:
 - [制作 Hikey970 的 rootfs](https://github.com/lucmann/hikey970-ubuntu-image)
 - [UEFI Shell Specification](https://uefi.org/sites/default/files/resources/UEFI_Shell_Spec_2_0_Errata_A.pdf)
 - [When should ADV7511 bridge attach to DSI host](https://patchwork.kernel.org/project/dri-devel/patch/20190627151740.2277-1-matt.redfearn@thinci.com/)
+- [ADV7511 Programming Guide](https://www.analog.com/media/en/technical-documentation/user-guides/ADV7511_Programming_Guide.pdf)
