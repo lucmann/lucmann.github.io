@@ -11,6 +11,17 @@ categories: linux
 
 <!--more-->
 
+# 中断的触发
+- 边沿触发 edge-triggered
+
+    电平变化时产生一个短脉冲信号，并将这个信号保存在一个锁存器(latch), 电平由高到低时触发叫 falling edge triggered, 电平由低到高时触发叫 raising edge triggered
+- 电平触发 level-triggered
+
+    电平高或低时一直触发直到中断处理函数清除中断位
+- 消息信号中断 Message Signal Interrupt
+
+    通过写入特定内存地址来触发中断， 类似 AMDGPU 的 Doorbell 就是通过 CPU 将 wptr 写入一个特定 MMIO 寄存器触发 GPU 开始读取 Ring Buffer 的命令
+
 # 参考
 
 - [Concurrency Managed Workqueue之（一）：workqueue的基本概念](http://www.wowotech.net/irq_subsystem/workqueue.html)
