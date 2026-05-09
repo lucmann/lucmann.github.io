@@ -5,7 +5,7 @@ tags: [kernel]
 categories: graphics
 ---
 
-![](/images/nouveau/nvidia-gpu-generation.dot.png)
+![](/images/nouveau/nvidia-gpu-generation.png)
 
 <!--more-->
 
