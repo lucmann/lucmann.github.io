@@ -191,13 +191,27 @@ find_package(<PackageName> <version> [EXACT] [QUIET] [MODULE]
 - LIBDRM_CFLAGS
 - LIBDRM_CFLAGS_OTHER
 
-## CTest
+# CTest
 
 - 打开CTest, 后续可以直接通过 `make [-C builddir] test` 运行测试用例
   - `enable_testing()`
 
 - 增加测试用例
   - `add_test(NAME PALBench.test_cpu_read_vram COMMAND test_cpu_access_vram -size 1048576 -access read)`
+  
+# CPack
+
+CPack 与 CMake 的 `install()` 关联，CPack 只会把 `install()` 过的文件按照 `install()` 的相对路径 (相对 `CMAKE_INSTALL_PREFIX`) 打包。
+
+- `set(CPACK_GENERATOR "TGZ")`
+
+  CPack 支持生成 *.tar.gz* (`"TGZ"`), *.rpm* (`"RPM"`), *.deb* (`"DEB"`)
+
+- `set(CPACK_PACKAGING_INSTALL_PREFIX "/${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}")`
+
+  如果是 *.tar.gz*， 这个路径前缀会被加在包名之后，注意，前面的 **`/`** 必须有 
+
+- `include(CPack)`
 
 # NOTES
 ## -fPIC
