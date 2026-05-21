@@ -231,6 +231,25 @@ rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard $d/,$(2)) $(filter $(su
 ```
 - `rwildcard` 即 **recursive wildcard**, 相当于 find, 调用方法 `$(call rwildcard,$(A_PATH)/,*.c)`, 找出 `$(A_PATH)` 目录下的所有 .c 文件，效果相当于 `$(shell find $(A_PATH) -name '*.c' --type f)`
 
+# Make 替换引用 (substitution reference)
+
+- 基本语法 `$(VAR:OLD=NEW)`
+
+- 例1: 替换
+  ```makefile
+  SRCS := foo.c bar.c
+  OBJS := $(SRCS:.c=.o)
+  ```
+- 例2: 引用。`%` 作为占位符, 代表原始变量
+  ```makefile
+  dirs := src include
+  dirs := $(dirs:%=/%)
+  ```
+- 例3: 引用。`%` 可以省略
+  ```makefile
+  names := a b c
+  files := $(names:=file)
+  ```
   
 # Make 用户手册
 
