@@ -16,6 +16,8 @@ categories: hardware
 
 龙芯的 GPU 目前基本存在于与龙芯 CPU 配套使用的桥片中，使用的是 Vivante GC 系列的低端 GPU IP.
 
+NOTE: Vivante Corporation 于 2015 年被芯原收购后，后来芯原推出了最新的 [Arcturus GC8000 系列](https://www.verisilicon.com/en/IPPortfolio/VivanteGPUIP)，但开源驱动 etnaviv 并不支持该最新系列 GPU.
+
 ## [LS7A1000](https://www.loongson.cn/product/show?id=14)
 
 龙芯7A1000是面向服务器及个人计算机领域的龙芯3号系列处理器配套桥片。它里面应该集成了 Vivante GC1000 V5037 IP
@@ -48,4 +50,5 @@ categories: hardware
 
 # 参考
 
-[1. Unofficial LoongArch FAQ](https://blog.xen0n.name/posts/tinkering/loongarch-faq/)
+- [Unofficial LoongArch FAQ](https://blog.xen0n.name/posts/tinkering/loongarch-faq/)
+- [Vivante GPUs Comparison](https://dev.visucore.com/etna_viv/gpus_comparison.html)
