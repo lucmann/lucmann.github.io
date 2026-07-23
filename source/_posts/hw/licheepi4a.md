@@ -18,7 +18,7 @@ categories: hardware
 
 # Boot from SD-Card
 
-dd 写入 [img](https://fast-mirror.isrc.ac.cn/revyos/extra/images/lpi4a/20250110/) 到 sd-card 之后 lsblk
+dd 写入 [RevyOS 镜像](https://fast-mirror.isrc.ac.cn/revyos/extra/images/lpi4a/20250110/) 到 sd-card 之后 lsblk
 
 ```
 NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
@@ -28,6 +28,11 @@ sda           8:0    1 119.1G  0 disk
 ├─sda3        8:3    1     4G  0 part 
 └─sda4        8:4    1     5G  0 part /media/luc/f929e2c1-6c06-419a-9c7b-28f5ded4e665
 ```
+
+RevyOS 系统默认用户名密码有两套:
+
+- sipeed/licheepi
+- debian/debian
 
 # References
 

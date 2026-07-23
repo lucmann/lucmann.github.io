@@ -18,6 +18,8 @@ stateDiagram-v2
     Z: zombie
     P: parked
     I: idle
+    L: page locked
+    l: multi-threaded
 
     R --> S: schedule_timeout()
     R --> D: Wait for Disk I/O
