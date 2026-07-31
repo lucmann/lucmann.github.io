@@ -56,6 +56,27 @@ HiKey970 有两个 Type-C 接口，而且当板子被设置为 Recovery 模式�
 
 ![Select CONFIG_USB_SERIAL_OPTION on WSL2 Kernel config](/images/hikey970/huawei-USB-SER-driver.png)
 
+# Arm Firmware
+
+| Bootloader Level | File | Description |
+|:-----------------|:-----|:------------|
+| BL1 | l-loader.bin      |             |
+| BL2 | included in fip.bin |           |
+| BL31| included in fip.bin |           |
+| BL32| included in fip.bin | Optional  |
+| BL33| included in fip.bin | UEFI Boot Manager/U-Boot          |
+
+## Firmware Image Package (fip.bin)
+
+`fiptool` 
+
+``` fiptool info fip.bin
+Trusted Boot Firmware BL2: offset=0xD8, size=0x4248, cmdline="--tb-fw"
+SCP Firmware SCP_BL2: offset=0x4320, size=0x36064, cmdline="--scp-fw"
+EL3 Runtime Firmware BL31: offset=0x3A384, size=0x8010, cmdline="--soc-fw"
+Non-Trusted Firmware BL33: offset=0x42394, size=0xF0000, cmdline="--nt-fw"
+```
+
 # Build rootfs.img and boot.img
 
 ## boot.img
