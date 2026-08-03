@@ -621,7 +621,7 @@ SD 卡启动有两个主要问题:
 ![Hikey970 BootManager](/images/hikey970/grub.png)
 
 <video width="100%" controls preload="none">
-  <source src="/images/hikey970/boot_from_sd.mp4" type="video/mp4">
+  <source src="https://github.com/lucmann/lucmann.github.io/releases/download/videos/boot_from_sd.mp4" type="video/mp4">
   您的浏览器不支持 HTML5 视频播放。
 </video>
 
