@@ -6,7 +6,7 @@ categories: hardware
 ---
 
 
-# 环境准备
+# 1. 环境
 
 ## WSL2 作为上位机
 
@@ -56,7 +56,11 @@ HiKey970 有两个 Type-C 接口，而且当板子被设置为 Recovery 模式�
 
 ![Select CONFIG_USB_SERIAL_OPTION on WSL2 Kernel config](/images/hikey970/huawei-USB-SER-driver.png)
 
-# Arm Firmware
+# 2. 启动
+
+## eMMC 启动
+
+### Arm Firmware
 
 | Bootloader Level | File | Description |
 |:-----------------|:-----|:------------|
@@ -66,7 +70,7 @@ HiKey970 有两个 Type-C 接口，而且当板子被设置为 Recovery 模式�
 | BL32| included in fip.bin | Optional  |
 | BL33| included in fip.bin | UEFI Boot Manager/U-Boot          |
 
-## Firmware Image Package (fip.bin)
+#### Firmware Image Package (fip.bin)
 
 `fiptool` 
 
@@ -77,13 +81,13 @@ EL3 Runtime Firmware BL31: offset=0x3A384, size=0x8010, cmdline="--soc-fw"
 Non-Trusted Firmware BL33: offset=0x42394, size=0xF0000, cmdline="--nt-fw"
 ```
 
-# Build rootfs.img and boot.img
+### Build rootfs.img and boot.img
 
-## boot.img
- 
+#### boot.img
+
 `boot.img` 主要提供 bootloader, 所以它可以只包含 **grub.efi**, Hikey970 使用的 boot.img 是 64M 大小
 
-## rootfs.img
+#### rootfs.img
 
 `rootfs.img` 就是整个系统了(根文件系统)，内核可执行文件(Image)和设备树二进制文件(.dtb) 都包含在它的 boot 目录里，Hikey970 使用的 rootfs.img 原始大小是 4.0GB, 但经过 android-tools 工具包里的 `img2simg` 处理后只有 716M
 
@@ -92,14 +96,14 @@ Non-Trusted Firmware BL33: offset=0x42394, size=0xF0000, cmdline="--nt-fw"
 -rw-r--r-- 1 luc luc 716M 11月18日 21:47 rootfs.sparse.img
 ```
 
-## debootstrap
+#### debootstrap
 
 - `/usr/sbin/qemu-debootstrap`
 - `/usr/sbin/debootstrap`
 
 是两个 **Shell 脚本**, 主要就是通过下载相应平台的 binaries，通过 **chroot** 来制作根文件系统
 
-# fastboot
+### fastboot
 
 fastboot 是用来从 Host 向开发板烧写固件和镜像的常用工具之一，在 Arch Linux 上它可以通过以下命令安装
 
@@ -107,7 +111,7 @@ fastboot 是用来从 Host 向开发板烧写固件和镜像的常用工具之�
 yay -S android-sdk-platform-tools
 ```
 
-## fastboot 常用命令
+#### fastboot 常用命令
 
 ```从设备的 bootloader 获取各种信息，如 version, partition
 fastboot getvar all
@@ -129,9 +133,7 @@ fastboot flash boot boot2grub.uefi.img
 fastboot -S 8M flash system rootfs.sparse.img
 ```
 
-# 启动
-
-## Bootloader
+### Bootloader
 
 ```sudo mount -o loop boot2grub.uefi.img /mnt
 ➜  /mnt ls -lh /mnt/EFI/BOOT
@@ -168,25 +170,27 @@ total 4.0K
 > HiKey970 的输入电压要求在 8V ~ 18V 之间，但最好使用 **12V 以上接近 18V**的输入电压，否则可能出现 `fastboot flash` 时出现板子自己重启的怪现象
 > ![Hikey970 Input Power Voltage](/images/hikey970/hikey970-power.jpg)
 
-## 连接 WiFi
+#### 连接 WiFi
 
 ![Hikey970 wifi](/images/hikey970/wifi-connect.png)
 
 ![Hikey970 WiFi LED indicator](/images/hikey970/hikey970-wifi-led.jpg)
 
-## xfce4 桌面
+#### xfce4 桌面
 
 吃灰5,6年的板子又再一次亮了
 
 ![Hikey970 xfce4](/images/hikey970/hikey970-xfce4.jpg)
 
-# 制作 rootfs, initramfs
+## SD 卡启动
+
+### 制作 rootfs, initramfs
 
 环境是 qemu-system-aarch64 Debian 13 Trixie, 折腾了一圈，最后还是发现 Ubuntu, Debian, Arch Linux 这3个，还是 Debian 对 Aarch64 支持最好，Ubuntu 甚至还一个桌面版的 Arm 安装镜像都没有(Arm架构的安装镜像似乎都是服务器版的)。
 
 ![Debian vs. Ubuntu](/images/hikey970/debian-vs-ubuntu.png)
 
-## NetworkManager vs wpasupplicant
+#### NetworkManager vs wpasupplicant
 
 点亮吹灰 Hikey970 用的是 [hikey970-ubuntu-image](https://github.com/mengzhuo/hikey970-ubuntu-image), 它的 rootfs 里安装的是 NetworkManager, 当我试着将 hikey970-ubuntu-image 转换成 hikey970-debian-image 时，发现 debootstrap 会因为奇怪的包依赖问题，无法安装 NetworkManager， 而且了解到 wpasupplicant 可以完成同样的事情(连接 WiFi,让板子联网), 而且体量更小，更适合这种开发板。
 
@@ -243,7 +247,11 @@ systemctl start dhcpcd.service
 /sbin/ntpdate ntp.aliyun.com
 ```
 
-# `kirin-drm` Display Pipeline Engine driver
+# 3. 驱动
+
+## DC 驱动
+
+### `kirin-drm` Display Pipeline Engine driver
 
 ![From claude.ai](/images/hikey970/hikey970-display.svg)
 ![](/images/hikey970/atomic_modeset.png)
@@ -281,7 +289,7 @@ flowchart TB
     A --> B --> C1 --> C2 --> C3 --> C31 --> C4 --> C5 --> C6 --> C7 --> C8 --> C9 --> D --> E
 ```
 
-# `dw-dsi` DesignWare MIPI DSI Host Controller Driver
+### `dw-dsi` DesignWare MIPI DSI Host Controller Driver
 
 ```mermaid
 flowchart TB
@@ -308,7 +316,7 @@ flowchart TB
     B2 -.-> N2
 ```
 
-## [DSI bridge probe](https://lore.kernel.org/dri-devel/e5ec9763-37fe-6cd8-6eca-52792afbdb94@samsung.com/T/)
+#### [DSI bridge probe](https://lore.kernel.org/dri-devel/e5ec9763-37fe-6cd8-6eca-52792afbdb94@samsung.com/T/)
 
 DSI bridge driver probe [陷入死循环](https://gist.github.com/lucmann/7ae4bf26d49807a4d951db2e989a271c)
 
@@ -339,7 +347,7 @@ DSI bridge driver probe [陷入死循环](https://gist.github.com/lucmann/7ae4bf
 
 ![From claude.ai](/images/hikey970/dsi_probe_ordering_comparison.svg)
 
-# `kirin9xx-dw-dsi` MIPI DSI Host Controller Driver
+### `kirin9xx-dw-dsi` MIPI DSI Host Controller Driver
 
 ```mermaid
 flowchart TB
@@ -384,7 +392,7 @@ flowchart TB
     B_ --> H14
 ```
 
-# `adv7511` ADV7535 Bridge Driver
+### `adv7511` ADV7535 Bridge Driver
 
 ```c
 static void adv7511_power_on(struct adv7511 *adv7511)
@@ -516,32 +524,34 @@ static void adv7511_power_on(struct adv7511 *adv7511)
 [    2.588653] [drm] host attach, client name=[adv7533], id=0
 ```
 
-## fbdev vs drm_client
+#### fbdev vs drm_client
 
 kernel command line 选项 `drm_client_lib.active=fbdev` 可以覆盖内核配置项 `CONFIG_DRM_CLIENT_DEFAULT` 
 
-## modetest -M kirin9xx -s 37@35:#0
+#### modetest -M kirin9xx -s 37@35:#0
 
 <video width="100%" controls preload="none" poster="/images/modetest.png">
   <source src="/images/hikey970/modetest-M-kirin9xx.mp4" type="video/mp4">
   您的浏览器不支持 HTML5 视频播放。
 </video>
 
-## fbtest
+#### fbtest
 
 <video width="100%" controls preload="none" poster="/images/modetest.png">
   <source src="/images/hikey970/fbtest.mp4" type="video/mp4">
   您的浏览器不支持 HTML5 视频播放。
 </video>
 
-## xfce4
+#### xfce4
 
 <video width="100%" controls preload="none" poster="/images/modetest.png">
   <source src="/images/hikey970/xfce-glxgears.mp4" type="video/mp4">
   您的浏览器不支持 HTML5 视频播放。
 </video>
 
-# `panfrost` GPU Driver
+## GPU 驱动
+
+### `panfrost` GPU Driver
 
 Pathor(C) 和 Tyr(Rust) 都是为 Valhall 架构以上的 Mali GPU (即基于 Command Stream Frontend 的 GPU) 而写的驱动, HiKey 970 (HI3670 SoC) 搭载的是 Mali G72 MP12 (Bifrost)，所以只能使用 Panfrost 驱动。上面可以启动的内核是 v4.19, 当时的 GPU 驱动还是 lima.
 
@@ -571,7 +581,7 @@ HiKey 970 开发板对应的 devicetree 源文件 **hi3670-hikey970.dts**， 在
 >  arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts | 35 +++++++++++++++++++++++++++++++++++
 >  1 file changed, 35 insertions(+)
 
-## v6.19
+#### v6.19
 
 到目前为止，使用 [@mengzhuo/hikey970-ubuntu-image](https://github.com/mengzhuo/hikey970-ubuntu-image) 可以正常启动 HiKey970，而且安装了 Xfce，所以我 fork 了这个仓库，将其更名为 [hikey970-debian-image](https://github.com/lucmann/hikey970-debian-image)，将基于 Ubuntu bionic (18.04 LTS) 的 rootfs.img 移植到基于 Debian bookworm (12) 的 rootfs.img，并成功启动。之后准备将这块 2018 年 3 月发布的板子作为学习和测试内核最新驱动的平台，所以现在就看看主线编译的设备树 (arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dtb) 和内核 (arch/arm64/boot/Image.gz) 是否能正常启动。 
 
@@ -580,7 +590,7 @@ HiKey 970 开发板对应的 devicetree 源文件 **hi3670-hikey970.dts**， 在
 - kernel only
 ![Try latest kernel on hikey970](/images/hikey970/try-latest-kernel-on-hikey970-2.png)
 
-### `random: crng init done` took **70** minutes
+##### `random: crng init done` took **70** minutes
 
 ```
 [    5.201987] random: perl: uninitialized urandom read (4 bytes read)
@@ -599,7 +609,7 @@ See 'systemctl status systemd-random-seed.service' for details.
 
 crng init 花这么长时间的原因是系统 entropy sources 不足，内核一直在填充 entropy pool, 这种情况只发生在刷写系统后第一次启动，之后 entropy pool 应该固化在 UFS 存储里了，启动时间就正常了。但因为需要频繁刷写系统，所以还是得解决这个问题。尝试了 rng-tools5 和 haveged 后，发现 haveged 可以解决这个问题。理论上 rng-tools5/rng-tools 也可以借助 `/dev/hwrng` 解决这个问题，但不知为何 rngd 服务始终[不能正常工作](https://gist.githubusercontent.com/lucmann/bfabaac6a2c904877629dd3ce97229eb/raw/ceb01cbe992a09d8e1c20a944ea272c8145c7a67/rngd.log)，怀疑可能是 Hi3670 SoC 的 TRNG 驱动有问题。
 
-### SD 卡不识别
+##### SD 卡不识别
 
 现象：系统启动后 `lsblk` 看不到 `/dev/mmcblk0`
 
@@ -607,7 +617,7 @@ crng init 花这么长时间的原因是系统 entropy sources 不足，内核�
 
 将下来主要排查设备树和内核配置的问题，在这里和 ChatGPT/DeepSeek 交流了很多，总体感觉 ChatGPT 在这方面比 DeepSeek 靠谱一点。了解到了 HI3670 SoC 的 MMC 控制器使用的是 Synopsis DesignWare MMC, 它是一种不遵循 SD Host Controller Interface 规范的厂家自定义接口。
 
-### SD 卡启动
+##### SD 卡启动
 
 SD 卡启动有两个主要问题:
 
@@ -625,7 +635,7 @@ SD 卡启动有两个主要问题:
   您的浏览器不支持 HTML5 视频播放。
 </video>
 
-# 参考
+# 4. 参考
 
 - [HiKey970 User Guide](https://www.96boards.org/documentation/consumer/hikey/hikey970/hardware-docs/files/hikey970-user-manual.pdf)
 - [HiKey970 Board Recovery](https://www.96boards.org/documentation/consumer/hikey/hikey970/installation/board-recovery.md.html)
