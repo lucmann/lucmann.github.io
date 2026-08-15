@@ -1,0 +1,43 @@
+digraph G {
+    subgraph cluster_sync_file {
+        label="Sync File";
+        fontcolor=red;
+        style=dashed;
+        color=lightgrey;
+        node [color=red, fontcolor=red];
+        edge [color=red, fontcolor=red];
+
+        userspace_1   [label="Userspace", shape=none];
+        kernelspace_1 [label="Kernel Space fences\n(struct dma_fence)", shape=none];
+        userspace_1 -> kernelspace_1 [label="Sync File\n(file descriptor)", fontsize=16];
+        kernelspace_1 -> userspace_1;
+    }
+
+    subgraph cluster_dma_buf {
+        label="DMA-BUF";
+        fontcolor=green;
+        style=dashed;
+        color=lightgrey;
+        node [color=green, fontcolor=green];
+        edge [color=green, fontcolor=green];
+
+        userspace_2   [label="Userspace", shape=none];
+        kernelspace_2 [label="Kernel Space dma-buf\n(struct dma_buf)", shape=none];
+        userspace_2 -> kernelspace_2 [label="PRIME\n(file descriptor)", fontsize=16];
+        kernelspace_2 -> userspace_2;
+    }
+
+    subgraph cluster_sync_obj {
+        label="Sync Object";
+        fontcolor=blue;
+        style=dashed;
+        color=lightgrey;
+        node [color=blue, fontcolor=blue];
+        edge [color=blue, fontcolor=blue];
+
+        userspace_3   [label="Userspace", shape=none];
+        kernelspace_3 [label="Kernel Space syncobj\n(struct drm_syncobj)", shape=none];
+        userspace_3 -> kernelspace_3 [label="SYNCOBJ\n(file descriptor)", fontsize=16];
+        kernelspace_3 -> userspace_3;
+    }
+}
