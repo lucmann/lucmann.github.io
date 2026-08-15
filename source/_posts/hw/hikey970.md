@@ -269,11 +269,6 @@ SD 卡启动有两个主要问题:
 ![Hikey970 BootManager](/images/hikey970/boot_sdcard_0x30a7d232_0x3f_0x7ffc1.png)
 ![Hikey970 BootManager](/images/hikey970/grub.png)
 
-<video width="100%" controls preload="none">
-  <source src="https://github.com/lucmann/lucmann.github.io/releases/download/videos/hikey970-back-crf22.mp4" type="video/mp4">
-  您的浏览器不支持 HTML5 视频播放。
-</video>
-
 # 3. 驱动
 
 ## DC 驱动
@@ -557,22 +552,35 @@ kernel command line 选项 `drm_client_lib.active=fbdev` 可以覆盖内核配�
 
 #### modetest -M kirin9xx -s 37@35:#0
 
-<video width="100%" controls preload="none" poster="/images/modetest.png">
+<video width="100%" controls preload="none">
   <source src="/images/hikey970/modetest-M-kirin9xx.mp4" type="video/mp4">
   您的浏览器不支持 HTML5 视频播放。
 </video>
 
 #### fbtest
 
-<video width="100%" controls preload="none" poster="/images/modetest.png">
+<video width="100%" controls preload="none">
   <source src="/images/hikey970/fbtest.mp4" type="video/mp4">
   您的浏览器不支持 HTML5 视频播放。
 </video>
 
 #### xfce4
 
-<video width="100%" controls preload="none" poster="/images/modetest.png">
+<video width="100%" controls preload="none">
   <source src="/images/hikey970/xfce-glxgears.mp4" type="video/mp4">
+  您的浏览器不支持 HTML5 视频播放。
+</video>
+
+#### Assisted-by: deepseek-v4-pro
+
+花了50元的token 费用，终于算是把这块“古老”的Hikey970 变成了一个"MiniPC"了(不用借助上位机串口工具了)。AI 帮助解决了以下问题, 而且搭建了 [lucmann/linux](https://github.com/lucmann/linux/actions) 和 [lucmann/hikey970-debian-image](https://github.com/lucmann/hikey970-debian-image/actions) 的 GitHub CI, 分别用来生成 Image.gz/hi3670-hikey970.dtb 和 rootfs image.
+
+- bootloader (grubaa64.efi) 不支持 ext4 rootfs
+- 修改 grub.cfg 不生效
+- 2.4G Wireless Mouse/Keyboard USB receiver reset loop (Logi M212/K240)
+
+<video width="100%" controls preload="none">
+  <source src="https://github.com/lucmann/lucmann.github.io/releases/download/videos/hikey970-back-crf22.mp4" type="video/mp4">
   您的浏览器不支持 HTML5 视频播放。
 </video>
 
