@@ -43,17 +43,105 @@ NOTE:
 - (*) 表示本来不需要的依赖
 - (+) 在 OpenKylin 2.0 的源里没有，需要源码构建
 
-- Ubuntu 22.04
+下面是几个 Linux Distro 下编译 mesa 前可能需要安装的软件包
 
-**书到用时方恨少，包要装时不好找**
+- Ubuntu/Debian
 
 ```bash
-sudo apt install -y cmake ninja-build bison flex g++ git pkg-config python3-setuptools python3-lz4 \
-    python3-jinja2 libssl-dev libelf-dev libboost-dev libglm-dev libtinyobjloader-dev libstb-dev \
-    libpng-dev wayland-protocols libwayland-dev libdecor-0-dev freeglut3-dev libglfw3-dev libexpat1-dev libglvnd-dev \
-    libx11-dev libxext-dev libxshmfence-dev libxrandr-dev libxxf86vm-dev libxfixes-dev libx11-xcb-dev \
-    libxcb1-dev libxcb-randr0-dev libxcb-glx0-dev libxcb-shm0-dev libxcb-dri3-dev libxcb-dri2-0-dev libxcb-present-dev \
-    libselinux1-dev libvulkan-dev vulkan-tools mesa-utils
+sudo apt install -y \
+cmake \
+ninja-build \
+bison \
+flex \
+g++ \
+git \
+pkg-config \
+python3-setuptools \
+python3-lz4 \
+python3-jinja2 \
+libssl-dev \
+libelf-dev \
+libboost-dev \
+libglm-dev \
+libtinyobjloader-dev \
+libstb-dev \
+libpng-dev \
+wayland-protocols \
+libwayland-dev \
+libdecor-0-dev \
+freeglut3-dev \
+libglfw3-dev \
+libexpat1-dev \
+libglvnd-dev \
+libx11-dev \
+libxext-dev \
+libxshmfence-dev \
+libxrandr-dev \
+libxxf86vm-dev \
+libxfixes-dev \
+libx11-xcb-dev \
+libxcb1-dev \
+libxcb-randr0-dev \
+libxcb-glx0-dev \
+libxcb-shm0-dev \
+libxcb-dri3-dev \
+libxcb-dri2-0-dev \
+libxcb-present-dev \
+libselinux1-dev \
+libvulkan-dev \
+vulkan-tools \
+mesa-utils
+```
+
+- Kylin V10
+
+**个别软件包与 Ubuntu 有出入**
+
+```bash
+sudo apt install -y \
+cmake \
+ninja-build \
+bison \
+flex \
+g++ \
+git \
+pkg-config \
+python3-mako \
+python3-setuptools \
+python3-lz4 \
+python3-jinja2 \
+libssl-dev \
+libelf-dev \
+libboost-dev \
+libglm-dev \
+libstb-dev \
+libpng-dev \
+wayland-protocols \
+libwayland-dev \
+libdecoration0-dev \
+freeglut3-dev \
+libglfw3-dev \
+libexpat1-dev \
+libglvnd-dev \
+libx11-dev \
+libxdamage-dev \
+libxext-dev \
+libxshmfence-dev \
+libxrandr-dev \
+libxxf86vm-dev \
+libxfixes-dev \
+libx11-xcb-dev \
+libxcb1-dev \
+libxcb-randr0-dev \
+libxcb-glx0-dev \
+libxcb-shm0-dev \
+libxcb-dri3-dev \
+libxcb-dri2-0-dev \
+libxcb-present-dev \
+libselinux1-dev \
+libvulkan-dev \
+vulkan-tools \
+mesa-utils
 ```
 
 ```bash
