@@ -1,0 +1,52 @@
+digraph FBCONFIG {
+    rankdir=LR;
+    node [shape=record];
+
+    fbconfig [
+        label="<f0> GLXFBConfig (opaque type,\ndefined in mesa/src/glx/glxconfig.h)
+            | + glXGetFBConfigAttrib(): int\l
+            | - GLX_FBCONFIG_ID \l
+            | - GLX_X_VISUAL_TYPE \l
+            | - GLX_X_RENDERABLE \l
+            | - GLX_RENDER_TYPE \l
+            | - GLX_DRAWABLE_TYPE \l
+            | - GLX_SAMPLES \l
+            | - GLX_SAMPLE_BUFFERS \l
+            | - GLX_AUX_BUFFERS \l
+            | - GLX_RED_SIZE \l
+            | - GLX_GREEN_SIZE \l
+            | - GLX_BLUE_SIZE \l
+            | - GLX_ALPHA_SIZE \l
+            | - GLX_DEPTH_SIZE \l
+            | - GLX_STENCIL_SIZE \l
+            | - GLX_ACCUM_RED_SIZE \l
+            | - GLX_ACCUM_GREEN_SIZE \l
+            | - GLX_ACCUM_BLUE_SIZE \l
+            | - GLX_ACCUM_ALPHA_SIZE \l
+            | - GLX_LEVEL \l
+            | - GLX_STEREO \l
+            | - GLX_DOUBLEBUFFER \l
+            | - GLX_BUFFER_SIZE \l
+            | - GLX_MAX_PBUFFER_WIDTH \l
+            | - GLX_MAX_PBUFFER_HEIGHT \l
+            | - GLX_MAX_PBUFFER_PIXELS \l
+        "
+    ];
+
+    xvisualinfo [
+        label="<f0> XVisualInfo\n(defined in X11/Xutil.h)
+            | + visual: Visual * \l
+            | + visualid: VisualID \l
+            | + screen: int \l
+            | + depth: int \l
+            | + class: int \l
+            | + red_mask: unsigned long \l
+            | + green_mask: unsigned long \l
+            | + blue_mask: unsigned long \l
+            | + colormap_size: int \l
+            | + bits_per_rgb: int \l
+        "
+    ];
+
+    fbconfig:f0 -> xvisualinfo:f0 [label="glXGetVisualFromFBConfig(): XVisualInfo *"];
+}

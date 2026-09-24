@@ -1,0 +1,38 @@
+digraph KERNELINSTALL {
+    rankdir=LR;
+
+    node [shape=plaintext, style=filled, fillcolor=lightblue];
+    edge [color=gray];
+
+    // Nodes
+    A [label="make install"];
+    B [label="$srctree/scripts/install.sh"];
+    C [label=<
+        <table border="0" cellspacing="0">
+            <tr>
+                <td port="f0" bgcolor="lightblue"><font color="black">$HOME/bin/installkernel</font></td>
+            </tr>
+            <tr>
+                <td port="f1" bgcolor="lightblue"><font color="gray">/sbin/installkernel (debianutils.deb)</font></td>
+            </tr>
+            <tr>
+                <td port="f2" bgcolor="lightblue"><font color="gray">$srctree/arch/x86/install.sh</font></td>
+            </tr>
+            <tr>
+                <td port="f3" bgcolor="lightblue"><font color="gray">$srctree/arch/x86/boot/install.sh</font></td>
+            </tr>
+        </table>
+      >];
+    D [label="exit"];
+
+    // Edges
+    A -> B [color=black];
+    B -> C:f0 [color=black];
+    B -> C:f1 [style=dashed];
+    B -> C:f2 [style=dashed];
+    B -> C:f3 [style=dashed];
+    C:f0 -> D [color=black];
+    C:f1 -> D [style=dashed];
+    C:f2 -> D [style=dashed];
+    C:f3 -> D [style=dashed];
+}
