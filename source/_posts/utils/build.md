@@ -102,9 +102,9 @@ GROUP (
 - `-L/path/to/lib`          编译时搜索路径
 - `-Wl,-rpath,/path/to/lib` 运行时搜索路径
 
-## 动态库都去哪儿呢
+## 动态库在哪
 
-- pkg-config
+### pkg-config 搞定编译时动态库在哪
 
 **pkg-config (symbolic link to `/usr/bin/pkgconf`)** 是用来获取系统上安装的库的信息的程序。cmake, meson 这些构建系统底层都是靠它来解析依赖包的。 下面的命令可以查看 pkg-config 工作时所搜索的路径和优先次序， 用户也可以通过环境变量 **`PKG_CONFIG_PATH`** 来指定自己想要优先搜索的路径。
 
@@ -161,50 +161,15 @@ pkg-config --variable pc_path pkg-config | sed 's/:/\n/g'
 ───────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ```
 
-- `lib*-dev` 与 `lib*` 的区别
+### ldconfig 搞定运行时动态库在哪
 
-```
-$ dpkg -L libxcb1
-/.
-/usr
-/usr/lib
-/usr/lib/x86_64-linux-gnu
-/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
-/usr/share
-/usr/share/doc
-/usr/share/doc/libxcb1
-/usr/share/doc/libxcb1/changelog.Debian.gz
-/usr/share/doc/libxcb1/copyright
-/usr/lib/x86_64-linux-gnu/libxcb.so.1
-```
+`/usr/sbin/ldconfig` 是一个 wrapper script, 它调用 `/sbin/ldconfig.real`, 它的功能有两个:
 
-```
-$ dpkg -L libxcb1-dev
-/.
-/usr
-/usr/include
-/usr/include/xcb
-/usr/include/xcb/bigreq.h
-/usr/include/xcb/xc_misc.h
-/usr/include/xcb/xcb.h
-/usr/include/xcb/xcbext.h
-/usr/include/xcb/xproto.h
-/usr/lib
-/usr/lib/x86_64-linux-gnu
-/usr/lib/x86_64-linux-gnu/libxcb.a
-/usr/lib/x86_64-linux-gnu/pkgconfig
-/usr/lib/x86_64-linux-gnu/pkgconfig/xcb.pc
-/usr/share
-/usr/share/doc
-/usr/share/doc/libxcb1-dev
-/usr/share/doc/libxcb1-dev/copyright
-/usr/lib/x86_64-linux-gnu/libxcb.so
-/usr/share/doc/libxcb1-dev/changelog.Debian.gz
-```
-
-- `/usr/sbin/ldconfig`
-
-Configure Dynamic Linker Run Time Bindings
+- 重建动态链接库缓存  (`/etc/ld.so.conf.d` -> `/etc/ld.so.cache`)
+  - 系统启动时**不自动重建动态库缓存** !!!
+  - 系统启动时**不自动重建动态库缓存** !!!
+  - 系统启动时**不自动重建动态库缓存** !!!
+- 创建动态链接库符号链接
 
 ```sh
 #!/bin/sh
