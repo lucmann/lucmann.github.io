@@ -40,10 +40,12 @@ categories: linux
 
 - Compilation Errors 
 
-|  Errors                                                        | Need to do                                             |
+|  Errors                                                        | Solutions                                              |
 |:---------------------------------------------------------------|:-------------------------------------------------------|
-| gelf.h: No such file or directory                              | apt install libelf-dev                                 |
-| <openssl/opensslv.h>: No such file or directory                | apt install libssl-dev                                 |
+| gelf.h: No such file or directory                              | sudo apt install libelf-dev                            |
+| dwarf.h: No such file or directory                             | sudo apt install libdw-dev                             |
+| <openssl/opensslv.h>: No such file or directory                | sudo apt install libssl-dev                            |
+| /bin/sh: 1: gawk: not found                                    | sudo apt install gawk                                  |
 | No rule to make target 'debian/canonical-certs.pem'            | ./scripts/config --set-str SYSTEM_TRUSTED_KEYS ""      |
 | No rule to make target 'debian/canonical-revoked-certs.pem'    | ./scripts/config --set-str SYSTEM_REVOCATION_KEYS ""   |
 
