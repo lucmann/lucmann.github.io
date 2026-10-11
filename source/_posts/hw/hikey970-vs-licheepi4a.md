@@ -2,7 +2,6 @@
 layout: false
 title: HiKey 970 vs LicheePi 4A 详细规格对比
 date: 2026-10-11
-tags: [Hardware]
 categories: hardware
 ---
 <!DOCTYPE html>
