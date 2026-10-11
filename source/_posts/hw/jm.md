@@ -1,7 +1,7 @@
 ---
-layout: false
 title: 景美 JM1100 vs JM9100M vs JM9100 性能指标对比
 date: 2026-10-11
+tags: [Hardware]
 categories: hardware
 ---
 <!DOCTYPE html>
