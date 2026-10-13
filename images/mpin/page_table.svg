@@ -1,0 +1,197 @@
+<svg viewBox="0 0 820 720" width="820" height="720" xmlns="http://www.w3.org/2000/svg">
+<rect width="820" height="720" fill="#ffffff"/>
+
+<defs>
+  <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#555"/>
+  </marker>
+  <marker id="arrBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6"/>
+  </marker>
+  <marker id="arrPurple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+  </marker>
+  <marker id="arrPink" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#db2777"/>
+  </marker>
+  <marker id="arrGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#16a34a"/>
+  </marker>
+  <marker id="arrGold" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#b45309"/>
+  </marker>
+</defs>
+
+<!-- TITLE -->
+<text x="410" y="28" text-anchor="middle" font-size="17" font-weight="bold" font-family="Courier New,monospace" fill="#1a1a1a">4-Level Page Table Walk</text>
+<text x="410" y="46" text-anchor="middle" font-size="10" font-family="Courier New,monospace" fill="#666">Virtual Address → Physical Address Translation (x86-64)</text>
+
+<!-- ── VIRTUAL ADDRESS FIELDS ── -->
+<text x="300" y="63" text-anchor="middle" font-size="10" font-weight="bold" font-family="Courier New,monospace" fill="#333">Virtual Address (64-bit)</text>
+
+<rect x="30"  y="68" width="72"  height="36" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="66"  y="83" text-anchor="middle" font-size="9" font-family="Courier New,monospace" fill="#64748b" font-weight="bold">63:48</text>
+<text x="66"  y="97" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#94a3b8">Sign Ext.</text>
+
+<rect x="102" y="68" width="92" height="36" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+<text x="148" y="83" text-anchor="middle" font-size="9" font-family="Courier New,monospace" fill="#1d4ed8" font-weight="bold">47:39</text>
+<text x="148" y="97" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#3b82f6">PGD idx (9b)</text>
+
+<rect x="194" y="68" width="92" height="36" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="240" y="83" text-anchor="middle" font-size="9" font-family="Courier New,monospace" fill="#5b21b6" font-weight="bold">38:30</text>
+<text x="240" y="97" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#7c3aed">PUD idx (9b)</text>
+
+<rect x="286" y="68" width="92" height="36" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+<text x="332" y="83" text-anchor="middle" font-size="9" font-family="Courier New,monospace" fill="#9d174d" font-weight="bold">29:21</text>
+<text x="332" y="97" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#db2777">PMD idx (9b)</text>
+
+<rect x="378" y="68" width="92" height="36" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="424" y="83" text-anchor="middle" font-size="9" font-family="Courier New,monospace" fill="#15803d" font-weight="bold">20:12</text>
+<text x="424" y="97" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#16a34a">PTE idx (9b)</text>
+
+<rect x="470" y="68" width="100" height="36" fill="#fef9c3" stroke="#b45309" stroke-width="1.5"/>
+<text x="520" y="83" text-anchor="middle" font-size="9" font-family="Courier New,monospace" fill="#92400e" font-weight="bold">11:0</text>
+<text x="520" y="97" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#b45309">Offset (12b)</text>
+
+<!-- CR3 -->
+<rect x="620" y="60" width="168" height="44" rx="6" fill="#1e3a5f" stroke="#0f2440" stroke-width="2"/>
+<text x="704" y="78" text-anchor="middle" font-size="13" font-weight="bold" font-family="Courier New,monospace" fill="#fff">CR3</text>
+<text x="704" y="95" text-anchor="middle" font-size="9"  font-family="Courier New,monospace" fill="#93c5fd">PGD physical base addr</text>
+
+<!-- separator -->
+<line x1="20" y1="116" x2="800" y2="116" stroke="#e2e8f0" stroke-width="1"/>
+
+<!-- ══════════════════════════════
+     PAGE TABLE BOXES
+     x=248, width=310
+     entry highlight: x=258, width=290, height=26
+     y sequence: 135, 248, 361, 474
+══════════════════════════════ -->
+
+<!-- ── PGD ── y=135 total h=88 -->
+<rect x="248" y="135" width="310" height="88" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+<!-- header -->
+<rect x="248" y="135" width="310" height="26" rx="6" fill="#3b82f6"/>
+<rect x="248" y="149" width="310" height="12" fill="#3b82f6"/>
+<text x="403" y="153" text-anchor="middle" font-size="12" font-weight="bold" font-family="Courier New,monospace" fill="#fff">PGD — Page Global Directory</text>
+<!-- entry row with content inside -->
+<rect x="258" y="167" width="40" height="26" rx="2" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1"/>
+<text x="278" y="184" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#93c5fd">…</text>
+<rect x="300" y="167" width="200" height="26" rx="3" fill="#fff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="400" y="177" text-anchor="middle" font-size="8" font-weight="bold" font-family="Courier New,monospace" fill="#1d4ed8">entry[PGD_idx]</text>
+<text x="400" y="189" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#3b82f6">PUD phys base addr | flags</text>
+<rect x="502" y="167" width="40" height="26" rx="2" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1"/>
+<text x="522" y="184" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#93c5fd">…</text>
+
+<!-- ── PUD ── y=248 -->
+<rect x="248" y="248" width="310" height="88" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+<rect x="248" y="248" width="310" height="26" rx="6" fill="#7c3aed"/>
+<rect x="248" y="262" width="310" height="12" fill="#7c3aed"/>
+<text x="403" y="266" text-anchor="middle" font-size="12" font-weight="bold" font-family="Courier New,monospace" fill="#fff">PUD — Page Upper Directory</text>
+<rect x="258" y="280" width="40" height="26" rx="2" fill="#ddd6fe" stroke="#7c3aed" stroke-width="1"/>
+<text x="278" y="297" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#a78bfa">…</text>
+<rect x="300" y="280" width="200" height="26" rx="3" fill="#fff" stroke="#5b21b6" stroke-width="1.8"/>
+<text x="400" y="290" text-anchor="middle" font-size="8" font-weight="bold" font-family="Courier New,monospace" fill="#5b21b6">entry[PUD_idx]</text>
+<text x="400" y="302" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#7c3aed">PMD phys base addr | flags</text>
+<rect x="502" y="280" width="40" height="26" rx="2" fill="#ddd6fe" stroke="#7c3aed" stroke-width="1"/>
+<text x="522" y="297" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#a78bfa">…</text>
+
+<!-- ── PMD ── y=361 -->
+<rect x="248" y="361" width="310" height="88" rx="6" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+<rect x="248" y="361" width="310" height="26" rx="6" fill="#db2777"/>
+<rect x="248" y="375" width="310" height="12" fill="#db2777"/>
+<text x="403" y="379" text-anchor="middle" font-size="12" font-weight="bold" font-family="Courier New,monospace" fill="#fff">PMD — Page Middle Directory</text>
+<rect x="258" y="393" width="40" height="26" rx="2" fill="#fbcfe8" stroke="#db2777" stroke-width="1"/>
+<text x="278" y="410" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#f9a8d4">…</text>
+<rect x="300" y="393" width="200" height="26" rx="3" fill="#fff" stroke="#9d174d" stroke-width="1.8"/>
+<text x="400" y="403" text-anchor="middle" font-size="8" font-weight="bold" font-family="Courier New,monospace" fill="#9d174d">entry[PMD_idx]</text>
+<text x="400" y="415" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#db2777">PTE phys base addr | flags</text>
+<rect x="502" y="393" width="40" height="26" rx="2" fill="#fbcfe8" stroke="#db2777" stroke-width="1"/>
+<text x="522" y="410" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#f9a8d4">…</text>
+
+<!-- ── PTE ── y=474 -->
+<rect x="248" y="474" width="310" height="88" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+<rect x="248" y="474" width="310" height="26" rx="6" fill="#16a34a"/>
+<rect x="248" y="488" width="310" height="12" fill="#16a34a"/>
+<text x="403" y="492" text-anchor="middle" font-size="12" font-weight="bold" font-family="Courier New,monospace" fill="#fff">PTE — Page Table Entry</text>
+<rect x="258" y="506" width="40" height="26" rx="2" fill="#bbf7d0" stroke="#16a34a" stroke-width="1"/>
+<text x="278" y="523" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#86efac">…</text>
+<rect x="300" y="506" width="200" height="26" rx="3" fill="#fff" stroke="#15803d" stroke-width="1.8"/>
+<text x="400" y="516" text-anchor="middle" font-size="8" font-weight="bold" font-family="Courier New,monospace" fill="#15803d">entry[PTE_idx]</text>
+<text x="400" y="528" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#16a34a">PFN (page frame number) | flags</text>
+<rect x="502" y="506" width="40" height="26" rx="2" fill="#bbf7d0" stroke="#16a34a" stroke-width="1"/>
+<text x="522" y="523" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#86efac">…</text>
+
+<!-- ── Physical Page ── y=590 -->
+<rect x="248" y="590" width="310" height="52" rx="6" fill="#fef9c3" stroke="#b45309" stroke-width="2"/>
+<rect x="248" y="590" width="310" height="22" rx="6" fill="#b45309"/>
+<rect x="248" y="600" width="310" height="12" fill="#b45309"/>
+<text x="403" y="606" text-anchor="middle" font-size="12" font-weight="bold" font-family="Courier New,monospace" fill="#fff">Physical Page (4 KB frame)</text>
+<text x="403" y="631" text-anchor="middle" font-size="9" font-family="Courier New,monospace" fill="#92400e">PA = PFN × 4096 + Offset[11:0]</text>
+
+<!-- ══════════════════════════
+     VERTICAL ARROWS between tables
+     — label on left of arrow
+══════════════════════════ -->
+
+<!-- CR3 → PGD -->
+<line x1="704" y1="104" x2="704" y2="128" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5,3"/>
+<line x1="704" y1="128" x2="560" y2="135" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrBlue)"/>
+
+<!-- PGD → PUD: label = PGD_idx -->
+<line x1="403" y1="223" x2="403" y2="246" stroke="#555" stroke-width="2.5" marker-end="url(#arr)"/>
+
+<!-- PUD → PMD -->
+<line x1="403" y1="336" x2="403" y2="359" stroke="#555" stroke-width="2.5" marker-end="url(#arr)"/>
+
+<!-- PMD → PTE -->
+<line x1="403" y1="449" x2="403" y2="472" stroke="#555" stroke-width="2.5" marker-end="url(#arr)"/>
+
+<!-- PTE → Physical -->
+<line x1="403" y1="562" x2="403" y2="588" stroke="#555" stroke-width="2.5" marker-end="url(#arr)"/>
+
+<!-- ══════════════════════════
+     INDEX ARROWS from VA fields
+     Label *_idx on the horizontal segment
+     Route: down from VA field → left rail → right into entry box
+══════════════════════════ -->
+
+<!-- PGD_idx  (blue)  rail x=185 -->
+<polyline points="148,104 148,193" stroke="#3b82f6" stroke-width="1.4" stroke-dasharray="4,3" fill="none"/>
+<line x1="148" y1="193" x2="298" y2="193" stroke="#3b82f6" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#arrBlue)"/>
+<text x="170" y="187" font-size="8" font-weight="bold" font-family="Courier New,monospace" fill="#3b82f6">PGD_idx</text>
+
+<!-- PUD_idx  (purple)  rail x=170 -->
+<polyline points="240,104 240,120 172,120 172,306" stroke="#7c3aed" stroke-width="1.4" stroke-dasharray="4,3" fill="none"/>
+<line x1="172" y1="306" x2="298" y2="306" stroke="#7c3aed" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#arrPurple)"/>
+<text x="176" y="270" font-size="8" font-weight="bold" font-family="Courier New,monospace" fill="#7c3aed">PUD_idx</text>
+
+<!-- PMD_idx  (pink)  rail x=155 -->
+<polyline points="332,104 332,112 157,112 157,419" stroke="#db2777" stroke-width="1.4" stroke-dasharray="4,3" fill="none"/>
+<line x1="157" y1="419" x2="298" y2="419" stroke="#db2777" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#arrPink)"/>
+<text x="160" y="370" font-size="8" font-weight="bold" font-family="Courier New,monospace" fill="#db2777">PMD_idx</text>
+
+<!-- PTE_idx  (green)  rail x=140 -->
+<polyline points="424,104 424,105 142,105 142,532" stroke="#16a34a" stroke-width="1.4" stroke-dasharray="4,3" fill="none"/>
+<line x1="142" y1="532" x2="298" y2="532" stroke="#16a34a" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#arrGreen)"/>
+<text x="144" y="480" font-size="8" font-weight="bold" font-family="Courier New,monospace" fill="#16a34a">PTE_idx</text>
+
+<!-- Offset  (gold)  right rail x=650 -->
+<polyline points="520,104 520,108 652,108 652,615" stroke="#b45309" stroke-width="1.4" stroke-dasharray="4,3" fill="none"/>
+<line x1="652" y1="615" x2="560" y2="615" stroke="#b45309" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#arrGold)"/>
+<text x="656" y="400" font-size="8" font-weight="bold" font-family="Courier New,monospace" fill="#b45309">Offset</text>
+
+<!-- ══════════════════════════
+     PHYSICAL ADDRESS BAR
+══════════════════════════ -->
+<line x1="403" y1="642" x2="403" y2="660" stroke="#b45309" stroke-width="1.5" marker-end="url(#arrGold)"/>
+<text x="403" y="658" text-anchor="middle" font-size="10" font-weight="bold" font-family="Courier New,monospace" fill="#333">Physical Address</text>
+<rect x="233" y="665" width="185" height="28" rx="4" fill="#fef9c3" stroke="#b45309" stroke-width="1.5"/>
+<text x="325" y="683" text-anchor="middle" font-size="9" font-family="Courier New,monospace" fill="#92400e" font-weight="bold">PFN [51:12]</text>
+<text x="421" y="683" text-anchor="middle" font-size="13" font-family="Courier New,monospace" fill="#b45309">|</text>
+<rect x="424" y="665" width="130" height="28" rx="4" fill="#fef9c3" stroke="#b45309" stroke-width="1.5"/>
+<text x="489" y="683" text-anchor="middle" font-size="9" font-family="Courier New,monospace" fill="#92400e" font-weight="bold">Offset [11:0]</text>
+
+<!-- FOOTNOTE -->
+<text x="410" y="712" text-anchor="middle" font-size="8" font-family="Courier New,monospace" fill="#bbb">flags: P=Present  RW=Read/Write  US=User/Supervisor  D=Dirty  A=Accessed  NX=No-Execute</text>
+</svg>
