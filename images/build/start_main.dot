@@ -1,0 +1,11 @@
+digraph G {
+    rankdir=LR;
+
+    node [shape=plaintext];
+
+    crt1 [label="crt1.o::_start()"];
+    libc [label="libc.so.6::__libc_start_main()"];
+    obj  [label="main()"];
+
+    crt1 -> libc -> obj;
+}
