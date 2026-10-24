@@ -4,14 +4,13 @@ date: 2023-06-14 15:00:41
 tags: [Hardware]
 categories: hardware
 ---
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>HiKey 970 vs LicheePi 4A 详细规格对比</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
+<meta charset="UTF-8">
+<title>HiKey 970 vs LicheePi 4A 详细规格对比</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
   body {
     font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
     margin: 40px auto;
@@ -20,7 +19,6 @@ categories: hardware
     color: #333;
     line-height: 1.45;
   }
-  * { box-sizing: border-box; }
   h1 { font-size: 24px; text-align: center; }
   .subtitle {
     text-align: center;
@@ -498,4 +496,3 @@ categories: hardware
   </footer>
 </body>
 </html>
-<!DOCTYPE html>
