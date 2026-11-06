@@ -56,6 +56,7 @@ flex \
 g++ \
 git \
 pkg-config \
+python3-mako \
 python3-setuptools \
 python3-lz4 \
 python3-jinja2 \
@@ -89,9 +90,16 @@ libxcb-dri2-0-dev \
 libxcb-present-dev \
 libselinux1-dev \
 libvulkan-dev \
+llvm-22-dev \
+libclang-22-dev \
+libclang-cpp22-dev \
 vulkan-tools \
 mesa-utils
 ```
+
+NOTE: Mesa 依赖 LLVM 的版本会随着 Mesa 演进变化，当前是针对 Ubuntu 24.04 ship 的 LLVM 和 Mesa 2026.x 的要求安装的 LLVM 22.
+
+![Mesa Loves LLVM](/images/dot/mesa-llvm.png)
 
 - Kylin V10
 
