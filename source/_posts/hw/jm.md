@@ -1,5 +1,5 @@
 ---
-title: 景美 JM1100 vs JM9100M vs JM9100 性能指标对比
+title: 景美 JM1100 vs JM9100M vs JM9100 规格对比
 date: 2026-10-11
 tags: [Hardware]
 categories: hardware
@@ -9,7 +9,7 @@ categories: hardware
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>景美 JM1100 vs JM9100M vs JM9100 性能指标对比</title>
+<title>景美 JM1100 vs JM9100M vs JM9100 规格对比</title>
 <style>
   body {
     font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
@@ -73,7 +73,7 @@ categories: hardware
 </head>
 <body>
 
-<h1>景美 JM1100 vs JM9100M vs JM9100 性能指标对比</h1>
+<h1>景美 JM1100 vs JM9100M vs JM9100 规格对比</h1>
 <p class="subtitle">黄色行为三款产品有差异的指标（含仅部分产品公布的指标）</p>
 
 <table>
