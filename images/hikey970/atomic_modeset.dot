@@ -1,0 +1,37 @@
+digraph atomic_modeset {
+    rankdir=LR
+    node [shape=rectangle, fontname=Helvetica, fontsize=10]
+    edge [fontname=Helvetica, fontsize=10]
+
+    subgraph cluster_atomic_modeset_without_bridge {
+        label="Atomic Modeset without Bridge"
+        style=dashed
+
+        _atomic_modeset [label="Atomic Modeset", shape=ellipse]
+        _crtc [label="CRTC::\ndrm_crtc_state", fillcolor=lightcoral, style=filled]
+        _encoder [label="ENCODER::\nenable()", fillcolor=lightgreen, style=filled]
+        _connector [label="CONNECTOR", fillcolor=lightyellow, style=filled]
+        
+        _atomic_modeset -> _crtc
+        _crtc -> _encoder [minlen=2]
+        _encoder -> _connector [minlen=2] 
+    }
+
+    subgraph cluster_atomic_modeset_with_bridge {
+        label="Atomic Modeset with Bridge"
+        style=dashed
+
+        atomic_modeset [label="Atomic Modeset", shape=ellipse]
+        crtc [label="CRTC::\ndrm_crtc_state", fillcolor=lightcoral, style=filled]
+        encoder [label="ENCODER::\nenable()", fillcolor=lightgreen, style=filled]
+        bridge_pre [label="BRIDGE::\natomic_pre_enable()", fillcolor=lightblue, style=filled, fixedsize=true, width=1.6, height=0.6]
+        bridge [label="BRIDGE::\natomic_enable()", fillcolor=lightblue, style=filled, fixedsize=true, width=1.6, height=0.6]
+        connector [label="CONNECTOR", fillcolor=lightyellow, style=filled]
+        
+        atomic_modeset -> crtc
+        crtc -> bridge_pre 
+        bridge_pre -> encoder
+        encoder -> bridge 
+        bridge -> connector
+    }
+}

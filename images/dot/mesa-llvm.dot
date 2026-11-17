@@ -1,0 +1,139 @@
+digraph mesa_llvm {
+  rankdir=LR;
+  compound=true;
+  node  [fontname="Noto Sans CJK SC", fontsize=10];
+  edge  [fontname="Noto Sans CJK SC", fontsize=9];
+
+  /* ---------- 样式约定 ----------
+     实线  : enable_if 强制依赖（硬要求 LLVM）
+     虚线  : 条件/可选触发
+     点线  : 配置选项 → 内部变量
+  */
+
+  /* ===== 用户选项 ===== */
+  subgraph cluster_opts {
+    label="meson 配置选项"; style=rounded; color=gray;
+    opt_llvm    [label="-Dllvm",            shape=box, style=filled, fillcolor=lightyellow];
+    opt_amd     [label="-Damd-use-llvm",    shape=box, style=filled, fillcolor=lightyellow];
+    opt_draw    [label="-Ddraw-use-llvm",   shape=box, style=filled, fillcolor=lightyellow];
+    opt_orcjit  [label="-Dllvm-orcjit",     shape=box, style=filled, fillcolor=lightyellow];
+    opt_shared  [label="-Dshared-llvm",     shape=box, style=filled, fillcolor=lightyellow];
+    opt_mesaclc [label="-Dmesa-clc",        shape=box, style=filled, fillcolor=lightyellow];
+    opt_msclc   [label="-Dmicrosoft-clc",   shape=box, style=filled, fillcolor=lightyellow];
+    opt_precomp [label="-Dprecomp-compiler",shape=box, style=filled, fillcolor=lightyellow];
+  }
+
+  /* ===== 内部判定变量 ===== */
+  subgraph cluster_vars {
+    label="内部判定变量"; style=rounded; color=gray;
+    with_llvm     [label="with_llvm",      shape=ellipse];
+    amd_with_llvm [label="amd_with_llvm",  shape=ellipse];
+    draw_with_llvm[label="draw_with_llvm", shape=ellipse];
+    with_clc      [label="with_clc",       shape=ellipse, style=filled, fillcolor=lightblue];
+    orcjit        [label="llvm_with_orcjit", shape=ellipse];
+  }
+
+  opt_llvm    -> with_llvm      [style=dotted];
+  opt_amd     -> amd_with_llvm  [style=dotted];
+  with_llvm   -> amd_with_llvm  [style=dotted, label="allowed()"];
+  opt_draw    -> draw_with_llvm [style=dotted];
+  with_llvm   -> draw_with_llvm [style=dotted, label="allowed()"];
+  opt_orcjit  -> orcjit         [style=dotted];
+
+  /* ===== 硬性要求 LLVM 的目标 ===== */
+  subgraph cluster_targets {
+    label="强制依赖 LLVM 的编译目标 (enable_if)"; style=rounded; color=red; fontcolor=red;
+    llvmpipe [label="llvmpipe\n(Gallium 软渲染)",        shape=box, style=filled, fillcolor=mistyrose];
+    lavapipe [label="Lavapipe\n(Vulkan swrast)",         shape=box, style=filled, fillcolor=mistyrose];
+    i915     [label="i915\n(Gallium, 顶点着色器)",       shape=box, style=filled, fillcolor=mistyrose];
+    r300     [label="r300\n(x86 IGP 顶点处理)",          shape=box, style=filled, fillcolor=mistyrose];
+    radeonsi [label="radeonsi\n(AMD OpenGL)",            shape=box, style=filled, fillcolor=mistyrose];
+    aco_test [label="RADV ACO 测试",                     shape=box, style=filled, fillcolor=mistyrose];
+  }
+
+  /* ===== CLC 及间接触发者 ===== */
+  subgraph cluster_clc_users {
+    label="触发 with_clc 的目标 (driver_using_cl)"; style=rounded; color=blue; fontcolor=blue;
+    rusticl  [label="rusticl\n(OpenCL 运行时)", shape=box, style=filled, fillcolor=lightsteelblue];
+    msclc_t  [label="microsoft-clc",            shape=box, style=filled, fillcolor=lightsteelblue];
+    intel_cl [label="iris / crocus\nanvil / hasvk", shape=box, style=filled, fillcolor=lightsteelblue];
+    other_cl [label="asahi / panfrost\nNVK / imagination\nkosmickrisp", shape=box, style=filled, fillcolor=lightsteelblue];
+  }
+
+  /* ===== LLVM 依赖本身 ===== */
+  dep_llvm [label="dep_llvm\n(llvm-config / CMake / subproject)",
+            shape=box3d, style=filled, fillcolor=lightgreen];
+
+  /* ===== 模块与版本 ===== */
+  subgraph cluster_mods {
+    label="LLVM 链接模块 / 版本要求"; style=rounded; color=darkgreen; fontcolor=darkgreen;
+    mod_base [label="基础: core, bitwriter, engine, mcdisassembler,\nexecutionengine, scalaropts, transformutils, instcombine", shape=note];
+    mod_amd  [label="+ amdgpu, bitreader, ipo\n(版本 >= 18)", shape=note];
+    mod_clc  [label="+ coverage, target, linker, irreader,\noption, libdriver, lto  (版本 >= 15)", shape=note];
+    mod_draw [label="+ native\n(darwin: all-targets)", shape=note];
+    mod_jit  [label="orcjit (新架构/强制) | mcjit\n(ORCJIT: 版本 >= 15)", shape=note];
+    mod_opt  [label="可选: coroutines, all-targets, windowsdriver,\nfrontendhlsl, frontenddriver, abi, lto", shape=note];
+  }
+
+  /* ===== CLC 拉入的额外依赖 ===== */
+  subgraph cluster_clc_deps {
+    label="CLC 相关依赖"; style=rounded; color=purple; fontcolor=purple;
+    dep_llvmspirv [label="LLVMSPIRVLib\n(SPIRV-LLVM-Translator)", shape=box, style=filled, fillcolor=thistle];
+    dep_spvtools  [label="SPIRV-Tools (>= 2024.1)",               shape=box, style=filled, fillcolor=thistle];
+    dep_clang     [label="libclang\n(clang-cpp / 静态 clang 模块)", shape=box, style=filled, fillcolor=thistle];
+    dep_libclc    [label="libclc / mesa-libclc",                  shape=box, style=filled, fillcolor=thistle];
+  }
+
+  defines [label="预处理宏:\nMESA_LLVM_VERSION_STRING, LLVM_IS_SHARED,\nDRAW_LLVM_AVAILABLE, AMD_LLVM_AVAILABLE,\nGALLIVM_USE_ORCJIT", shape=folder, style=filled, fillcolor=gray90];
+
+  /* ---------- 边：目标 → with_llvm (硬依赖) ---------- */
+  llvmpipe -> with_llvm [color=red, penwidth=2, label="requires"];
+  lavapipe -> with_llvm [color=red, penwidth=2, label="requires"];
+  i915     -> with_llvm [color=red, penwidth=2, label="requires"];
+  r300     -> with_llvm [color=red, penwidth=2, label="x86 + draw"];
+  radeonsi -> with_llvm [color=red, penwidth=2, label="+ amd-use-llvm"];
+  aco_test -> with_llvm [color=red, penwidth=2, label="+ amd_vk"];
+  with_clc -> with_llvm [color=red, penwidth=2, label="requires"];
+
+  /* draw_with_llvm 约束 */
+  llvmpipe -> draw_with_llvm [color=orange, style=dashed, label="draw 必须开启"];
+  lavapipe -> draw_with_llvm [color=orange, style=dashed];
+  i915     -> draw_with_llvm [color=orange, style=dashed];
+  r300     -> draw_with_llvm [color=orange, style=dashed];
+
+  /* radv/radeonsi 的 AMD LLVM 后端 */
+  amd_with_llvm -> radeonsi [color=darkred, style=dashed, label="LLVM 后端"];
+  radv [label="RADV (amd_vk)", shape=box, style=filled, fillcolor=mistyrose];
+  amd_with_llvm -> radv [color=darkred, style=dashed, label="可选 LLVM 后端"];
+  radv -> aco_test [style=dashed, label="build-aco-tests"];
+
+  /* ---------- with_clc 的触发源 ---------- */
+  opt_mesaclc -> with_clc [style=dashed];
+  opt_msclc   -> msclc_t  [style=dotted];
+  msclc_t     -> with_clc [style=dashed];
+  opt_precomp -> with_clc [style=dashed, label="!= system"];
+  rusticl     -> with_clc [style=dashed];
+  intel_cl    -> with_clc [style=dashed];
+  other_cl    -> with_clc [style=dashed];
+
+  /* ---------- dep_llvm 解析 ---------- */
+  with_llvm      -> dep_llvm [label="required"];
+  opt_shared     -> dep_llvm [style=dotted, label="static/shared"];
+  orcjit         -> mod_jit;
+  dep_llvm       -> mod_base;
+  radeonsi       -> mod_amd  [style=dashed];
+  radv           -> mod_amd  [style=dashed];
+  with_clc       -> mod_clc  [style=dashed];
+  draw_with_llvm -> mod_draw [style=dashed];
+  dep_llvm       -> mod_opt  [style=dashed];
+  dep_llvm       -> mod_jit;
+  dep_llvm       -> defines;
+
+  /* ---------- CLC 依赖 ---------- */
+  with_clc -> dep_llvmspirv [color=purple, label="版本随 LLVM 主版本"];
+  with_clc -> dep_spvtools  [color=purple, label="enable_if"];
+  with_clc -> dep_clang     [color=purple];
+  rusticl  -> dep_libclc    [color=purple, style=dashed];
+  msclc_t  -> dep_libclc    [color=purple, style=dashed];
+  dep_llvm -> dep_clang     [style=dotted, label="libdir"];
+}
